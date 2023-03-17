@@ -1,6 +1,13 @@
 name: FairWear API Gateway CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - *
+    paths:
+      - 'FairWearAPIGateway/**'
+      - '.github/workflows/FairWearAPIGatewayCI.yml'
+    
 
 jobs:
   test:

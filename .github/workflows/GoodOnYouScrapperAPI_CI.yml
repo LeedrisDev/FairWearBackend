@@ -9,8 +9,8 @@ on:
       - hotfix/*
       - release/*
     paths:
-      - 'FairWearAPIGateway/**'
-      - '.github/workflows/FairWearAPIGatewayCI.yml'
+      - 'GoodOnYouScrapperAPI/**'
+      - '.github/workflows/GoodOnYouScrapperAPI_CI.yml'
 
 jobs:
   test:

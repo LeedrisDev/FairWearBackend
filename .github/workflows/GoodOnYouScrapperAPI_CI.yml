@@ -10,6 +10,7 @@ on:
       - release/*
     paths:
       - 'GoodOnYouScrapperAPI/**'
+      - 'GoodOnYouScrapperAPI.Tests/**'
       - '.github/workflows/GoodOnYouScrapperAPI_CI.yml'
 
 jobs:

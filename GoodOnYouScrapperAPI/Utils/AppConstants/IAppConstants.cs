@@ -1,6 +1,6 @@
 namespace GoodOnYouScrapperAPI.Utils.AppConstants;
 
 public interface IAppConstants
-{ 
-    static string WebSiteUrl { get; }
+{
+    static string WebSiteUrl { get; } = null!;
 }

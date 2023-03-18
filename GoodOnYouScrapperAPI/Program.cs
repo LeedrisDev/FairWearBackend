@@ -1,5 +1,6 @@
 using GoodOnYouScrapperAPI.Business.BrandBusiness;
 using GoodOnYouScrapperAPI.DataAccess.BrandData;
+using HtmlAgilityPack;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Dependency Injection
+builder.Services.AddHttpClient();
+builder.Services.AddTransient<HtmlDocument>();
 builder.Services.AddTransient<IBrandData, BrandData>();
 builder.Services.AddTransient<IBrandBusiness, BrandBusiness>();
 

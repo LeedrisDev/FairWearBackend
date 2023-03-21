@@ -27,7 +27,7 @@ public class BrandBusiness: IBrandBusiness
         catch (Exception e)
         {
             _processingStatusResponse.Status = HttpStatusCode.NotFound;
-            _processingStatusResponse.MessageObject.Message = e.Message;
+            _processingStatusResponse.ErrorMessage = e.Message;
             return _processingStatusResponse;
         }
         

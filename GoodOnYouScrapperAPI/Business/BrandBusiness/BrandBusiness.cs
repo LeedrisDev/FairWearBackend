@@ -1,7 +1,7 @@
-using System.Collections.Specialized;
 using System.Net;
 using GoodOnYouScrapperAPI.DataAccess.BrandData;
 using GoodOnYouScrapperAPI.Models;
+using GoodOnYouScrapperAPI.Utils.AppConstants;
 using HtmlAgilityPack;
 
 namespace GoodOnYouScrapperAPI.Business.BrandBusiness;
@@ -10,7 +10,7 @@ public class BrandBusiness: IBrandBusiness
 {
     private ProcessingStatusResponse<BrandModel> _processingStatusResponse;
     private readonly IBrandData _brandData;
-    
+
     public BrandBusiness(IBrandData brandData)
     {
         _processingStatusResponse = new ProcessingStatusResponse<BrandModel>();
@@ -34,36 +34,26 @@ public class BrandBusiness: IBrandBusiness
         
         // TODO: Implement the rest of the logic
         _processingStatusResponse.Status = HttpStatusCode.OK;
+        
+        
 
-        _processingStatusResponse.Object = new BrandModel();
-        _processingStatusResponse.Object.name = brandName;
-        _processingStatusResponse.Object.environmentRating = getEnvironmentRating(htmlDocument);
-        _processingStatusResponse.Object.peopleRating = getPeopleRating(htmlDocument);
-        _processingStatusResponse.Object.animalRating = getAnimalRating(htmlDocument);
+        var brandModel = new BrandModel();
+        brandModel.name = brandName;
+        
+        brandModel.environmentRating = GetRating(htmlDocument, AppConstants.XPathEnvironmentRating);
+        brandModel.peopleRating = GetRating(htmlDocument, AppConstants.XPathPeopleRating);
+        brandModel.animalRating = GetRating(htmlDocument, AppConstants.XPathAnimalRating);
+        
+        _processingStatusResponse.Object.environmentRatingDescription = GetEnvironmentRatingDescription(htmlDocument);
         
         return _processingStatusResponse;
     }
 
-    public int getEnvironmentRating(HtmlDocument doc)
+    private static int GetRating(HtmlDocument doc, string xpath)
     {
         var res = doc
             .DocumentNode
-            .SelectNodes("//*[@id='__next']/div/div[4]/div/div[1]/div[2]/div[2]/div/div[1]/div[1]/div/div[2]/div/span")
-            .First()
-            .InnerHtml;
-
-        if (res != null)
-        {
-            return res[0] - '0';
-        }
-        return -1;
-    }
-    
-    public int getPeopleRating(HtmlDocument doc)
-    {
-        var res = doc
-            .DocumentNode
-            .SelectNodes("//*[@id='__next']/div/div[4]/div/div[1]/div[2]/div[2]/div/div[1]/div[2]/div/div[2]/div/span")
+            .SelectNodes(xpath)
             .First()
             .InnerHtml;
 
@@ -74,20 +64,19 @@ public class BrandBusiness: IBrandBusiness
         return -1;
     }
 
-
-    public int getAnimalRating(HtmlDocument doc)
+    private static string GetEnvironmentRatingDescription(HtmlDocument doc)
     {
         var res = doc
             .DocumentNode
-            .SelectNodes("//*[@id='__next']/div/div[4]/div/div[1]/div[2]/div[2]/div/div[1]/div[3]/div/div[2]/div/span")
+            .SelectNodes("//*[@id='rating-summary-text']")
             .First()
-            .InnerHtml;
+            .ChildNodes
+            .Count;
+        
+        Console.WriteLine(res);
 
-        if (res != null)
-        {
-            return res[0] - '0';
-        }
-        return -1;
+
+        return "";
     }
     
 }

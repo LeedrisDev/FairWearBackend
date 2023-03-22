@@ -6,4 +6,8 @@ public class BrandModel
      public int environmentRating { get; set; }
      public int peopleRating { get; set; }
      public int animalRating { get; set; }
+     
+     public string environmentRatingDescription { get; set; }
+     
+     
 }

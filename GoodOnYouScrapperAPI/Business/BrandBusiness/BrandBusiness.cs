@@ -25,9 +25,9 @@ public class BrandBusiness: IBrandBusiness
         {
             htmlDocument = await _brandData.GetBrandPageHtml(brandName);
         }
-        catch (Exception e)
+        catch (HttpRequestException e)
         {
-            _processingStatusResponse.Status = HttpStatusCode.NotFound;
+            _processingStatusResponse.Status = e.StatusCode?? HttpStatusCode.InternalServerError;
             _processingStatusResponse.ErrorMessage = e.Message;
             return _processingStatusResponse;
         }

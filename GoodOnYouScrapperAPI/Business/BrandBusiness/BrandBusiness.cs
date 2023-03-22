@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 using System.Net;
 using GoodOnYouScrapperAPI.DataAccess.BrandData;
 using GoodOnYouScrapperAPI.Models;
@@ -32,13 +33,14 @@ public class BrandBusiness: IBrandBusiness
         }
         
         // TODO: Implement the rest of the logic
-        var environmentRating = getEnvironmentRating(htmlDocument);
-        var peopleRating = getPeopleRating(htmlDocument);
-        var animalRating = getAnimalRating(htmlDocument);
-        
         _processingStatusResponse.Status = HttpStatusCode.OK;
-        _processingStatusResponse.Object = new BrandModel(environmentRating, peopleRating, animalRating);
 
+        _processingStatusResponse.Object = new BrandModel();
+        _processingStatusResponse.Object.name = brandName;
+        _processingStatusResponse.Object.environmentRating = getEnvironmentRating(htmlDocument);
+        _processingStatusResponse.Object.peopleRating = getPeopleRating(htmlDocument);
+        _processingStatusResponse.Object.animalRating = getAnimalRating(htmlDocument);
+        
         return _processingStatusResponse;
     }
 

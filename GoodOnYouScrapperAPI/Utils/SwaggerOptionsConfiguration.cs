@@ -14,10 +14,7 @@ public class SwaggerOptionsConfiguration: IConfigureNamedOptions<SwaggerGenOptio
         _provider = provider;
     }
     
-    /// <summary>
-    /// Configure each API discovered for Swagger Documentation
-    /// </summary>
-    /// <param name="options"></param>
+    /// <inheritdoc/>
     public void Configure(SwaggerGenOptions options)
     {
         // add swagger document for every API version discovered
@@ -29,19 +26,13 @@ public class SwaggerOptionsConfiguration: IConfigureNamedOptions<SwaggerGenOptio
         }
     }
     
-    /// <summary>
-    /// Configure Swagger Options. Inherited from the Interface
-    /// </summary>
-    /// <param name="name"></param>
-    /// <param name="options"></param>
+    /// <inheritdoc/>
     public void Configure(string? name, SwaggerGenOptions options)
     {
         Configure(options);
     }   
     
-    /// <summary>
-    /// Create information about the version of the API
-    /// </summary>
+    /// <summary>Create information about the version of the API</summary>
     /// <param name="desc"></param>
     /// <returns>Information about the API</returns>
     private static OpenApiInfo CreateVersionInfo(ApiVersionDescription desc)

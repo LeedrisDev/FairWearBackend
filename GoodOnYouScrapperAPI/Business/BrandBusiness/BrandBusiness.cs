@@ -32,7 +32,60 @@ public class BrandBusiness: IBrandBusiness
         }
         
         // TODO: Implement the rest of the logic
+        var environmentRating = getEnvironmentRating(htmlDocument);
+        var peopleRating = getPeopleRating(htmlDocument);
+        var animalRating = getAnimalRating(htmlDocument);
+        
+        _processingStatusResponse.Status = HttpStatusCode.OK;
+        _processingStatusResponse.Object = new BrandModel(environmentRating, peopleRating, animalRating);
 
-        throw new NotImplementedException();
+        return _processingStatusResponse;
     }
+
+    public int getEnvironmentRating(HtmlDocument doc)
+    {
+        var res = doc
+            .DocumentNode
+            .SelectNodes("//*[@id='__next']/div/div[4]/div/div[1]/div[2]/div[2]/div/div[1]/div[1]/div/div[2]/div/span")
+            .First()
+            .InnerHtml;
+
+        if (res != null)
+        {
+            return res[0] - '0';
+        }
+        return -1;
+    }
+    
+    public int getPeopleRating(HtmlDocument doc)
+    {
+        var res = doc
+            .DocumentNode
+            .SelectNodes("//*[@id='__next']/div/div[4]/div/div[1]/div[2]/div[2]/div/div[1]/div[2]/div/div[2]/div/span")
+            .First()
+            .InnerHtml;
+
+        if (res != null)
+        {
+            return res[0] - '0';
+        }
+        return -1;
+    }
+
+
+    public int getAnimalRating(HtmlDocument doc)
+    {
+        var res = doc
+            .DocumentNode
+            .SelectNodes("//*[@id='__next']/div/div[4]/div/div[1]/div[2]/div[2]/div/div[1]/div[3]/div/div[2]/div/span")
+            .First()
+            .InnerHtml;
+
+        if (res != null)
+        {
+            return res[0] - '0';
+        }
+        return -1;
+    }
+    
 }

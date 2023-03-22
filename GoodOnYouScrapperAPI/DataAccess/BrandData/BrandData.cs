@@ -23,7 +23,6 @@ public class BrandData: IBrandData
     public async Task<HtmlDocument> GetBrandPageHtml(string brandName)
     {
         var brandPage = await GetBrandPage(brandName);
-        Console.WriteLine(brandPage);
         _htmlDocument.LoadHtml(brandPage);
         return _htmlDocument;
     }

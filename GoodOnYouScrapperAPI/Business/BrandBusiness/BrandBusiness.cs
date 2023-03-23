@@ -33,10 +33,7 @@ public class BrandBusiness: IBrandBusiness
         }
         
         // TODO: Implement the rest of the logic
-        _processingStatusResponse.Status = HttpStatusCode.OK;
         
-        
-
         var brandModel = new BrandModel();
         brandModel.name = brandName;
         
@@ -44,7 +41,8 @@ public class BrandBusiness: IBrandBusiness
         brandModel.peopleRating = GetRating(htmlDocument, AppConstants.XPathPeopleRating);
         brandModel.animalRating = GetRating(htmlDocument, AppConstants.XPathAnimalRating);
         
-        _processingStatusResponse.Object.environmentRatingDescription = GetEnvironmentRatingDescription(htmlDocument);
+        _processingStatusResponse.Status = HttpStatusCode.OK;
+        _processingStatusResponse.Object = brandModel;
         
         return _processingStatusResponse;
     }

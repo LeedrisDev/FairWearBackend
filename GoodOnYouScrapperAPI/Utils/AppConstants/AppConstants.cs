@@ -26,5 +26,7 @@ public abstract class AppConstants: IAppConstants
     
     public static readonly string XPathAnimalRating =
         "//*[@id='__next']/div/div[4]/div/div[1]/div[2]/div[2]/div/div[1]/div[3]/div/div[2]/div/span";
-    
+
+    public static readonly string XPathRatingDescription =
+        "//*[@id='rating-summary-text']";
 }

@@ -17,6 +17,9 @@ public class BrandBusiness: IBrandBusiness
         _brandData = brandData;
     }
     
+    
+    /// <summary>Retrieves information for a brand on the GoodOnYou website</summary>
+    /// <param name="brandName">Name of the brand to retrieve information for</param>
     public async Task<ProcessingStatusResponse<BrandModel>> GetBrandInformation(string brandName)
     {
         HtmlDocument htmlDocument;
@@ -35,46 +38,55 @@ public class BrandBusiness: IBrandBusiness
         // TODO: Implement the rest of the logic
         
         var brandModel = new BrandModel();
-        brandModel.name = brandName;
+        brandModel.Name = brandName;
         
-        brandModel.environmentRating = GetRating(htmlDocument, AppConstants.XPathEnvironmentRating);
-        brandModel.peopleRating = GetRating(htmlDocument, AppConstants.XPathPeopleRating);
-        brandModel.animalRating = GetRating(htmlDocument, AppConstants.XPathAnimalRating);
+        brandModel.EnvironmentRating = GetRating(htmlDocument, AppConstants.XPathEnvironmentRating);
+        brandModel.PeopleRating = GetRating(htmlDocument, AppConstants.XPathPeopleRating);
+        brandModel.AnimalRating = GetRating(htmlDocument, AppConstants.XPathAnimalRating);
+
+        brandModel.RatingDescription = GetRatingDescription(htmlDocument);
         
         _processingStatusResponse.Status = HttpStatusCode.OK;
         _processingStatusResponse.Object = brandModel;
         
         return _processingStatusResponse;
     }
-
+    
+    
+    /// <summary>
+    /// Retrieves the rating for a specific category
+    /// </summary>
+    /// <param name="doc">Document to retrieve the information from</param>
+    /// <param name="xpath">Path of the content in the source document</param>
+    /// <returns></returns>
     private static int GetRating(HtmlDocument doc, string xpath)
     {
-        var res = doc
+        var rating = doc
             .DocumentNode
             .SelectNodes(xpath)
             .First()
             .InnerHtml;
 
-        if (res != null)
+        if (rating != null)
         {
-            return res[0] - '0';
+            return rating[0] - '0';
         }
         return -1;
     }
 
-    private static string GetEnvironmentRatingDescription(HtmlDocument doc)
+    /// <summary>
+    /// Retrieves the html of the overall rating description
+    /// </summary>
+    /// <param name="doc">Document to retrieve the information from</param>
+    /// <returns></returns>
+    private static string GetRatingDescription(HtmlDocument doc)
     {
-        var res = doc
+        var ratingSummaryNodes = doc
             .DocumentNode
-            .SelectNodes("//*[@id='rating-summary-text']")
-            .First()
-            .ChildNodes
-            .Count;
-        
-        Console.WriteLine(res);
+            .SelectNodes(AppConstants.XPathRatingDescription)
+            .First();
 
-
-        return "";
+        return ratingSummaryNodes.OuterHtml;
     }
     
 }

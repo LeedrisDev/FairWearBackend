@@ -2,12 +2,11 @@ namespace GoodOnYouScrapperAPI.Models;
 
 public class BrandModel
 {
-     public string name { get; set; }
-     public int environmentRating { get; set; }
-     public int peopleRating { get; set; }
-     public int animalRating { get; set; }
-     
-     public string environmentRatingDescription { get; set; }
+     public string Name { get; set; }
+     public int EnvironmentRating { get; set; }
+     public int PeopleRating { get; set; }
+     public int AnimalRating { get; set; }
+     public string RatingDescription { get; set; }
      
      
 }

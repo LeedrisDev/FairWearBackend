@@ -13,20 +13,20 @@ public class BrandBusinessTester
     public async Task GetBrandInformations()
     {
         _brandDataMock.Setup(m => m.GetBrandPageHtml(It.IsAny<string>()))
-            .ReturnsAsync(getTestHtmlDocument());
+            .ReturnsAsync(GetTestHtmlDocument());
         
         var brandBusiness = new GoodOnYouScrapperAPI.Business.BrandBusiness.BrandBusiness(_brandDataMock.Object);
         var mock = _brandDataMock.Object;
         var brandName = "Levis";
 
         var result = await brandBusiness.GetBrandInformation(brandName);
-
-        Assert.AreEqual(4, result.Object.environmentRating);
-        Assert.AreEqual(2, result.Object.peopleRating);
-        Assert.AreEqual(2, result.Object.animalRating);
+        
+        Assert.AreEqual(4, result.Object.EnvironmentRating);
+        Assert.AreEqual(2, result.Object.PeopleRating);
+        Assert.AreEqual(2, result.Object.AnimalRating);
     }
-
-    public static HtmlDocument getTestHtmlDocument()
+    
+    public static HtmlDocument GetTestHtmlDocument()
     {
         var workingDirectory = Environment.CurrentDirectory;
         var projectDirectory = Directory.GetParent(workingDirectory)?.Parent?.Parent?.FullName;

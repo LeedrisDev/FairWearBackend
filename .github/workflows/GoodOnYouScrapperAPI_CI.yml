@@ -79,6 +79,6 @@ jobs:
     steps:
       - uses: nobrayner/discord-webhook@v1
         with:
-          github-token: ${{ secrets.TOKEN }}
+          github-token: ${{ secrets.github_token }}
           discord-webhook: ${{ secrets.DISCORD_WEBHOOK }} 
           

@@ -68,17 +68,4 @@ jobs:
         
       - name: Build
         run: dotnet build ./GoodOnYouScrapperAPI/GoodOnYouScrapperAPI.csproj --configuration Release --no-restore 
-
-  notify:
-    name: 'Notify'
-    needs: 
-      - test
-      - build
-    runs-on: ubuntu-latest
-    if: ${{ always() }}
-    steps:
-      - uses: nobrayner/discord-webhook@v1
-        with:
-          github-token: ${{ secrets.github_token }}
-          discord-webhook: ${{ secrets.DISCORD_WEBHOOK }} 
           

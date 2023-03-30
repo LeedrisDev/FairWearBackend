@@ -20,7 +20,7 @@ public class BrandBusinessTester
         var brandName = "Levis";
 
         var result = await brandBusiness.GetBrandInformation(brandName);
-        
+
         Assert.AreEqual(4, result.Object.EnvironmentRating);
         Assert.AreEqual(2, result.Object.PeopleRating);
         Assert.AreEqual(2, result.Object.AnimalRating);

@@ -1,4 +1,5 @@
 using System.Net;
+using System.Runtime.InteropServices;
 using GoodOnYouScrapperAPI.DataAccess.BrandData;
 using GoodOnYouScrapperAPI.Models;
 using GoodOnYouScrapperAPI.Utils.AppConstants;
@@ -39,13 +40,17 @@ public class BrandBusiness: IBrandBusiness
         
         var brandModel = new BrandModel();
         brandModel.Name = brandName;
+        brandModel.Country = GetBrandCountry(htmlDocument);
         
         brandModel.EnvironmentRating = GetRating(htmlDocument, AppConstants.XPathEnvironmentRating);
         brandModel.PeopleRating = GetRating(htmlDocument, AppConstants.XPathPeopleRating);
         brandModel.AnimalRating = GetRating(htmlDocument, AppConstants.XPathAnimalRating);
-
-        brandModel.RatingDescription = GetRatingDescription(htmlDocument);
         
+        brandModel.RatingDescription = GetRatingDescription(htmlDocument);
+        brandModel.Categories = GetBrandCategories(htmlDocument);
+        brandModel.Ranges = GetBrandRanges(htmlDocument);
+
+
         _processingStatusResponse.Status = HttpStatusCode.OK;
         _processingStatusResponse.Object = brandModel;
         
@@ -86,7 +91,69 @@ public class BrandBusiness: IBrandBusiness
             .SelectNodes(AppConstants.XPathRatingDescription)
             .First();
 
-        return ratingSummaryNodes.OuterHtml;
+        return ratingSummaryNodes.InnerText;
     }
+    
+    /// <summary>
+    /// Retrieves the location of a brand
+    /// </summary>
+    /// <param name="doc">Document to retrieve the information from</param>
+    /// <returns></returns>
+    private static string GetBrandCountry(HtmlDocument doc)
+    {
+        var country = doc
+            .DocumentNode
+            .SelectNodes(AppConstants.XPathBrandCountry)
+            .First()
+            .InnerText;
+        
+        if (country.StartsWith("location: "))
+            return country.Substring("location: ".Length);
+        
+        return "";
+    }
+    
+    private static string[] GetBrandCategories(HtmlDocument doc)
+    {
+        var categories = doc
+            .DocumentNode
+            .SelectNodes(AppConstants.XPathBrandCategories)
+            .First()
+            .ChildNodes;
+        
+        var listCategories = new List<String>();
+
+        foreach (var category in categories)
+        {
+            listCategories.Add(category.InnerText);
+        }
+
+        return listCategories.ToArray();
+    }
+    
+    
+    private static string[] GetBrandRanges(HtmlDocument doc)
+    {
+        var ranges = doc
+            .DocumentNode
+            .SelectNodes(AppConstants.XPathBrandRanges)
+            .First()
+            .ChildNodes;
+
+        ranges.RemoveAt(0);
+        var listRanges = new List<String>();
+        
+        foreach (var range in ranges)
+        {
+            string rangeText = range.InnerText;
+
+            if (rangeText.EndsWith(','))
+                rangeText = rangeText.Remove(rangeText.Length - 1);
+            listRanges.Add(rangeText);
+        }
+
+        return listRanges.ToArray();
+    }
+    
     
 }

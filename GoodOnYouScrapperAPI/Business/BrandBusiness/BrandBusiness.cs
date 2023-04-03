@@ -8,7 +8,7 @@ namespace GoodOnYouScrapperAPI.Business.BrandBusiness;
 
 public class BrandBusiness: IBrandBusiness
 {
-    private ProcessingStatusResponse<BrandModel> _processingStatusResponse;
+    private readonly ProcessingStatusResponse<BrandModel> _processingStatusResponse;
     private readonly IBrandData _brandData;
 
     public BrandBusiness(IBrandData brandData)
@@ -34,18 +34,16 @@ public class BrandBusiness: IBrandBusiness
             _processingStatusResponse.ErrorMessage = e.Message;
             return _processingStatusResponse;
         }
-        
-        // TODO: Implement the rest of the logic
-        
-        var brandModel = new BrandModel();
-        brandModel.Name = brandName;
-        
-        brandModel.EnvironmentRating = GetRating(htmlDocument, AppConstants.XPathEnvironmentRating);
-        brandModel.PeopleRating = GetRating(htmlDocument, AppConstants.XPathPeopleRating);
-        brandModel.AnimalRating = GetRating(htmlDocument, AppConstants.XPathAnimalRating);
 
-        brandModel.RatingDescription = GetRatingDescription(htmlDocument);
-        
+        var brandModel = new BrandModel
+        {
+            Name = brandName,
+            EnvironmentRating = GetRating(htmlDocument, AppConstants.XPathEnvironmentRating),
+            PeopleRating = GetRating(htmlDocument, AppConstants.XPathPeopleRating),
+            AnimalRating = GetRating(htmlDocument, AppConstants.XPathAnimalRating),
+            RatingDescription = GetRatingDescription(htmlDocument)
+        };
+
         _processingStatusResponse.Status = HttpStatusCode.OK;
         _processingStatusResponse.Object = brandModel;
         
@@ -53,9 +51,7 @@ public class BrandBusiness: IBrandBusiness
     }
     
     
-    /// <summary>
-    /// Retrieves the rating for a specific category
-    /// </summary>
+    /// <summary>Retrieves the rating for a specific category</summary>
     /// <param name="doc">Document to retrieve the information from</param>
     /// <param name="xpath">Path of the content in the source document</param>
     /// <returns></returns>
@@ -74,9 +70,7 @@ public class BrandBusiness: IBrandBusiness
         return -1;
     }
 
-    /// <summary>
-    /// Retrieves the html of the overall rating description
-    /// </summary>
+    /// <summary>Retrieves the html of the overall rating description</summary>
     /// <param name="doc">Document to retrieve the information from</param>
     /// <returns></returns>
     private static string GetRatingDescription(HtmlDocument doc)

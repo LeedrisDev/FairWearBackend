@@ -1,5 +1,7 @@
 using System.Net;
-using System.Runtime.InteropServices;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Web;
 using GoodOnYouScrapperAPI.DataAccess.BrandData;
 using GoodOnYouScrapperAPI.Models;
 using GoodOnYouScrapperAPI.Utils.AppConstants;
@@ -50,7 +52,6 @@ public class BrandBusiness: IBrandBusiness
         brandModel.Categories = GetBrandCategories(htmlDocument);
         brandModel.Ranges = GetBrandRanges(htmlDocument);
 
-
         _processingStatusResponse.Status = HttpStatusCode.OK;
         _processingStatusResponse.Object = brandModel;
         
@@ -89,9 +90,30 @@ public class BrandBusiness: IBrandBusiness
         var ratingSummaryNodes = doc
             .DocumentNode
             .SelectNodes(AppConstants.XPathRatingDescription)
-            .First();
+            .First()
+            .ChildNodes;
 
-        return ratingSummaryNodes.InnerText;
+        StringBuilder sb = new StringBuilder();
+        
+        foreach (var node in ratingSummaryNodes)
+        {
+            if (node.Name == "ul")
+            {
+                foreach (var li in node.ChildNodes)
+                {
+                    sb.Append("\t" + "- "+ li.InnerText + "\n");
+                }
+            }
+            else
+            {
+                sb.Append(node.InnerText + "\n");
+            }
+
+            if (node.NextSibling != null && node.NextSibling.Name == "p")
+                sb.Append("\n");
+        }
+        
+        return sb.ToString();
     }
     
     /// <summary>
@@ -109,51 +131,70 @@ public class BrandBusiness: IBrandBusiness
         
         if (country.StartsWith("location: "))
             return country.Substring("location: ".Length);
-        
+
         return "";
     }
     
     private static string[] GetBrandCategories(HtmlDocument doc)
     {
-        var categories = doc
+        var sideBar = doc
             .DocumentNode
-            .SelectNodes(AppConstants.XPathBrandCategories)
+            .SelectNodes(AppConstants.XPathSideBar)
             .First()
             .ChildNodes;
         
         var listCategories = new List<String>();
+        var divList = sideBar.Where(row => row.Name == "div").ToList();
 
-        foreach (var category in categories)
+
+        foreach (var row in divList)
         {
-            listCategories.Add(category.InnerText);
-        }
+            if (row.FirstChild.InnerText == "CATEGORIES")
+            {
+                row.ChildNodes.RemoveAt(0);
+                foreach (var node in row.FirstChild.ChildNodes)
+                {
+                    var str = HttpUtility.HtmlDecode(node.InnerText);
+                    listCategories.Add(str);
+                }
+                return listCategories.ToArray();
 
+            }
+        }
         return listCategories.ToArray();
     }
     
     
     private static string[] GetBrandRanges(HtmlDocument doc)
     {
-        var ranges = doc
+        var sideBar = doc
             .DocumentNode
-            .SelectNodes(AppConstants.XPathBrandRanges)
+            .SelectNodes(AppConstants.XPathSideBar)
             .First()
             .ChildNodes;
-
-        ranges.RemoveAt(0);
+        
+        var divList = sideBar.Where(row => row.Name == "div").ToList();
+        
         var listRanges = new List<String>();
         
-        foreach (var range in ranges)
+        foreach (var row in divList)
         {
-            string rangeText = range.InnerText;
+            if (row.FirstChild.InnerText == "RANGE")
+            {
+                row.ChildNodes.RemoveAt(0);
+                foreach (var node in row.ChildNodes)
+                {
+                    var str = HttpUtility.HtmlDecode(node.InnerText);
+                    str = Regex.Replace(str, @"[^\w]", string.Empty);
+                    listRanges.Add(str);
+                }
 
-            if (rangeText.EndsWith(','))
-                rangeText = rangeText.Remove(rangeText.Length - 1);
-            listRanges.Add(rangeText);
+                return listRanges.ToArray();
+            }
         }
 
         return listRanges.ToArray();
     }
-    
-    
+
+
 }

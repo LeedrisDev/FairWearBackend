@@ -37,14 +37,9 @@ public abstract class AppConstants: IAppConstants
     /// <summary>Regex to extract the rating from the rating description</summary>
     public static readonly string XPathBrandCountry =
         "//*[@id='brand-hero-summary']/div/div[2]/p[3]";
-    
-    /// <summary>XPath for brand categories</summary>
-    public static readonly string XPathBrandCategories =
-        "//*[@id='sideBar']/div[4]/div[2]";
-    
-    /// <summary>XPath for brand categories</summary>
-    public static readonly string XPathBrandRanges =
-        "//*[@id='sideBar']/div[3]";
-    
+
+    /// <summary>XPath for sidebar</summary>
+    public static readonly string XPathSideBar =
+        "//*[@id='sideBar']";
     
 }

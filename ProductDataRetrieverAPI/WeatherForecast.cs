@@ -1,4 +1,4 @@
-namespace ProductDataRetriever;
+namespace ProductDataRetrieverAPI;
 
 public class WeatherForecast
 {

@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace ProductDataRetriever.Controllers;
+namespace ProductDataRetrieverAPI.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1.0")]
 public class WeatherForecastController : ControllerBase
 {
     private static readonly string[] Summaries = new[]

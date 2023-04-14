@@ -40,17 +40,17 @@ public class BrandBusiness: IBrandBusiness
         
         // TODO: Implement the rest of the logic
         
-        var brandModel = new BrandModel();
-        brandModel.Name = brandName;
-        brandModel.Country = GetBrandCountry(htmlDocument);
-        
-        brandModel.EnvironmentRating = GetRating(htmlDocument, AppConstants.XPathEnvironmentRating);
-        brandModel.PeopleRating = GetRating(htmlDocument, AppConstants.XPathPeopleRating);
-        brandModel.AnimalRating = GetRating(htmlDocument, AppConstants.XPathAnimalRating);
-        
-        brandModel.RatingDescription = GetRatingDescription(htmlDocument);
-        brandModel.Categories = GetBrandCategories(htmlDocument);
-        brandModel.Ranges = GetBrandRanges(htmlDocument);
+        var brandModel = new BrandModel
+        {
+            Name = brandName,
+            Country = GetBrandCountry(htmlDocument),
+            EnvironmentRating = GetRating(htmlDocument, AppConstants.XPathEnvironmentRating),
+            PeopleRating = GetRating(htmlDocument, AppConstants.XPathPeopleRating),
+            AnimalRating = GetRating(htmlDocument, AppConstants.XPathAnimalRating),
+            RatingDescription = GetRatingDescription(htmlDocument),
+            Categories = GetBrandCategories(htmlDocument),
+            Ranges = GetBrandRanges(htmlDocument),
+        };
 
         _processingStatusResponse.Status = HttpStatusCode.OK;
         _processingStatusResponse.Object = brandModel;
@@ -105,8 +105,8 @@ public class BrandBusiness: IBrandBusiness
                 sb.Append(node.InnerText + "\n");
             }
 
-            if (node.NextSibling != null && node.NextSibling.Name == "p")
-                sb.Append("\n");
+            if (node.NextSibling is { Name: "p" })
+                sb.Append('\n');
         }
         
         return sb.ToString();
@@ -125,10 +125,7 @@ public class BrandBusiness: IBrandBusiness
             .First()
             .InnerText;
         
-        if (country.StartsWith("location: "))
-            return country.Substring("location: ".Length);
-
-        return "";
+        return country.StartsWith("location: ") ? country.Substring("location: ".Length) : "";
     }
     
     private static string[] GetBrandCategories(HtmlDocument doc)

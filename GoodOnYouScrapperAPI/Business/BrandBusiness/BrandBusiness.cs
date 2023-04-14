@@ -11,7 +11,7 @@ namespace GoodOnYouScrapperAPI.Business.BrandBusiness;
 
 public class BrandBusiness: IBrandBusiness
 {
-    private ProcessingStatusResponse<BrandModel> _processingStatusResponse;
+    private readonly ProcessingStatusResponse<BrandModel> _processingStatusResponse;
     private readonly IBrandData _brandData;
 
     public BrandBusiness(IBrandData brandData)
@@ -59,9 +59,7 @@ public class BrandBusiness: IBrandBusiness
     }
     
     
-    /// <summary>
-    /// Retrieves the rating for a specific category
-    /// </summary>
+    /// <summary>Retrieves the rating for a specific category</summary>
     /// <param name="doc">Document to retrieve the information from</param>
     /// <param name="xpath">Path of the content in the source document</param>
     /// <returns></returns>
@@ -80,9 +78,7 @@ public class BrandBusiness: IBrandBusiness
         return -1;
     }
 
-    /// <summary>
-    /// Retrieves the html of the overall rating description
-    /// </summary>
+    /// <summary>Retrieves the html of the overall rating description</summary>
     /// <param name="doc">Document to retrieve the information from</param>
     /// <returns></returns>
     private static string GetRatingDescription(HtmlDocument doc)

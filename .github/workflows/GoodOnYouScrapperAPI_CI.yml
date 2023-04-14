@@ -28,7 +28,7 @@ jobs:
       
       - name: Cache Resharper CLI
         id: cache-resharper
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.dotnet/tools
           key: resharper-cli

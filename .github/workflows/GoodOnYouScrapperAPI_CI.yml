@@ -40,6 +40,15 @@ jobs:
         
       - name: Build
         run: dotnet build ./GoodOnYouScrapperAPI/GoodOnYouScrapperAPI.csproj --configuration Release --no-restore 
+      
+      - uses: sarisia/actions-status-discord@v1
+        if: ${{ job.status == 'failure' || job.status == 'cancelled' }}
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          status: ${{ job.status }}
+          title: "Build & Test GoodOnYou Scrapper API"
+          username: GitHub Actions
+          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
   
   test:
     name: 'Tests'
@@ -69,4 +78,13 @@ jobs:
           
       - name: 'DotNet Test'
         run: dotnet test --no-restore --verbosity normal GoodOnYouScrapperAPI.Tests/GoodOnYouScrapperAPI.Tests.csproj
+
+      - uses: sarisia/actions-status-discord@v1
+        if: always()
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          status: ${{ job.status }}
+          title: "Build & Test GoodOnYou Scrapper API"
+          username: GitHub Actions
+          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
           

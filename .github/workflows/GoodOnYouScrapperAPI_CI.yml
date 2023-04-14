@@ -35,6 +35,7 @@ jobs:
           restore-keys: resharper-cli
       
       - name: Install Resharper CLI
+        if: steps.cache-resharper.outputs.cache-hit != 'true'
         run: |
           dotnet tool install JetBrains.ReSharper.GlobalTools --tool-path ~/.dotnet/tools
           export PATH=$PATH:~/.dotnet/tools

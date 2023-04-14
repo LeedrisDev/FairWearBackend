@@ -45,7 +45,7 @@ jobs:
 
       - name: Check Resharper results
         run: |
-          if grep -q 'Issue Type="ERROR\|Issue Type="SUGGESTION\|Issue Type="WARNING"' resharper-results.xml; then 
+          if grep -q 'Issue Type="ERROR\|Issue Type="SUGGESTION\|Issue Type="WARNING"' resharper-report.xml; then 
           exit 1; 
           fi
 

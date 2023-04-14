@@ -41,22 +41,19 @@ jobs:
           export PATH=$PATH:~/.dotnet/tools
 
       - name: Run ReSharper InspectCode
-        run: jb inspectcode GoodOnYouScrapperAPI/GoodOnYouScrapperAPI.csproj -o=resharper-report.txt -f:Text -verbosity=INFO -no-swea
+        run: jb inspectcode GoodOnYouScrapperAPI/GoodOnYouScrapperAPI.csproj -o=resharper-report.xml -f=Xml -verbosity=INFO -no-swea
 
       - name: Check Resharper results
         run: |
-          if grep -q "<ReportInspectionResults>" resharper-results.txt; then
-            echo "Resharper detected issues in the code."
-            exit 1
-          else
-            echo "Code is clean according to Resharper."
+          if grep -q 'Issue Type="ERROR\|Issue Type="SUGGESTION\|Issue Type="WARNING"' resharper-results.xml; then 
+          exit 1; 
           fi
 
       - name: Upload ReSharper Report
         uses: actions/upload-artifact@v3
         with:
           name: resharper-report
-          path: resharper-report.txt
+          path: resharper-report.xml
 
       - uses: sarisia/actions-status-discord@v1
         if: ${{ job.status == 'failure' || job.status == 'cancelled' }}

@@ -50,6 +50,7 @@ jobs:
           if grep -q 'Severity="SUGGESTION"' resharper-report.xml; then exit 1; fi
 
       - name: Upload ReSharper Report
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: resharper-report

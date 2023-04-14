@@ -14,8 +14,36 @@ on:
       - '.github/workflows/GoodOnYouScrapperAPI_CI.yml'
 
 jobs:
+  
+  build:
+    name: 'Build'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET Core SDK 7.0.x
+        uses: actions/setup-dotnet@v3
+        with:
+            dotnet-version: '7.0.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          # Look to see if there is a cache hit for the corresponding requirements file
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: 'Install dependencies'
+        run: dotnet restore ./GoodOnYouScrapperAPI/GoodOnYouScrapperAPI.csproj
+        
+      - name: Build
+        run: dotnet build ./GoodOnYouScrapperAPI/GoodOnYouScrapperAPI.csproj --configuration Release --no-restore 
+  
   test:
     name: 'Tests'
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -41,31 +69,4 @@ jobs:
           
       - name: 'DotNet Test'
         run: dotnet test --no-restore --verbosity normal GoodOnYouScrapperAPI.Tests/GoodOnYouScrapperAPI.Tests.csproj
-  
-  build:
-    name: 'Build'
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup .NET Core SDK 7.0.x
-        uses: actions/setup-dotnet@v3
-        with:
-            dotnet-version: '7.0.x'
-
-      - name: Cache NuGet packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-
-      - name: 'Install dependencies'
-        run: dotnet restore ./GoodOnYouScrapperAPI/GoodOnYouScrapperAPI.csproj
-        
-      - name: Build
-        run: dotnet build ./GoodOnYouScrapperAPI/GoodOnYouScrapperAPI.csproj --configuration Release --no-restore 
           

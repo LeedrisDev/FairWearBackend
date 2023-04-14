@@ -44,7 +44,7 @@ jobs:
 
       - name: Check Resharper results
         run: |
-          if grep -q "<ReportInspectionResults>" resharper-results.xml; then
+          if grep -q "<ReportInspectionResults>" resharper-results.txt; then
             echo "Resharper detected issues in the code."
             exit 1
           else
@@ -56,6 +56,15 @@ jobs:
         with:
           name: resharper-report
           path: resharper-report.txt
+
+      - uses: sarisia/actions-status-discord@v1
+        if: ${{ job.status == 'failure' || job.status == 'cancelled' }}
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          status: ${{ job.status }}
+          title: "Linter on GoodOnYou Scrapper API"
+          username: GitHub Actions
+          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
 
   
   build:

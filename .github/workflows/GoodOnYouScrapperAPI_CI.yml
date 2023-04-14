@@ -40,7 +40,7 @@ jobs:
           export PATH=$PATH:~/.dotnet/tools
 
       - name: Run ReSharper InspectCode
-        run: jb inspectcode /GoodOnYouScrapperAPI/GoodOnYouScrapperAPI.csproj -o=resharper-report.txt -f:Text -verbosity=INFO -no-swea
+        run: jb inspectcode GoodOnYouScrapperAPI/GoodOnYouScrapperAPI.csproj -o=resharper-report.txt -f:Text -verbosity=INFO -no-swea
 
       - name: Check Resharper results
         run: |

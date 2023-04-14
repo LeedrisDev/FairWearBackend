@@ -14,9 +14,53 @@ on:
       - '.github/workflows/GoodOnYouScrapperAPI_CI.yml'
 
 jobs:
+
+  linter:
+    name: 'Linter'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET Core SDK 7.0.x
+        uses: actions/setup-dotnet@v3
+        with:
+            dotnet-version: '7.0.x'
+      
+      - name: Cache Resharper CLI
+        id: cache-resharper
+        uses: actions/cache@v2
+        with:
+          path: ~/.dotnet/tools
+          key: resharper-cli
+          restore-keys: resharper-cli
+      
+      - name: Install Resharper CLI
+        run: |
+          dotnet tool install JetBrains.ReSharper.GlobalTools --tool-path ~/.dotnet/tools
+          export PATH=$PATH:~/.dotnet/tools
+
+      - name: Run ReSharper InspectCode
+        run: jb inspectcode /GoodOnYouScrapperAPI/GoodOnYouScrapperAPI.csproj -o=resharper-report.txt -f:Text -verbosity=INFO -no-swea
+
+      - name: Check Resharper results
+        run: |
+          if grep -q "<ReportInspectionResults>" resharper-results.xml; then
+            echo "Resharper detected issues in the code."
+            exit 1
+          else
+            echo "Code is clean according to Resharper."
+          fi
+
+      - name: Upload ReSharper Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: resharper-report
+          path: resharper-report.txt
+
   
   build:
     name: 'Build'
+    needs: linter
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -52,7 +96,9 @@ jobs:
   
   test:
     name: 'Tests'
-    needs: build
+    needs: 
+      - build
+      - linter
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

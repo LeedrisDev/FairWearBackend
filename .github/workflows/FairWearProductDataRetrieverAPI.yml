@@ -61,7 +61,7 @@ jobs:
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           status: ${{ job.status }}
-          title: "Build & Test Product Data Retriever API"
+          title: "Linter Product Data Retriever API"
           username: GitHub Actions
           avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
   
@@ -80,6 +80,7 @@ jobs:
 
       - name: Cache NuGet packages
         uses: actions/cache@v3
+        id: cache-packages
         with:
           path: ~/.nuget/packages
           # Look to see if there is a cache hit for the corresponding requirements file
@@ -88,6 +89,7 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: 'Install dependencies'
+        if: steps.cache-packages.outputs.cache-hit != 'true'
         run: dotnet restore ./FairWearProductDataRetriever.API/FairWearProductDataRetriever.API.csproj
 
       - name: Build
@@ -118,14 +120,16 @@ jobs:
 
       - name: Cache NuGet packages
         uses: actions/cache@v3
+        id: cache-packages
         with:
           path: ~/.nuget/packages
           # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          key: ${{ runner.os }}-nuget-tests-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-nuget-
+            ${{ runner.os }}-nuget-tests-
 
       - name: 'Install dependencies'
+        if: steps.cache-packages.outputs.cache-hit != 'true'
         run: |
           dotnet restore ./FairWearProductDataRetriever.API.Tests/FairWearProductDataRetriever.API.Tests.csproj
           dotnet restore ./FairWearProductDataRetriever.API/FairWearProductDataRetriever.API.csproj

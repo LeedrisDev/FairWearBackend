@@ -14,7 +14,7 @@
             })(window,document,'script','dataLayer','GTM-TFZDZVH');
         <!-- End Google Tag Manager -->
     </script>
-    <title>Invalid Value — Go-UPC</title>
+    <title>Item Not Found — Go-UPC</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
 
@@ -84,22 +84,29 @@
 
 
 
-        <div class="page-content content" style="max-width: 600px; margin: 0 auto;">
-            <div class="alert alert-danger">Please enter a valid UPC (12-digit number) or EAN/ISBN (13-digit
-                number)!</div>
-            <div class="search-form-container">
-                <form class="search-form" action="/search" method="get">
-                    <label for="barcode-search-HMAvN">
-                        Enter any <abbr title="Universal Product Code">UPC</abbr>,
-                        <abbr title="International Article Number (European Article Number, previously)">EAN</abbr>
-                        (<abbr title="Global Trade Identification Number, a standard including EAN">GTIN</abbr>), or
-                        <abbr title="International Standard Book Number">ISBN</abbr>:
-                    </label>
-                    <div class="search-input">
-                        <input type="text" name="q" id="barcode-search-HMAvN" value="2965115029871" class="form-control barcode-search-field" placeholder=""/>
-                        <button class="button" type="submit">Go</button>
+        <div class="page-content content">
+            <div id="resultPageContainer">
+                <p class="not-found">
+                    Sorry, we were not able to find a product for <b>EAN 3102271165352</b>.
+                </p>
+                <div>
+                    <div>
+                        <div class="search-form-container">
+                            <form class="search-form" action="/search" method="get">
+                                <label for="barcode-search-4rNSL">
+                                    Enter any <abbr title="Universal Product Code">UPC</abbr>,
+                                    <abbr title="International Article Number (European Article Number, previously)">EAN</abbr>
+                                    (<abbr title="Global Trade Identification Number, a standard including EAN">GTIN</abbr>), or
+                                    <abbr title="International Standard Book Number">ISBN</abbr>:
+                                </label>
+                                <div class="search-input">
+                                    <input type="text" name="q" id="barcode-search-4rNSL" value="" class="form-control barcode-search-field" placeholder=""/>
+                                    <button class="button" type="submit">Go</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </main>

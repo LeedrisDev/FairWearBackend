@@ -17,7 +17,6 @@ public class ProductBusinessTest
             .ReturnsAsync(GetTestHtmlDocument("LevisProductData.html"));
         
         var productBusiness = new ProductDataRetrieverAPI.Business.ProductBusiness.ProductBusiness(_productBusinessMock.Object);
-        var mock = _productBusinessMock.Object;
         var barcode = "3665115029871";
         
         var result = await productBusiness.GetProductInformation(barcode);
@@ -28,7 +27,22 @@ public class ProductBusinessTest
         Assert.AreEqual("Shirts & Tops", result.Object.Category);
     }
     
-    public static HtmlDocument GetTestHtmlDocument(string testFileName)
+    [TestMethod]
+    public async Task GetProductInformation_WithWrongBarcode_ThenReturnsNotFound()
+    {
+        _productBusinessMock.Setup(m => m.GetBarcodeInfoPageHtml(It.IsAny<string>()))
+            .ReturnsAsync(GetTestHtmlDocument("NotFoundData.html"));
+        
+        var productBusiness = new ProductDataRetrieverAPI.Business.ProductBusiness.ProductBusiness(_productBusinessMock.Object);
+        var barcode = "3102271165352";
+        
+        var result = await productBusiness.GetProductInformation(barcode);
+
+        Assert.AreEqual(HttpStatusCode.NotFound, result.Status);
+        Assert.AreEqual("Product not found", result.ErrorMessage);
+    }
+
+    private static HtmlDocument GetTestHtmlDocument(string testFileName)
     {
         var workingDirectory = Environment.CurrentDirectory;
         var projectDirectory = Directory.GetParent(workingDirectory)?.Parent?.Parent?.FullName;

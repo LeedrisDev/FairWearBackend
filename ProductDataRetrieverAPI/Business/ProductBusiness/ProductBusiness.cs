@@ -1,5 +1,4 @@
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Web;
 using HtmlAgilityPack;
 using ProductDataRetrieverAPI.DataAccess.ProductData;
@@ -36,6 +35,10 @@ public class ProductBusiness : IProductBusiness
         try
         {
             htmlDocument = await _productData.GetBarcodeInfoPageHtml(barcode);
+            if (CheckForNotFound(htmlDocument))
+            {
+                throw new HttpRequestException("Product not found", null, HttpStatusCode.NotFound);
+            }
         }
         catch (HttpRequestException e)
         {
@@ -82,7 +85,7 @@ public class ProductBusiness : IProductBusiness
 
         return node.InnerText;
     }
-    
+
     private static string GetProductCategory(HtmlDocument doc)
     {
         var nodes = doc.DocumentNode
@@ -92,12 +95,36 @@ public class ProductBusiness : IProductBusiness
 
         var categoryNodes =
             nodes.Find(
-                node => node.ChildNodes.Any( child => child.Name == "td" && child.FirstChild.InnerText == "Category")
+                node => node.ChildNodes.Any(child => child.Name == "td" && child.FirstChild.InnerText == "Category")
             )?.ChildNodes.Where(node => node.Name == "td").ToList();
-        
-        
+
+
         var str = HttpUtility.HtmlDecode(categoryNodes?[1].InnerText ?? "");
         return str;
     }
     
+    private static bool CheckForNotFound(HtmlDocument doc)
+    {
+        try
+        {
+
+            var node = doc.DocumentNode.SelectSingleNode("//*[@id='resultPageContainer']/p");
+    
+            if (node != null)
+            {
+                var text = node.InnerText;
+                if (text.Contains("Sorry, we were not able to find a product for"))
+                {
+                    return true;
+                }
+            }
+    
+            return false;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+        
+    }
 }

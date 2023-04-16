@@ -1,4 +1,6 @@
 using System.Net;
+using System.Text.RegularExpressions;
+using System.Web;
 using HtmlAgilityPack;
 using ProductDataRetrieverAPI.DataAccess.ProductData;
 using ProductDataRetrieverAPI.Models;
@@ -46,7 +48,8 @@ public class ProductBusiness : IProductBusiness
         {
             UpcCode = barcode,
             Name = GetProductName(htmlDocument),
-            BrandName = GetBrandName(htmlDocument),
+            BrandName = GetProductBrandName(htmlDocument),
+            Category = GetProductCategory(htmlDocument),
         };
         
         _processingStatusResponse.Status = HttpStatusCode.OK;
@@ -55,7 +58,7 @@ public class ProductBusiness : IProductBusiness
         return _processingStatusResponse;
     }
 
-    private static string GetBrandName(HtmlDocument doc)
+    private static string GetProductBrandName(HtmlDocument doc)
     { 
         var nodes = doc.DocumentNode
             .SelectSingleNode(AppConstants.XPathInformationTable)
@@ -66,8 +69,10 @@ public class ProductBusiness : IProductBusiness
             nodes.Find(
             node => node.ChildNodes.Any( child => child.Name == "td" && child.FirstChild.InnerText == "Brand")
             )?.ChildNodes.Where(node => node.Name == "td").ToList();
-        
-        return brandNode?[1].InnerText ?? "";
+
+
+        var str = HttpUtility.HtmlDecode(brandNode?[1].InnerText ?? "");
+        return str;
     }
 
     private static string GetProductName(HtmlDocument doc)
@@ -78,5 +83,21 @@ public class ProductBusiness : IProductBusiness
         return node.InnerText;
     }
     
+    private static string GetProductCategory(HtmlDocument doc)
+    {
+        var nodes = doc.DocumentNode
+            .SelectSingleNode(AppConstants.XPathInformationTable)
+            .ChildNodes
+            .Where(node => node.Name == "tr").ToList();
+
+        var categoryNodes =
+            nodes.Find(
+                node => node.ChildNodes.Any( child => child.Name == "td" && child.FirstChild.InnerText == "Category")
+            )?.ChildNodes.Where(node => node.Name == "td").ToList();
+        
+        
+        var str = HttpUtility.HtmlDecode(categoryNodes?[1].InnerText ?? "");
+        return str;
+    }
     
 }

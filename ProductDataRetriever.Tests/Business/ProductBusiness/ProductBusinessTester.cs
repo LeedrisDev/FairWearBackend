@@ -14,17 +14,18 @@ public class ProductBusinessTest
     public async Task GetProductInformation()
     {
         _productBusinessMock.Setup(m => m.GetBarcodeInfoPageHtml(It.IsAny<string>()))
-            .ReturnsAsync(GetTestHtmlDocument("SuccessData.html"));
+            .ReturnsAsync(GetTestHtmlDocument("LevisProductData.html"));
         
         var productBusiness = new ProductDataRetrieverAPI.Business.ProductBusiness.ProductBusiness(_productBusinessMock.Object);
         var mock = _productBusinessMock.Object;
-        var barcode = "193392069882";
+        var barcode = "3665115029871";
         
         var result = await productBusiness.GetProductInformation(barcode);
-   
+
         Assert.AreEqual(HttpStatusCode.OK, result.Status);
-        Assert.AreEqual("The North Face", result.Object.BrandName);
-        Assert.AreEqual("The North Face M Etip Hardface Glove", result.Object.Name);
+        Assert.AreEqual("Levi's", result.Object.BrandName);
+        Assert.AreEqual("Levi's White T-shirt For With Logo", result.Object.Name);
+        Assert.AreEqual("Shirts & Tops", result.Object.Category);
     }
     
     public static HtmlDocument GetTestHtmlDocument(string testFileName)

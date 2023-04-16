@@ -15,7 +15,6 @@ public class ProductBusiness : IProductBusiness
     /// <summary>
     /// Constructor
     /// </summary>
-    /// <param name="processingStatusResponse"></param>
     /// <param name="productData"></param>
     public ProductBusiness(IProductData productData)
     {
@@ -107,7 +106,6 @@ public class ProductBusiness : IProductBusiness
     {
         try
         {
-
             var node = doc.DocumentNode.SelectSingleNode("//*[@id='resultPageContainer']/p");
     
             if (node != null)
@@ -121,7 +119,7 @@ public class ProductBusiness : IProductBusiness
     
             return false;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return false;
         }

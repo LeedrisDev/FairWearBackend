@@ -15,7 +15,7 @@ public abstract class AppConstants: IAppConstants
     public const string ApiVersionDeprecatedDescription = "This API version has been deprecated. " +
                                                           "Please use one of the new APIs available from the explorer.";
 
-    /// <summary>Base URL to access GoodOnYou</summary>
+    /// <summary>Base URL to access go-upc</summary>
     public static readonly string WebSiteUrl = "https://go-upc.com/search?q=";
     
 }

@@ -1,8 +1,8 @@
-using GoodOnYouScrapperAPI.Utils.HttpClientWrapper;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using ProductDataRetrieverAPI.Utils.HttpClientWrapper;
 using ProductDataRetrieverAPI.Utils;
 using ProductDataRetrieverAPI.Utils.AppConstants;
 

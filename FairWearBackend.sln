@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FairWearAPIGateway", "FairW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductDataRetrieverAPI", "ProductDataRetrieverAPI\ProductDataRetrieverAPI.csproj", "{2E2CC2A2-E61C-4AD4-9908-E556A83D5336}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductDataRetriever.Tests", "ProductDataRetriever.Tests\ProductDataRetriever.Tests.csproj", "{5930D285-80B9-4620-8D72-B4F260BA826E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{2E2CC2A2-E61C-4AD4-9908-E556A83D5336}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E2CC2A2-E61C-4AD4-9908-E556A83D5336}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E2CC2A2-E61C-4AD4-9908-E556A83D5336}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5930D285-80B9-4620-8D72-B4F260BA826E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5930D285-80B9-4620-8D72-B4F260BA826E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5930D285-80B9-4620-8D72-B4F260BA826E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5930D285-80B9-4620-8D72-B4F260BA826E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

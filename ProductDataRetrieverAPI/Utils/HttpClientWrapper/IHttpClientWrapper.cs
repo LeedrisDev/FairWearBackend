@@ -1,4 +1,4 @@
-namespace GoodOnYouScrapperAPI.Utils.HttpClientWrapper;
+namespace ProductDataRetrieverAPI.Utils.HttpClientWrapper;
 
 public interface IHttpClientWrapper
 {

@@ -19,8 +19,12 @@ public abstract class AppConstants: IAppConstants
     public static readonly string WebSiteUrl = "https://go-upc.com/search?q=";
 
     public static readonly string XPathInformationTable =
+        "//*[@id='resultPageContainer']/div/div[1]/div[1]/table";
+    
+    public static readonly string XPathProductName =
         "//*[@id='resultPageContainer']/div/div[1]/div[1]/h1";
-        // "//*[@id='resultPageContainer']/div/div[1]/div[1]/table";
+
+
 
 
 }

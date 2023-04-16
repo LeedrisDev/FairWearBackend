@@ -24,6 +24,7 @@ public class ProductBusinessTest
    
         Assert.AreEqual(HttpStatusCode.OK, result.Status);
         Assert.AreEqual("The North Face", result.Object.BrandName);
+        Assert.AreEqual("The North Face M Etip Hardface Glove", result.Object.Name);
     }
     
     public static HtmlDocument GetTestHtmlDocument(string testFileName)

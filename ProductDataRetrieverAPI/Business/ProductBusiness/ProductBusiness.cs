@@ -44,6 +44,8 @@ public class ProductBusiness : IProductBusiness
 
         var productModel = new ProductModel()
         {
+            UpcCode = barcode,
+            Name = GetProductName(htmlDocument),
             BrandName = GetBrandName(htmlDocument),
         };
         
@@ -56,7 +58,7 @@ public class ProductBusiness : IProductBusiness
     private static string GetBrandName(HtmlDocument doc)
     { 
         var nodes = doc.DocumentNode
-            .SelectSingleNode("//*[@id='resultPageContainer']/div/div[1]/div[1]/table")
+            .SelectSingleNode(AppConstants.XPathInformationTable)
             .ChildNodes
             .Where(node => node.Name == "tr").ToList();
 
@@ -67,5 +69,14 @@ public class ProductBusiness : IProductBusiness
         
         return brandNode?[1].InnerText ?? "";
     }
+
+    private static string GetProductName(HtmlDocument doc)
+    {
+        var node = doc.DocumentNode
+            .SelectSingleNode(AppConstants.XPathProductName);
+
+        return node.InnerText;
+    }
+    
     
 }

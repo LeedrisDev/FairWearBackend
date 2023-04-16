@@ -13,7 +13,7 @@ public class ProductBusiness : IProductBusiness
     private readonly IProductData _productData;
 
     /// <summary>/// Constructor</summary>
-    /// <param name="productData"></param>
+    /// <param name="productData">DataAccess of products</param>
     public ProductBusiness(IProductData productData)
     {
         _processingStatusResponse = new ProcessingStatusResponse<ProductModel>();
@@ -57,7 +57,7 @@ public class ProductBusiness : IProductBusiness
     /// <summary>
     /// Retrieves product brand name from the html document.
     /// </summary>
-    /// <param name="doc"></param>
+    /// <param name="doc">Html document of the product from go-upc</param>
     /// <returns></returns>
     private static string GetProductBrandName(HtmlDocument doc)
     { 
@@ -79,7 +79,7 @@ public class ProductBusiness : IProductBusiness
     /// <summary>
     /// Retrieve product name from the html document.
     /// </summary>
-    /// <param name="doc"></param>
+    /// <param name="doc">Html document of the product from go-upc</param>
     /// <returns></returns>
 
     private static string GetProductName(HtmlDocument doc)
@@ -94,7 +94,7 @@ public class ProductBusiness : IProductBusiness
     /// <summary>
     /// Retrieves product category from the html document.
     /// </summary>
-    /// <param name="doc"></param>
+    /// <param name="doc">Html document of the product from go-upc</param>
     /// <returns></returns>
     private static string GetProductCategory(HtmlDocument doc)
     {
@@ -116,7 +116,7 @@ public class ProductBusiness : IProductBusiness
     /// <summary>
     /// Checks if the product was not found.
     /// </summary>
-    /// <param name="doc"></param>
+    /// <param name="doc">Html document of the product from go-upc</param>
     /// <returns></returns>
     private static bool CheckForNotFound(HtmlDocument doc)
     {

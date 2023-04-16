@@ -18,7 +18,12 @@ public class ProductController: ControllerBase
     {
         _productBusiness = productBusiness;
     }
-
+    
+    /// <summary>
+    /// Endpoint for retrieving product information.
+    /// </summary>
+    /// <param name="barcode"></param>
+    /// <returns></returns>
     [HttpGet("{barcode}")]
     [ProducesResponseType(typeof(ProductModel), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]

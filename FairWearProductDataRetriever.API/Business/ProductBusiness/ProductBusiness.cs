@@ -19,10 +19,8 @@ public class ProductBusiness : IProductBusiness
         _processingStatusResponse = new ProcessingStatusResponse<ProductModel>();
         _productData = productData;
     }
-
-    /// <summary>Retrieves information for a product.</summary>
-    /// <param name="barcode"></param>
-    /// <returns></returns>
+    
+    /// <inheritdoc/>
     public async Task<ProcessingStatusResponse<ProductModel>> GetProductInformation(string barcode)
     {
         HtmlDocument htmlDocument;
@@ -56,6 +54,11 @@ public class ProductBusiness : IProductBusiness
         return _processingStatusResponse;
     }
 
+    /// <summary>
+    /// Retrieves product brand name from the html document.
+    /// </summary>
+    /// <param name="doc"></param>
+    /// <returns></returns>
     private static string GetProductBrandName(HtmlDocument doc)
     { 
         var nodes = doc.DocumentNode
@@ -72,6 +75,12 @@ public class ProductBusiness : IProductBusiness
         var str = HttpUtility.HtmlDecode(brandNode?[1].InnerText ?? "");
         return str;
     }
+    
+    /// <summary>
+    /// Retrieve product name from the html document.
+    /// </summary>
+    /// <param name="doc"></param>
+    /// <returns></returns>
 
     private static string GetProductName(HtmlDocument doc)
     {
@@ -80,7 +89,13 @@ public class ProductBusiness : IProductBusiness
 
         return node.InnerText;
     }
-
+    
+    
+    /// <summary>
+    /// Retrieves product category from the html document.
+    /// </summary>
+    /// <param name="doc"></param>
+    /// <returns></returns>
     private static string GetProductCategory(HtmlDocument doc)
     {
         var nodes = doc.DocumentNode
@@ -98,11 +113,16 @@ public class ProductBusiness : IProductBusiness
         return str;
     }
     
+    /// <summary>
+    /// Checks if the product was not found.
+    /// </summary>
+    /// <param name="doc"></param>
+    /// <returns></returns>
     private static bool CheckForNotFound(HtmlDocument doc)
     {
         try
         {
-            var node = doc.DocumentNode.SelectSingleNode("//*[@id='resultPageContainer']/p");
+            var node = doc.DocumentNode.SelectSingleNode(AppConstants.XPathNotFound);
     
             if (node != null)
             {

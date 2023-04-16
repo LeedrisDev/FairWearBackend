@@ -18,13 +18,19 @@ public class ProductData : IProductData
         _htmlDocument = htmlDocument;
     }
     
+    /// <summary>
+    /// Retrieves the product page
+    /// </summary>
+    /// <param name="barcode"></param>
+    /// <returns></returns>
     private async Task<string> GetBarcodeInfoPage(string barcode)
     {
         var response = await _httpClient.GetAsync(AppConstants.WebSiteUrl + barcode);
         response.EnsureSuccessStatusCode();
         return await response.Content.ReadAsStringAsync();
     }
-
+    
+    /// <inheritdoc/>
     public async Task<HtmlDocument> GetBarcodeInfoPageHtml(string barCode)
     {
         var productPage = await GetBarcodeInfoPage(barCode);

@@ -3,9 +3,8 @@ using FluentAssertions;
 using HtmlAgilityPack;
 using Moq;
 using ProductDataRetrieverAPI.Utils.HttpClientWrapper;
-using ProductDataRetrieverAPI.DataAccess.ProductData;
 
-namespace ProductDataRetriever.Test.DataAccess;
+namespace ProductDataRetriever.Test.DataAccess.ProductData;
 
 [TestClass]
 public class ProductDataTester
@@ -18,7 +17,7 @@ public class ProductDataTester
     {
         const string barcode = "193392069882";
         var httpClient = new HttpClientWrapper(new HttpClient());
-        var productData = new ProductData(httpClient, _htmlDocumentMock.Object);
+        var productData = new ProductDataRetrieverAPI.DataAccess.ProductData.ProductData(httpClient, _htmlDocumentMock.Object);
         
         var result = await productData.GetBarcodeInfoPageHtml(barcode);
         result.Text
@@ -37,7 +36,7 @@ public class ProductDataTester
             });
         
         const string barcode = "193392069882";
-        var productData = new ProductData(_httpClientMock.Object, _htmlDocumentMock.Object);
+        var productData = new ProductDataRetrieverAPI.DataAccess.ProductData.ProductData(_httpClientMock.Object, _htmlDocumentMock.Object);
 
         await productData
             .Invoking(m => m.GetBarcodeInfoPageHtml(barcode))
@@ -56,7 +55,7 @@ public class ProductDataTester
             });
         
         const string barcode = "203392069882";
-        var productData = new ProductData(_httpClientMock.Object, _htmlDocumentMock.Object);
+        var productData = new ProductDataRetrieverAPI.DataAccess.ProductData.ProductData(_httpClientMock.Object, _htmlDocumentMock.Object);
 
         await productData
             .Invoking(m => m.GetBarcodeInfoPageHtml(barcode))

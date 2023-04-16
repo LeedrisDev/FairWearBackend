@@ -12,9 +12,7 @@ public class ProductBusiness : IProductBusiness
     private readonly ProcessingStatusResponse<ProductModel> _processingStatusResponse;
     private readonly IProductData _productData;
 
-    /// <summary>
-    /// Constructor
-    /// </summary>
+    /// <summary>/// Constructor</summary>
     /// <param name="productData"></param>
     public ProductBusiness(IProductData productData)
     {
@@ -22,9 +20,7 @@ public class ProductBusiness : IProductBusiness
         _productData = productData;
     }
 
-    /// <summary>
-    /// Retrieves information for a product
-    /// </summary>
+    /// <summary>Retrieves information for a product.</summary>
     /// <param name="barcode"></param>
     /// <returns></returns>
     public async Task<ProcessingStatusResponse<ProductModel>> GetProductInformation(string barcode)
@@ -112,9 +108,7 @@ public class ProductBusiness : IProductBusiness
             {
                 var text = node.InnerText;
                 if (text.Contains("Sorry, we were not able to find a product for"))
-                {
                     return true;
-                }
             }
     
             return false;
@@ -123,6 +117,5 @@ public class ProductBusiness : IProductBusiness
         {
             return false;
         }
-        
     }
 }

@@ -54,9 +54,7 @@ public class ProductBusiness : IProductBusiness
         return _processingStatusResponse;
     }
 
-    /// <summary>
-    /// Retrieves product brand name from the html document.
-    /// </summary>
+    /// <summary>Retrieves product brand name from the html document.</summary>
     /// <param name="doc">Html document of the product from go-upc</param>
     /// <returns></returns>
     private static string GetProductBrandName(HtmlDocument doc)
@@ -76,12 +74,9 @@ public class ProductBusiness : IProductBusiness
         return str;
     }
     
-    /// <summary>
-    /// Retrieve product name from the html document.
-    /// </summary>
+    /// <summary>Retrieve product name from the html document.</summary>
     /// <param name="doc">Html document of the product from go-upc</param>
     /// <returns></returns>
-
     private static string GetProductName(HtmlDocument doc)
     {
         var node = doc.DocumentNode
@@ -91,9 +86,7 @@ public class ProductBusiness : IProductBusiness
     }
     
     
-    /// <summary>
-    /// Retrieves product category from the html document.
-    /// </summary>
+    /// <summary>Retrieves product category from the html document.</summary>
     /// <param name="doc">Html document of the product from go-upc</param>
     /// <returns></returns>
     private static string GetProductCategory(HtmlDocument doc)
@@ -113,9 +106,7 @@ public class ProductBusiness : IProductBusiness
         return str;
     }
     
-    /// <summary>
-    /// Checks if the product was not found.
-    /// </summary>
+    /// <summary>Checks if the product was not found.</summary>
     /// <param name="doc">Html document of the product from go-upc</param>
     /// <returns></returns>
     private static bool CheckForNotFound(HtmlDocument doc)
@@ -123,15 +114,11 @@ public class ProductBusiness : IProductBusiness
         try
         {
             var node = doc.DocumentNode.SelectSingleNode(AppConstants.XPathNotFound);
-    
-            if (node != null)
-            {
-                var text = node.InnerText;
-                if (text.Contains("Sorry, we were not able to find a product for"))
-                    return true;
-            }
-    
-            return false;
+
+            if (node == null) return false;
+            var text = node.InnerText;
+            
+            return text.Contains("Sorry, we were not able to find a product for");
         }
         catch (Exception)
         {

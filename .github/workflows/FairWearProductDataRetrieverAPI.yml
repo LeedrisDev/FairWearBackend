@@ -89,7 +89,6 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: 'Install dependencies'
-        if: steps.cache-packages.outputs.cache-hit != 'true'
         run: dotnet restore ./FairWearProductDataRetriever.API/FairWearProductDataRetriever.API.csproj
 
       - name: Build
@@ -129,7 +128,6 @@ jobs:
             ${{ runner.os }}-nuget-tests-
 
       - name: 'Install dependencies'
-        if: steps.cache-packages.outputs.cache-hit != 'true'
         run: |
           dotnet restore ./FairWearProductDataRetriever.API.Tests/FairWearProductDataRetriever.API.Tests.csproj
           dotnet restore ./FairWearProductDataRetriever.API/FairWearProductDataRetriever.API.csproj

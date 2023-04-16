@@ -4,7 +4,7 @@ using ProductDataRetrieverAPI.Utils.AppConstants;
 
 namespace ProductDataRetrieverAPI.DataAccess.ProductData;
 
-public class ProductData
+public class ProductData : IProductData
 {
     private readonly IHttpClientWrapper _httpClient;
     private readonly HtmlDocument _htmlDocument;
@@ -18,17 +18,18 @@ public class ProductData
         _htmlDocument = htmlDocument;
     }
     
-    private async Task<string> GetBarcodeInfoPage(string barCode)
+    private async Task<string> GetBarcodeInfoPage(string barcode)
     {
-        var response = await _httpClient.GetAsync(AppConstants.WebSiteUrl + barCode);
+        var response = await _httpClient.GetAsync(AppConstants.WebSiteUrl + barcode);
+        
         response.EnsureSuccessStatusCode();
         return await response.Content.ReadAsStringAsync();
     }
 
     public async Task<HtmlDocument> GetBarcodeInfoPageHtml(string barCode)
     {
-        var brandPage = await GetBarcodeInfoPage(barCode);
-        _htmlDocument.LoadHtml(brandPage);
+        var productPage = await GetBarcodeInfoPage(barCode);
+        _htmlDocument.LoadHtml(productPage);
         return _htmlDocument;
     }
     

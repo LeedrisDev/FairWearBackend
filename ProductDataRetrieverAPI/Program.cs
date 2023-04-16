@@ -2,6 +2,8 @@ using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using ProductDataRetrieverAPI.Business.ProductBusiness;
+using ProductDataRetrieverAPI.DataAccess.ProductData;
 using ProductDataRetrieverAPI.Utils.HttpClientWrapper;
 using ProductDataRetrieverAPI.Utils;
 using ProductDataRetrieverAPI.Utils.AppConstants;
@@ -34,6 +36,8 @@ builder.Services.AddVersionedApiExplorer(opt =>
 // Dependency Injection
 builder.Services.AddHttpClient<IHttpClientWrapper, HttpClientWrapper>();
 builder.Services.AddTransient<HtmlDocument>();
+builder.Services.AddTransient<IProductData, ProductData>();
+builder.Services.AddTransient<IProductBusiness, ProductBusiness>();
 
 var app = builder.Build();
 

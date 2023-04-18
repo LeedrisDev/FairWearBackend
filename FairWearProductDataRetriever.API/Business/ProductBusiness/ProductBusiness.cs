@@ -2,11 +2,12 @@ using System.Net;
 using System.Web;
 using FairWearProductDataRetriever.API.DataAccess.ProductData;
 using FairWearProductDataRetriever.API.Models;
-using FairWearProductDataRetriever.API.Utils.AppConstants;
+using FairWearProductDataRetriever.API.Utils;
 using HtmlAgilityPack;
 
 namespace FairWearProductDataRetriever.API.Business.ProductBusiness;
 
+/// <summary>Business logic for retrieving product information.</summary>
 public class ProductBusiness : IProductBusiness
 {
     private readonly ProcessingStatusResponse<ProductModel> _processingStatusResponse;

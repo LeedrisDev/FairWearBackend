@@ -1,9 +1,10 @@
-using FairWearProductDataRetriever.API.Utils.AppConstants;
+using FairWearProductDataRetriever.API.Utils;
 using FairWearProductDataRetriever.API.Utils.HttpClientWrapper;
 using HtmlAgilityPack;
 
 namespace FairWearProductDataRetriever.API.DataAccess.ProductData;
 
+/// <summary>Data access for retrieving product information</summary>
 public class ProductData : IProductData
 {
     private readonly IHttpClientWrapper _httpClient;

@@ -2,6 +2,7 @@ using HtmlAgilityPack;
 
 namespace FairWearProductDataRetriever.API.DataAccess.ProductData;
 
+/// <summary>Interface for the product data access.</summary>
 public interface IProductData
 {
     /// <summary>Get the product page</summary>

@@ -10,7 +10,7 @@ on:
       - release/*
     paths:
       - 'FairWearAPIGateway/**'
-      - 'FairWearAPIGateway/**'
+      - '.github/workflows/FairWearAPIGatewayCI.yml'
       - '.github/workflows/FairWearAPIGatewayCI.yml'
 
 jobs:

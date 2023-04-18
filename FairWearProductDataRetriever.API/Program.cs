@@ -2,7 +2,7 @@ using System.Reflection;
 using HtmlAgilityPack;
 using FairWearProductDataRetriever.API.Business.ProductBusiness;
 using FairWearProductDataRetriever.API.DataAccess.ProductData;
-using FairWearProductDataRetriever.API.Utils.AppConstants;
+using FairWearProductDataRetriever.API.Utils;
 using FairWearProductDataRetriever.API.Utils.HttpClientWrapper;
 using Microsoft.OpenApi.Models;
 

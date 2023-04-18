@@ -1,6 +1,6 @@
 namespace FairWearProductDataRetriever.API.Utils.AppConstants;
 
-public abstract class AppConstants: IAppConstants
+public abstract class AppConstants
 {
     /// <summary>Api name</summary>
     public const string ApiName = "Product Data Retriever API (.NET 7)"; 

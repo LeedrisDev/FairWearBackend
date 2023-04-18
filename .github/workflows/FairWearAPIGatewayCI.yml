@@ -1,0 +1,42 @@
+name: FairWear API Gateway CI
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+      - feature/*
+      - hotfix/*
+      - release/*
+    paths:
+      - 'FairWearAPIGateway/**'
+      - '.github/workflows/FairWearAPIGatewayCI.yml'
+    
+
+jobs:
+  test:
+    name: 'Tests'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK 7.0.x
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+      - name: 'Temporary command'
+        run: echo "Test code come here"
+    
+  build:
+    name: 'Build'
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK 7.0.x
+        uses: actions/setup-dotnet@v3
+        with:
+            dotnet-version: '7.0.x'
+      - name: Install dependencies
+        run: dotnet restore ./FairWearAPIGateway/FairWearAPIGateway.csproj
+      - name: Build
+        run: dotnet build ./FairWearAPIGateway/FairWearAPIGateway.csproj --configuration Release --no-restore

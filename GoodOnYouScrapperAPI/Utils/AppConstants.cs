@@ -1,6 +1,6 @@
 namespace GoodOnYouScrapperAPI.Utils.AppConstants;
 
-public abstract class AppConstants: IAppConstants
+public abstract class AppConstants
 {
     /// <summary>Api name</summary>
     public const string ApiName = "GoodOnYou Scrapper Web API (.NET 7)"; 

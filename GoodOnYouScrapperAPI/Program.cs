@@ -1,7 +1,7 @@
 using System.Reflection;
 using GoodOnYouScrapperAPI.Business.BrandBusiness;
 using GoodOnYouScrapperAPI.DataAccess.BrandData;
-using GoodOnYouScrapperAPI.Utils.AppConstants;
+using GoodOnYouScrapperAPI.Utils;
 using GoodOnYouScrapperAPI.Utils.HttpClientWrapper;
 using HtmlAgilityPack;
 using Microsoft.OpenApi.Models;

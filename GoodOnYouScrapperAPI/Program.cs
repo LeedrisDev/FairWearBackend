@@ -1,3 +1,4 @@
+using System.Reflection;
 using GoodOnYouScrapperAPI.Business.BrandBusiness;
 using GoodOnYouScrapperAPI.DataAccess.BrandData;
 using GoodOnYouScrapperAPI.Utils.AppConstants;
@@ -24,6 +25,9 @@ builder.Services.AddSwaggerGen(options =>
             Email = AppConstants.FairWearMail
         }
     });
+    
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
 // Dependency Injection

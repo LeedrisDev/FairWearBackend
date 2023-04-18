@@ -5,6 +5,12 @@ public abstract class AppConstants: IAppConstants
     /// <summary>Api name</summary>
     public const string ApiName = "Product Data Retriever API (.NET 7)"; 
     
+    /// <summary>Api description</summary>
+    public const string ApiDescription = "This API is used to retrieve product information from a barcode.";
+
+    /// <summary>FairWear mail</summary>
+    public const string FairWearMail = "fairwear.group@gmail.com";
+    
     // API Versions
     /// <summary>API major version</summary>
     public const int ApiMajorVersion = 1;

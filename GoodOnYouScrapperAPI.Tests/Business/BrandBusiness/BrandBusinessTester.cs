@@ -28,8 +28,8 @@ public class BrandBusinessTester
         Assert.AreEqual(animalRating, result.Object.AnimalRating);
         Assert.IsFalse(string.IsNullOrEmpty(result.Object.RatingDescription));
         Assert.IsFalse(string.IsNullOrEmpty(result.Object.Country));
-        Assert.IsTrue(result.Object?.Categories?.Length > 0);
-        Assert.IsTrue(result.Object?.Ranges?.Length > 0);
+        Assert.IsTrue(result.Object?.Categories?.ToList().Count > 0);
+        Assert.IsTrue(result.Object?.Ranges?.ToList().Count > 0);
     }
 
     public static HtmlDocument GetTestHtmlDocument(string testFileName)

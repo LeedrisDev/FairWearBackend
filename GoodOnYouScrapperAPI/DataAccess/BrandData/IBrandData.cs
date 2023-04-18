@@ -2,6 +2,7 @@ using HtmlAgilityPack;
 
 namespace GoodOnYouScrapperAPI.DataAccess.BrandData;
 
+/// <summary>Interface for the brand data access layer</summary>
 public interface IBrandData
 {
     /// <summary>Get the brand page</summary>

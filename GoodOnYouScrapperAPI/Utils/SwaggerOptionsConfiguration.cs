@@ -5,10 +5,13 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace GoodOnYouScrapperAPI.Utils;
 
+/// <summary>Configures the Swagger options</summary>
 public class SwaggerOptionsConfiguration: IConfigureNamedOptions<SwaggerGenOptions>
 {
     private readonly IApiVersionDescriptionProvider _provider;
-
+    
+    /// <summary>Constructor</summary>
+    /// <param name="provider">The API version description provider.</param>
     public SwaggerOptionsConfiguration(IApiVersionDescriptionProvider provider)
     {
         _provider = provider;
@@ -39,12 +42,12 @@ public class SwaggerOptionsConfiguration: IConfigureNamedOptions<SwaggerGenOptio
     {
         var info = new OpenApiInfo
         {
-            Title = AppConstants.AppConstants.ApiName,
+            Title = AppConstants.ApiName,
             Version = desc.ApiVersion.ToString()
         };
 
         if (desc.IsDeprecated)
-            info.Description += $" {AppConstants.AppConstants.ApiVersionDeprecatedDescription}";
+            info.Description += $" {AppConstants.ApiVersionDeprecatedDescription}";
 
         return info;
     }

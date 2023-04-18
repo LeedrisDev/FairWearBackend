@@ -1,4 +1,4 @@
-using GoodOnYouScrapperAPI.Utils.AppConstants;
+using GoodOnYouScrapperAPI.Utils;
 using GoodOnYouScrapperAPI.Utils.HttpClientWrapper;
 using HtmlAgilityPack;
 

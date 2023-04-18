@@ -4,25 +4,28 @@ using System.Text.RegularExpressions;
 using System.Web;
 using GoodOnYouScrapperAPI.DataAccess.BrandData;
 using GoodOnYouScrapperAPI.Models;
-using GoodOnYouScrapperAPI.Utils.AppConstants;
+using GoodOnYouScrapperAPI.Utils;
 using HtmlAgilityPack;
 
 namespace GoodOnYouScrapperAPI.Business.BrandBusiness;
 
+/// <summary>
+/// 
+/// </summary>
 public class BrandBusiness: IBrandBusiness
 {
     private readonly ProcessingStatusResponse<BrandModel> _processingStatusResponse;
     private readonly IBrandData _brandData;
 
+    /// <summary>Constructor</summary>
+    /// <param name="brandData">Data access layer for the brand</param>
     public BrandBusiness(IBrandData brandData)
     {
         _processingStatusResponse = new ProcessingStatusResponse<BrandModel>();
         _brandData = brandData;
     }
     
-    
-    /// <summary>Retrieves information for a brand on the GoodOnYou website</summary>
-    /// <param name="brandName">Name of the brand to retrieve information for</param>
+    /// <inheritdoc/>
     public async Task<ProcessingStatusResponse<BrandModel>> GetBrandInformation(string brandName)
     {
         HtmlDocument htmlDocument;

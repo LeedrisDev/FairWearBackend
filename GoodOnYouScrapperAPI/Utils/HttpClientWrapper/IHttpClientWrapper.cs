@@ -1,5 +1,6 @@
 namespace GoodOnYouScrapperAPI.Utils.HttpClientWrapper;
 
+/// <summary>Wrapper for the <see cref="HttpClient"/> class</summary>
 public interface IHttpClientWrapper
 {
     /// <summary>Send a GET request to the specified Uri as an asynchronous operation.</summary>

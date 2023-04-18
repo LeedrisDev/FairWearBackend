@@ -1,5 +1,6 @@
-namespace GoodOnYouScrapperAPI.Utils.AppConstants;
+namespace GoodOnYouScrapperAPI.Utils;
 
+/// <summary>Class representing constants used in the application</summary>
 public abstract class AppConstants
 {
     /// <summary>Api name</summary>

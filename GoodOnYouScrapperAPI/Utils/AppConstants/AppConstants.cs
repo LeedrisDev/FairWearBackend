@@ -5,6 +5,12 @@ public abstract class AppConstants: IAppConstants
     /// <summary>Api name</summary>
     public const string ApiName = "GoodOnYou Scrapper Web API (.NET 7)"; 
     
+    /// <summary>Api description</summary>
+    public const string ApiDescription = "This API allows you to get information about a brand from GoodOnYou website.";
+
+    /// <summary>FairWear mail</summary>
+    public const string FairWearMail = "fairwear.group@gmail.com";
+    
     // API Versions
     /// <summary>API major version</summary>
     public const int ApiMajorVersion = 1;

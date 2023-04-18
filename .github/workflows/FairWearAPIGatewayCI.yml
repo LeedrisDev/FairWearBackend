@@ -11,7 +11,7 @@ on:
     paths:
       - 'FairWearAPIGateway/**'
       - '.github/workflows/FairWearAPIGatewayCI.yml'
-    
+      - '.github/workflows/FairWearAPIGatewayCI.yml'
 
 jobs:
   test:

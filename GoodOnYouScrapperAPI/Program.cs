@@ -1,35 +1,29 @@
 using GoodOnYouScrapperAPI.Business.BrandBusiness;
 using GoodOnYouScrapperAPI.DataAccess.BrandData;
-using GoodOnYouScrapperAPI.Utils;
 using GoodOnYouScrapperAPI.Utils.AppConstants;
 using GoodOnYouScrapperAPI.Utils.HttpClientWrapper;
 using HtmlAgilityPack;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.ConfigureOptions<SwaggerOptionsConfiguration>();
-builder.Services.AddApiVersioning(opt =>
+builder.Services.AddSwaggerGen(options =>
 {
-    opt.DefaultApiVersion = new ApiVersion(AppConstants.ApiMajorVersion, AppConstants.ApiMinorVersion);
-    opt.AssumeDefaultVersionWhenUnspecified = true;
-    opt.ReportApiVersions = true;
-    opt.ApiVersionReader = ApiVersionReader.Combine(new UrlSegmentApiVersionReader(),
-        new HeaderApiVersionReader("x-api-version"),
-        new MediaTypeApiVersionReader("x-api-version"));
-});
-builder.Services.AddVersionedApiExplorer(opt =>
-{
-    opt.GroupNameFormat = "'v'VVV";
-    opt.SubstituteApiVersionInUrl = true;
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = AppConstants.ApiName,
+        Version = "v1",
+        Description = AppConstants.ApiDescription,
+        Contact = new OpenApiContact
+        {
+            Name = "FairWear Group",
+            Email = AppConstants.FairWearMail
+        }
+    });
 });
 
 // Dependency Injection
@@ -43,16 +37,11 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    var apiVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
-    
     app.UseSwagger();
     app.UseSwaggerUI(opt =>
     {
-        foreach (var description in apiVersionDescriptionProvider.ApiVersionDescriptions.Reverse())
-        {
-            opt.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
-                description.GroupName.ToUpperInvariant());
-        }
+        opt.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+        opt.RoutePrefix = string.Empty;
     });
 }
 

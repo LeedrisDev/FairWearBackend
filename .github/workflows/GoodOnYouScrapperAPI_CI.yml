@@ -12,6 +12,7 @@ on:
       - 'GoodOnYouScrapperAPI/**'
       - 'GoodOnYouScrapperAPI.Tests/**'
       - '.github/workflows/GoodOnYouScrapperAPI_CI.yml'
+      - 'Scripts/**'
 
 jobs:
 
@@ -48,13 +49,6 @@ jobs:
           if grep -q 'Severity="WARNING"' resharper-report.xml; then cat resharper-report.xml && exit 1; fi
           if grep -q 'Severity="ERROR"' resharper-report.xml; then cat resharper-report.xml && exit 1; fi
           if grep -q 'Severity="SUGGESTION"' resharper-report.xml; then cat resharper-report.xml && exit 1; fi
-
-      - name: Upload ReSharper Report
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: resharper-report
-          path: resharper-report.xml
 
       - uses: sarisia/actions-status-discord@v1
         if: always() && (job.status == 'failure' || job.status == 'cancelled')
@@ -130,9 +124,9 @@ jobs:
           dotnet restore ./GoodOnYouScrapperAPI.Tests/GoodOnYouScrapperAPI.Tests.csproj
           dotnet restore ./GoodOnYouScrapperAPI/GoodOnYouScrapperAPI.csproj  
           
-      - name: 'DotNet Test'
-        run: dotnet test --no-restore --verbosity normal GoodOnYouScrapperAPI.Tests/GoodOnYouScrapperAPI.Tests.csproj
-
+      - name: 'Test with code coverage'
+        run: ./Scripts/code-coverage-ci.sh -p GoodOnYouScrapperAPI.Tests/GoodOnYouScrapperAPI.Tests.csproj -t 90
+      
       - uses: sarisia/actions-status-discord@v1
         if: always()
         with:

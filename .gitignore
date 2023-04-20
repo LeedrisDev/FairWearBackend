@@ -840,3 +840,7 @@ $RECYCLE.BIN/
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/csharp,macos,windows,jetbrains,rider,visualstudiocode,visualstudio,dotnetcore,vim
+
+# User defined 
+**/coveragereport/
+**/coverage.cobertura.xml

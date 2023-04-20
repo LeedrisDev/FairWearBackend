@@ -37,7 +37,7 @@ if [ -z "$THRESHOLD" ]; then
 fi
 
 # Run unit tests with code coverage
-dotnet test "$PROJECT" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+dotnet test --no-restore --verbosity normal "$PROJECT" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
 
 # Generate code coverage report with ReportGenerator
 dotnet "$HOME"/.nuget/packages/reportgenerator/*/tools/net7.0/ReportGenerator.dll -reports:"$PROJECT_DIR"/coverage.cobertura.xml -targetdir:coveragereport -reporttypes:JsonSummary

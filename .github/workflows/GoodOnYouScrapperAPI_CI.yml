@@ -12,6 +12,7 @@ on:
       - 'GoodOnYouScrapperAPI/**'
       - 'GoodOnYouScrapperAPI.Tests/**'
       - '.github/workflows/GoodOnYouScrapperAPI_CI.yml'
+      - 'Scripts/**'
 
 jobs:
 

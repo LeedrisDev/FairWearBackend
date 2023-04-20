@@ -29,3 +29,4 @@ jb inspectcode "$CSPROJ_PATH" \
           -f=Text \
           -verbosity=INFO \
           -no-swea
+          

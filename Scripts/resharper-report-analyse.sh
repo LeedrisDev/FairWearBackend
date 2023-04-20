@@ -1,3 +1,5 @@
+#!/bin/bash
+
 REPORT_FILE="resharper-report.xml"
 REPORT_FILE_TXT="resharper-report.txt"
 

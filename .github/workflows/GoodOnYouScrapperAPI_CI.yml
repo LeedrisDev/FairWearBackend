@@ -42,13 +42,17 @@ jobs:
           export PATH=$PATH:~/.dotnet/tools
 
       - name: Run ReSharper InspectCode
-        run: ./Scripts/resharper-report-generate.sh -p GoodOnYouScrapperAPI/GoodOnYouScrapperAPI.csproj
+        run: jb inspectcode GoodOnYouScrapperAPI/GoodOnYouScrapperAPI.csproj \
+          -o=resharper-report.xml \
+          -f=Xml \
+          -verbosity=INFO \
+          -no-swea
 
       - name: Check Resharper results
         run: |
-          if grep -q 'Severity="WARNING"' resharper-report.xml; then cat resharper-report.txt && exit 1; fi
-          if grep -q 'Severity="ERROR"' resharper-report.xml; then cat resharper-report.txt && exit 1; fi
-          if grep -q 'Severity="SUGGESTION"' resharper-report.xml; then cat resharper-report.txt && exit 1; fi
+          if grep -q 'Severity="WARNING"' resharper-report.xml; then cat resharper-report.xml && exit 1; fi
+          if grep -q 'Severity="ERROR"' resharper-report.xml; then cat resharper-report.xml && exit 1; fi
+          if grep -q 'Severity="SUGGESTION"' resharper-report.xml; then cat resharper-report.xml && exit 1; fi
 
       - uses: sarisia/actions-status-discord@v1
         if: always() && (job.status == 'failure' || job.status == 'cancelled')

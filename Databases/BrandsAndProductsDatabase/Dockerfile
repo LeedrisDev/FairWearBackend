@@ -4,4 +4,4 @@ ENV POSTGRES_USER ${POSTGRES_USER}
 ENV POSTGRES_PASSWORD ${POSTGRES_PASSWORD}
 ENV POSTGRES_DB ${POSTGRES_BRAND_DATABASE}
 
-COPY Scripts/*.sql /docker-entrypoint-initdb.d/
+COPY Databases/BrandsAndProductsDatabase/Scripts/*.sql /docker-entrypoint-initdb.d/

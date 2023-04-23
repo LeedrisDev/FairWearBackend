@@ -15,6 +15,17 @@ public class ProductModelTester
 
         Assert.AreEqual("193392069882", product.UpcCode);
     }
+    
+    [TestMethod]
+    public void TestName()
+    {
+        var product = new ProductModel
+        {
+            Name = "North face gloves"
+        };
+
+        Assert.AreEqual("North face gloves", product.Name);
+    }
 
 
 }

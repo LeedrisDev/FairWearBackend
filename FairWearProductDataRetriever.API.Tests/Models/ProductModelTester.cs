@@ -26,6 +26,19 @@ public class ProductModelTester
 
         Assert.AreEqual("North face gloves", product.Name);
     }
+    
+    [TestMethod]
+    public void TestBrandName()
+    {
+        var product = new ProductModel
+        {
+            BrandName = "North face"
+        };
+
+        Assert.AreEqual("North face", product.BrandName);
+    }
+    
+    
 
 
 }

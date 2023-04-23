@@ -57,7 +57,6 @@ public class ProductControllerTester
     [TestMethod]
     public async Task GetProduct_Returns_NotFound_When_Product_Is_Not_Found()
     {
-        // Arrange
         var barcode = "1234567890";
 
         _productBusinessMock.Setup(x => x.GetProductInformation(barcode)).ReturnsAsync(new ProcessingStatusResponse<ProductModel>
@@ -66,10 +65,8 @@ public class ProductControllerTester
             ErrorMessage = "Product not found"
         });
 
-        // Act
         var response = await _productController.GetProduct(barcode);
 
-        // Assert
         response.Should().BeOfType<NotFoundObjectResult>();
         
         var result = response as NotFoundObjectResult;
@@ -80,7 +77,6 @@ public class ProductControllerTester
     [TestMethod]
     public async Task GetProduct_Returns_InternalServerError_When_An_Error_Occurs()
     {
-        // Arrange
         var barcode = "1234567890";
 
         _productBusinessMock.Setup(x => x.GetProductInformation(barcode)).ReturnsAsync(new ProcessingStatusResponse<ProductModel>

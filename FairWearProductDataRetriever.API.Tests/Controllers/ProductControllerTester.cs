@@ -52,6 +52,29 @@ public class ProductControllerTester
         result?.Value.Should().BeSameAs(productInformation);
         
     }
+    
+    [TestMethod]
+    public async Task GetProduct_Returns_NotFound_When_Product_Is_Not_Found()
+    {
+        // Arrange
+        var barcode = "1234567890";
 
+        _productBusinessMock.Setup(x => x.GetProductInformation(barcode)).ReturnsAsync(new ProcessingStatusResponse<ProductModel>
+        {
+            Status = HttpStatusCode.NotFound,
+            ErrorMessage = "Product not found"
+        });
+
+        // Act
+        var response = await _productController.GetProduct(barcode);
+
+        // Assert
+        response.Should().BeOfType<NotFoundObjectResult>();
+        
+        var result = response as NotFoundObjectResult;
+        result?.Value.Should().Be("Product not found");
+    }
+    
+    
 
 }

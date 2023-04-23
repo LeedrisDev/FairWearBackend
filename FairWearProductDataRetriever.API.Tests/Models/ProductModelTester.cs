@@ -26,7 +26,7 @@ public class ProductModelTester
 
         Assert.AreEqual("North face gloves", product.Name);
     }
-    
+
     [TestMethod]
     public void TestBrandName()
     {
@@ -37,8 +37,31 @@ public class ProductModelTester
 
         Assert.AreEqual("North face", product.BrandName);
     }
-    
-    
 
+    [TestMethod]
+    public void TestCategory()
+    {
+        var product = new ProductModel
+        {
+            Category = "Gloves"
+        };
+
+        Assert.AreEqual("Gloves", product.Category);
+    }
+
+    [TestMethod]
+    public void TestRanges()
+    {
+        var product = new ProductModel
+        {
+            Ranges = new List<string>
+            {
+                "Men", "Women"
+            }
+        };
+
+        Assert.AreEqual("Men", product.Ranges.ElementAt(0));
+        Assert.AreEqual("Women", product.Ranges.ElementAt(1));
+    }
 
 }

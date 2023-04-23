@@ -112,18 +112,15 @@ public class ProductBusiness : IProductBusiness
     /// <returns></returns>
     private static bool CheckForNotFound(HtmlDocument doc)
     {
-        try
-        {
-            var node = doc.DocumentNode.SelectSingleNode(AppConstants.XPathNotFound);
+        var node = doc.DocumentNode.SelectSingleNode(AppConstants.XPathNotFound);
 
-            if (node == null) return false;
-            var text = node.InnerText;
-            
-            return text.Contains("Sorry, we were not able to find a product for");
-        }
-        catch (Exception)
+        if (node == null)
         {
             return false;
         }
+
+        var text = node.InnerText;
+        
+        return text.Contains("Sorry, we were not able to find a product for");
     }
 }

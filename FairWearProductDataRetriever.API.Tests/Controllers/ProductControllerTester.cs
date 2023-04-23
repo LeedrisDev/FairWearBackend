@@ -4,6 +4,7 @@ using FairWearProductDataRetriever.API.Controllers;
 using FairWearProductDataRetriever.API.Models;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 
 namespace ProductDataRetriever.Test.Controllers;
@@ -72,9 +73,27 @@ public class ProductControllerTester
         response.Should().BeOfType<NotFoundObjectResult>();
         
         var result = response as NotFoundObjectResult;
+        result.Should().NotBeNull();
         result?.Value.Should().Be("Product not found");
     }
     
-    
+    [TestMethod]
+    public async Task GetProduct_Returns_InternalServerError_When_An_Error_Occurs()
+    {
+        // Arrange
+        var barcode = "1234567890";
 
+        _productBusinessMock.Setup(x => x.GetProductInformation(barcode)).ReturnsAsync(new ProcessingStatusResponse<ProductModel>
+        {
+            Status = HttpStatusCode.InternalServerError,
+            ErrorMessage = "An error occurred while retrieving product information."
+        });
+
+        var response = await _productController.GetProduct(barcode);
+
+        var result = response as ObjectResult;
+
+        result.Should().NotBeNull();
+        result?.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+    }
 }

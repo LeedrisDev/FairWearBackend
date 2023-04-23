@@ -16,7 +16,7 @@ public class SwaggerOptionsConfigurationTester
         var options = new SwaggerGenOptions();
         var apiVersionDescriptions = new List<ApiVersionDescription>
         {
-            new(new ApiVersion(1, 0), "v1", false),
+            new(new ApiVersion(1, 0), "v1", true),
             new(new ApiVersion(2, 0), "v2", false)
         };
         providerMock.Setup(p => p.ApiVersionDescriptions).Returns(apiVersionDescriptions);
@@ -32,7 +32,8 @@ public class SwaggerOptionsConfigurationTester
         var v1Info = options.SwaggerGeneratorOptions.SwaggerDocs["v1"];
         Assert.AreEqual(AppConstants.ApiName, v1Info.Title);
         Assert.AreEqual("1.0", v1Info.Version);
-
+        Assert.AreEqual($" {AppConstants.ApiVersionDeprecatedDescription}", v1Info.Description);
+        
         var v2Info = options.SwaggerGeneratorOptions.SwaggerDocs["v2"];
         Assert.AreEqual(AppConstants.ApiName, v2Info.Title);
         Assert.AreEqual("2.0", v2Info.Version);

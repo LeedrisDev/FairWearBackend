@@ -6,7 +6,7 @@ namespace ProductDataRetriever.Test.Models;
 public class ProductModelTester
 {
     [TestMethod]
-    public void TestUpcCode()
+    public void Create_ProductModel_With_UpcCode()
     {
         var product = new ProductModel
         {
@@ -17,7 +17,7 @@ public class ProductModelTester
     }
     
     [TestMethod]
-    public void TestName()
+    public void Create_ProductModel_With_Name()
     {
         var product = new ProductModel
         {
@@ -28,7 +28,7 @@ public class ProductModelTester
     }
 
     [TestMethod]
-    public void TestBrandName()
+    public void Create_ProductModel_With_BrandName()
     {
         var product = new ProductModel
         {
@@ -39,7 +39,7 @@ public class ProductModelTester
     }
 
     [TestMethod]
-    public void TestCategory()
+    public void Create_ProductModel_With_Category()
     {
         var product = new ProductModel
         {
@@ -50,7 +50,7 @@ public class ProductModelTester
     }
 
     [TestMethod]
-    public void TestRanges()
+    public void Create_ProductModel_With_Ranges()
     {
         var product = new ProductModel
         {

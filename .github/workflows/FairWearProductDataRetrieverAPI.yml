@@ -8,6 +8,7 @@ on:
       - feature/*
       - hotfix/*
       - release/*
+      - fix/*
     paths:
       - 'FairWearProductDataRetriever.API/**'
       - 'FairWearProductDataRetriever.API.Tests/**'

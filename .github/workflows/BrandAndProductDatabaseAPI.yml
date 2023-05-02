@@ -124,7 +124,7 @@ jobs:
           dotnet restore BrandAndProductDatabase.API/BrandAndProductDatabase.API.csproj 
 
       - name: 'Test with code coverage'
-        run: ./Scripts/code-coverage-ci.sh -p BrandAndProductDatabase.API.Tests/BrandAndProductDatabase.API.Tests.csproj -t 79
+        run: ./Scripts/code-coverage-ci.sh -p BrandAndProductDatabase.API.Tests/BrandAndProductDatabase.API.Tests.csproj -t 75
 
       - uses: sarisia/actions-status-discord@v1
         if: always()

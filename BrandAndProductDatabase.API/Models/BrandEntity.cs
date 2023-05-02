@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace BrandAndProductDatabase.API.Models;
 
-namespace BrandAndProductDatabase.API.Models;
-
-public partial class Brand
+public class BrandEntity
 {
     public int Id { get; set; }
 
@@ -23,5 +20,5 @@ public partial class Brand
 
     public string[] Ranges { get; set; } = null!;
 
-    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+    public virtual ICollection<ProductEntity> Products { get; set; } = new List<ProductEntity>();
 }

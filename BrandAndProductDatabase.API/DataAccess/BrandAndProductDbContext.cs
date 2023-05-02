@@ -1,24 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using BrandAndProductDatabase.API.Models;
+﻿using BrandAndProductDatabase.API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BrandAndProductDatabase.API.DataAccess;
 
-public partial class FairwearBrandAndProductDatabaseContext : DbContext
+public class BrandAndProductDbContext : DbContext
 {
-    public FairwearBrandAndProductDatabaseContext()
+    public BrandAndProductDbContext()
     {
     }
 
-    public FairwearBrandAndProductDatabaseContext(DbContextOptions<FairwearBrandAndProductDatabaseContext> options)
+    public BrandAndProductDbContext(DbContextOptions<BrandAndProductDbContext> options)
         : base(options)
     {
     }
 
-    public virtual DbSet<Brand> Brands { get; set; }
+    public virtual DbSet<BrandEntity> Brands { get; set; }
 
-    public virtual DbSet<Product> Products { get; set; }
+    public virtual DbSet<ProductEntity> Products { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -26,7 +24,7 @@ public partial class FairwearBrandAndProductDatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Brand>(entity =>
+        modelBuilder.Entity<BrandEntity>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("brands_pkey");
 
@@ -53,7 +51,7 @@ public partial class FairwearBrandAndProductDatabaseContext : DbContext
                 .HasColumnName("rating_description");
         });
 
-        modelBuilder.Entity<Product>(entity =>
+        modelBuilder.Entity<ProductEntity>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("products_pkey");
 
@@ -74,14 +72,10 @@ public partial class FairwearBrandAndProductDatabaseContext : DbContext
                 .HasColumnType("character varying")
                 .HasColumnName("upc_code");
 
-            entity.HasOne(d => d.Brand).WithMany(p => p.Products)
+            entity.HasOne(d => d.BrandEntity).WithMany(p => p.Products)
                 .HasForeignKey(d => d.BrandId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("products_brand_id_fkey");
         });
-
-        OnModelCreatingPartial(modelBuilder);
     }
-
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

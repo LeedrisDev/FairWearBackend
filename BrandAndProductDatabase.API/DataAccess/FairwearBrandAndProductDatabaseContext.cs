@@ -1,0 +1,87 @@
+﻿using System;
+using System.Collections.Generic;
+using BrandAndProductDatabase.API.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace BrandAndProductDatabase.API.DataAccess;
+
+public partial class FairwearBrandAndProductDatabaseContext : DbContext
+{
+    public FairwearBrandAndProductDatabaseContext()
+    {
+    }
+
+    public FairwearBrandAndProductDatabaseContext(DbContextOptions<FairwearBrandAndProductDatabaseContext> options)
+        : base(options)
+    {
+    }
+
+    public virtual DbSet<Brand> Brands { get; set; }
+
+    public virtual DbSet<Product> Products { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseNpgsql("User ID=fairwear;Password=fairwear;Host=localhost;Port=5432;Database=fairwear_brand_and_product_database;");
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Brand>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("brands_pkey");
+
+            entity.ToTable("brands");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.AnimalRating).HasColumnName("animal_rating");
+            entity.Property(e => e.Categories)
+                .HasColumnType("character varying[]")
+                .HasColumnName("categories");
+            entity.Property(e => e.Country)
+                .HasColumnType("character varying")
+                .HasColumnName("country");
+            entity.Property(e => e.EnvironmentRating).HasColumnName("environment_rating");
+            entity.Property(e => e.Name)
+                .HasColumnType("character varying")
+                .HasColumnName("name");
+            entity.Property(e => e.PeopleRating).HasColumnName("people_rating");
+            entity.Property(e => e.Ranges)
+                .HasColumnType("character varying[]")
+                .HasColumnName("ranges");
+            entity.Property(e => e.RatingDescription)
+                .HasColumnType("character varying")
+                .HasColumnName("rating_description");
+        });
+
+        modelBuilder.Entity<Product>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("products_pkey");
+
+            entity.ToTable("products");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.BrandId).HasColumnName("brand_id");
+            entity.Property(e => e.Category)
+                .HasColumnType("character varying")
+                .HasColumnName("category");
+            entity.Property(e => e.Name)
+                .HasColumnType("character varying")
+                .HasColumnName("name");
+            entity.Property(e => e.Ranges)
+                .HasColumnType("character varying[]")
+                .HasColumnName("ranges");
+            entity.Property(e => e.UpcCode)
+                .HasColumnType("character varying")
+                .HasColumnName("upc_code");
+
+            entity.HasOne(d => d.Brand).WithMany(p => p.Products)
+                .HasForeignKey(d => d.BrandId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("products_brand_id_fkey");
+        });
+
+        OnModelCreatingPartial(modelBuilder);
+    }
+
+    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+}

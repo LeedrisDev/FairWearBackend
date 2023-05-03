@@ -1,7 +1,7 @@
 ﻿namespace BrandAndProductDatabase.API.Models.Entity;
 
 /// <summary>Class representing a Product in database.</summary>
-public class ProductEntity
+public class ProductEntity : IObjectWithId
 {
     /// <summary>The Id of the Product.</summary>
     public int Id { get; set; }

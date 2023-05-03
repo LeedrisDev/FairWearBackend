@@ -17,8 +17,9 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
 
     /// <summary>Initializes a new instance of the <see cref="Repository{TModel,TEntity}"/> class.</summary>
     /// <param name="context">The <see cref="DbContext"/> instance used to access the data store.</param>
-    /// <param name="mapper"> The <see cref="IMapper"/> instance used to map between <typeparamref name="TModel"/>
-    /// and <typeparamref name="TEntity"/>. </param>
+    /// <param name="mapper">
+    /// The <see cref="IMapper"/> instance used to map between <typeparamref name="TModel"/> and <typeparamref name="TEntity"/>.
+    /// </param>
     public Repository(DbContext context, IMapper mapper)
     {
         _context = context;

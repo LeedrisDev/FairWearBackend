@@ -1,4 +1,4 @@
-﻿namespace BrandAndProductDatabase.API.Models;
+﻿namespace BrandAndProductDatabase.API.Models.Entity;
 
 /// <summary>Class representing a Product in database.</summary>
 public class ProductEntity

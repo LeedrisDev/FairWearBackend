@@ -1,4 +1,4 @@
-﻿using BrandAndProductDatabase.API.Models;
+﻿using BrandAndProductDatabase.API.Models.Entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace BrandAndProductDatabase.API.DataAccess;

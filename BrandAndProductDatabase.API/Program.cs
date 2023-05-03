@@ -1,4 +1,5 @@
 using BrandAndProductDatabase.API.DataAccess;
+using BrandAndProductDatabase.API.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,7 @@ builder.Services.AddSwaggerGen();
 
 // Dependency Injection
 builder.Services.AddDbContext<BrandAndProductDbContext>();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 var app = builder.Build();
 

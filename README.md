@@ -26,5 +26,5 @@ export POSTGRES_BRAND_DATABASE=""
 Then to run the container run the following command :
 
 ```shell
-docker run -t --rm --name brand_database -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -e POSTGRES_DB=$POSTGRES_DB  brands_and_products_db
+docker run -p 5432:5432 -t --rm --name brand_database -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -e POSTGRES_DB=$POSTGRES_DB  brands_and_products_db
 ```

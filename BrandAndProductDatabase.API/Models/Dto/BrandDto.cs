@@ -27,10 +27,10 @@ public class BrandDto : IObjectWithId
     public string RatingDescription { get; set; } = null!;
 
     /// <summary>The Categories of the Brand.</summary>
-    public IEnumerable<string> Categories { get; set; } = null!;
+    public List<string> Categories { get; set; } = null!;
 
     /// <summary>The Ranges of the Brand.</summary>
-    public IEnumerable<string> Ranges { get; set; } = null!;
+    public List<string> Ranges { get; set; } = null!;
 
     /// <summary>The <see cref="ProductEntity"/>s of the Brand.</summary>
     public virtual IEnumerable<ProductEntity> Products { get; set; } = new List<ProductEntity>();

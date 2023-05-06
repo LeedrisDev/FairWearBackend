@@ -18,7 +18,7 @@ public class ProductDto :  IObjectWithId
     public string? Category { get; set; }
     
     /// <summary>The Ranges of the Product.</summary>
-    public IEnumerable<string>? Ranges { get; set; }
+    public List<string>? Ranges { get; set; }
 
     /// <summary>The BrandId of the Product.</summary>
     public int BrandId { get; set; }

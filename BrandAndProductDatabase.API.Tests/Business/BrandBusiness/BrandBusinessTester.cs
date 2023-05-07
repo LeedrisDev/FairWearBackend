@@ -72,4 +72,37 @@ public class BrandBusinessTester
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(brandsInDb);
     }
+
+    [TestMethod]
+    public async Task GetBrandByIdAsync_ReturnsBrandIfExists()
+    {
+        // Arrange
+        var brandInDb = new BrandDto
+        {
+            Id = 1,
+            Name = "Brand 1",
+            Country = "Country 1",
+            EnvironmentRating = 1,
+            PeopleRating = 1,
+            AnimalRating = 1,
+            RatingDescription = "Rating 1",
+            Categories = new List<string> { "Category 1" },
+            Ranges = new List<string> { "Range 1" }
+        };
+
+        _brandRepositoryMock.Setup(x => x.GetByIdAsync(brandInDb.Id)).ReturnsAsync(
+            new ProcessingStatusResponse<BrandDto>()
+            {
+                Object = brandInDb
+            });
+
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _mapper);
+
+        // Act
+        var result = await brandBusiness.GetBrandByIdAsync(brandInDb.Id);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeEquivalentTo(brandInDb);
+    }
 }

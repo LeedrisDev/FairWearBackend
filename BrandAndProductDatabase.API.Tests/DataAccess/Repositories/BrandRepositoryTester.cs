@@ -8,12 +8,12 @@ using BrandAndProductDatabase.API.Utils;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 
-namespace BrandAndProductDatabase.API.Tests.DataAccess;
+namespace BrandAndProductDatabase.API.Tests.DataAccess.Repositories;
 
 [TestClass]
-public class BrandRespositoryTester
+public class BrandRepositoryTester
 {
-    private BrandAndProductDbContextTest _context;
+    private BrandAndProductDbContextInMemoryDatabase _context;
     private IMapper _mapper;
 
     [TestInitialize]
@@ -23,7 +23,7 @@ public class BrandRespositoryTester
             .UseInMemoryDatabase(databaseName: "test_database")
             .Options;
 
-        _context = new BrandAndProductDbContextTest(options);
+        _context = new BrandAndProductDbContextInMemoryDatabase(options);
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
 

@@ -127,6 +127,52 @@ public class BrandRespositoryTester
             .BeEquivalentTo(brands.First());
 
     }
+    
+    [TestMethod]
+    public async Task GetByIdAsync_ReturnsNotFoundForNonExistentId()
+    {
+        // Arrange
+        var brands = new List<BrandEntity>
+        {
+            new BrandEntity
+            {
+                Id = 1,
+                Name = "Brand 1",
+                Country = "Country 1",
+                EnvironmentRating = 1,
+                PeopleRating = 1,
+                AnimalRating = 1,
+                RatingDescription = "Rating 1",
+                Categories = new List<string> { "Category 1" },
+                Ranges = new List<string> { "Range 1" }
+            },
+            new BrandEntity
+            {
+                Id = 2,
+                Name = "Brand 2",
+                Country = "Country 2",
+                EnvironmentRating = 2,
+                PeopleRating = 2,
+                AnimalRating = 2,
+                RatingDescription = "Rating 2",
+                Categories = new List<string> { "Category 2" },
+                Ranges = new List<string> { "Range 2" }
+            }
+        };
+        _context.Brands.AddRange(brands);
+        _context.SaveChanges();
+        
+        var repository = new BrandRepository(_context, _mapper);
+        // Act
+        var result = await repository.GetByIdAsync(3);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Status.Should().Be(HttpStatusCode.NotFound);
+        result.ErrorMessage.Should().NotBeNull();
+    }
+    
+    
 
 
 

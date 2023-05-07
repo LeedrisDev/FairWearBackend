@@ -26,12 +26,12 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
         _dbSet = context.Set<TEntity>();
         _mapper = mapper;
     }
-    
+
     /// <inheritdoc/>
     public async Task<ProcessingStatusResponse<IEnumerable<TModel>>> GetAllAsync()
     {
         var processingStatusResponse = new ProcessingStatusResponse<IEnumerable<TModel>>();
-        
+
         var entities = await _dbSet.ToListAsync();
         processingStatusResponse.Object = _mapper.Map<IEnumerable<TModel>>(entities);
 
@@ -42,7 +42,7 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
     public async Task<ProcessingStatusResponse<TModel>> GetByIdAsync(int id)
     {
         var processingStatusResponse = new ProcessingStatusResponse<TModel>();
-        
+
         var entity = await _dbSet.FindAsync(id);
         if (entity == null)
         {
@@ -50,7 +50,7 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
             processingStatusResponse.ErrorMessage = $"Entity with ID {id} not found.";
             return processingStatusResponse;
         }
-        
+
         processingStatusResponse.Object = _mapper.Map<TModel>(entity);
         return processingStatusResponse;
     }
@@ -59,11 +59,11 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
     public async Task<ProcessingStatusResponse<TModel>> AddAsync(TModel entity)
     {
         var processingStatusResponse = new ProcessingStatusResponse<TModel>();
-        
+
         var entityToAdd = _mapper.Map<TEntity>(entity);
         await _dbSet.AddAsync(entityToAdd);
         await _context.SaveChangesAsync();
-        
+
         processingStatusResponse.Object = _mapper.Map<TModel>(entityToAdd);
         return processingStatusResponse;
     }
@@ -80,11 +80,12 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
             processingStatusResponse.ErrorMessage = $"Entity with ID {entity.Id} not found.";
             return processingStatusResponse;
         }
-        
-        var entityUpdated = _dbSet.Update(_mapper.Map<TEntity>(entity));
+
+        _mapper.Map(entity, entityToUpdate);
+        _dbSet.Update(entityToUpdate);
         await _context.SaveChangesAsync();
-        
-        processingStatusResponse.Object = _mapper.Map<TModel>(entityUpdated);
+
+        processingStatusResponse.Object = _mapper.Map<TModel>(entityToUpdate);
         return processingStatusResponse;
     }
 
@@ -100,7 +101,7 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
             processingStatusResponse.ErrorMessage = $"Entity with ID {id} not found.";
             return processingStatusResponse;
         }
-        
+
         _dbSet.Remove(entityToDelete);
         processingStatusResponse.Object = _mapper.Map<TModel>(entityToDelete);
         await _context.SaveChangesAsync();

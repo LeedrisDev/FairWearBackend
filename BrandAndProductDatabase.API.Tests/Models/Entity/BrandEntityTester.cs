@@ -12,10 +12,11 @@ public class BrandEntityTester
         public void BrandEntity_Id_ShouldBeSettable()
         {
             // Arrange
-            var brand = new BrandEntity();
-
-            // Act
-            brand.Id = 42;
+            var brand = new BrandEntity
+            {
+                // Act
+                Id = 42
+            };
 
             // Assert
             brand.Id.Should().Be(42);
@@ -25,10 +26,11 @@ public class BrandEntityTester
         public void BrandEntity_Name_ShouldBeSettable()
         {
             // Arrange
-            var brand = new BrandEntity();
-
-            // Act
-            brand.Name = "Test Brand";
+            var brand = new BrandEntity
+            {
+                // Act
+                Name = "Test Brand"
+            };
 
             // Assert
             brand.Name.Should().Be("Test Brand");
@@ -38,10 +40,11 @@ public class BrandEntityTester
         public void BrandEntity_Country_ShouldBeSettable()
         {
             // Arrange
-            var brand = new BrandEntity();
-
-            // Act
-            brand.Country = "Test Country";
+            var brand = new BrandEntity
+            {
+                // Act
+                Country = "Test Country"
+            };
 
             // Assert
             brand.Country.Should().Be("Test Country");
@@ -51,10 +54,11 @@ public class BrandEntityTester
         public void BrandEntity_EnvironmentRating_ShouldBeSettable()
         {
             // Arrange
-            var brand = new BrandEntity();
-
-            // Act
-            brand.EnvironmentRating = 5;
+            var brand = new BrandEntity
+            {
+                // Act
+                EnvironmentRating = 5
+            };
 
             // Assert
             brand.EnvironmentRating.Should().Be(5);
@@ -64,10 +68,11 @@ public class BrandEntityTester
         public void BrandEntity_PeopleRating_ShouldBeSettable()
         {
             // Arrange
-            var brand = new BrandEntity();
-
-            // Act
-            brand.PeopleRating = 5;
+            var brand = new BrandEntity
+            {
+                // Act
+                PeopleRating = 5
+            };
 
             // Assert
             brand.PeopleRating.Should().Be(5);
@@ -77,10 +82,11 @@ public class BrandEntityTester
         public void BrandEntity_AnimalRating_ShouldBeSettable()
         {
             // Arrange
-            var brand = new BrandEntity();
-
-            // Act
-            brand.AnimalRating = 5;
+            var brand = new BrandEntity
+            {
+                // Act
+                AnimalRating = 5
+            };
 
             // Assert
             brand.AnimalRating.Should().Be(5);
@@ -90,10 +96,11 @@ public class BrandEntityTester
         public void BrandEntity_RatingDescription_ShouldBeSettable()
         {
             // Arrange
-            var brand = new BrandEntity();
-
-            // Act
-            brand.RatingDescription = "Test Description";
+            var brand = new BrandEntity
+            {
+                // Act
+                RatingDescription = "Test Description"
+            };
 
             // Assert
             brand.RatingDescription.Should().Be("Test Description");

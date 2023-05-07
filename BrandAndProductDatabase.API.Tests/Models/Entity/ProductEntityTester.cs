@@ -10,10 +10,11 @@ public class ProductEntityTester
     public void ProductEntity_Id_ShouldBeSettable()
     {
         // Arrange
-        var product = new ProductEntity();
-
-        // Act
-        product.Id = 42;
+        var product = new ProductEntity
+        {
+            // Act
+            Id = 42
+        };
 
         // Assert
         product.Id.Should().Be(42);
@@ -23,10 +24,11 @@ public class ProductEntityTester
     public void ProductEntity_UpcCode_ShouldBeSettable()
     {
         // Arrange
-        var product = new ProductEntity();
-
-        // Act
-        product.UpcCode = "1234567890";
+        var product = new ProductEntity
+        {
+            // Act
+            UpcCode = "1234567890"
+        };
 
         // Assert
         product.UpcCode.Should().Be("1234567890");
@@ -36,10 +38,11 @@ public class ProductEntityTester
     public void ProductEntity_Name_ShouldBeSettable()
     {
         // Arrange
-        var product = new ProductEntity();
-
-        // Act
-        product.Name = "Test Product";
+        var product = new ProductEntity
+        {
+            // Act
+            Name = "Test Product"
+        };
 
         // Assert
         product.Name.Should().Be("Test Product");
@@ -49,10 +52,11 @@ public class ProductEntityTester
     public void ProductEntity_Category_ShouldBeSettable()
     {
         // Arrange
-        var product = new ProductEntity();
-
-        // Act
-        product.Category = "Test Category";
+        var product = new ProductEntity
+        {
+            // Act
+            Category = "Test Category"
+        };
 
         // Assert
         product.Category.Should().Be("Test Category");

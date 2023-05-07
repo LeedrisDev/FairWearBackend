@@ -25,21 +25,21 @@ public class BrandBusiness : IBrandBusiness
     public async Task<IEnumerable<BrandDto>> GetAllBrandsAsync()
     {
         var brands = await _brandRepository.GetAllAsync();
-        return _mapper.Map<IEnumerable<BrandDto>>(brands);
+        return _mapper.Map<IEnumerable<BrandDto>>(brands.Object);
     }
 
     /// <inheritdoc/>
     public async Task<BrandDto> GetBrandByIdAsync(int id)
     {
         var brand = await _brandRepository.GetByIdAsync(id);
-        return _mapper.Map<BrandDto>(brand);
+        return _mapper.Map<BrandDto>(brand.Object);
     }
 
     /// <inheritdoc/>
     public async Task<BrandDto> CreateBrandAsync(BrandDto brandDto)
     {
         var brand = await _brandRepository.AddAsync(brandDto);
-        return _mapper.Map<BrandDto>(brand);
+        return _mapper.Map<BrandDto>(brand.Object);
     }
 
     /// <inheritdoc/>
@@ -53,7 +53,7 @@ public class BrandBusiness : IBrandBusiness
         }
 
         brand = await _brandRepository.UpdateAsync(brandDto);
-        return _mapper.Map<BrandDto>(brand);
+        return _mapper.Map<BrandDto>(brand.Object);
     }
 
     /// <inheritdoc/>

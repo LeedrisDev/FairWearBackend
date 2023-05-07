@@ -172,4 +172,89 @@ public class BrandBusinessTester
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(createdBrandInDb);
     }
+
+    [TestMethod]
+    public async Task UpdateBrandAsync_WithValidBrandDto_UpdatesBrand()
+    {
+        // Arrange
+        var brandInDb = new BrandDto
+        {
+            Id = 1,
+            Name = "Brand 1",
+            Country = "Country 1",
+            EnvironmentRating = 2,
+            PeopleRating = 2,
+            AnimalRating = 2,
+            RatingDescription = "Rating 2",
+            Categories = new List<string> { "Category 2" },
+            Ranges = new List<string> { "Range 2" }
+        };
+
+        var brandToUpdate = new BrandDto
+        {
+            Id = 1,
+            Name = "Updated Brand",
+            Country = "Updated Country",
+            EnvironmentRating = 3,
+            PeopleRating = 3,
+            AnimalRating = 3,
+            RatingDescription = "Updated Rating",
+            Categories = new List<string> { "Updated Category" },
+            Ranges = new List<string> { "Updated Range" }
+        };
+
+        _brandRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(
+            new ProcessingStatusResponse<BrandDto>()
+            {
+                Object = brandInDb
+            });
+
+        _brandRepositoryMock.Setup(x => x.UpdateAsync(It.IsAny<BrandDto>())).ReturnsAsync(
+            new ProcessingStatusResponse<BrandDto>()
+            {
+                Object = brandToUpdate
+            });
+
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _mapper);
+
+        // Act
+        var result = await brandBusiness.UpdateBrandAsync(brandToUpdate);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeEquivalentTo(brandToUpdate);
+    }
+
+    [TestMethod]
+    public async Task UpdateBrandAsync_WithInvalidBrand_ReturnsNull()
+    {
+        // Arrange
+        var brandToUpdate = new BrandDto
+        {
+            Id = 1,
+            Name = "Brand 1",
+            Country = "Country 1",
+            EnvironmentRating = 1,
+            PeopleRating = 1,
+            AnimalRating = 1,
+            RatingDescription = "Rating 1",
+            Categories = new List<string> { "Category 1" },
+            Ranges = new List<string> { "Range 1" }
+        };
+
+
+        _brandRepositoryMock.Setup(x => x.GetByIdAsync(brandToUpdate.Id)).ReturnsAsync(
+            new ProcessingStatusResponse<BrandDto>()
+            {
+                Object = null
+            });
+
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _mapper);
+
+        // Act
+        var result = await brandBusiness.UpdateBrandAsync(brandToUpdate);
+
+        // Assert
+        result.Should().BeNull();
+    }
 }

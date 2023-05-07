@@ -46,7 +46,7 @@ public class BrandBusiness : IBrandBusiness
     public async Task<BrandDto> UpdateBrandAsync(BrandDto brandDto)
     {
         var brand = await _brandRepository.GetByIdAsync(brandDto.Id);
-        if (brand == null)
+        if (brand == null || brand.Object == null)
         {
             // Handle the case where the brand doesn't exist
             return null;

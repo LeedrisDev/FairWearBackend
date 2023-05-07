@@ -27,11 +27,8 @@ public class BrandRespositoryTester
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
 
-        var config = new MapperConfiguration(cfg =>
-        {
-            cfg.AddProfile<AutoMapperProfiles>();
-        });
-        
+        var config = new MapperConfiguration(cfg => { cfg.AddProfile<AutoMapperProfiles>(); });
+
         _mapper = config.CreateMapper();
     }
 
@@ -70,10 +67,10 @@ public class BrandRespositoryTester
         await _context.SaveChangesAsync();
 
         var repository = new BrandRepository(_context, _mapper);
-        
+
         // Act
         var result = await repository.GetAllAsync();
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Status.Should().Be(HttpStatusCode.OK);
@@ -126,9 +123,8 @@ public class BrandRespositoryTester
         result.Object.Should().NotBeNull();
         result.Object.Should()
             .BeEquivalentTo(brands.First());
-
     }
-    
+
     [TestMethod]
     public async Task GetByIdAsync_ReturnsNotFoundForNonExistentId()
     {
@@ -162,7 +158,7 @@ public class BrandRespositoryTester
         };
         _context.Brands.AddRange(brands);
         _context.SaveChanges();
-        
+
         var repository = new BrandRepository(_context, _mapper);
         // Act
         var result = await repository.GetByIdAsync(3);
@@ -172,13 +168,13 @@ public class BrandRespositoryTester
         result.Status.Should().Be(HttpStatusCode.NotFound);
         result.ErrorMessage.Should().NotBeNull();
     }
-    
+
     [TestMethod]
     public async Task AddAsync_AddsBrandToDatabase()
     {
         // Arrange
-        var brandToAdd = new BrandDto 
-        { 
+        var brandToAdd = new BrandDto
+        {
             Name = "Brand 1",
             Country = "Country 1",
             EnvironmentRating = 1,
@@ -205,7 +201,68 @@ public class BrandRespositoryTester
             .BeEquivalentTo(brandToAdd, options => options.Excluding(x => x.Id));
     }
 
+    [TestMethod]
+    public async Task UpdateAsync_UpdatesBrandInDatabase()
+    {
+        // Arrange
+        var brands = new List<BrandEntity>
+        {
+            new BrandEntity
+            {
+                Id = 1,
+                Name = "Brand 1",
+                Country = "Country 1",
+                EnvironmentRating = 1,
+                PeopleRating = 1,
+                AnimalRating = 1,
+                RatingDescription = "Rating 1",
+                Categories = new List<string> { "Category 1" },
+                Ranges = new List<string> { "Range 1" }
+            },
+            new BrandEntity
+            {
+                Id = 2,
+                Name = "Brand 2",
+                Country = "Country 2",
+                EnvironmentRating = 2,
+                PeopleRating = 2,
+                AnimalRating = 2,
+                RatingDescription = "Rating 2",
+                Categories = new List<string> { "Category 2" },
+                Ranges = new List<string> { "Range 2" }
+            }
+        };
 
+        var brandToUpdate = new BrandDto
+        {
+            Id = 2,
+            Name = "Updated Brand",
+            Country = "Updated Country",
+            EnvironmentRating = 3,
+            PeopleRating = 3,
+            AnimalRating = 3,
+            RatingDescription = "Updated Rating",
+            Categories = new List<string> { "Updated Category" },
+            Ranges = new List<string> { "Updated Range" }
+        };
 
+        _context.Brands.AddRange(brands);
+        _context.SaveChanges();
 
+        var repository = new BrandRepository(_context, _mapper);
+
+        // Act
+        var result = await repository.UpdateAsync(brandToUpdate);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Status.Should().Be(HttpStatusCode.OK);
+        result.Object.Should().NotBeNull();
+        result.Object.Should().BeEquivalentTo(brandToUpdate);
+
+        var brandInDb = _context.Brands
+            .FirstOrDefault(b => b.Id == 2);
+        brandInDb.Should().NotBeNull();
+        brandInDb.Should().BeEquivalentTo(brandToUpdate);
+    }
 }

@@ -2,6 +2,7 @@
 using AutoMapper;
 using BrandAndProductDatabase.API.DataAccess;
 using BrandAndProductDatabase.API.DataAccess.Repositories;
+using BrandAndProductDatabase.API.Models.Dto;
 using BrandAndProductDatabase.API.Models.Entity;
 using BrandAndProductDatabase.API.Utils;
 using FluentAssertions;
@@ -172,7 +173,37 @@ public class BrandRespositoryTester
         result.ErrorMessage.Should().NotBeNull();
     }
     
-    
+    [TestMethod]
+    public async Task AddAsync_AddsBrandToDatabase()
+    {
+        // Arrange
+        var brandToAdd = new BrandDto 
+        { 
+            Name = "Brand 1",
+            Country = "Country 1",
+            EnvironmentRating = 1,
+            PeopleRating = 1,
+            AnimalRating = 1,
+            RatingDescription = "Rating 1",
+            Categories = new List<string> { "Category 1" },
+            Ranges = new List<string> { "Range 1" }
+        };
+        var repository = new BrandRepository(_context, _mapper);
+
+        // Act
+        var result = await repository.AddAsync(brandToAdd);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Status.Should().Be(HttpStatusCode.OK);
+        result.Object.Should().NotBeNull();
+        result.Object.Id.Should().NotBe(0);
+
+        var brandInDb = _context.Brands.FirstOrDefault(b => b.Id == result.Object.Id);
+        brandInDb.Should().NotBeNull();
+        brandInDb.Should()
+            .BeEquivalentTo(brandToAdd, options => options.Excluding(x => x.Id));
+    }
 
 
 

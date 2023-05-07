@@ -127,4 +127,49 @@ public class BrandBusinessTester
         // Assert
         result.Should().BeNull();
     }
+
+    [TestMethod]
+    public async Task CreateBrandAsync_WithValidBrandDto_CreatesBrand()
+    {
+        // Arrange
+        var brandDto = new BrandDto
+        {
+            Name = "Brand 1",
+            Country = "Country 1",
+            EnvironmentRating = 1,
+            PeopleRating = 1,
+            AnimalRating = 1,
+            RatingDescription = "Rating 1",
+            Categories = new List<string> { "Category 1" },
+            Ranges = new List<string> { "Range 1" }
+        };
+
+        var createdBrandInDb = new BrandDto
+        {
+            Id = 1,
+            Name = "Brand 1",
+            Country = "Country 1",
+            EnvironmentRating = 1,
+            PeopleRating = 1,
+            AnimalRating = 1,
+            RatingDescription = "Rating 1",
+            Categories = new List<string> { "Category 1" },
+            Ranges = new List<string> { "Range 1" }
+        };
+
+        _brandRepositoryMock.Setup(x => x.AddAsync(brandDto)).ReturnsAsync(
+            new ProcessingStatusResponse<BrandDto>()
+            {
+                Object = createdBrandInDb
+            });
+
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _mapper);
+
+        // Act
+        var result = await brandBusiness.CreateBrandAsync(brandDto);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeEquivalentTo(createdBrandInDb);
+    }
 }

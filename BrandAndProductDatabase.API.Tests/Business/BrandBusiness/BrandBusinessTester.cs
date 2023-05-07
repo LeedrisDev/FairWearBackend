@@ -71,7 +71,8 @@ public class BrandBusinessTester
 
         // // Assert
         result.Should().NotBeNull();
-        result.Should().BeEquivalentTo(brandsInDb);
+        result.Status.Should().Be(HttpStatusCode.OK);
+        result.Object.Should().BeEquivalentTo(brandsInDb);
     }
 
     [TestMethod]
@@ -91,7 +92,7 @@ public class BrandBusinessTester
             Ranges = new List<string> { "Range 1" }
         };
 
-        _brandRepositoryMock.Setup(x => x.GetByIdAsync(brandInDb.Id)).ReturnsAsync(
+        _brandRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(
             new ProcessingStatusResponse<BrandDto>()
             {
                 Object = brandInDb
@@ -104,7 +105,8 @@ public class BrandBusinessTester
 
         // Assert
         result.Should().NotBeNull();
-        result.Should().BeEquivalentTo(brandInDb);
+        result.Status.Should().Be(HttpStatusCode.OK);
+        result.Object.Should().BeEquivalentTo(brandInDb);
     }
 
     [TestMethod]
@@ -113,7 +115,7 @@ public class BrandBusinessTester
         // Arrange
         var brandId = 1;
 
-        _brandRepositoryMock.Setup(x => x.GetByIdAsync(brandId)).ReturnsAsync(
+        _brandRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(
             new ProcessingStatusResponse<BrandDto>()
             {
                 Status = HttpStatusCode.NotFound
@@ -125,7 +127,8 @@ public class BrandBusinessTester
         var result = await brandBusiness.GetBrandByIdAsync(brandId);
 
         // Assert
-        result.Should().BeNull();
+        result.Should().NotBeNull();
+        result.Status.Should().Be(HttpStatusCode.NotFound);
     }
 
     [TestMethod]
@@ -157,7 +160,7 @@ public class BrandBusinessTester
             Ranges = new List<string> { "Range 1" }
         };
 
-        _brandRepositoryMock.Setup(x => x.AddAsync(brandDto)).ReturnsAsync(
+        _brandRepositoryMock.Setup(x => x.AddAsync(It.IsAny<BrandDto>())).ReturnsAsync(
             new ProcessingStatusResponse<BrandDto>()
             {
                 Object = createdBrandInDb
@@ -170,7 +173,8 @@ public class BrandBusinessTester
 
         // Assert
         result.Should().NotBeNull();
-        result.Should().BeEquivalentTo(createdBrandInDb);
+        result.Status.Should().Be(HttpStatusCode.OK);
+        result.Object.Should().BeEquivalentTo(createdBrandInDb);
     }
 
     [TestMethod]
@@ -222,7 +226,8 @@ public class BrandBusinessTester
 
         // Assert
         result.Should().NotBeNull();
-        result.Should().BeEquivalentTo(brandToUpdate);
+        result.Status.Should().Be(HttpStatusCode.OK);
+        result.Object.Should().BeEquivalentTo(brandToUpdate);
     }
 
     [TestMethod]
@@ -242,10 +247,10 @@ public class BrandBusinessTester
             Ranges = new List<string> { "Range 1" }
         };
 
-
-        _brandRepositoryMock.Setup(x => x.GetByIdAsync(brandToUpdate.Id)).ReturnsAsync(
+        _brandRepositoryMock.Setup(x => x.UpdateAsync(It.IsAny<BrandDto>())).ReturnsAsync(
             new ProcessingStatusResponse<BrandDto>()
             {
+                Status = HttpStatusCode.NotFound,
                 Object = null
             });
 
@@ -255,6 +260,63 @@ public class BrandBusinessTester
         var result = await brandBusiness.UpdateBrandAsync(brandToUpdate);
 
         // Assert
-        result.Should().BeNull();
+        result.Should().NotBeNull();
+        result.Status.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [TestMethod]
+    public async Task DeleteBrandAsync_WithValidId_DeletesBrand()
+    {
+        // Arrange
+        var brandInDb = new BrandDto
+        {
+            Id = 1,
+            Name = "Brand 1",
+            Country = "Country 1",
+            EnvironmentRating = 2,
+            PeopleRating = 2,
+            AnimalRating = 2,
+            RatingDescription = "Rating 2",
+            Categories = new List<string> { "Category 2" },
+            Ranges = new List<string> { "Range 2" }
+        };
+
+        _brandRepositoryMock.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync(
+            new ProcessingStatusResponse<BrandDto>()
+            {
+                Object = brandInDb
+            });
+
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _mapper);
+
+        // Act
+        var result = await brandBusiness.DeleteBrandAsync(1);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Status.Should().Be(HttpStatusCode.OK);
+        result.Object.Should().BeEquivalentTo(brandInDb);
+    }
+
+    [TestMethod]
+    public async Task DeleteBrandAsync_WithInvalidId_ReturnsNull()
+    {
+        // Arrange
+
+        _brandRepositoryMock.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync(
+            new ProcessingStatusResponse<BrandDto>()
+            {
+                Status = HttpStatusCode.NotFound,
+                Object = null
+            });
+
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _mapper);
+
+        // Act
+        var result = await brandBusiness.DeleteBrandAsync(1);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Status.Should().Be(HttpStatusCode.NotFound);
     }
 }

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Net;
+using AutoMapper;
 using BrandAndProductDatabase.API.DataAccess.IRepositories;
 using BrandAndProductDatabase.API.Models;
 using BrandAndProductDatabase.API.Models.Dto;
@@ -104,5 +105,26 @@ public class BrandBusinessTester
         // Assert
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(brandInDb);
+    }
+
+    [TestMethod]
+    public async Task GetBrandByIdAsync_WithInvalidId_ReturnsNull()
+    {
+        // Arrange
+        var brandId = 1;
+
+        _brandRepositoryMock.Setup(x => x.GetByIdAsync(brandId)).ReturnsAsync(
+            new ProcessingStatusResponse<BrandDto>()
+            {
+                Status = HttpStatusCode.NotFound
+            });
+
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _mapper);
+
+        // Act
+        var result = await brandBusiness.GetBrandByIdAsync(brandId);
+
+        // Assert
+        result.Should().BeNull();
     }
 }

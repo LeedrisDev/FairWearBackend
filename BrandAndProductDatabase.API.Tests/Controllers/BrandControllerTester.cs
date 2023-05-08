@@ -141,8 +141,8 @@ public class BrandControllerTester
         // Assert
         result.Should().BeOfType<OkObjectResult>();
         var okResult = result as OkObjectResult;
-        okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
-        okResult.Value.Should().BeEquivalentTo(brandResponse);
+        okResult?.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        okResult?.Value.Should().BeEquivalentTo(brandResponse);
     }
 
     [TestMethod]
@@ -164,7 +164,7 @@ public class BrandControllerTester
         // Assert
         result.Should().BeOfType<NotFoundResult>();
         var notFoundResult = result as NotFoundResult;
-        notFoundResult.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+        notFoundResult?.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
     }
 
     [TestMethod]
@@ -335,7 +335,7 @@ public class BrandControllerTester
     public async Task DeleteBrandAsync_ReturnsNoContentResult_WhenBrandIsDeleted()
     {
         // Arrange
-        var brandId = 1;
+        const int brandId = 1;
 
         var brand = new BrandDto()
         {
@@ -377,7 +377,7 @@ public class BrandControllerTester
     public async Task DeleteBrandAsync_ReturnsNotFoundResult_WhenBrandDoesNotExist()
     {
         // Arrange
-        var brandId = 1;
+        const int brandId = 1;
         _brandBusinessMock.Setup(x => x.GetBrandByIdAsync(It.IsAny<int>())).ReturnsAsync(
             (new ProcessingStatusResponse<BrandDto>()
             {

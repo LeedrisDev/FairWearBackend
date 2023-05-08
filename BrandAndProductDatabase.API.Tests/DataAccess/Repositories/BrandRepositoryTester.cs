@@ -110,7 +110,7 @@ public class BrandRepositoryTester
             }
         };
         _context.Brands.AddRange(brands);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         var repository = new BrandRepository(_context, _mapper);
 
@@ -157,7 +157,7 @@ public class BrandRepositoryTester
             }
         };
         _context.Brands.AddRange(brands);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         var repository = new BrandRepository(_context, _mapper);
         // Act
@@ -247,7 +247,7 @@ public class BrandRepositoryTester
         };
 
         _context.Brands.AddRange(brands);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         var repository = new BrandRepository(_context, _mapper);
 
@@ -300,7 +300,7 @@ public class BrandRepositoryTester
         };
 
         _context.Brands.AddRange(brands);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         var repository = new BrandRepository(_context, _mapper);
 
@@ -346,7 +346,7 @@ public class BrandRepositoryTester
         };
 
         _context.Brands.AddRange(brands);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         var repository = new BrandRepository(_context, _mapper);
 

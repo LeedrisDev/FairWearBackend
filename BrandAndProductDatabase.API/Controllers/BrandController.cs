@@ -22,6 +22,7 @@ public class BrandController : ControllerBase
     /// Initializes a new instance of the <see cref="BrandController"/> class.
     /// </summary>
     /// <param name="brandBusiness">The brand business.</param>
+    /// <param name="mapper">The mapper.</param>
     public BrandController(IBrandBusiness brandBusiness, IMapper mapper)
     {
         _brandBusiness = brandBusiness;

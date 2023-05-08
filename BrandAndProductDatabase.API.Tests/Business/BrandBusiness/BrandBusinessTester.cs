@@ -244,7 +244,6 @@ public class BrandBusinessTester
             new ProcessingStatusResponse<BrandDto>()
             {
                 Status = HttpStatusCode.NotFound,
-                Object = null
             });
 
         var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object);
@@ -300,7 +299,6 @@ public class BrandBusinessTester
             new ProcessingStatusResponse<BrandDto>()
             {
                 Status = HttpStatusCode.NotFound,
-                Object = null
             });
 
         var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object);

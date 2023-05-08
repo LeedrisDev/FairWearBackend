@@ -5,6 +5,9 @@ using BrandAndProductDatabase.API.Models.Dto;
 
 namespace BrandAndProductDatabase.API.Business.ProductBusiness;
 
+/// <summary>
+/// Logic for product repository operations
+/// </summary>
 public class ProductBusiness : IProductBusiness
 {
     private readonly IBrandRepository _brandRepository;

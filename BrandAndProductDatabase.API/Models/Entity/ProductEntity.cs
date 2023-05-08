@@ -13,7 +13,7 @@ public class ProductEntity : IObjectWithId
     public string? Category { get; set; }
 
     /// <summary>The Ranges of the Product.</summary>
-    /// <remarks>TO DO : For IEnumerable<string> should use hasconversion in dbcontext </remarks>
+    /// <remarks>TODO : For IEnumerable should use hasconversion in dbcontext </remarks>
     public List<string>? Ranges { get; set; }
 
     /// <summary>The BrandId of the Product.</summary>

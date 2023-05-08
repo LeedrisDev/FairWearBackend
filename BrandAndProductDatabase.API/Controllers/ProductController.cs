@@ -33,11 +33,9 @@ public class ProductController : ControllerBase
     {
         var productList = await _productBusiness.GetAllProductsAsync();
 
-        var productResponse = productList.Object.Select(product => _mapper.Map<ProductResponse>(product)).ToList();
-
         return productList.Status switch
         {
-            HttpStatusCode.OK => Ok(productResponse),
+            HttpStatusCode.OK => Ok(productList.Object.Select(product => _mapper.Map<ProductResponse>(product)).ToList()),
             _ => StatusCode((int)productList.Status, productList.ErrorMessage)
         };
     }

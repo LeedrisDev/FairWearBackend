@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BrandAndProductDatabase.API.Controllers;
 
-/// <summary>
-/// Controller for managing brands.
-/// </summary>
+/// <summary>Controller for managing brands.</summary>
 [ApiController]
 [Route("api/brands")]
 [Produces("application/json")]
@@ -18,9 +16,7 @@ public class BrandController : ControllerBase
     private readonly IBrandBusiness _brandBusiness;
     private readonly IMapper _mapper;
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="BrandController"/> class.
-    /// </summary>
+    /// <summary>Initializes a new instance of the <see cref="BrandController"/> class.</summary>
     /// <param name="brandBusiness">The brand business.</param>
     /// <param name="mapper">The mapper.</param>
     public BrandController(IBrandBusiness brandBusiness, IMapper mapper)
@@ -29,9 +25,7 @@ public class BrandController : ControllerBase
         _mapper = mapper;
     }
 
-    /// <summary>
-    /// Gets all the brands in the database.
-    /// </summary>
+    /// <summary>Gets all the brands in the database.</summary>
     /// <returns>An HTTP response containing a collection of brands.</returns>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<BrandResponse>), (int)HttpStatusCode.OK)]
@@ -39,16 +33,9 @@ public class BrandController : ControllerBase
     {
         var brandList = await _brandBusiness.GetAllBrandsAsync();
 
-        var brandResponse = new List<BrandResponse>();
-
-        foreach (var brand in brandList.Object)
-        {
-            brandResponse.Add(_mapper.Map<BrandResponse>(brand));
-        }
-
         return brandList.Status switch
         {
-            HttpStatusCode.OK => Ok(brandResponse),
+            HttpStatusCode.OK => Ok(brandList.Object.Select(brand => _mapper.Map<BrandResponse>(brand)).ToList()),
             _ => StatusCode((int)brandList.Status, brandList.ErrorMessage)
         };
     }
@@ -73,9 +60,7 @@ public class BrandController : ControllerBase
         };
     }
 
-    /// <summary>
-    /// Creates a new brand in the database.
-    /// </summary>
+    /// <summary>Creates a new brand in the database.</summary>
     /// <param name="brand">The brand containing the brand information.</param>
     /// <returns>An HTTP response containing the newly created brand.</returns>
     [HttpPost]
@@ -84,9 +69,7 @@ public class BrandController : ControllerBase
     public async Task<IActionResult> CreateBrandAsync([FromBody] BrandResponse brand)
     {
         if (!ModelState.IsValid)
-        {
             return BadRequest(ModelState);
-        }
 
         var createdBrand = await _brandBusiness.CreateBrandAsync(_mapper.Map<BrandDto>(brand));
 
@@ -129,12 +112,9 @@ public class BrandController : ControllerBase
         var brand = await _brandBusiness.GetBrandByIdAsync(id);
 
         if (brand.Status == HttpStatusCode.NotFound)
-        {
             return NotFound();
-        }
 
         var deleteBrand = await _brandBusiness.DeleteBrandAsync(id);
-
         return StatusCode((int)deleteBrand.Status, deleteBrand.ErrorMessage);
     }
 }

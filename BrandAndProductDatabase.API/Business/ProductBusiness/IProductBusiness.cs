@@ -14,12 +14,12 @@ public interface IProductBusiness
 
     /// <summary>Gets a Product by Id.</summary>
     /// <param name="id">The Id of the Product.</param>
-    /// <returns>A <see cref="Models.Dto.ProductDto"/>.</returns>
+    /// <returns>A <see cref="ProductDto"/>.</returns>
     Task<ProcessingStatusResponse<ProductDto>> GetProductByIdAsync(int id);
 
     /// <summary>Creates a Product.</summary>
     /// <param name="productDto">The Product to create.</param>
-    /// <returns>A <see cref="productDto"/>.</returns>
+    /// <returns>A <see cref="ProductDto"/>.</returns>
     Task<ProcessingStatusResponse<ProductDto>> CreateProductAsync(ProductDto productDto);
 
     /// <summary>Updates a Product.</summary>

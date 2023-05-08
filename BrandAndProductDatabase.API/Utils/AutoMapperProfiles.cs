@@ -16,5 +16,8 @@ public class AutoMapperProfiles : Profile
 
         CreateMap<Models.Dto.BrandDto, Models.Response.BrandResponse>();
         CreateMap<Models.Response.BrandResponse, Models.Dto.BrandDto>();
+
+        CreateMap<Models.Dto.ProductDto, Models.Response.ProductResponse>();
+        CreateMap<Models.Response.ProductResponse, Models.Dto.ProductDto>();
     }
 }

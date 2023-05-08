@@ -1,5 +1,8 @@
 ﻿namespace BrandAndProductDatabase.API.Models.Response;
 
+/// <summary>
+/// Controller brand response.
+/// </summary>
 public class BrandResponse
 {
     /// <summary>The Id of the Brand.</summary>

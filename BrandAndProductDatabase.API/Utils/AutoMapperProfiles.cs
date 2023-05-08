@@ -1,4 +1,7 @@
 using AutoMapper;
+using BrandAndProductDatabase.API.Models.Dto;
+using BrandAndProductDatabase.API.Models.Entity;
+using BrandAndProductDatabase.API.Models.Response;
 
 namespace BrandAndProductDatabase.API.Utils;
 
@@ -8,16 +11,20 @@ public class AutoMapperProfiles : Profile
     /// <summary>Constructor for AutoMapperProfiles</summary>
     public AutoMapperProfiles()
     {
-        CreateMap<Models.Entity.BrandEntity, Models.Dto.BrandDto>();
-        CreateMap<Models.Dto.BrandDto, Models.Entity.BrandEntity>();
+        // Entity to Dto
+        CreateMap<BrandEntity, BrandDto>();
+        CreateMap<ProductEntity, ProductDto>();
+        
+        // Dto to Entity
+        CreateMap<BrandDto, BrandEntity>();
+        CreateMap<ProductDto, ProductEntity>();
+        
+        // Dto to Response
+        CreateMap<BrandDto, BrandResponse>();
+        CreateMap<ProductDto, ProductResponse>();
 
-        CreateMap<Models.Entity.ProductEntity, Models.Dto.ProductDto>();
-        CreateMap<Models.Dto.ProductDto, Models.Entity.ProductEntity>();
-
-        CreateMap<Models.Dto.BrandDto, Models.Response.BrandResponse>();
-        CreateMap<Models.Response.BrandResponse, Models.Dto.BrandDto>();
-
-        CreateMap<Models.Dto.ProductDto, Models.Response.ProductResponse>();
-        CreateMap<Models.Response.ProductResponse, Models.Dto.ProductDto>();
+        
+        CreateMap<BrandResponse, BrandDto>();
+        CreateMap<ProductResponse, ProductDto>();
     }
 }

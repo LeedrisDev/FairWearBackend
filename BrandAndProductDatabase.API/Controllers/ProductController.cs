@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BrandAndProductDatabase.API.Controllers;
 
-/// <summary>
-/// Controller for managing products.
-/// </summary>
+/// <summary>Controller for managing products.</summary>
 [ApiController]
 [Route("api/products")]
 [Produces("application/json")]
@@ -18,9 +16,7 @@ public class ProductController : ControllerBase
     private readonly IMapper _mapper;
     private readonly IProductBusiness _productBusiness;
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ProductController"/> class.
-    /// </summary>
+    /// <summary>Initializes a new instance of the <see cref="ProductController"/> class.</summary>
     /// <param name="productBusiness">The Product business.</param>
     /// <param name="mapper">The mapper.</param>
     public ProductController(IProductBusiness productBusiness, IMapper mapper)
@@ -29,9 +25,7 @@ public class ProductController : ControllerBase
         _mapper = mapper;
     }
 
-    /// <summary>
-    /// Gets all the Products in the database.
-    /// </summary>
+    /// <summary>Gets all the Products in the database.</summary>
     /// <returns>An HTTP response containing a collection of Products.</returns>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<ProductResponse>), (int)HttpStatusCode.OK)]
@@ -39,12 +33,7 @@ public class ProductController : ControllerBase
     {
         var productList = await _productBusiness.GetAllProductsAsync();
 
-        var productResponse = new List<ProductResponse>();
-
-        foreach (var product in productList.Object)
-        {
-            productResponse.Add(_mapper.Map<ProductResponse>(product));
-        }
+        var productResponse = productList.Object.Select(product => _mapper.Map<ProductResponse>(product)).ToList();
 
         return productList.Status switch
         {
@@ -53,9 +42,7 @@ public class ProductController : ControllerBase
         };
     }
 
-    /// <summary>
-    /// Gets a single Product by its ID.
-    /// </summary>
+    /// <summary>Gets a single Product by its ID.</summary>
     /// <param name="id">The ID of the Product to get.</param>
     /// <returns>An HTTP response containing the Product.</returns>
     [HttpGet("{id}")]
@@ -73,9 +60,7 @@ public class ProductController : ControllerBase
         };
     }
 
-    /// <summary>
-    /// Creates a new Product in the database.
-    /// </summary>
+    /// <summary>Creates a new Product in the database.</summary>
     /// <param name="product">The Product containing the Product information.</param>
     /// <returns>An HTTP response containing the newly created Product.</returns>
     [HttpPost]
@@ -97,9 +82,7 @@ public class ProductController : ControllerBase
         };
     }
 
-    /// <summary>
-    /// Updates a Product in the database.
-    /// </summary>
+    /// <summary>Updates a Product in the database.</summary>
     /// <param name="product">The updated Product data.</param>
     [HttpPatch]
     [ProducesResponseType(typeof(ProductResponse), (int)HttpStatusCode.OK)]
@@ -116,12 +99,11 @@ public class ProductController : ControllerBase
         };
     }
 
-    /// <summary>
-    /// Deletes a Product with the given id from the database.
-    /// </summary>
+    /// <summary>Deletes a Product with the given id from the database.</summary>
     /// <param name="id">The id of the Product to delete.</param>
-    /// <returns>Returns a NoContentResult if the Product was deleted successfully,
-    /// otherwise returns a NotFoundResult.</returns>
+    /// <returns>
+    /// Returns a NoContentResult if the Product was deleted successfully, otherwise returns a NotFoundResult.
+    /// </returns>
     /// <response code="200">The Product was deleted successfully.</response>
     /// <response code="404">The Product with the given id was not found.</response>
     [HttpDelete("{id}")]
@@ -132,12 +114,9 @@ public class ProductController : ControllerBase
         var product = await _productBusiness.GetProductByIdAsync(id);
 
         if (product.Status == HttpStatusCode.NotFound)
-        {
             return NotFound();
-        }
 
         var deleteProduct = await _productBusiness.DeleteProductAsync(id);
-
         return StatusCode((int)deleteProduct.Status, deleteProduct.ErrorMessage);
     }
 }

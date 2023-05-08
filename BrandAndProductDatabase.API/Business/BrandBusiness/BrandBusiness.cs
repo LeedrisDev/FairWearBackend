@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using BrandAndProductDatabase.API.DataAccess.IRepositories;
+﻿using BrandAndProductDatabase.API.DataAccess.IRepositories;
 using BrandAndProductDatabase.API.Models;
 using BrandAndProductDatabase.API.Models.Dto;
 
@@ -9,17 +8,14 @@ namespace BrandAndProductDatabase.API.Business.BrandBusiness;
 public class BrandBusiness : IBrandBusiness
 {
     private readonly IBrandRepository _brandRepository;
-    private readonly IMapper _mapper;
 
     /// <summary>
     /// Constructor for BrandBusiness.
     /// </summary>
     /// <param name="brandRepository"></param>
-    /// <param name="mapper"></param>
-    public BrandBusiness(IBrandRepository brandRepository, IMapper mapper)
+    public BrandBusiness(IBrandRepository brandRepository)
     {
         _brandRepository = brandRepository;
-        _mapper = mapper;
     }
 
     /// <inheritdoc/>

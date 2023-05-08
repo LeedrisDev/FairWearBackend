@@ -1,8 +1,10 @@
-using AutoMapper;
+using BrandAndProductDatabase.API.Business.BrandBusiness;
 using BrandAndProductDatabase.API.DataAccess;
+using BrandAndProductDatabase.API.DataAccess.IRepositories;
 using BrandAndProductDatabase.API.DataAccess.Repositories;
-using BrandAndProductDatabase.API.Models.Dto;
 using BrandAndProductDatabase.API.Utils;
+using BrandAndProductDatabase.API.Utils.HttpClientWrapper;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +15,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Dependency Injection
+builder.Services.AddHttpClient<IHttpClientWrapper, HttpClientWrapper>();
 builder.Services.AddDbContext<BrandAndProductDbContext>();
+
+builder.Services.AddTransient<DbContext, BrandAndProductDbContext>();
+
+builder.Services.AddTransient<IBrandRepository, BrandRepository>();
+builder.Services.AddTransient<IBrandBusiness, BrandBusiness>();
+
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 var app = builder.Build();
@@ -30,38 +39,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
-var config = new MapperConfiguration(cfg =>
-{
-    cfg.AddProfile<AutoMapperProfiles>();
-});
-
-var mapper = config.CreateMapper();
-var repo = new BrandRepository(new BrandAndProductDbContext(), mapper);
-
-await repo.AddAsync(new BrandDto()
-{
-    Name = "Levis",
-    Country = "United States",
-    EnvironmentRating = 1,
-    PeopleRating = 1,
-    AnimalRating = 1,
-    RatingDescription = "",
-    Categories = new List<String>()
-    {
-        "Jeans", "T-Shirts"
-    },
-    Ranges = new List<String>()
-});
-
-
-var res = await repo.GetAllAsync();
-
-foreach (var brand in res.Object)
-{
-    Console.WriteLine("Brand: " + brand.Name + " Country" + brand.Country + "EnvironmentRating " + brand.EnvironmentRating + " PeopleRating" +
-                      brand.PeopleRating + " AnimalRating" + brand.AnimalRating);
-}
-
 
 app.Run();

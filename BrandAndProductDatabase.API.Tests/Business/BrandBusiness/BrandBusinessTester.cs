@@ -1,9 +1,7 @@
 ﻿using System.Net;
-using AutoMapper;
 using BrandAndProductDatabase.API.DataAccess.IRepositories;
 using BrandAndProductDatabase.API.Models;
 using BrandAndProductDatabase.API.Models.Dto;
-using BrandAndProductDatabase.API.Utils;
 using FluentAssertions;
 using Moq;
 
@@ -14,16 +12,11 @@ public class BrandBusinessTester
 {
     private API.Business.BrandBusiness.BrandBusiness _brandBusiness;
     private Mock<IBrandRepository> _brandRepositoryMock;
-    private IMapper _mapper;
 
     [TestInitialize]
     public void Initialize()
     {
         _brandRepositoryMock = new Mock<IBrandRepository>();
-
-        var config = new MapperConfiguration(cfg => { cfg.AddProfile<AutoMapperProfiles>(); });
-
-        _mapper = config.CreateMapper();
     }
 
     [TestMethod]
@@ -64,7 +57,7 @@ public class BrandBusinessTester
                 Object = brandsInDb
             });
 
-        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _mapper);
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object);
 
         // Act
         var result = await brandBusiness.GetAllBrandsAsync();
@@ -98,7 +91,7 @@ public class BrandBusinessTester
                 Object = brandInDb
             });
 
-        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _mapper);
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object);
 
         // Act
         var result = await brandBusiness.GetBrandByIdAsync(brandInDb.Id);
@@ -121,7 +114,7 @@ public class BrandBusinessTester
                 Status = HttpStatusCode.NotFound
             });
 
-        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _mapper);
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object);
 
         // Act
         var result = await brandBusiness.GetBrandByIdAsync(brandId);
@@ -166,7 +159,7 @@ public class BrandBusinessTester
                 Object = createdBrandInDb
             });
 
-        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _mapper);
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object);
 
         // Act
         var result = await brandBusiness.CreateBrandAsync(brandDto);
@@ -219,7 +212,7 @@ public class BrandBusinessTester
                 Object = brandToUpdate
             });
 
-        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _mapper);
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object);
 
         // Act
         var result = await brandBusiness.UpdateBrandAsync(brandToUpdate);
@@ -254,7 +247,7 @@ public class BrandBusinessTester
                 Object = null
             });
 
-        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _mapper);
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object);
 
         // Act
         var result = await brandBusiness.UpdateBrandAsync(brandToUpdate);
@@ -287,7 +280,7 @@ public class BrandBusinessTester
                 Object = brandInDb
             });
 
-        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _mapper);
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object);
 
         // Act
         var result = await brandBusiness.DeleteBrandAsync(1);
@@ -310,7 +303,7 @@ public class BrandBusinessTester
                 Object = null
             });
 
-        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _mapper);
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object);
 
         // Act
         var result = await brandBusiness.DeleteBrandAsync(1);

@@ -8,7 +8,5 @@ namespace BrandAndProductDatabase.API.DataAccess.Repositories;
 public class ProductRepository : Repository<Models.Dto.ProductDto, Models.Entity.ProductEntity>, IProductRepository
 {
     /// <summary>Constructor for ProductRepository</summary>
-    public ProductRepository(DbContext context, IMapper mapper) : base(context, mapper)
-    {
-    }
+    public ProductRepository(DbContext context, IMapper mapper) : base(context, mapper) { }
 }

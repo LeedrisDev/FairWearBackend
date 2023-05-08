@@ -20,7 +20,7 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
     /// <param name="mapper">
     /// The <see cref="IMapper"/> instance used to map between <typeparamref name="TModel"/> and <typeparamref name="TEntity"/>.
     /// </param>
-    public Repository(DbContext context, IMapper mapper)
+    protected Repository(DbContext context, IMapper mapper)
     {
         _context = context;
         _dbSet = context.Set<TEntity>();

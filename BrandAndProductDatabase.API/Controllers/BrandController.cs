@@ -50,4 +50,24 @@ public class BrandController : ControllerBase
             _ => StatusCode((int)brandList.Status, brandList.ErrorMessage)
         };
     }
+
+    /// <summary>
+    /// Gets a single brand by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the brand to get.</param>
+    /// <returns>An HTTP response containing the brand.</returns
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    public async Task<IActionResult> GetBrandByIdAsync(int id)
+    {
+        var brand = await _brandBusiness.GetBrandByIdAsync(id);
+
+        return brand.Status switch
+        {
+            HttpStatusCode.OK => Ok(_mapper.Map<BrandResponse>(brand.Object)),
+            HttpStatusCode.NotFound => NotFound(),
+            _ => StatusCode((int)brand.Status, brand.ErrorMessage)
+        };
+    }
 }

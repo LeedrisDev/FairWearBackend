@@ -104,4 +104,66 @@ public class BrandControllerTester
         okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
         okResult.Value.Should().BeEquivalentTo(expected);
     }
+
+    [TestMethod]
+    public async Task GetBrandByIdAsync_ReturnsOk_WhenBrandExists()
+    {
+        // Arrange
+        int brandId = 1;
+
+        var businessResponse = new ProcessingStatusResponse<BrandDto>()
+        {
+            Object = new BrandDto()
+            {
+                Id = 1,
+                Name = "Brand 1",
+                Country = "Country 1",
+                EnvironmentRating = 1,
+                PeopleRating = 1,
+                AnimalRating = 1,
+                RatingDescription = "Rating 1",
+                Categories = new List<string> { "Category 1" },
+                Ranges = new List<string> { "Range 1" }
+            },
+            Status = HttpStatusCode.OK
+        };
+
+
+        var brandResponse = _mapper.Map<BrandResponse>(businessResponse.Object);
+
+        _brandBusinessMock.Setup(b => b.GetBrandByIdAsync(It.IsAny<int>())).ReturnsAsync(businessResponse);
+
+        var controller = new BrandController(_brandBusinessMock.Object, _mapper);
+
+        // Act
+        var result = await controller.GetBrandByIdAsync(brandId);
+
+        // Assert
+        result.Should().BeOfType<OkObjectResult>();
+        var okResult = result as OkObjectResult;
+        okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        okResult.Value.Should().BeEquivalentTo(brandResponse);
+    }
+
+    [TestMethod]
+    public async Task GetBrandByIdAsync_ReturnsNotFound_WhenBrandDoesNotExist()
+    {
+        // Arrange
+
+        var businessResponse = new ProcessingStatusResponse<BrandDto>()
+        {
+            Status = HttpStatusCode.NotFound
+        };
+
+        _brandBusinessMock.Setup(b => b.GetBrandByIdAsync(It.IsAny<int>())).ReturnsAsync(businessResponse);
+        var controller = new BrandController(_brandBusinessMock.Object, _mapper);
+
+        // Act
+        var result = await controller.GetBrandByIdAsync(1);
+
+        // Assert
+        result.Should().BeOfType<NotFoundResult>();
+        var notFoundResult = result as NotFoundResult;
+        notFoundResult.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+    }
 }

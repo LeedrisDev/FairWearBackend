@@ -330,4 +330,68 @@ public class BrandControllerTester
         notFoundResult.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
         notFoundResult.Value.Should().Be($"Brand with ID {brand.Id} not found.");
     }
+
+    [TestMethod]
+    public async Task DeleteBrandAsync_ReturnsNoContentResult_WhenBrandIsDeleted()
+    {
+        // Arrange
+        var brandId = 1;
+
+        var brand = new BrandDto()
+        {
+            Id = 1,
+            Country = "Country 1",
+            EnvironmentRating = 1,
+            PeopleRating = 1,
+            AnimalRating = 1,
+            RatingDescription = "Rating 1",
+            Categories = new List<string> { "Category 1" },
+            Ranges = new List<string> { "Range 1" }
+        };
+
+        _brandBusinessMock.Setup(x => x.GetBrandByIdAsync(It.IsAny<int>())).ReturnsAsync(
+            new ProcessingStatusResponse<BrandDto>()
+            {
+                Object = brand,
+                Status = HttpStatusCode.OK
+            });
+
+        _brandBusinessMock.Setup(x => x.DeleteBrandAsync(It.IsAny<int>())).ReturnsAsync(
+            new ProcessingStatusResponse<BrandDto>()
+            {
+                Status = HttpStatusCode.OK
+            });
+
+        var controller = new BrandController(_brandBusinessMock.Object, _mapper);
+
+        // Act
+        var result = await controller.DeleteBrandAsync(brandId);
+
+        // Assert
+        result.Should().BeOfType<ObjectResult>();
+        var noContentResult = (ObjectResult)result;
+        noContentResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+    }
+
+    [TestMethod]
+    public async Task DeleteBrandAsync_ReturnsNotFoundResult_WhenBrandDoesNotExist()
+    {
+        // Arrange
+        var brandId = 1;
+        _brandBusinessMock.Setup(x => x.GetBrandByIdAsync(It.IsAny<int>())).ReturnsAsync(
+            (new ProcessingStatusResponse<BrandDto>()
+            {
+                Status = HttpStatusCode.NotFound
+            }));
+
+        var controller = new BrandController(_brandBusinessMock.Object, _mapper);
+
+        // Act
+        var result = await controller.DeleteBrandAsync(brandId);
+
+        // Assert
+        result.Should().BeOfType<NotFoundResult>();
+        var notFoundResult = (NotFoundResult)result;
+        notFoundResult.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+    }
 }

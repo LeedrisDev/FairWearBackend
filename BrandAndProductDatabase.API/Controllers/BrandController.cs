@@ -114,4 +114,29 @@ public class BrandController : ControllerBase
             _ => StatusCode((int)updatedBrand.Status, updatedBrand.ErrorMessage)
         };
     }
+
+    /// <summary>
+    /// Deletes a brand with the given id from the database.
+    /// </summary>
+    /// <param name="id">The id of the brand to delete.</param>
+    /// <returns>Returns a NoContentResult if the brand was deleted successfully,
+    /// otherwise returns a NotFoundResult.</returns>
+    /// <response code="200">The brand was deleted successfully.</response>
+    /// <response code="404">The brand with the given id was not found.</response>
+    [HttpDelete("{id}")]
+    [ProducesResponseType((int)HttpStatusCode.NoContent)]
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    public async Task<IActionResult> DeleteBrandAsync(int id)
+    {
+        var brand = await _brandBusiness.GetBrandByIdAsync(id);
+
+        if (brand.Status == HttpStatusCode.NotFound)
+        {
+            return NotFound();
+        }
+
+        var deleteBrand = await _brandBusiness.DeleteBrandAsync(id);
+
+        return StatusCode((int)deleteBrand.Status, deleteBrand.ErrorMessage);
+    }
 }

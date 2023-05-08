@@ -10,9 +10,9 @@ namespace BrandAndProductDatabase.API.Tests.Business.ProductBusiness;
 [TestClass]
 public class ProductBusinessTester
 {
-    private Mock<IBrandRepository> _brandRepositoryMock;
-    private API.Business.ProductBusiness.ProductBusiness _productBusiness;
-    private Mock<IProductRepository> _productRepositoryMock;
+    private Mock<IBrandRepository> _brandRepositoryMock = null!;
+    private API.Business.ProductBusiness.ProductBusiness _productBusiness = null!;
+    private Mock<IProductRepository> _productRepositoryMock = null!;
 
     [TestInitialize]
     public void Initialize()
@@ -27,28 +27,28 @@ public class ProductBusinessTester
         // Arrange
         var productsInDb = new List<ProductDto>
         {
-            new ProductDto
+            new()
             {
                 Id = 1,
                 Name = "Product 1",
                 UpcCode = "123456789",
                 Category = "Category A",
                 Ranges = new List<string> { "Range A" },
-                BrandId = 1,
+                BrandId = 1
             },
-            new ProductDto
+            new()
             {
                 Id = 2,
                 Name = "Product 2",
                 UpcCode = "987654321",
                 Category = "Category B",
                 Ranges = new List<string> { "Range B" },
-                BrandId = 2,
+                BrandId = 2
             }
         };
 
         _productRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(
-            new ProcessingStatusResponse<IEnumerable<ProductDto>>()
+            new ProcessingStatusResponse<IEnumerable<ProductDto>>
             {
                 Object = productsInDb
             });
@@ -277,7 +277,7 @@ public class ProductBusinessTester
             UpcCode = "123456789",
             Category = "Category A",
             Ranges = new List<string> { "Range A" },
-            BrandId = 1,
+            BrandId = 1
         };
 
         _productRepositoryMock.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync(
@@ -303,7 +303,6 @@ public class ProductBusinessTester
     public async Task DeleteProductAsync_WithInvalidId_ReturnsNull()
     {
         // Arrange
-
         _productRepositoryMock.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync(
             new ProcessingStatusResponse<ProductDto>()
             {
@@ -320,5 +319,89 @@ public class ProductBusinessTester
         // Assert
         result.Should().NotBeNull();
         result.Status.Should().Be(HttpStatusCode.NotFound);
+    }
+    
+    [TestMethod]
+    public async Task CreateProductAsync_WithBrandDoesNotExist_ThenReturnsBadRequestResponse()
+    {
+        // Arrange
+        _productRepositoryMock = new Mock<IProductRepository>();
+        _productBusiness = new API.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object, _brandRepositoryMock.Object);
+        const int nonExistentBrandId = 123;
+        var productDto = new ProductDto { BrandId = nonExistentBrandId };
+        _brandRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(nonExistentBrandId))
+            .ReturnsAsync(new ProcessingStatusResponse<BrandDto>
+            {
+                Status = HttpStatusCode.NotFound,
+                ErrorMessage = $"Brand with Id {nonExistentBrandId} does not exist."
+            });
+
+        // Act
+        var result = await _productBusiness.CreateProductAsync(productDto);
+
+        // Assert
+        result.Status.Should().Be(HttpStatusCode.BadRequest);
+        result.ErrorMessage.Should().Be($"Brand with Id {nonExistentBrandId} does not exist.");
+        _productRepositoryMock.Verify(repo => repo.AddAsync(productDto), Times.Never);
+    }
+    
+    [TestMethod]
+    public async Task CreateProductAsync_BrandExists_CallsProductRepository()
+    {
+        // Arrange
+        _productRepositoryMock = new Mock<IProductRepository>();
+        _productBusiness = new API.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object, _brandRepositoryMock.Object);
+        const int existingBrandId = 456;
+        var productDto = new ProductDto { BrandId = existingBrandId };
+        var brandRepositoryResponse = new ProcessingStatusResponse<BrandDto>
+        {
+            Status = HttpStatusCode.OK,
+            Object = new BrandDto { Id = existingBrandId }
+        };
+        var expectedResponse = new ProcessingStatusResponse<ProductDto>
+        {
+            Status = HttpStatusCode.Created,
+            Object = productDto
+        };
+        
+        _brandRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(existingBrandId))
+            .ReturnsAsync(brandRepositoryResponse);
+        _productRepositoryMock
+            .Setup(repo => repo.AddAsync(productDto))
+            .ReturnsAsync(expectedResponse);
+
+        // Act
+        var result = await _productBusiness.CreateProductAsync(productDto);
+
+        // Assert
+        result.Should().BeEquivalentTo(expectedResponse);
+        _productRepositoryMock.Verify(repo => repo.AddAsync(productDto), Times.Once);
+    }
+    
+    [TestMethod]
+    public async Task UpdateProductAsync_WithBrandDoesNotExist_ThenReturnsBadRequestResponse()
+    {
+        // Arrange
+        _productRepositoryMock = new Mock<IProductRepository>();
+        _productBusiness = new API.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object, _brandRepositoryMock.Object);
+        const int nonExistentBrandId = 123;
+        var productDto = new ProductDto { BrandId = nonExistentBrandId };
+        _brandRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(nonExistentBrandId))
+            .ReturnsAsync(new ProcessingStatusResponse<BrandDto>
+            {
+                Status = HttpStatusCode.NotFound,
+                ErrorMessage = $"Brand with Id {nonExistentBrandId} does not exist."
+            });
+
+        // Act
+        var result = await _productBusiness.UpdateProductAsync(productDto);
+
+        // Assert
+        result.Status.Should().Be(HttpStatusCode.BadRequest);
+        result.ErrorMessage.Should().Be($"Brand with Id {nonExistentBrandId} does not exist.");
+        _productRepositoryMock.Verify(repo => repo.AddAsync(productDto), Times.Never);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using AutoMapper;
 using BrandAndProductDatabase.API.Business.BrandBusiness;
+using BrandAndProductDatabase.API.Models.Dto;
 using BrandAndProductDatabase.API.Models.Response;
 using Microsoft.AspNetCore.Mvc;
 
@@ -55,7 +56,7 @@ public class BrandController : ControllerBase
     /// Gets a single brand by its ID.
     /// </summary>
     /// <param name="id">The ID of the brand to get.</param>
-    /// <returns>An HTTP response containing the brand.</returns
+    /// <returns>An HTTP response containing the brand.</returns>
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -68,6 +69,30 @@ public class BrandController : ControllerBase
             HttpStatusCode.OK => Ok(_mapper.Map<BrandResponse>(brand.Object)),
             HttpStatusCode.NotFound => NotFound(),
             _ => StatusCode((int)brand.Status, brand.ErrorMessage)
+        };
+    }
+
+    /// <summary>
+    /// Creates a new brand in the database.
+    /// </summary>
+    /// <param name="brand">The brand containing the brand information.</param>
+    /// <returns>An HTTP response containing the newly created brand.</returns>
+    [HttpPost]
+    [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.Created)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> CreateBrandAsync([FromBody] BrandResponse brand)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var createdBrand = await _brandBusiness.CreateBrandAsync(_mapper.Map<BrandDto>(brand));
+
+        return createdBrand.Status switch
+        {
+            HttpStatusCode.OK => Ok(_mapper.Map<BrandResponse>(createdBrand.Object)),
+            _ => StatusCode((int)createdBrand.Status, createdBrand.ErrorMessage)
         };
     }
 }

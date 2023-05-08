@@ -166,4 +166,84 @@ public class BrandControllerTester
         var notFoundResult = result as NotFoundResult;
         notFoundResult.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
     }
+
+    [TestMethod]
+    public async Task CreateBrandAsync_ReturnsCreatedResultWithBrand_WhenBrandBusinessCreatesBrand()
+    {
+        // Arrange
+        var brand = new BrandResponse
+        {
+            Name = "Brand 1",
+            Country = "Country 1",
+            EnvironmentRating = 1,
+            PeopleRating = 1,
+            AnimalRating = 1,
+            RatingDescription = "Rating 1",
+            Categories = new List<string> { "Category 1" },
+            Ranges = new List<string> { "Range 1" }
+        };
+        var createdBrand = new BrandDto
+        {
+            Id = 1,
+            Name = "Brand 1",
+            Country = "Country 1",
+            EnvironmentRating = 1,
+            PeopleRating = 1,
+            AnimalRating = 1,
+            RatingDescription = "Rating 1",
+            Categories = new List<string> { "Category 1" },
+            Ranges = new List<string> { "Range 1" }
+        };
+        var businessResult = new ProcessingStatusResponse<BrandDto>()
+        {
+            Object = createdBrand,
+            Status = HttpStatusCode.OK
+        };
+
+        _brandBusinessMock.Setup(x => x.CreateBrandAsync(It.IsAny<BrandDto>())).ReturnsAsync(businessResult);
+
+        var controller = new BrandController(_brandBusinessMock.Object, _mapper);
+
+        // Act
+        var result = await controller.CreateBrandAsync(brand);
+
+        // Assert
+        result.Should().BeOfType<OkObjectResult>();
+        var createdResult = (OkObjectResult)result;
+        createdResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        createdResult.Value.Should().BeEquivalentTo(_mapper.Map<BrandResponse>(createdBrand),
+            options => options.Excluding(x => x.Id));
+    }
+
+    [TestMethod]
+    public async Task CreateBrandAsync_ReturnsBadRequestResult_WhenModelStateIsInvalid()
+    {
+        // Arrange
+        var brand = new BrandResponse
+        {
+            Country = "Country 1",
+            EnvironmentRating = 1,
+            PeopleRating = 1,
+            AnimalRating = 1,
+            RatingDescription = "Rating 1",
+            Categories = new List<string> { "Category 1" },
+            Ranges = new List<string> { "Range 1" }
+        };
+
+        var businessResponse = new ProcessingStatusResponse<BrandDto>()
+        {
+            Status = HttpStatusCode.BadRequest
+        };
+
+        _brandBusinessMock.Setup(x => x.CreateBrandAsync(It.IsAny<BrandDto>())).ReturnsAsync(businessResponse);
+        var controller = new BrandController(_brandBusinessMock.Object, _mapper);
+
+        // Act
+        var result = await controller.CreateBrandAsync(brand);
+
+        // Assert
+        result.Should().BeOfType<ObjectResult>();
+        var badRequestResult = (ObjectResult)result;
+        badRequestResult.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+    }
 }

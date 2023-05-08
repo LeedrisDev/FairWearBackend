@@ -95,4 +95,23 @@ public class BrandController : ControllerBase
             _ => StatusCode((int)createdBrand.Status, createdBrand.ErrorMessage)
         };
     }
+
+    /// <summary>
+    /// Updates a brand in the database.
+    /// </summary>
+    /// <param name="brand">The updated brand data.</param>
+    [HttpPatch]
+    [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+    public async Task<IActionResult> UpdateBrandAsync([FromBody] BrandResponse brand)
+    {
+        var updatedBrand = await _brandBusiness.UpdateBrandAsync(_mapper.Map<BrandDto>(brand));
+
+        return updatedBrand.Status switch
+        {
+            HttpStatusCode.OK => Ok(_mapper.Map<BrandResponse>(updatedBrand.Object)),
+            HttpStatusCode.NotFound => NotFound(updatedBrand.ErrorMessage),
+            _ => StatusCode((int)updatedBrand.Status, updatedBrand.ErrorMessage)
+        };
+    }
 }

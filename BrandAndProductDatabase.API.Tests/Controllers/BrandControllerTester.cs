@@ -246,4 +246,88 @@ public class BrandControllerTester
         var badRequestResult = (ObjectResult)result;
         badRequestResult.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
     }
+
+    [TestMethod]
+    public async Task UpdateBrandAsync_ReturnsUpdatedBrand_WhenBrandIsValid()
+    {
+        // Arrange
+        var brand = new BrandResponse
+        {
+            Id = 1,
+            Country = "Country 1",
+            EnvironmentRating = 1,
+            PeopleRating = 1,
+            AnimalRating = 1,
+            RatingDescription = "Rating 1",
+            Categories = new List<string> { "Category 1" },
+            Ranges = new List<string> { "Range 1" }
+        };
+
+
+        var updatedBrand = new BrandResponse
+        {
+            Id = 1,
+            Name = "Updated Brand",
+            Country = "Updated Country",
+            EnvironmentRating = 3,
+            PeopleRating = 3,
+            AnimalRating = 3,
+            RatingDescription = "Updated Rating",
+            Categories = new List<string> { "Updated Category" },
+            Ranges = new List<string> { "Updated Range" }
+        };
+
+        _brandBusinessMock.Setup(x => x.UpdateBrandAsync(It.IsAny<BrandDto>())).ReturnsAsync(
+            new ProcessingStatusResponse<BrandDto>()
+            {
+                Object = _mapper.Map<BrandDto>(updatedBrand),
+                Status = HttpStatusCode.OK
+            });
+
+        var controller = new BrandController(_brandBusinessMock.Object, _mapper);
+
+        // Act
+        var result = await controller.UpdateBrandAsync(brand);
+
+        // Assert
+        result.Should().BeOfType<OkObjectResult>();
+        var okResult = (OkObjectResult)result;
+        okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        okResult.Value.Should().BeEquivalentTo(_mapper.Map<BrandResponse>(updatedBrand));
+    }
+
+    [TestMethod]
+    public async Task UpdateBrandAsync_ReturnsNotFound_WhenBrandDoesNotExist()
+    {
+        // Arrange
+        var brand = new BrandResponse
+        {
+            Id = 1,
+            Country = "Country 1",
+            EnvironmentRating = 1,
+            PeopleRating = 1,
+            AnimalRating = 1,
+            RatingDescription = "Rating 1",
+            Categories = new List<string> { "Category 1" },
+            Ranges = new List<string> { "Range 1" }
+        };
+
+        _brandBusinessMock.Setup(x => x.UpdateBrandAsync(It.IsAny<BrandDto>())).ReturnsAsync(
+            new ProcessingStatusResponse<BrandDto>()
+            {
+                Status = HttpStatusCode.NotFound,
+                ErrorMessage = $"Brand with ID {brand.Id} not found."
+            });
+
+        var controller = new BrandController(_brandBusinessMock.Object, _mapper);
+
+        // Act
+        var result = await controller.UpdateBrandAsync(brand);
+
+        // Assert
+        result.Should().BeOfType<NotFoundObjectResult>();
+        var notFoundResult = (NotFoundObjectResult)result;
+        notFoundResult.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+        notFoundResult.Value.Should().Be($"Brand with ID {brand.Id} not found.");
+    }
 }

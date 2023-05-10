@@ -5,8 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <AssemblyName>FairWearAPIGateway</AssemblyName>
-        <RootNamespace>FairWearAPIGateway</RootNamespace>
+        <PackageId>FairWearGateway.API</PackageId>
     </PropertyGroup>
 
     <ItemGroup>

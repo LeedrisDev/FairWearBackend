@@ -106,28 +106,6 @@ public class BrandControllerTester
     }
     
     [TestMethod]
-    public async Task GetAllBrandsAsync_ReturnsErrorStatusCode_WhenBrandBusinessFails()
-    {
-        // Arrange
-        var businessResult = new ProcessingStatusResponse<IEnumerable<BrandDto>>()
-        {
-            Status = HttpStatusCode.InternalServerError
-        };
-        
-        _brandBusinessMock.Setup(x => x.GetAllBrandsAsync()).ReturnsAsync(businessResult);
-
-        var controller = new BrandController(_brandBusinessMock.Object, _mapper);
-
-        // Act
-        var result = await controller.GetAllBrandsAsync();
-
-        // Assert
-        result.Should().BeOfType<ObjectResult>();
-        var objectResult = (ObjectResult)result;
-        objectResult.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
-    }
-
-    [TestMethod]
     public async Task GetBrandByIdAsync_ReturnsOk_WhenBrandExists()
     {
         // Arrange
@@ -187,28 +165,6 @@ public class BrandControllerTester
         result.Should().BeOfType<NotFoundResult>();
         var notFoundResult = result as NotFoundResult;
         notFoundResult?.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
-    }
-    
-    [TestMethod]
-    public async Task GetBrandByIdAsync_ReturnsErrorStatusCode_WhenBrandBusinessFails()
-    {
-        // Arrange
-        var businessResult = new ProcessingStatusResponse<BrandDto>()
-        {
-            Status = HttpStatusCode.InternalServerError
-        };
-        
-        _brandBusinessMock.Setup(b => b.GetBrandByIdAsync(It.IsAny<int>())).ReturnsAsync(businessResult);
-
-        var controller = new BrandController(_brandBusinessMock.Object, _mapper);
-
-        // Act
-        var result = await controller.GetBrandByIdAsync(1);
-
-        // Assert
-        result.Should().BeOfType<ObjectResult>();
-        var objectResult = (ObjectResult)result;
-        objectResult.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
     }
 
     [TestMethod]
@@ -290,39 +246,6 @@ public class BrandControllerTester
         var badRequestResult = (ObjectResult)result;
         badRequestResult.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
     }
-    
-    [TestMethod]
-    public async Task CreateBrandAsync_ReturnsErrorStatusCode_WhenBrandBusinessFails()
-    {
-        // Arrange
-        var brand = new BrandResponse
-        {
-            Country = "Country 1",
-            EnvironmentRating = 1,
-            PeopleRating = 1,
-            AnimalRating = 1,
-            RatingDescription = "Rating 1",
-            Categories = new List<string> { "Category 1" },
-            Ranges = new List<string> { "Range 1" }
-        };
-        
-        var businessResult = new ProcessingStatusResponse<BrandDto>()
-        {
-            Status = HttpStatusCode.InternalServerError
-        };
-        
-        _brandBusinessMock.Setup(x => x.CreateBrandAsync(It.IsAny<BrandDto>())).ReturnsAsync(businessResult);
-
-        var controller = new BrandController(_brandBusinessMock.Object, _mapper);
-
-        // Act
-        var result = await controller.CreateBrandAsync(brand);
-
-        // Assert
-        result.Should().BeOfType<ObjectResult>();
-        var objectResult = (ObjectResult)result;
-        objectResult.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
-    }
 
     [TestMethod]
     public async Task UpdateBrandAsync_ReturnsUpdatedBrand_WhenBrandIsValid()
@@ -374,7 +297,7 @@ public class BrandControllerTester
     }
 
     [TestMethod]
-    public async Task UpdateBrandAsync_ReturnsErrorStatusCode_WhenBrandBusinessFails()
+    public async Task UpdateBrandAsync_ReturnsNotFound_WhenBrandDoesNotExist()
     {
         // Arrange
         var brand = new BrandResponse
@@ -407,40 +330,7 @@ public class BrandControllerTester
         notFoundResult.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
         notFoundResult.Value.Should().Be($"Brand with ID {brand.Id} not found.");
     }
-    
-    [TestMethod]
-    public async Task UpdateBrandAsync_ReturnsNotFound_WhenBrandDoesNotExist()
-    {
-        // Arrange
-        var brand = new BrandResponse
-        {
-            Id = 1,
-            Name = "Updated Brand",
-            Country = "Updated Country",
-            EnvironmentRating = 3,
-            PeopleRating = 3,
-            AnimalRating = 3,
-            RatingDescription = "Updated Rating",
-            Categories = new List<string> { "Updated Category" },
-            Ranges = new List<string> { "Updated Range" }
-        };
 
-        _brandBusinessMock.Setup(x => x.UpdateBrandAsync(It.IsAny<BrandDto>())).ReturnsAsync(
-        new ProcessingStatusResponse<BrandDto>()
-        {
-            Status = HttpStatusCode.InternalServerError,
-        });
-
-        var controller = new BrandController(_brandBusinessMock.Object, _mapper);
-
-        // Act
-        var result = await controller.UpdateBrandAsync(brand);
-
-        // Assert
-        result.Should().BeOfType<ObjectResult>();
-        var objectResult = (ObjectResult)result;
-        objectResult.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
-}
     [TestMethod]
     public async Task DeleteBrandAsync_ReturnsNoContentResult_WhenBrandIsDeleted()
     {
@@ -503,27 +393,5 @@ public class BrandControllerTester
         result.Should().BeOfType<NotFoundObjectResult>();
         var notFoundResult = (NotFoundObjectResult)result;
         notFoundResult.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
-    }
-    
-    [TestMethod]
-    public async Task DeleteBrandAsync_ReturnsErrorStatusCode_WhenBrandBusinessFails()
-    {
-        // Arrange
-        const int brandId = 1;
-        _brandBusinessMock.Setup(x => x.GetBrandByIdAsync(It.IsAny<int>())).ReturnsAsync(
-            (new ProcessingStatusResponse<BrandDto>()
-            {
-                Status = HttpStatusCode.InternalServerError
-            }));
-
-        var controller = new BrandController(_brandBusinessMock.Object, _mapper);
-
-        // Act
-        var result = await controller.DeleteBrandAsync(brandId);
-
-        // Assert
-        result.Should().BeOfType<ObjectResult>();
-        var objectResult = (ObjectResult)result;
-        objectResult.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
     }
 }

@@ -1,13 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FairWearAPIGateway", "FairWearAPIGateway\FairWearAPIGateway.csproj", "{EA5B672B-5594-4C8C-B20F-86A7211E1C65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FairWearGateway.API", "FairWearGateway.API\FairWearGateway.API.csproj", "{EA5B672B-5594-4C8C-B20F-86A7211E1C65}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FairWearProductDataRetriever.API", "FairWearProductDataRetriever.API\FairWearProductDataRetriever.API.csproj", "{2E2CC2A2-E61C-4AD4-9908-E556A83D5336}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FairWearProductDataRetriever.API.Tests", "FairWearProductDataRetriever.API.Tests\FairWearProductDataRetriever.API.Tests.csproj", "{5930D285-80B9-4620-8D72-B4F260BA826E}"
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodOnYouScrapperAPI", "GoodOnYouScrapperAPI\GoodOnYouScrapperAPI.csproj", "{6837512C-16AC-4E31-B453-EA0BE3C8A4E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodOnYouScrapperAPI.Tests", "GoodOnYouScrapperAPI.Tests\GoodOnYouScrapperAPI.Tests.csproj", "{82C52078-8910-4F5D-89B3-905CDD284989}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodOnYouScrapper.API", "GoodOnYouScrapper.API\GoodOnYouScrapper.API.csproj", "{6837512C-16AC-4E31-B453-EA0BE3C8A4E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodOnYouScrapper.API.Tests", "GoodOnYouScrapper.API.Tests\GoodOnYouScrapper.API.Tests.csproj", "{82C52078-8910-4F5D-89B3-905CDD284989}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrandAndProductDatabase.API", "BrandAndProductDatabase.API\BrandAndProductDatabase.API.csproj", "{73BD25C4-39B9-473B-AB49-EEDA022C4301}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrandAndProductDatabase.API.Tests", "BrandAndProductDatabase.API.Tests\BrandAndProductDatabase.API.Tests.csproj", "{85755176-D22D-44D6-B0B8-93AF38B6133C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,5 +40,13 @@ Global
 		{82C52078-8910-4F5D-89B3-905CDD284989}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82C52078-8910-4F5D-89B3-905CDD284989}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82C52078-8910-4F5D-89B3-905CDD284989}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73BD25C4-39B9-473B-AB49-EEDA022C4301}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73BD25C4-39B9-473B-AB49-EEDA022C4301}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73BD25C4-39B9-473B-AB49-EEDA022C4301}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73BD25C4-39B9-473B-AB49-EEDA022C4301}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85755176-D22D-44D6-B0B8-93AF38B6133C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85755176-D22D-44D6-B0B8-93AF38B6133C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85755176-D22D-44D6-B0B8-93AF38B6133C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85755176-D22D-44D6-B0B8-93AF38B6133C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

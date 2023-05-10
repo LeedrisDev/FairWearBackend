@@ -1,4 +1,4 @@
-name: Product Data Retriever API CI
+name: Brand & Product Database API CI
 
 on:
   push:
@@ -10,13 +10,12 @@ on:
       - release/*
       - fix/*
     paths:
-      - 'FairWearProductDataRetriever.API/**'
-      - 'FairWearProductDataRetriever.API.Tests/**'
-      - '.github/workflows/FairWearProductDataRetrieverAPI.yml'
+      - 'BrandAndProductDatabase.API/**'
+      - 'BrandAndProductDatabase.API.Tests/**'
+      - '.github/workflows/BrandAndProductDatabaseAPI.yml'
       - 'Scripts/**'
-
+        
 jobs:
-
   linter:
     name: 'Linter'
     runs-on: ubuntu-latest
@@ -43,7 +42,7 @@ jobs:
           export PATH=$PATH:~/.dotnet/tools
 
       - name: Run ReSharper InspectCode
-        run: jb inspectcode FairWearProductDataRetriever.API/FairWearProductDataRetriever.API.csproj -o=resharper-report.xml -f=Xml -verbosity=INFO -no-swea
+        run: jb inspectcode BrandAndProductDatabase.API/BrandAndProductDatabase.API.csproj -o=resharper-report.xml -f=Xml -verbosity=INFO -no-swea
 
       - name: Check Resharper results
         run: |
@@ -56,11 +55,10 @@ jobs:
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           status: ${{ job.status }}
-          title: "Linter Product Data Retriever API"
+          title: "Linter Brand & Product Database API"
           username: GitHub Actions
           avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
-  
-  
+          
   build:
     name: 'Build'
     needs: linter
@@ -75,29 +73,28 @@ jobs:
 
       - name: Cache NuGet packages
         uses: actions/cache@v3
-        id: cache-packages
         with:
           path: ~/.nuget/packages
           # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-nuget-product-data-retriever-${{ hashFiles('**/packages.lock.json') }}
+          key: ${{ runner.os }}-nuget-brand-and-product-database-api-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-nuget-product-data-retriever-
+            ${{ runner.os }}-nuget-brand-and-product-database-api-
 
       - name: 'Install dependencies'
-        run: dotnet restore ./FairWearProductDataRetriever.API/FairWearProductDataRetriever.API.csproj
+        run: dotnet restore BrandAndProductDatabase.API/BrandAndProductDatabase.API.csproj
 
       - name: Build
-        run: dotnet build ./FairWearProductDataRetriever.API/FairWearProductDataRetriever.API.csproj --configuration Release --no-restore
+        run: dotnet build BrandAndProductDatabase.API/BrandAndProductDatabase.API.csproj --configuration Release --no-restore
 
       - uses: sarisia/actions-status-discord@v1
         if: always() && (job.status == 'failure' || job.status == 'cancelled')
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           status: ${{ job.status }}
-          title: "Build & Test Product Data Retriever API"
+          title: "Build & Test Brand & Product Database API"
           username: GitHub Actions
           avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
-  
+          
   test:
     name: 'Tests'
     needs:
@@ -114,28 +111,26 @@ jobs:
 
       - name: Cache NuGet packages
         uses: actions/cache@v3
-        id: cache-packages
         with:
           path: ~/.nuget/packages
           # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-nuget-product-data-retriever-tests-${{ hashFiles('**/packages.lock.json') }}
+          key: ${{ runner.os }}-nuget-brand-and-product-database-api-tests-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-nuget-product-data-retriever-tests-
+            ${{ runner.os }}-nuget-brand-and-product-database-api-tests-
 
       - name: 'Install dependencies'
         run: |
-          dotnet restore ./FairWearProductDataRetriever.API.Tests/FairWearProductDataRetriever.API.Tests.csproj
-          dotnet restore ./FairWearProductDataRetriever.API/FairWearProductDataRetriever.API.csproj
+          dotnet restore BrandAndProductDatabase.API.Tests/BrandAndProductDatabase.API.Tests.csproj
+          dotnet restore BrandAndProductDatabase.API/BrandAndProductDatabase.API.csproj 
 
       - name: 'Test with code coverage'
-        run: ./Scripts/code-coverage-ci.sh -p FairWearProductDataRetriever.API.Tests/FairWearProductDataRetriever.API.Tests.csproj -t 77
+        run: ./Scripts/code-coverage-ci.sh -p BrandAndProductDatabase.API.Tests/BrandAndProductDatabase.API.Tests.csproj -t 75
 
       - uses: sarisia/actions-status-discord@v1
         if: always()
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           status: ${{ job.status }}
-          title: "Build & Test Product Data Retriever API"
+          title: "Build & Test Brand & Product Database API"
           username: GitHub Actions
           avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
-          

@@ -10,9 +10,16 @@ while [[ $# -gt 0 ]]; do
       shift
       shift
       ;;
+    --clean) # delete generated files
+      rm -rf coveragereport
+      rm -f "$PROJECT_DIR"/coverage.cobertura.xml
+      rm -rf "$PROJECT_DIR"/TestResults
+      exit 0
+      shift
+      ;;
     *)    # unknown option
       echo "Invalid argument: $1"
-      echo "Usage: $0 -p|--project <project_test_path>"
+      echo "Usage: $0 -p|--project <project_test_path> [--clean]"
       exit 1
       ;;
   esac
@@ -21,7 +28,7 @@ done
 # Check required arguments
 if [ -z "$PROJECT" ]; then
   echo "Project path is required"
-  echo "Usage: $0 -p|--project <project_test_path>"
+  echo "Usage: $0 -p|--project <project_test_path> [--clean]"
   exit 1
 fi
 

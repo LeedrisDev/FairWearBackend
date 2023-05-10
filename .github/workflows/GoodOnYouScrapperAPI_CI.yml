@@ -10,8 +10,8 @@ on:
       - release/*
       - fix/*
     paths:
-      - 'GoodOnYouScrapperAPI/**'
-      - 'GoodOnYouScrapperAPI.Tests/**'
+      - 'GoodOnYouScrapper.API/**'
+      - 'GoodOnYouScrapper.API.Tests/**'
       - '.github/workflows/GoodOnYouScrapperAPI_CI.yml'
       - 'Scripts/**'
 
@@ -43,7 +43,7 @@ jobs:
           export PATH=$PATH:~/.dotnet/tools
 
       - name: Run ReSharper InspectCode
-        run: jb inspectcode GoodOnYouScrapperAPI/GoodOnYouScrapperAPI.csproj -o=resharper-report.xml -f=Xml -verbosity=INFO -no-swea
+        run: jb inspectcode GoodOnYouScrapper.API/GoodOnYouScrapper.API.csproj -o=resharper-report.xml -f=Xml -verbosity=INFO -no-swea
 
       - name: Check Resharper results
         run: |
@@ -78,15 +78,15 @@ jobs:
         with:
           path: ~/.nuget/packages
           # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          key: ${{ runner.os }}-nuget-goodonyou-scrapper-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-nuget-
+            ${{ runner.os }}-nuget-goodonyou-scrapper-
 
       - name: 'Install dependencies'
-        run: dotnet restore ./GoodOnYouScrapperAPI/GoodOnYouScrapperAPI.csproj
+        run: dotnet restore ./GoodOnYouScrapper.API/GoodOnYouScrapper.API.csproj
         
       - name: Build
-        run: dotnet build ./GoodOnYouScrapperAPI/GoodOnYouScrapperAPI.csproj --configuration Release --no-restore 
+        run: dotnet build ./GoodOnYouScrapper.API/GoodOnYouScrapper.API.csproj --configuration Release --no-restore 
       
       - uses: sarisia/actions-status-discord@v1
         if: always() && (job.status == 'failure' || job.status == 'cancelled')
@@ -116,17 +116,17 @@ jobs:
         with:
           path: ~/.nuget/packages
           # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          key: ${{ runner.os }}-nuget-goodonyou-scrapper-tests-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-nuget-
+            ${{ runner.os }}-nuget-goodonyou-scrapper-tests-
 
       - name: 'Install dependencies'
         run: |
-          dotnet restore ./GoodOnYouScrapperAPI.Tests/GoodOnYouScrapperAPI.Tests.csproj
-          dotnet restore ./GoodOnYouScrapperAPI/GoodOnYouScrapperAPI.csproj  
+          dotnet restore ./GoodOnYouScrapper.API.Tests/GoodOnYouScrapper.API.Tests.csproj
+          dotnet restore ./GoodOnYouScrapper.API/GoodOnYouScrapper.API.csproj  
           
       - name: 'Test with code coverage'
-        run: ./Scripts/code-coverage-ci.sh -p GoodOnYouScrapperAPI.Tests/GoodOnYouScrapperAPI.Tests.csproj -t 79
+        run: ./Scripts/code-coverage-ci.sh -p GoodOnYouScrapper.API.Tests/GoodOnYouScrapper.API.Tests.csproj -t 79
       
       - uses: sarisia/actions-status-discord@v1
         if: always()

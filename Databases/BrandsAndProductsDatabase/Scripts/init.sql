@@ -1,3 +1,7 @@
+CREATE DATABASE fairwear_brand_and_product_database;
+    
+\c fairwear_brand_and_product_database;
+
 DROP TABLE IF EXISTS brands;
 DROP TABLE IF EXISTS products;
 

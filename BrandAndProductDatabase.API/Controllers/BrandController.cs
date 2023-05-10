@@ -111,10 +111,22 @@ public class BrandController : ControllerBase
     {
         var brand = await _brandBusiness.GetBrandByIdAsync(id);
 
-        if (brand.Status == HttpStatusCode.NotFound)
-            return NotFound();
-
+        if (brand.Status != HttpStatusCode.OK)
+        {
+            return brand.Status switch
+            {
+                HttpStatusCode.NotFound => NotFound(brand.ErrorMessage),
+                _ => StatusCode((int)brand.Status, brand.ErrorMessage)
+            };
+        }
+        
         var deleteBrand = await _brandBusiness.DeleteBrandAsync(id);
-        return StatusCode((int)deleteBrand.Status, deleteBrand.ErrorMessage);
+
+        return deleteBrand.Status switch
+        {
+            HttpStatusCode.OK => Ok(),
+            HttpStatusCode.NotFound => NotFound(deleteBrand.ErrorMessage),
+            _ => StatusCode((int)deleteBrand.Status, deleteBrand.ErrorMessage)
+        };
     }
 }

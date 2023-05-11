@@ -10,3 +10,12 @@ services:
     restart: on-failure
     ports: 
       - "5432:5432"
+    
+  brand_and_product_api:
+    container_name: brand_and_product_api
+    build:
+        context: .
+        dockerfile: BrandAndProductDatabase.API/Dockerfile
+    restart: on-failure
+    ports:
+      - "8081:80"

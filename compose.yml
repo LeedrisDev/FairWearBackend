@@ -1,0 +1,12 @@
+services:
+  
+#  traefik:
+  
+  brand_and_product_db:
+    container_name: brand_and_product_db
+    build:
+        context: .
+        dockerfile: Databases/BrandsAndProductsDatabase/Dockerfile
+    restart: on-failure
+    ports: 
+      - "5432:5432"

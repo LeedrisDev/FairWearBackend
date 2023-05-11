@@ -1,20 +1,20 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["FairWearAPI/FairWearAPI.csproj", "FairWearAPI/"]
-RUN dotnet restore "FairWearAPI/FairWearAPI.csproj"
+COPY ["FairWearGateway.API/FairWearGateway.API.csproj", "FairWearGateway.API/"]
+RUN dotnet restore "FairWearGateway.API/FairWearGateway.API.csproj"
 COPY . .
-WORKDIR "/src/FairWearAPI"
-RUN dotnet build "FairWearAPI.csproj" -c Release -o /app/build
+WORKDIR "/src/FairWearGateway.API"
+RUN dotnet build "FairWearGateway.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "FairWearAPI.csproj" -c Release -o /app/publish
+RUN dotnet publish "FairWearGateway.API.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "FairWearAPI.dll"]
+ENTRYPOINT ["dotnet", "FairWearGateway.API.dll"]

@@ -11,6 +11,15 @@ services:
     ports: 
       - "5432:5432"
     
+  gateway_api:
+    container_name: gateway_api
+    build:
+        context: .
+        dockerfile: FairWearGateway.API/Dockerfile
+    restart: on-failure
+    ports:
+      - "8080:80"  
+    
   brand_and_product_api:
     container_name: brand_and_product_api
     build:

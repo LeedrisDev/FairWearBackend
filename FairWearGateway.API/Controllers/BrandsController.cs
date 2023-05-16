@@ -1,5 +1,6 @@
 using System.Net;
-using FairWearGateway.API.DataAccess.BrandData;
+using FairWearGateway.API.Business.BrandBusiness;
+using FairWearGateway.API.Models.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FairWearGateway.API.Controllers;
@@ -10,19 +11,21 @@ namespace FairWearGateway.API.Controllers;
 [Produces("application/json")]
 public class BrandsController : ControllerBase
 {
-    private readonly IBrandData _brandData;
+    private readonly IBrandBusiness _brandBusiness;
 
     /// <summary>Constructor of the BrandsController class.</summary>
-    public BrandsController(IBrandData brandData)
+    public BrandsController(IBrandBusiness brandBusiness)
     {
-        _brandData = brandData;
+        _brandBusiness = brandBusiness;
     }
     
     /// <summary>Gets all brands.</summary>
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<BrandResponse>), (int) HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.InternalServerError)]
     public async Task<IActionResult> GetAllBrandsAsync()
     {
-        var processingStatusResponse = await _brandData.GetAllBrandsAsync();
+        var processingStatusResponse = await _brandBusiness.GetAllBrandsAsync();
         
         return processingStatusResponse.Status != HttpStatusCode.OK ? StatusCode((int) processingStatusResponse.Status, processingStatusResponse.ErrorMessage) : Ok(processingStatusResponse.Object);
     }

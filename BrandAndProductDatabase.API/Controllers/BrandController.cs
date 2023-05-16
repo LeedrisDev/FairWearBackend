@@ -3,6 +3,7 @@ using System.Net;
 using AutoMapper;
 using BrandAndProductDatabase.API.Business.BrandBusiness;
 using BrandAndProductDatabase.API.Models.Dto;
+using BrandAndProductDatabase.API.Models.Request;
 using BrandAndProductDatabase.API.Models.Response;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,7 +38,44 @@ public class BrandController : ControllerBase
         return brandList.Status switch
         {
             HttpStatusCode.OK => Ok(brandList.Object.Select(brand => _mapper.Map<BrandResponse>(brand)).ToList()),
-            _ => StatusCode((int)brandList.Status, brandList.ErrorMessage)
+            _ => StatusCode((int)brandList.Status, brandList.MessageObject)
+        };
+    }
+    
+    /// <summary>Creates a new brand in the database.</summary> 
+    /// <param name="brand">The brand containing the brand information.</param> 
+    /// <returns>An HTTP response containing the newly created brand.</returns> 
+    [HttpPost("/brand")] 
+    [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.Created)] 
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)] 
+    public async Task<IActionResult> CreateBrandAsync([Required][FromBody] BrandResponse brand) 
+    { 
+        if (!ModelState.IsValid) 
+            return BadRequest(ModelState); 
+ 
+        var createdBrand = await _brandBusiness.CreateBrandAsync(_mapper.Map<BrandDto>(brand)); 
+ 
+        return createdBrand.Status switch 
+        { 
+            HttpStatusCode.OK => Ok(_mapper.Map<BrandResponse>(createdBrand.Object)), 
+            _ => StatusCode((int)createdBrand.Status, createdBrand.ErrorMessage) 
+        }; 
+    } 
+
+    /// <summary>Updates a brand in the database.</summary>
+    /// <param name="brand">The updated brand data.</param>
+    [HttpPatch("/brand")]
+    [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+    public async Task<IActionResult> UpdateBrandAsync([Required][FromBody] BrandResponse brand)
+    {
+        var updatedBrand = await _brandBusiness.UpdateBrandAsync(_mapper.Map<BrandDto>(brand));
+
+        return updatedBrand.Status switch
+        {
+            HttpStatusCode.OK => Ok(_mapper.Map<BrandResponse>(updatedBrand.Object)),
+            HttpStatusCode.NotFound => NotFound(updatedBrand.MessageObject),
+            _ => StatusCode((int)updatedBrand.Status, updatedBrand.MessageObject)
         };
     }
 
@@ -54,63 +92,26 @@ public class BrandController : ControllerBase
         return brand.Status switch
         {
             HttpStatusCode.OK => Ok(_mapper.Map<BrandResponse>(brand.Object)),
-            HttpStatusCode.NotFound => NotFound(),
-            _ => StatusCode((int)brand.Status, brand.ErrorMessage)
+            HttpStatusCode.NotFound => NotFound(brand.MessageObject),
+            _ => StatusCode((int)brand.Status, brand.MessageObject)
         };
     }
     
     /// <summary>Gets a single brand by its name.</summary>
-    /// <param name="name">Name of the wanted brand</param>
+    /// <param name="brandRequest"> Object containing the name of the brand to get.</param>
     /// <returns>An HTTP response containing the brand. If the brand exists.</returns>
-    [HttpPost("/brand")]
+    [HttpPost("/brand/name")]
     [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ErrorResponse) ,(int)HttpStatusCode.NotFound)]
-    public async Task<IActionResult> GetBrandByNameAsync([Required][FromBody] string name)
+    public async Task<IActionResult> GetBrandByNameAsync([Required][FromBody] BrandRequest brandRequest)
     {
-        var brand = await _brandBusiness.GetBrandByNameAsync(name);
+        var brand = await _brandBusiness.GetBrandByNameAsync(brandRequest.Name);
 
         return brand.Status switch
         {
             HttpStatusCode.OK => Ok(_mapper.Map<BrandResponse>(brand.Object)),
-            HttpStatusCode.NotFound => NotFound(),
-            _ => StatusCode((int)brand.Status, brand.ErrorMessage)
-        };
-    }
-
-    /// <summary>Creates a new brand in the database.</summary>
-    /// <param name="brand">The brand containing the brand information.</param>
-    /// <returns>An HTTP response containing the newly created brand.</returns>
-    [HttpPost("/brand")]
-    [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.Created)]
-    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> CreateBrandAsync([Required][FromBody] BrandResponse brand)
-    {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        var createdBrand = await _brandBusiness.CreateBrandAsync(_mapper.Map<BrandDto>(brand));
-
-        return createdBrand.Status switch
-        {
-            HttpStatusCode.OK => Ok(_mapper.Map<BrandResponse>(createdBrand.Object)),
-            _ => StatusCode((int)createdBrand.Status, createdBrand.ErrorMessage)
-        };
-    }
-
-    /// <summary>Updates a brand in the database.</summary>
-    /// <param name="brand">The updated brand data.</param>
-    [HttpPatch("/brand")]
-    [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-    public async Task<IActionResult> UpdateBrandAsync([Required][FromBody] BrandResponse brand)
-    {
-        var updatedBrand = await _brandBusiness.UpdateBrandAsync(_mapper.Map<BrandDto>(brand));
-
-        return updatedBrand.Status switch
-        {
-            HttpStatusCode.OK => Ok(_mapper.Map<BrandResponse>(updatedBrand.Object)),
-            HttpStatusCode.NotFound => NotFound(updatedBrand.ErrorMessage),
-            _ => StatusCode((int)updatedBrand.Status, updatedBrand.ErrorMessage)
+            HttpStatusCode.NotFound => NotFound(brand.MessageObject),
+            _ => StatusCode((int)brand.Status, brand.MessageObject)
         };
     }
 
@@ -132,8 +133,8 @@ public class BrandController : ControllerBase
         {
             return brand.Status switch
             {
-                HttpStatusCode.NotFound => NotFound(brand.ErrorMessage),
-                _ => StatusCode((int)brand.Status, brand.ErrorMessage)
+                HttpStatusCode.NotFound => NotFound(brand.MessageObject),
+                _ => StatusCode((int)brand.Status, brand.MessageObject)
             };
         }
         
@@ -142,8 +143,8 @@ public class BrandController : ControllerBase
         return deleteBrand.Status switch
         {
             HttpStatusCode.OK => Ok(),
-            HttpStatusCode.NotFound => NotFound(deleteBrand.ErrorMessage),
-            _ => StatusCode((int)deleteBrand.Status, deleteBrand.ErrorMessage)
+            HttpStatusCode.NotFound => NotFound(deleteBrand.MessageObject),
+            _ => StatusCode((int)deleteBrand.Status, deleteBrand.MessageObject)
         };
     }
 }

@@ -16,7 +16,7 @@ public static class SwaggerConfiguration
             {
                 Title = "FairWear Gateway API",
                 Version = "v1",
-                Description = "API to handle any request from the frontend and redirect it to the correct microservice.",
+                Description = "API to handle any request from the frontend and redirect it to the appropriate microservice.",
                 Contact = new OpenApiContact
                 {
                     Name = "FairWear Group",

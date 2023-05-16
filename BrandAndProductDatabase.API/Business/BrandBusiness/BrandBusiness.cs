@@ -43,11 +43,11 @@ public class BrandBusiness : IBrandBusiness
             return processingStatusResponse;
         
         var brandDataResponse = await _brandData.GetBrandByNameAsync(name);
-        if (processingStatusResponse.Status != HttpStatusCode.OK) 
+        if (brandDataResponse.Status != HttpStatusCode.OK) 
             return brandDataResponse;
             
-        await _brandRepository.AddAsync(processingStatusResponse.Object);
-        return brandDataResponse;
+        var repositoryResponse = await _brandRepository.AddAsync(brandDataResponse.Object);
+        return repositoryResponse;
     }
 
     /// <inheritdoc/>

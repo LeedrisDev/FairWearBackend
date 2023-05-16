@@ -1,5 +1,6 @@
 using FairWearGateway.API.Business.BrandBusiness;
 using FairWearGateway.API.Business.ProductBusiness;
+using FairWearGateway.API.Config;
 using FairWearGateway.API.DataAccess.BrandData;
 using FairWearGateway.API.DataAccess.ProductData;
 using FairWearGateway.API.Utils.HttpClientWrapper;
@@ -20,7 +21,7 @@ builder.Services.AddTransient<IBrandBusiness, BrandBusiness>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+SwaggerConfiguration.Configure(builder.Services);
 
 var app = builder.Build();
 
@@ -30,7 +31,11 @@ var app = builder.Build();
 // }
 
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "FairWear Gateway API");
+    options.RoutePrefix = "api/swagger";
+});
 
 // app.UseHttpsRedirection();
 

@@ -1,5 +1,6 @@
 using BrandAndProductDatabase.API.Business.BrandBusiness;
 using BrandAndProductDatabase.API.Business.ProductBusiness;
+using BrandAndProductDatabase.API.Config;
 using BrandAndProductDatabase.API.DataAccess;
 using BrandAndProductDatabase.API.DataAccess.BrandData;
 using BrandAndProductDatabase.API.DataAccess.IRepositories;
@@ -7,6 +8,7 @@ using BrandAndProductDatabase.API.DataAccess.Repositories;
 using BrandAndProductDatabase.API.Utils;
 using BrandAndProductDatabase.API.Utils.HttpClientWrapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+SwaggerConfiguration.Configure(builder.Services);
 
 // Dependency Injection
 builder.Services.AddHttpClient<IHttpClientWrapper, HttpClientWrapper>();
@@ -39,7 +41,7 @@ app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-    options.RoutePrefix = string.Empty;
+    options.RoutePrefix = "api/swagger";
 });
 
 app.UseHttpsRedirection();

@@ -25,7 +25,7 @@ public class BrandAndProductDbContext : DbContext
     /// <inheritdoc />
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseNpgsql(
-            "User ID=fairwear;Password=fairwear;Host=localhost;Port=5432;Database=fairwear_brand_and_product_database;");
+            "User ID=fairwear;Password=fairwear;Host=brand_and_product_db;Port=5432;Database=fairwear_brand_and_product_database;");
 
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)

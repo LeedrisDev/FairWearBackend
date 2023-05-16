@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using GoodOnYouScrapper.API.DataAccess.BrandData;
 using GoodOnYouScrapper.API.Models;
+using GoodOnYouScrapper.API.Models.Response;
 using GoodOnYouScrapper.API.Utils;
 using HtmlAgilityPack;
 
@@ -14,19 +15,19 @@ namespace GoodOnYouScrapper.API.Business.BrandBusiness;
 /// </summary>
 public class BrandBusiness: IBrandBusiness
 {
-    private readonly ProcessingStatusResponse<BrandModel> _processingStatusResponse;
+    private readonly ProcessingStatusResponse<BrandResponse> _processingStatusResponse;
     private readonly IBrandData _brandData;
 
     /// <summary>Constructor</summary>
     /// <param name="brandData">Data access layer for the brand</param>
     public BrandBusiness(IBrandData brandData)
     {
-        _processingStatusResponse = new ProcessingStatusResponse<BrandModel>();
+        _processingStatusResponse = new ProcessingStatusResponse<BrandResponse>();
         _brandData = brandData;
     }
     
     /// <inheritdoc/>
-    public async Task<ProcessingStatusResponse<BrandModel>> GetBrandInformation(string brandName)
+    public async Task<ProcessingStatusResponse<BrandResponse>> GetBrandInformation(string brandName)
     {
         HtmlDocument htmlDocument;
 
@@ -43,7 +44,7 @@ public class BrandBusiness: IBrandBusiness
         
         // TODO: Implement the rest of the logic
         
-        var brandModel = new BrandModel
+        var brandModel = new BrandResponse
         {
             Name = brandName,
             Country = GetBrandCountry(htmlDocument),

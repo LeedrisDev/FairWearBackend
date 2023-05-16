@@ -2,6 +2,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using GoodOnYouScrapper.API.Business.BrandBusiness;
 using GoodOnYouScrapper.API.Models;
+using GoodOnYouScrapper.API.Models.Request;
+using GoodOnYouScrapper.API.Models.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoodOnYouScrapper.API.Controllers;

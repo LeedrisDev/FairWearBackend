@@ -1,4 +1,5 @@
 using System.Net;
+using GoodOnYouScrapper.API.Models.Response;
 
 namespace GoodOnYouScrapper.API.Models;
 

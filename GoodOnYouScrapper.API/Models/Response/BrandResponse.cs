@@ -1,7 +1,7 @@
-namespace GoodOnYouScrapper.API.Models;
+namespace GoodOnYouScrapper.API.Models.Response;
 
 /// <summary>Model for the brand</summary>
-public class BrandModel
+public class BrandResponse
 {
      /// <summary>Name of the brand</summary>
      public string? Name { get; set; }

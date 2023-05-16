@@ -1,4 +1,4 @@
-namespace GoodOnYouScrapper.API.Models;
+namespace GoodOnYouScrapper.API.Models.Response;
 
 /// <summary>Model for error response</summary>
 public class ErrorResponse

@@ -1,11 +1,12 @@
 using System.Net;
 using System.Text;
-using System.Text.Json;
 using BrandAndProductDatabase.API.Models;
 using BrandAndProductDatabase.API.Models.Dto;
 using BrandAndProductDatabase.API.Models.Request;
 using BrandAndProductDatabase.API.Utils;
 using BrandAndProductDatabase.API.Utils.HttpClientWrapper;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace BrandAndProductDatabase.API.DataAccess.BrandData;
 
@@ -13,7 +14,7 @@ namespace BrandAndProductDatabase.API.DataAccess.BrandData;
 public class BrandData : IBrandData
 {
     private readonly IHttpClientWrapper _httpClientWrapper;
-    
+
     /// <summary>Initializes a new instance of the <see cref="BrandData"/> class.</summary>
     public BrandData(IHttpClientWrapper httpClientWrapper)
     {
@@ -33,7 +34,7 @@ public class BrandData : IBrandData
         if (response.IsSuccessStatusCode)
         {
             var responseString = await response.Content.ReadAsStringAsync();
-            var brandDto = JsonSerializer.Deserialize<BrandDto>(responseString);
+            var brandDto = JsonConvert.DeserializeObject<BrandDto>(responseString);
             if (brandDto == null)
             {
                 processingStatusResponse.Status = HttpStatusCode.InternalServerError;

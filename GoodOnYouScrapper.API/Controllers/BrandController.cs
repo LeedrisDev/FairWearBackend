@@ -26,7 +26,7 @@ public class BrandController: ControllerBase
     /// <summary>Get brand information</summary>
     /// <param name="brandRequest">Brand object containing the brand name</param>
     /// <returns> Brand information </returns>
-    [HttpGet]
+    [HttpPost]
     [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> GetBrand([Required][FromBody] BrandRequest brandRequest)

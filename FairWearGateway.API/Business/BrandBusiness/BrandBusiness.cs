@@ -25,6 +25,6 @@ public class BrandBusiness : IBrandBusiness
     /// <inheritdoc/>
     public async Task<ProcessingStatusResponse<BrandResponse>> GetBrandByIdAsync(int brandId)
     {
-        throw new NotImplementedException();
+        return await _brandData.GetBrandByIdAsync(brandId);
     }
 }

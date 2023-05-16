@@ -30,7 +30,7 @@ public class BrandData : IBrandData
         var json = JsonSerializer.Serialize(data);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
         
-        var response = await _httpClientWrapper.PostAsync(AppConstants.GOOD_ON_YOU_SCRAPPER_URL, content);
+        var response = await _httpClientWrapper.PostAsync(AppConstants.GoodOnYouScrapperUrl, content);
         if (response.IsSuccessStatusCode)
         {
             var responseString = await response.Content.ReadAsStringAsync();

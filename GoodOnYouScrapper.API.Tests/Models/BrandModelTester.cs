@@ -1,4 +1,5 @@
 using GoodOnYouScrapper.API.Models;
+using GoodOnYouScrapper.API.Models.Response;
 
 namespace GoodOnYouScrapper.API.Tests.Models;
 
@@ -8,7 +9,7 @@ public class BrandModelTester
     [TestMethod]
     public void Create_BrandModel_With_Name()
     {
-        var brand = new BrandModel
+        var brand = new BrandResponse
         {
             Name = "Levis"
         };
@@ -20,7 +21,7 @@ public class BrandModelTester
     [TestMethod]
     public void Create_BrandModel_With_Country()
     {
-        var brand = new BrandModel
+        var brand = new BrandResponse
         {
             Country = "United States"
         };
@@ -32,7 +33,7 @@ public class BrandModelTester
     [TestMethod]
     public void Create_BrandModel_With_EnvironmentRating()
     {
-        var brand = new BrandModel
+        var brand = new BrandResponse
         {
             EnvironmentRating = 1
         };
@@ -44,7 +45,7 @@ public class BrandModelTester
     [TestMethod]
     public void Create_BrandModel_With_PeopleRating()
     {
-        var brand = new BrandModel
+        var brand = new BrandResponse
         {
             PeopleRating = 1
         };
@@ -56,7 +57,7 @@ public class BrandModelTester
     [TestMethod]
     public void Create_BrandModel_With_AnimalRating()
     {
-        var brand = new BrandModel
+        var brand = new BrandResponse
         {
             AnimalRating = 1
         };
@@ -68,7 +69,7 @@ public class BrandModelTester
     [TestMethod]
     public void Create_BrandModel_With_RatingDescription()
     {
-        var brand = new BrandModel
+        var brand = new BrandResponse
         {
             RatingDescription = "Description"
         };
@@ -79,7 +80,7 @@ public class BrandModelTester
     [TestMethod]
     public void Create_BrandModel_With_Categories()
     {
-        var brand = new BrandModel
+        var brand = new BrandResponse
         {
             Categories = new List<string>
             {
@@ -95,7 +96,7 @@ public class BrandModelTester
     [TestMethod]
     public void Create_BrandModel_With_Ranges()
     {
-        var brand = new BrandModel
+        var brand = new BrandResponse
         {
             Ranges = new List<string>
             {

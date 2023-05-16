@@ -6,15 +6,19 @@ using FairWearGateway.API.Utils.HttpClientWrapper;
 
 namespace FairWearGateway.API.DataAccess.BrandData;
 
+
+/// <summary>Class that call the appropriate microservice to get all is related to brands.</summary>
 public class BrandData : IBrandData
 {
     private readonly IHttpClientWrapper _httpClientWrapper;
 
+    /// <summary>Constructor</summary>
     public BrandData(IHttpClientWrapper httpClientWrapper)
     {
         _httpClientWrapper = httpClientWrapper;
     }
     
+    /// <inheritdoc />
     public async Task<ProcessingStatusResponse<IEnumerable<BrandServiceResponse>>> GetAllBrandsAsync()
     {
         var processingStatusResponse = new ProcessingStatusResponse<IEnumerable<BrandServiceResponse>>();
@@ -42,6 +46,7 @@ public class BrandData : IBrandData
         }
     }
 
+    /// <inheritdoc />
     public async Task<ProcessingStatusResponse<BrandServiceResponse>> GetBrandByIdAsync(int brandId)
     {
         var processingStatusResponse = new ProcessingStatusResponse<BrandServiceResponse>();

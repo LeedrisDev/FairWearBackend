@@ -3,6 +3,8 @@ using FairWearGateway.API.Models.ServiceResponse;
 
 namespace FairWearGateway.API.DataAccess.BrandData;
 
+
+/// <summary>Interface that defines the methods to call the appropriate microservice to get all is related to brands.</summary>
 public interface IBrandData
 {
     /// <summary>Gets all the brands in the database</summary>

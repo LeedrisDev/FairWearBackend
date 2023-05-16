@@ -22,11 +22,9 @@ public class BrandRepository : Repository<BrandDto, BrandEntity>, IBrandReposito
         var brand = await DbSet.FirstOrDefaultAsync(x => x.Name == name);
         if (brand == null)
         {
-            return new ProcessingStatusResponse<BrandDto>
-            {
-                Status = HttpStatusCode.NotFound,
-                ErrorMessage = $"Brand with name {name} not found."
-            };
+            processingStatusResponse.Status = HttpStatusCode.NotFound;
+            processingStatusResponse.ErrorMessage = $"Brand with name {name} was not found.";
+            return processingStatusResponse;
         }
         
         processingStatusResponse.Object = Mapper.Map<BrandDto>(brand);

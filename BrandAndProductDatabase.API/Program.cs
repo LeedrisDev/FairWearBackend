@@ -8,7 +8,6 @@ using BrandAndProductDatabase.API.DataAccess.Repositories;
 using BrandAndProductDatabase.API.Utils;
 using BrandAndProductDatabase.API.Utils.HttpClientWrapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

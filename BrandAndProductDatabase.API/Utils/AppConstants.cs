@@ -4,5 +4,5 @@ namespace BrandAndProductDatabase.API.Utils;
 public static class AppConstants
 {
     /// <summary>URL for the Good On You Scrapper microservice.</summary>
-    public static string GOOD_ON_YOU_SCRAPPER_URL = "http://good_on_you_scrapper_api:80/api/brand";
+    public const string GoodOnYouScrapperUrl = "http://good_on_you_scrapper_api:80/api/brand";
 }

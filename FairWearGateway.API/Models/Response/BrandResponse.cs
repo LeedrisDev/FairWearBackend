@@ -1,9 +1,9 @@
-namespace FairWearGateway.API.Models.ServiceResponse;
+namespace FairWearGateway.API.Models.Response;
 
 /// <summary>
 /// Model representing a brand response from the BrandAndProductDatabase.API.
 /// </summary>
-public class BrandServiceResponse
+public class BrandResponse
 {
     /// <summary>The Id of the Brand.</summary>
     public int Id { get; set; }

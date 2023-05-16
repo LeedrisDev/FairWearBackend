@@ -1,6 +1,6 @@
 using System.Text.Json;
 using FairWearGateway.API.Models;
-using FairWearGateway.API.Models.ServiceResponse;
+using FairWearGateway.API.Models.Response;
 using FairWearGateway.API.Utils;
 using FairWearGateway.API.Utils.HttpClientWrapper;
 
@@ -19,9 +19,9 @@ public class BrandData : IBrandData
     }
     
     /// <inheritdoc />
-    public async Task<ProcessingStatusResponse<IEnumerable<BrandServiceResponse>>> GetAllBrandsAsync()
+    public async Task<ProcessingStatusResponse<IEnumerable<BrandResponse>>> GetAllBrandsAsync()
     {
-        var processingStatusResponse = new ProcessingStatusResponse<IEnumerable<BrandServiceResponse>>();
+        var processingStatusResponse = new ProcessingStatusResponse<IEnumerable<BrandResponse>>();
         
         var response = await _httpClientWrapper.GetAsync(AppConstants.BRAND_AND_PRODUCT_API_URL);
 
@@ -34,7 +34,7 @@ public class BrandData : IBrandData
 
         try
         {
-            var brands = await DeserializeResponse<IEnumerable<BrandServiceResponse>>(response);
+            var brands = await DeserializeResponse<IEnumerable<BrandResponse>>(response);
             processingStatusResponse.Object = brands;
             return processingStatusResponse;
         }
@@ -47,9 +47,9 @@ public class BrandData : IBrandData
     }
 
     /// <inheritdoc />
-    public async Task<ProcessingStatusResponse<BrandServiceResponse>> GetBrandByIdAsync(int brandId)
+    public async Task<ProcessingStatusResponse<BrandResponse>> GetBrandByIdAsync(int brandId)
     {
-        var processingStatusResponse = new ProcessingStatusResponse<BrandServiceResponse>();
+        var processingStatusResponse = new ProcessingStatusResponse<BrandResponse>();
         
         var response = await _httpClientWrapper.GetAsync($"{AppConstants.BRAND_AND_PRODUCT_API_URL}/{brandId}");
         
@@ -62,7 +62,7 @@ public class BrandData : IBrandData
         
         try
         {
-            var brand = await DeserializeResponse<BrandServiceResponse>(response);
+            var brand = await DeserializeResponse<BrandResponse>(response);
             processingStatusResponse.Object = brand;
             return processingStatusResponse;
         }

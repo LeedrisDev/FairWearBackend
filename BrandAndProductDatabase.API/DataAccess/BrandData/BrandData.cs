@@ -6,7 +6,6 @@ using BrandAndProductDatabase.API.Models.Request;
 using BrandAndProductDatabase.API.Utils;
 using BrandAndProductDatabase.API.Utils.HttpClientWrapper;
 using Newtonsoft.Json;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace BrandAndProductDatabase.API.DataAccess.BrandData;
 
@@ -27,7 +26,7 @@ public class BrandData : IBrandData
         var processingStatusResponse = new ProcessingStatusResponse<BrandDto>();
         
         var data = new BrandRequest { Name = name };
-        var json = JsonSerializer.Serialize(data);
+        var json = JsonConvert.SerializeObject(data);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
         
         var response = await _httpClientWrapper.PostAsync(AppConstants.GoodOnYouScrapperUrl, content);

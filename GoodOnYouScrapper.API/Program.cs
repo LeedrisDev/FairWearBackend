@@ -42,10 +42,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(opt =>
+    app.UseSwaggerUI(options =>
     {
-        opt.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-        opt.RoutePrefix = string.Empty;
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "GoodOnYou Scrapper API");
+        options.RoutePrefix = "api/swagger";
     });
 }
 

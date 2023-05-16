@@ -16,6 +16,11 @@ public interface IBrandBusiness
     /// <param name="id">The Id of the Brand.</param>
     /// <returns>A <see cref="BrandDto"/>.</returns>
     Task<ProcessingStatusResponse<BrandDto>> GetBrandByIdAsync(int id);
+    
+    /// <summary>Gets a Brand by Name.</summary>
+    /// <param name="name">The Name of the Brand.</param>
+    /// <returns>A <see cref="BrandDto"/>.</returns>
+    Task<ProcessingStatusResponse<BrandDto>> GetBrandByNameAsync(string name);
 
     /// <summary>Creates a Brand.</summary>
     /// <param name="brandDto">The Brand to create.</param>

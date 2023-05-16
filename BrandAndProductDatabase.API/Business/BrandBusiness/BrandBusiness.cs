@@ -1,4 +1,6 @@
-﻿using BrandAndProductDatabase.API.DataAccess.IRepositories;
+﻿using System.Net;
+using BrandAndProductDatabase.API.DataAccess.BrandData;
+using BrandAndProductDatabase.API.DataAccess.IRepositories;
 using BrandAndProductDatabase.API.Models;
 using BrandAndProductDatabase.API.Models.Dto;
 
@@ -8,14 +10,17 @@ namespace BrandAndProductDatabase.API.Business.BrandBusiness;
 public class BrandBusiness : IBrandBusiness
 {
     private readonly IBrandRepository _brandRepository;
+    private readonly IBrandData _brandData;
 
     /// <summary>
     /// Constructor for BrandBusiness.
     /// </summary>
     /// <param name="brandRepository"></param>
-    public BrandBusiness(IBrandRepository brandRepository)
+    /// <param name="brandData"></param>
+    public BrandBusiness(IBrandRepository brandRepository, IBrandData brandData)
     {
         _brandRepository = brandRepository;
+        _brandData = brandData;
     }
 
     /// <inheritdoc/>
@@ -28,6 +33,21 @@ public class BrandBusiness : IBrandBusiness
     public async Task<ProcessingStatusResponse<BrandDto>> GetBrandByIdAsync(int id)
     {
         return await _brandRepository.GetByIdAsync(id);
+    }
+
+    /// <inheritdoc/>
+    public async Task<ProcessingStatusResponse<BrandDto>> GetBrandByNameAsync(string name)
+    {
+        var processingStatusResponse = await _brandRepository.GetBrandByNameAsync(name);
+        if (processingStatusResponse.Status == HttpStatusCode.OK) 
+            return processingStatusResponse;
+        
+        var brandDataResponse = await _brandData.GetBrandByNameAsync(name);
+        if (processingStatusResponse.Status != HttpStatusCode.OK) 
+            return brandDataResponse;
+            
+        await _brandRepository.AddAsync(processingStatusResponse.Object);
+        return brandDataResponse;
     }
 
     /// <inheritdoc/>

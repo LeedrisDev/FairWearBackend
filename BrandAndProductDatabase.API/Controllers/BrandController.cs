@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Net;
 using AutoMapper;
 using BrandAndProductDatabase.API.Business.BrandBusiness;
 using BrandAndProductDatabase.API.Models.Dto;
@@ -9,7 +10,7 @@ namespace BrandAndProductDatabase.API.Controllers;
 
 /// <summary>Controller for managing brands.</summary>
 [ApiController]
-[Route("api/brands")]
+[Route("api/")]
 [Produces("application/json")]
 public class BrandController : ControllerBase
 {
@@ -27,7 +28,7 @@ public class BrandController : ControllerBase
 
     /// <summary>Gets all the brands in the database.</summary>
     /// <returns>An HTTP response containing a collection of brands.</returns>
-    [HttpGet]
+    [HttpGet("/brands")]
     [ProducesResponseType(typeof(IEnumerable<BrandResponse>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetAllBrandsAsync()
     {
@@ -40,17 +41,33 @@ public class BrandController : ControllerBase
         };
     }
 
-    /// <summary>
-    /// Gets a single brand by its ID.
-    /// </summary>
+    /// <summary>Gets a single brand by its ID.</summary>
     /// <param name="id">The ID of the brand to get.</param>
     /// <returns>An HTTP response containing the brand.</returns>
-    [HttpGet("{id}")]
+    [HttpGet("/brand/{id:int}")]
     [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.OK)]
-    [ProducesResponseType((int)HttpStatusCode.NotFound)]
-    public async Task<IActionResult> GetBrandByIdAsync(int id)
+    [ProducesResponseType(typeof(ErrorResponse) ,(int)HttpStatusCode.NotFound)]
+    public async Task<IActionResult> GetBrandByIdAsync([Required] int id)
     {
         var brand = await _brandBusiness.GetBrandByIdAsync(id);
+
+        return brand.Status switch
+        {
+            HttpStatusCode.OK => Ok(_mapper.Map<BrandResponse>(brand.Object)),
+            HttpStatusCode.NotFound => NotFound(),
+            _ => StatusCode((int)brand.Status, brand.ErrorMessage)
+        };
+    }
+    
+    /// <summary>Gets a single brand by its name.</summary>
+    /// <param name="name">Name of the wanted brand</param>
+    /// <returns>An HTTP response containing the brand. If the brand exists.</returns>
+    [HttpPost("/brand")]
+    [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ErrorResponse) ,(int)HttpStatusCode.NotFound)]
+    public async Task<IActionResult> GetBrandByNameAsync([Required][FromBody] string name)
+    {
+        var brand = await _brandBusiness.GetBrandByNameAsync(name);
 
         return brand.Status switch
         {
@@ -63,10 +80,10 @@ public class BrandController : ControllerBase
     /// <summary>Creates a new brand in the database.</summary>
     /// <param name="brand">The brand containing the brand information.</param>
     /// <returns>An HTTP response containing the newly created brand.</returns>
-    [HttpPost]
+    [HttpPost("/brand")]
     [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.Created)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> CreateBrandAsync([FromBody] BrandResponse brand)
+    public async Task<IActionResult> CreateBrandAsync([Required][FromBody] BrandResponse brand)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -82,10 +99,10 @@ public class BrandController : ControllerBase
 
     /// <summary>Updates a brand in the database.</summary>
     /// <param name="brand">The updated brand data.</param>
-    [HttpPatch]
+    [HttpPatch("/brand")]
     [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-    public async Task<IActionResult> UpdateBrandAsync([FromBody] BrandResponse brand)
+    public async Task<IActionResult> UpdateBrandAsync([Required][FromBody] BrandResponse brand)
     {
         var updatedBrand = await _brandBusiness.UpdateBrandAsync(_mapper.Map<BrandDto>(brand));
 
@@ -104,10 +121,10 @@ public class BrandController : ControllerBase
     /// </returns>
     /// <response code="200">The brand was deleted successfully.</response>
     /// <response code="404">The brand with the given id was not found.</response>
-    [HttpDelete("{id}")]
+    [HttpDelete("/brand/{id:int}")]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
-    public async Task<IActionResult> DeleteBrandAsync(int id)
+    public async Task<IActionResult> DeleteBrandAsync([Required] int id)
     {
         var brand = await _brandBusiness.GetBrandByIdAsync(id);
 

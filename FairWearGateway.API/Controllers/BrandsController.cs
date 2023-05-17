@@ -8,7 +8,7 @@ namespace FairWearGateway.API.Controllers;
 
 /// <summary>Controller that handles the requests for the Brand model.</summary>
 [ApiController]
-[Route("/api/[controller]")]
+[Route("api/")]
 [Produces("application/json")]
 public class BrandsController : ControllerBase
 {
@@ -21,19 +21,22 @@ public class BrandsController : ControllerBase
     }
     
     /// <summary>Gets all brands.</summary>
-    [HttpGet]
+    [HttpGet("brands")]
     [ProducesResponseType(typeof(IEnumerable<BrandResponse>), (int) HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.InternalServerError)]
     public async Task<IActionResult> GetAllBrandsAsync()
     {
         var processingStatusResponse = await _brandBusiness.GetAllBrandsAsync();
         
-        return processingStatusResponse.Status != HttpStatusCode.OK ? StatusCode((int) processingStatusResponse.Status, processingStatusResponse.ErrorMessage) : Ok(processingStatusResponse.Object);
+        return processingStatusResponse.Status != HttpStatusCode.OK ? StatusCode((int) processingStatusResponse.Status, processingStatusResponse.MessageObject) : Ok(processingStatusResponse.Object);
     }
     
     /// <summary>Gets a brand by its id.</summary>
-    [HttpGet("{brandId:int}")]
-    public async Task<IActionResult> GetBrandByIdAsync(int brandId)
+    [HttpGet("brand/{brandId:int}")]
+    [ProducesResponseType(typeof(BrandResponse), (int) HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.InternalServerError)]
+    public async Task<IActionResult> GetBrandByIdAsync([Required] int brandId)
     {
         var processingStatusResponse = await _brandBusiness.GetBrandByIdAsync(brandId);
 

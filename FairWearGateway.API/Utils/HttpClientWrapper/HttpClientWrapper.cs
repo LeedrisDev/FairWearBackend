@@ -17,4 +17,10 @@ public class HttpClientWrapper: IHttpClientWrapper
     {
         return await _httpClient.GetAsync(requestUri);
     }
+    
+    /// <inheritdoc />
+    public async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
+    {
+        return await _httpClient.PostAsync(requestUri, content);
+    }
 }

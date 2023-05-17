@@ -1,13 +1,4 @@
-using BrandAndProductDatabase.API.Business.BrandBusiness;
-using BrandAndProductDatabase.API.Business.ProductBusiness;
 using BrandAndProductDatabase.API.Config;
-using BrandAndProductDatabase.API.DataAccess;
-using BrandAndProductDatabase.API.DataAccess.BrandData;
-using BrandAndProductDatabase.API.DataAccess.IRepositories;
-using BrandAndProductDatabase.API.DataAccess.Repositories;
-using BrandAndProductDatabase.API.Utils;
-using BrandAndProductDatabase.API.Utils.HttpClientWrapper;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,23 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
 SwaggerConfiguration.Configure(builder.Services);
-
-// Dependency Injection
-builder.Services.AddHttpClient<IHttpClientWrapper, HttpClientWrapper>();
-builder.Services.AddDbContext<BrandAndProductDbContext>();
-
-builder.Services.AddTransient<DbContext, BrandAndProductDbContext>();
-
-builder.Services.AddTransient<IBrandRepository, BrandRepository>();
-builder.Services.AddTransient<IProductRepository, ProductRepository>();
-
-builder.Services.AddTransient<IBrandData, BrandData>();
-
-builder.Services.AddTransient<IBrandBusiness, BrandBusiness>();
-builder.Services.AddTransient<IProductBusiness, ProductBusiness>();
-
-builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+DependencyInjectionConfiguration.Configure(builder.Services);
 
 var app = builder.Build();
 

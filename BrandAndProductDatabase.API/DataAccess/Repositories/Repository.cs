@@ -11,7 +11,7 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
     where TModel : class, IObjectWithId
     where TEntity : class, IObjectWithId
 {
-    private readonly DbContext _context;
+    private readonly BrandAndProductDbContext _context;
     /// <summary>The <see cref="DbSet{TEntity}"/> instance used to access the data store.</summary>
     protected readonly DbSet<TEntity> DbSet;
     /// <summary>
@@ -24,7 +24,7 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
     /// <param name="mapper">
     /// The <see cref="IMapper"/> instance used to map between <typeparamref name="TModel"/> and <typeparamref name="TEntity"/>.
     /// </param>
-    protected Repository(DbContext context, IMapper mapper)
+    protected Repository(BrandAndProductDbContext context, IMapper mapper)
     {
         _context = context;
         DbSet = context.Set<TEntity>();

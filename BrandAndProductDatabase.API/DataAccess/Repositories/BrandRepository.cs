@@ -12,7 +12,7 @@ namespace BrandAndProductDatabase.API.DataAccess.Repositories;
 public class BrandRepository : Repository<BrandDto, BrandEntity>, IBrandRepository
 {
     /// <summary>Constructor for BrandRepository</summary>
-    public BrandRepository(DbContext context, IMapper mapper) : base(context, mapper) { }
+    public BrandRepository(BrandAndProductDbContext context, IMapper mapper) : base(context, mapper) { }
 
     /// <inheritdoc/>
     public async Task<ProcessingStatusResponse<BrandDto>> GetBrandByNameAsync(string name)

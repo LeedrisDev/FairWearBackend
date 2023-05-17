@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BrandAndProductDatabase.API.DataAccess.IRepositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace BrandAndProductDatabase.API.DataAccess.Repositories;
 

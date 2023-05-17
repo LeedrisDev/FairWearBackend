@@ -1,8 +1,10 @@
-using System.Text.Json;
+using System.Text;
 using FairWearGateway.API.Models;
+using FairWearGateway.API.Models.Request;
 using FairWearGateway.API.Models.Response;
 using FairWearGateway.API.Utils;
 using FairWearGateway.API.Utils.HttpClientWrapper;
+using Newtonsoft.Json;
 
 namespace FairWearGateway.API.DataAccess.BrandData;
 
@@ -23,7 +25,7 @@ public class BrandData : IBrandData
     {
         var processingStatusResponse = new ProcessingStatusResponse<IEnumerable<BrandResponse>>();
         
-        var response = await _httpClientWrapper.GetAsync(AppConstants.BRAND_AND_PRODUCT_API_URL);
+        var response = await _httpClientWrapper.GetAsync($"{AppConstants.BrandAndProductApiUrl}/brands");
 
         if (!response.IsSuccessStatusCode)
         {
@@ -51,7 +53,7 @@ public class BrandData : IBrandData
     {
         var processingStatusResponse = new ProcessingStatusResponse<BrandResponse>();
         
-        var response = await _httpClientWrapper.GetAsync($"{AppConstants.BRAND_AND_PRODUCT_API_URL}/{brandId}");
+        var response = await _httpClientWrapper.GetAsync($"{AppConstants.BrandAndProductApiUrl}/brand/{brandId}");
         
         if (!response.IsSuccessStatusCode)
         {
@@ -73,11 +75,43 @@ public class BrandData : IBrandData
             return processingStatusResponse;
         }
     }
-    
+
+    /// <inheritdoc />
+    public async Task<ProcessingStatusResponse<BrandResponse>> GetBrandByNameAsync(string name)
+    {
+        var request = new BrandRequest { Name = name };
+        var json = JsonConvert.SerializeObject(request);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        
+        var processingStatusResponse = new ProcessingStatusResponse<BrandResponse>();
+        
+        var response = await _httpClientWrapper.PostAsync($"{AppConstants.BrandAndProductApiUrl}/brand/name", content);
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            processingStatusResponse.Status = response.StatusCode;
+            processingStatusResponse.ErrorMessage = response.ReasonPhrase ?? "Error while getting brand";
+            return processingStatusResponse;
+        }
+        
+        try
+        {
+            var brand = await DeserializeResponse<BrandResponse>(response);
+            processingStatusResponse.Object = brand;
+            return processingStatusResponse;
+        }
+        catch (ApplicationException e)
+        {
+            processingStatusResponse.Status = System.Net.HttpStatusCode.InternalServerError;
+            processingStatusResponse.ErrorMessage = e.Message;
+            return processingStatusResponse;
+        }
+    }
+
     private static async Task<T> DeserializeResponse<T>(HttpResponseMessage response)
     {
         var responseString = await response.Content.ReadAsStringAsync();
-        var deserializedObject = JsonSerializer.Deserialize<T>(responseString);
+        var deserializedObject = JsonConvert.DeserializeObject<T>(responseString);
 
         if (deserializedObject == null)
             throw new ApplicationException("Cannot deserialize response");

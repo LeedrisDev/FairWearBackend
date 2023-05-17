@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using FairWearGateway.API.Business.BrandBusiness;
+using FairWearGateway.API.Models.Request;
 using FairWearGateway.API.Models.Response;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,8 +44,26 @@ public class BrandsController : ControllerBase
         return processingStatusResponse.Status switch
         {
             HttpStatusCode.OK => Ok(processingStatusResponse.Object),
-            HttpStatusCode.NotFound => NotFound(processingStatusResponse.ErrorMessage),
-            _ => StatusCode((int)processingStatusResponse.Status, processingStatusResponse.ErrorMessage)
+            HttpStatusCode.NotFound => NotFound(processingStatusResponse.MessageObject),
+            _ => StatusCode((int)processingStatusResponse.Status, processingStatusResponse.MessageObject)
         };
     }
+    
+    /// <summary>Gets a brand by its name.</summary>
+    [HttpPost("brand/name")]
+    [ProducesResponseType(typeof(BrandResponse), (int) HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.InternalServerError)]
+    public async Task<IActionResult> GetBrandByNameAsync([Required] BrandRequest brandRequest)
+    {
+        var processingStatusResponse = await _brandBusiness.GetBrandByNameAsync(brandRequest.Name);
+
+        return processingStatusResponse.Status switch
+        {
+            HttpStatusCode.OK => Ok(processingStatusResponse.Object),
+            HttpStatusCode.NotFound => NotFound(processingStatusResponse.MessageObject),
+            _ => StatusCode((int)processingStatusResponse.Status, processingStatusResponse.MessageObject)
+        };
+    }
+    
 }

@@ -29,7 +29,7 @@ public class BrandController : ControllerBase
 
     /// <summary>Gets all the brands in the database.</summary>
     /// <returns>An HTTP response containing a collection of brands.</returns>
-    [HttpGet("/brands")]
+    [HttpGet("brands")]
     [ProducesResponseType(typeof(IEnumerable<BrandResponse>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetAllBrandsAsync()
     {
@@ -45,7 +45,7 @@ public class BrandController : ControllerBase
     /// <summary>Creates a new brand in the database.</summary> 
     /// <param name="brand">The brand containing the brand information.</param> 
     /// <returns>An HTTP response containing the newly created brand.</returns> 
-    [HttpPost("/brand")] 
+    [HttpPost("brand")] 
     [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.Created)] 
     [ProducesResponseType((int)HttpStatusCode.BadRequest)] 
     public async Task<IActionResult> CreateBrandAsync([Required][FromBody] BrandResponse brand) 
@@ -64,7 +64,7 @@ public class BrandController : ControllerBase
 
     /// <summary>Updates a brand in the database.</summary>
     /// <param name="brand">The updated brand data.</param>
-    [HttpPatch("/brand")]
+    [HttpPatch("brand")]
     [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> UpdateBrandAsync([Required][FromBody] BrandResponse brand)
@@ -82,7 +82,7 @@ public class BrandController : ControllerBase
     /// <summary>Gets a single brand by its ID.</summary>
     /// <param name="id">The ID of the brand to get.</param>
     /// <returns>An HTTP response containing the brand.</returns>
-    [HttpGet("/brand/{id:int}")]
+    [HttpGet("brand/{id:int}")]
     [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ErrorResponse) ,(int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> GetBrandByIdAsync([Required] int id)
@@ -100,7 +100,7 @@ public class BrandController : ControllerBase
     /// <summary>Gets a single brand by its name.</summary>
     /// <param name="brandRequest"> Object containing the name of the brand to get.</param>
     /// <returns>An HTTP response containing the brand. If the brand exists.</returns>
-    [HttpPost("/brand/name")]
+    [HttpPost("brand/name")]
     [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ErrorResponse) ,(int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> GetBrandByNameAsync([Required][FromBody] BrandRequest brandRequest)
@@ -122,7 +122,7 @@ public class BrandController : ControllerBase
     /// </returns>
     /// <response code="200">The brand was deleted successfully.</response>
     /// <response code="404">The brand with the given id was not found.</response>
-    [HttpDelete("/brand/{id:int}")]
+    [HttpDelete("brand/{id:int}")]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> DeleteBrandAsync([Required] int id)

@@ -125,7 +125,10 @@ jobs:
           dotnet restore ./GoodOnYouScrapper.API.Tests/GoodOnYouScrapper.API.Tests.csproj
           dotnet restore ./GoodOnYouScrapper.API/GoodOnYouScrapper.API.csproj  
           
-      - name: 'Test with code coverage'
+      - name: 'Run tests'
+        run: dotnet test ./GoodOnYouScrapper.API.Tests/GoodOnYouScrapper.API.Tests.csproj --configuration Release --no-restore --no-build --verbosity normal 
+          
+      - name: 'Code Coverage'
         run: ./Scripts/code-coverage-ci.sh -p GoodOnYouScrapper.API.Tests/GoodOnYouScrapper.API.Tests.csproj -t 79
       
       - uses: sarisia/actions-status-discord@v1

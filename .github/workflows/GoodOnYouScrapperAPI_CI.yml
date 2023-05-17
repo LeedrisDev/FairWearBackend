@@ -126,7 +126,7 @@ jobs:
           dotnet restore ./GoodOnYouScrapper.API/GoodOnYouScrapper.API.csproj  
           
       - name: 'Run tests'
-        run: dotnet test ./GoodOnYouScrapper.API.Tests/GoodOnYouScrapper.API.Tests.csproj --configuration Release --no-restore --no-build --verbosity normal 
+        run: dotnet test --no-restore  --verbosity normal GoodOnYouScrapper.API.Tests/GoodOnYouScrapper.API.Tests.csproj
           
       - name: 'Code Coverage'
         run: ./Scripts/code-coverage-ci.sh -p GoodOnYouScrapper.API.Tests/GoodOnYouScrapper.API.Tests.csproj -t 79

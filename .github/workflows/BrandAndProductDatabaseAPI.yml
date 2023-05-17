@@ -124,7 +124,7 @@ jobs:
           dotnet restore BrandAndProductDatabase.API/BrandAndProductDatabase.API.csproj 
           
       - name: 'Run tests'
-        run: dotnet test BrandAndProductDatabase.API.Tests/BrandAndProductDatabase.API.Tests.csproj --configuration Release --no-restore 
+        run: dotnet test --no-restore  --verbosity normal BrandAndProductDatabase.API.Tests/BrandAndProductDatabase.API.Tests.csproj
 
       - name: 'Code Coverage'
         run: ./Scripts/code-coverage-ci.sh -p BrandAndProductDatabase.API.Tests/BrandAndProductDatabase.API.Tests.csproj -t 75

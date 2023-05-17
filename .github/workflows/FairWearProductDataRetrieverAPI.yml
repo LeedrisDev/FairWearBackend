@@ -128,8 +128,8 @@ jobs:
           dotnet restore ./FairWearProductDataRetriever.API/FairWearProductDataRetriever.API.csproj
           
       - name: 'Run tests'
-        run: dotnet test ./FairWearProductDataRetriever.API.Tests/FairWearProductDataRetriever.API.Tests.csproj --configuration Release --no-restore --verbosity normal
-
+        run: dotnet test --no-restore  --verbosity normal FairWearProductDataRetriever.API.Tests/FairWearProductDataRetriever.API.Tests.csproj
+  
       - name: 'Code Coverage'
         run: ./Scripts/code-coverage-ci.sh -p FairWearProductDataRetriever.API.Tests/FairWearProductDataRetriever.API.Tests.csproj -t 77
 

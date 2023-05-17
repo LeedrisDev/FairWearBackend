@@ -62,7 +62,7 @@ jobs:
       - name: Install dependencies
         run: dotnet restore FairWearGateway.API/FairWearGateway.API.csproj
       - name: Build
-        run: dotnet build FairWearGateway.API/FairWearGateway.API.csproj --configuration Release --no-restore
+        run: dotnet build FairWearGateway.API/FairWearGateway.API.csproj --no-restore
   
 #  TEST JOB WILL COME HERE
   

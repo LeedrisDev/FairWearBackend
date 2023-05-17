@@ -27,4 +27,10 @@ public class BrandBusiness : IBrandBusiness
     {
         return await _brandData.GetBrandByIdAsync(brandId);
     }
+
+    /// <inheritdoc/>
+    public async Task<ProcessingStatusResponse<BrandResponse>> GetBrandByNameAsync(string brandName)
+    {
+        return await _brandData.GetBrandByNameAsync(brandName);
+    }
 }

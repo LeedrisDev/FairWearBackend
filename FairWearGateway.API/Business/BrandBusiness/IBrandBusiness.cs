@@ -18,4 +18,11 @@ public interface IBrandBusiness
     /// A <see cref="ProcessingStatusResponse{T}"/> instance, that contains the brand object if the call succeed
     /// </returns>
     Task<ProcessingStatusResponse<BrandResponse>> GetBrandByIdAsync(int brandId);
+    
+    /// <summary>Call the data access to get a brand by its name.</summary>
+    /// <param name="brandName">Name of the wanted brand</param>
+    /// <returns>
+    /// A <see cref="ProcessingStatusResponse{T}"/> instance, that contains the brand object if the call succeed.
+    /// </returns>
+    Task<ProcessingStatusResponse<BrandResponse>> GetBrandByNameAsync(string brandName);
 }

@@ -9,7 +9,7 @@ public interface IProductData
     /// <summary>
     /// Call the appropriate microservice to get a product by its name.
     /// </summary>
-    /// <param name="name">Name of the product to get.</param>
+    /// <param name="barcode">Name of the product to get.</param>
     /// <returns> A <see cref="ProcessingStatusResponse{T}"/> containing the product. If the product exists.</returns>
     Task<ProcessingStatusResponse<ProductDto>> GetProductByBarcode(string barcode);
 }

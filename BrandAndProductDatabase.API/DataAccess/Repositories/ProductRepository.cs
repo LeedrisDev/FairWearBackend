@@ -19,7 +19,7 @@ public class ProductRepository : Repository<ProductDto, ProductEntity>, IProduct
     {
         var processingStatusResponse = new ProcessingStatusResponse<ProductDto>();
         
-        var entity = await _context.Products.FirstOrDefaultAsync(p => p.UpcCode == barcode);
+        var entity = await Context.Products.FirstOrDefaultAsync(p => p.UpcCode == barcode);
         
         if (entity == null)
         {

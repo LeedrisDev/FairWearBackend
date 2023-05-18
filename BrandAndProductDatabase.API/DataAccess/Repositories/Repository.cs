@@ -11,7 +11,8 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
     where TModel : class, IObjectWithId
     where TEntity : class, IObjectWithId
 {
-    protected readonly BrandAndProductDbContext _context;
+    /// <summary>The <see cref="DbContext"/> instance used to access the data store.</summary>
+    protected readonly BrandAndProductDbContext Context;
     /// <summary>The <see cref="DbSet{TEntity}"/> instance used to access the data store.</summary>
     protected readonly DbSet<TEntity> DbSet;
     /// <summary>
@@ -26,7 +27,7 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
     /// </param>
     protected Repository(BrandAndProductDbContext context, IMapper mapper)
     {
-        _context = context;
+        Context = context;
         DbSet = context.Set<TEntity>();
         Mapper = mapper;
     }
@@ -66,7 +67,7 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
 
         var entityToAdd = Mapper.Map<TEntity>(entity);
         await DbSet.AddAsync(entityToAdd);
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
 
         processingStatusResponse.Object = Mapper.Map<TModel>(entityToAdd);
         return processingStatusResponse;
@@ -87,7 +88,7 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
 
         Mapper.Map(entity, entityToUpdate);
         DbSet.Update(entityToUpdate);
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
 
         processingStatusResponse.Object = Mapper.Map<TModel>(entityToUpdate);
         return processingStatusResponse;
@@ -108,7 +109,7 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
 
         DbSet.Remove(entityToDelete);
         processingStatusResponse.Object = Mapper.Map<TModel>(entityToDelete);
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
 
         return processingStatusResponse;
     }

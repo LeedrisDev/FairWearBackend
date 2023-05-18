@@ -1,27 +1,27 @@
 ﻿using System.Net;
 using BrandAndProductDatabase.API.DataAccess.IRepositories;
+using BrandAndProductDatabase.API.DataAccess.ProductData;
 using BrandAndProductDatabase.API.Models;
 using BrandAndProductDatabase.API.Models.Dto;
 
 namespace BrandAndProductDatabase.API.Business.ProductBusiness;
 
-/// <summary>
-/// Logic for product repository operations
-/// </summary>
+/// <summary>Logic for product repository operations</summary>
 public class ProductBusiness : IProductBusiness
 {
     private readonly IBrandRepository _brandRepository;
     private readonly IProductRepository _productRepository;
+    private readonly IProductData _productData;
 
-    /// <summary>
-    /// Constructor for ProductBusiness.
-    /// </summary>
+    /// <summary>Constructor for ProductBusiness.</summary>
     /// <param name="productRepository"></param>
     /// <param name="brandRepository"></param>
-    public ProductBusiness(IProductRepository productRepository, IBrandRepository brandRepository)
+    /// <param name="productData"></param>
+    public ProductBusiness(IProductRepository productRepository, IBrandRepository brandRepository, IProductData productData)
     {
         _productRepository = productRepository;
         _brandRepository = brandRepository;
+        _productData = productData;
     }
 
     /// <inheritdoc/>
@@ -34,6 +34,18 @@ public class ProductBusiness : IProductBusiness
     public async Task<ProcessingStatusResponse<ProductDto>> GetProductByIdAsync(int id)
     {
         return await _productRepository.GetByIdAsync(id);
+    }
+
+    /// <inheritdoc/>
+    public async Task<ProcessingStatusResponse<ProductDto>> GetProductByBarcodeAsync(string barcode)
+    {
+        var repositoryResponse = await _productRepository.GetProductByBarcodeAsync(barcode);
+        if (repositoryResponse.Status == HttpStatusCode.OK)
+            return repositoryResponse;
+        
+        var productDataResponse = await _productData.GetProductByBarcode(barcode);
+        var entityFromDatabase = await _productRepository.AddAsync(productDataResponse.Object);
+        return entityFromDatabase;
     }
 
     /// <inheritdoc/>

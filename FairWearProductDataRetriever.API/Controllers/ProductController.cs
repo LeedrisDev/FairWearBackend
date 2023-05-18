@@ -45,7 +45,7 @@ public class ProductController: ControllerBase
         };
     }
     
-    private bool IsBarcodeValid(string barcode)
+    private static bool IsBarcodeValid(string barcode)
     {
         // return barcode.Length == 13;
         var regex = new Regex("^[0-9]+$");

@@ -11,7 +11,7 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
     where TModel : class, IObjectWithId
     where TEntity : class, IObjectWithId
 {
-    private readonly BrandAndProductDbContext _context;
+    protected readonly BrandAndProductDbContext _context;
     /// <summary>The <see cref="DbSet{TEntity}"/> instance used to access the data store.</summary>
     protected readonly DbSet<TEntity> DbSet;
     /// <summary>

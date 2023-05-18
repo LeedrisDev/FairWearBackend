@@ -3,6 +3,7 @@ using BrandAndProductDatabase.API.Business.ProductBusiness;
 using BrandAndProductDatabase.API.DataAccess;
 using BrandAndProductDatabase.API.DataAccess.BrandData;
 using BrandAndProductDatabase.API.DataAccess.IRepositories;
+using BrandAndProductDatabase.API.DataAccess.ProductData;
 using BrandAndProductDatabase.API.DataAccess.Repositories;
 using BrandAndProductDatabase.API.Utils;
 using BrandAndProductDatabase.API.Utils.HttpClientWrapper;
@@ -32,6 +33,7 @@ public static class DependencyInjectionConfiguration
         services.AddTransient<IBrandRepository, BrandRepository>();
         services.AddTransient<IProductRepository, ProductRepository>();
         services.AddTransient<IBrandData, BrandData>();
+        services.AddTransient<IProductData, ProductData>();
         
         // Business
         services.AddTransient<IBrandBusiness, BrandBusiness>();

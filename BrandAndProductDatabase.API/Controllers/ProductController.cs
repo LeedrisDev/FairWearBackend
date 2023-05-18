@@ -10,7 +10,7 @@ namespace BrandAndProductDatabase.API.Controllers;
 
 /// <summary>Controller for managing products.</summary>
 [ApiController]
-[Route("api/products")]
+[Route("api/")]
 [Produces("application/json")]
 public class ProductController : ControllerBase
 {
@@ -28,7 +28,7 @@ public class ProductController : ControllerBase
 
     /// <summary>Gets all the Products in the database.</summary>
     /// <returns>An HTTP response containing a collection of Products.</returns>
-    [HttpGet]
+    [HttpGet("/products")]
     [ProducesResponseType(typeof(IEnumerable<ProductResponse>), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
     public async Task<IActionResult> GetAllProductsAsync()
@@ -42,29 +42,10 @@ public class ProductController : ControllerBase
         };
     }
 
-    /// <summary>Gets a single Product by its ID.</summary>
-    /// <param name="id">The ID of the Product to get.</param>
-    /// <returns>An HTTP response containing the Product.</returns>
-    [HttpGet("{id}")]
-    [ProducesResponseType(typeof(ProductResponse), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
-    public async Task<IActionResult> GetProductByIdAsync([Required] int id)
-    {
-        var product = await _productBusiness.GetProductByIdAsync(id);
-
-        return product.Status switch
-        {
-            HttpStatusCode.OK => Ok(_mapper.Map<ProductResponse>(product.Object)),
-            HttpStatusCode.NotFound => NotFound(product.MessageObject),
-            _ => StatusCode((int)product.Status, product.MessageObject)
-        };
-    }
-
     /// <summary>Creates a new Product in the database.</summary>
     /// <param name="product">The Product containing the Product information.</param>
     /// <returns>An HTTP response containing the newly created Product.</returns>
-    [HttpPost]
+    [HttpPost("/product")]
     [ProducesResponseType(typeof(ProductResponse), (int)HttpStatusCode.Created)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> CreateProductAsync([Required][FromBody] ProductResponse product)
@@ -80,7 +61,7 @@ public class ProductController : ControllerBase
 
     /// <summary>Updates a Product in the database.</summary>
     /// <param name="product">The updated Product data.</param>
-    [HttpPatch]
+    [HttpPatch("/product")]
     [ProducesResponseType(typeof(ProductResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
@@ -104,7 +85,7 @@ public class ProductController : ControllerBase
     /// </returns>
     /// <response code="200">The Product was deleted successfully.</response>
     /// <response code="404">The Product with the given id was not found.</response>
-    [HttpDelete("{id}")]
+    [HttpDelete("/product/{id:int}")]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> DeleteProductAsync([Required] int id)
@@ -116,5 +97,43 @@ public class ProductController : ControllerBase
 
         var deleteProduct = await _productBusiness.DeleteProductAsync(id);
         return StatusCode((int)deleteProduct.Status, deleteProduct.MessageObject);
+    }
+    
+    /// <summary>Gets a single Product by its ID.</summary>
+    /// <param name="id">The ID of the Product to get.</param>
+    /// <returns>An HTTP response containing the Product.</returns>
+    [HttpGet("/product/{id:int}")]
+    [ProducesResponseType(typeof(ProductResponse), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
+    public async Task<IActionResult> GetProductByIdAsync([Required] int id)
+    {
+        var product = await _productBusiness.GetProductByIdAsync(id);
+
+        return product.Status switch
+        {
+            HttpStatusCode.OK => Ok(_mapper.Map<ProductResponse>(product.Object)),
+            HttpStatusCode.NotFound => NotFound(product.MessageObject),
+            _ => StatusCode((int)product.Status, product.MessageObject)
+        };
+    }
+    
+    /// <summary>Gets a single Product by its barcode.</summary>
+    /// <param name="barcode">The barcode of the Product to get.</param>
+    /// <returns>An HTTP response containing the Product.</returns>
+    [HttpGet("/product/barcode/{barcode}")]
+    [ProducesResponseType(typeof(ProductResponse), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
+    public async Task<IActionResult> GetProductByBarcodeAsync([Required] string barcode)
+    {
+        var product = await _productBusiness.GetProductByBarcodeAsync(barcode);
+
+        return product.Status switch
+        {
+            HttpStatusCode.OK => Ok(_mapper.Map<ProductResponse>(product.Object)),
+            HttpStatusCode.NotFound => NotFound(product.MessageObject),
+            _ => StatusCode((int)product.Status, product.MessageObject)
+        };
     }
 }

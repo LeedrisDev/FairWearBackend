@@ -61,7 +61,7 @@ public class ProductBusiness : IProductBusiness
     private static string GetProductBrandName(HtmlDocument doc)
     { 
         var nodes = doc.DocumentNode
-            .SelectSingleNode(AppConstants.XPathInformationTable)
+            .SelectSingleNode(AppConstants.PathInformationTable)
             .ChildNodes
             .Where(node => node.Name == "tr").ToList();
 
@@ -81,7 +81,7 @@ public class ProductBusiness : IProductBusiness
     private static string GetProductName(HtmlDocument doc)
     {
         var node = doc.DocumentNode
-            .SelectSingleNode(AppConstants.XPathProductName);
+            .SelectSingleNode(AppConstants.PathProductName);
 
         return node.InnerText;
     }
@@ -93,7 +93,7 @@ public class ProductBusiness : IProductBusiness
     private static string GetProductCategory(HtmlDocument doc)
     {
         var nodes = doc.DocumentNode
-            .SelectSingleNode(AppConstants.XPathInformationTable)
+            .SelectSingleNode(AppConstants.PathInformationTable)
             .ChildNodes
             .Where(node => node.Name == "tr").ToList();
 
@@ -112,7 +112,7 @@ public class ProductBusiness : IProductBusiness
     /// <returns></returns>
     private static bool CheckForNotFound(HtmlDocument doc)
     {
-        var node = doc.DocumentNode.SelectSingleNode(AppConstants.XPathNotFound);
+        var node = doc.DocumentNode.SelectSingleNode(AppConstants.PathNotFound);
 
         if (node == null)
         {

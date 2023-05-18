@@ -1,8 +1,4 @@
-using HtmlAgilityPack;
-using FairWearProductDataRetriever.API.Business.ProductBusiness;
 using FairWearProductDataRetriever.API.Config;
-using FairWearProductDataRetriever.API.DataAccess.ProductData;
-using FairWearProductDataRetriever.API.Utils.HttpClientWrapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,10 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 SwaggerConfiguration.Configure(builder.Services);
 
 // Dependency Injection
-builder.Services.AddHttpClient<IHttpClientWrapper, HttpClientWrapper>();
-builder.Services.AddTransient<HtmlDocument>();
-builder.Services.AddTransient<IProductData, ProductData>();
-builder.Services.AddTransient<IProductBusiness, ProductBusiness>();
+DependencyInjectionConfiguration.Configure(builder.Services);
 
 var app = builder.Build();
 

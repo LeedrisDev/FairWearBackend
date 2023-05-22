@@ -37,9 +37,50 @@ public class ProductController : ControllerBase
 
         return productList.Status switch
         {
-            HttpStatusCode.OK => Ok(productList.Object.Select(product => _mapper.Map<ProductResponse>(product)).ToList()),
+            HttpStatusCode.OK => Ok(
+                productList.Object.Select(product => _mapper.Map<ProductResponse>(product)).ToList()),
             _ => StatusCode((int)productList.Status, productList.MessageObject)
         };
+    }
+
+    /// <summary>Gets all the Products in the database.</summary>
+    /// <returns>An HTTP response containing a collection of Products.</returns>
+    [HttpGet("/products")]
+    [ProducesResponseType(typeof(ProductScanResponse), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> GetByUpcAsync([FromQuery] string Upc)
+    {
+        var productScores = new ProductScoreResponse
+        {
+            moral = 2,
+            animal = 2,
+            environemental = 3
+        };
+
+        var productComposition = new List<ProductCompositionResponse>
+        {
+            new()
+            {
+                percentage = 77,
+                component = "viscose"
+            },
+            new()
+            {
+                percentage = 23,
+                component = "polyamide"
+            }
+        };
+        var product = new ProductScanResponse()
+        {
+            name = "White shirt",
+            country = "Bangladesh",
+            image = "image de ta maman",
+            globalScore = (productScores.animal + productScores.environemental + productScores.moral) / 3,
+            composition = productComposition.ToArray(),
+            alternatives = new string[0],
+            brand = "Bershka"
+        };
+
+        return Ok(product);
     }
 
     /// <summary>Creates a new Product in the database.</summary>
@@ -48,7 +89,7 @@ public class ProductController : ControllerBase
     [HttpPost("/product")]
     [ProducesResponseType(typeof(ProductResponse), (int)HttpStatusCode.Created)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> CreateProductAsync([Required][FromBody] ProductResponse product)
+    public async Task<IActionResult> CreateProductAsync([Required] [FromBody] ProductResponse product)
     {
         var createdProduct = await _productBusiness.CreateProductAsync(_mapper.Map<ProductDto>(product));
 
@@ -66,7 +107,7 @@ public class ProductController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
-    public async Task<IActionResult> UpdateProductAsync([Required][FromBody] ProductResponse product)
+    public async Task<IActionResult> UpdateProductAsync([Required] [FromBody] ProductResponse product)
     {
         var updatedProduct = await _productBusiness.UpdateProductAsync(_mapper.Map<ProductDto>(product));
 
@@ -98,7 +139,7 @@ public class ProductController : ControllerBase
         var deleteProduct = await _productBusiness.DeleteProductAsync(id);
         return StatusCode((int)deleteProduct.Status, deleteProduct.MessageObject);
     }
-    
+
     /// <summary>Gets a single Product by its ID.</summary>
     /// <param name="id">The ID of the Product to get.</param>
     /// <returns>An HTTP response containing the Product.</returns>
@@ -117,7 +158,7 @@ public class ProductController : ControllerBase
             _ => StatusCode((int)product.Status, product.MessageObject)
         };
     }
-    
+
     /// <summary>Gets a single Product by its barcode.</summary>
     /// <param name="barcode">The barcode of the Product to get.</param>
     /// <returns>An HTTP response containing the Product.</returns>

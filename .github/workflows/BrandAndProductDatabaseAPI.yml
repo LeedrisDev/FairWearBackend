@@ -122,8 +122,11 @@ jobs:
         run: |
           dotnet restore BrandAndProductDatabase.API.Tests/BrandAndProductDatabase.API.Tests.csproj
           dotnet restore BrandAndProductDatabase.API/BrandAndProductDatabase.API.csproj 
+          
+      - name: 'Run tests'
+        run: dotnet test --no-restore  --verbosity normal BrandAndProductDatabase.API.Tests/BrandAndProductDatabase.API.Tests.csproj
 
-      - name: 'Test with code coverage'
+      - name: 'Code Coverage'
         run: ./Scripts/code-coverage-ci.sh -p BrandAndProductDatabase.API.Tests/BrandAndProductDatabase.API.Tests.csproj -t 75
 
       - uses: sarisia/actions-status-discord@v1

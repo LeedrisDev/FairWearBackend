@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using BrandAndProductDatabase.API.DataAccess.BrandData;
 using BrandAndProductDatabase.API.DataAccess.IRepositories;
 using BrandAndProductDatabase.API.Models;
 using BrandAndProductDatabase.API.Models.Dto;
@@ -11,12 +12,14 @@ namespace BrandAndProductDatabase.API.Tests.Business.BrandBusiness;
 public class BrandBusinessTester
 {
     private API.Business.BrandBusiness.BrandBusiness _brandBusiness;
-    private Mock<IBrandRepository> _brandRepositoryMock;
+    private Mock<IBrandRepository> _brandRepositoryMock = null!;
+    private Mock<IBrandData> _brandDataMock = null!;
 
     [TestInitialize]
     public void Initialize()
     {
         _brandRepositoryMock = new Mock<IBrandRepository>();
+        _brandDataMock = new Mock<IBrandData>();
     }
 
     [TestMethod]
@@ -52,12 +55,12 @@ public class BrandBusinessTester
         };
 
         _brandRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(
-            new ProcessingStatusResponse<IEnumerable<BrandDto>>()
+            new ProcessingStatusResponse<IEnumerable<BrandDto>>
             {
                 Object = brandsInDb
             });
 
-        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object);
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _brandDataMock.Object);
 
         // Act
         var result = await brandBusiness.GetAllBrandsAsync();
@@ -86,12 +89,12 @@ public class BrandBusinessTester
         };
 
         _brandRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(
-            new ProcessingStatusResponse<BrandDto>()
+            new ProcessingStatusResponse<BrandDto>
             {
                 Object = brandInDb
             });
 
-        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object);
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _brandDataMock.Object);
 
         // Act
         var result = await brandBusiness.GetBrandByIdAsync(brandInDb.Id);
@@ -114,7 +117,7 @@ public class BrandBusinessTester
                 Status = HttpStatusCode.NotFound
             });
 
-        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object);
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _brandDataMock.Object);
 
         // Act
         var result = await brandBusiness.GetBrandByIdAsync(brandId);
@@ -159,7 +162,7 @@ public class BrandBusinessTester
                 Object = createdBrandInDb
             });
 
-        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object);
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _brandDataMock.Object);
 
         // Act
         var result = await brandBusiness.CreateBrandAsync(brandDto);
@@ -212,7 +215,7 @@ public class BrandBusinessTester
                 Object = brandToUpdate
             });
 
-        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object);
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _brandDataMock.Object);
 
         // Act
         var result = await brandBusiness.UpdateBrandAsync(brandToUpdate);
@@ -246,7 +249,7 @@ public class BrandBusinessTester
                 Status = HttpStatusCode.NotFound,
             });
 
-        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object);
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _brandDataMock.Object);
 
         // Act
         var result = await brandBusiness.UpdateBrandAsync(brandToUpdate);
@@ -279,7 +282,7 @@ public class BrandBusinessTester
                 Object = brandInDb
             });
 
-        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object);
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _brandDataMock.Object);
 
         // Act
         var result = await brandBusiness.DeleteBrandAsync(1);
@@ -301,7 +304,7 @@ public class BrandBusinessTester
                 Status = HttpStatusCode.NotFound,
             });
 
-        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object);
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandRepositoryMock.Object, _brandDataMock.Object);
 
         // Act
         var result = await brandBusiness.DeleteBrandAsync(1);

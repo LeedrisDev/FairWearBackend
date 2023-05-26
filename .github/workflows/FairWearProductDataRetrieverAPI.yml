@@ -126,8 +126,11 @@ jobs:
         run: |
           dotnet restore ./FairWearProductDataRetriever.API.Tests/FairWearProductDataRetriever.API.Tests.csproj
           dotnet restore ./FairWearProductDataRetriever.API/FairWearProductDataRetriever.API.csproj
-
-      - name: 'Test with code coverage'
+          
+      - name: 'Run tests'
+        run: dotnet test --no-restore  --verbosity normal FairWearProductDataRetriever.API.Tests/FairWearProductDataRetriever.API.Tests.csproj
+  
+      - name: 'Code Coverage'
         run: ./Scripts/code-coverage-ci.sh -p FairWearProductDataRetriever.API.Tests/FairWearProductDataRetriever.API.Tests.csproj -t 77
 
       - uses: sarisia/actions-status-discord@v1

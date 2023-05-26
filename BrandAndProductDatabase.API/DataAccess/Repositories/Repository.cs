@@ -11,20 +11,25 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
     where TModel : class, IObjectWithId
     where TEntity : class, IObjectWithId
 {
-    private readonly DbContext _context;
-    private readonly DbSet<TEntity> _dbSet;
-    private readonly IMapper _mapper;
+    /// <summary>The <see cref="DbContext"/> instance used to access the data store.</summary>
+    protected readonly BrandAndProductDbContext Context;
+    /// <summary>The <see cref="DbSet{TEntity}"/> instance used to access the data store.</summary>
+    protected readonly DbSet<TEntity> DbSet;
+    /// <summary>
+    /// The <see cref="IMapper"/> instance used to map between <typeparamref name="TModel"/> and <typeparamref name="TEntity"/>.
+    /// </summary>
+    protected readonly IMapper Mapper;
 
     /// <summary>Initializes a new instance of the <see cref="Repository{TModel,TEntity}"/> class.</summary>
     /// <param name="context">The <see cref="DbContext"/> instance used to access the data store.</param>
     /// <param name="mapper">
     /// The <see cref="IMapper"/> instance used to map between <typeparamref name="TModel"/> and <typeparamref name="TEntity"/>.
     /// </param>
-    protected Repository(DbContext context, IMapper mapper)
+    protected Repository(BrandAndProductDbContext context, IMapper mapper)
     {
-        _context = context;
-        _dbSet = context.Set<TEntity>();
-        _mapper = mapper;
+        Context = context;
+        DbSet = context.Set<TEntity>();
+        Mapper = mapper;
     }
 
     /// <inheritdoc/>
@@ -32,8 +37,8 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
     {
         var processingStatusResponse = new ProcessingStatusResponse<IEnumerable<TModel>>();
 
-        var entities = await _dbSet.ToListAsync();
-        processingStatusResponse.Object = _mapper.Map<IEnumerable<TModel>>(entities);
+        var entities = await DbSet.ToListAsync();
+        processingStatusResponse.Object = Mapper.Map<IEnumerable<TModel>>(entities);
 
         return processingStatusResponse;
     }
@@ -43,7 +48,7 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
     {
         var processingStatusResponse = new ProcessingStatusResponse<TModel>();
 
-        var entity = await _dbSet.FindAsync(id);
+        var entity = await DbSet.FindAsync(id);
         if (entity == null)
         {
             processingStatusResponse.Status = HttpStatusCode.NotFound;
@@ -51,7 +56,7 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
             return processingStatusResponse;
         }
 
-        processingStatusResponse.Object = _mapper.Map<TModel>(entity);
+        processingStatusResponse.Object = Mapper.Map<TModel>(entity);
         return processingStatusResponse;
     }
 
@@ -60,11 +65,11 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
     {
         var processingStatusResponse = new ProcessingStatusResponse<TModel>();
 
-        var entityToAdd = _mapper.Map<TEntity>(entity);
-        await _dbSet.AddAsync(entityToAdd);
-        await _context.SaveChangesAsync();
+        var entityToAdd = Mapper.Map<TEntity>(entity);
+        await DbSet.AddAsync(entityToAdd);
+        await Context.SaveChangesAsync();
 
-        processingStatusResponse.Object = _mapper.Map<TModel>(entityToAdd);
+        processingStatusResponse.Object = Mapper.Map<TModel>(entityToAdd);
         return processingStatusResponse;
     }
 
@@ -72,7 +77,7 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
     public async Task<ProcessingStatusResponse<TModel>> UpdateAsync(TModel entity)
     {
         var processingStatusResponse = new ProcessingStatusResponse<TModel>();
-        var entityToUpdate = await _dbSet.FindAsync(entity.Id);
+        var entityToUpdate = await DbSet.FindAsync(entity.Id);
 
         if (entityToUpdate == null)
         {
@@ -81,11 +86,11 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
             return processingStatusResponse;
         }
 
-        _mapper.Map(entity, entityToUpdate);
-        _dbSet.Update(entityToUpdate);
-        await _context.SaveChangesAsync();
+        Mapper.Map(entity, entityToUpdate);
+        DbSet.Update(entityToUpdate);
+        await Context.SaveChangesAsync();
 
-        processingStatusResponse.Object = _mapper.Map<TModel>(entityToUpdate);
+        processingStatusResponse.Object = Mapper.Map<TModel>(entityToUpdate);
         return processingStatusResponse;
     }
 
@@ -93,7 +98,7 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
     public async Task<ProcessingStatusResponse<TModel>> DeleteAsync(int id)
     {
         var processingStatusResponse = new ProcessingStatusResponse<TModel>();
-        var entityToDelete = await _dbSet.FindAsync(id);
+        var entityToDelete = await DbSet.FindAsync(id);
 
         if (entityToDelete == null)
         {
@@ -102,9 +107,9 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
             return processingStatusResponse;
         }
 
-        _dbSet.Remove(entityToDelete);
-        processingStatusResponse.Object = _mapper.Map<TModel>(entityToDelete);
-        await _context.SaveChangesAsync();
+        DbSet.Remove(entityToDelete);
+        processingStatusResponse.Object = Mapper.Map<TModel>(entityToDelete);
+        await Context.SaveChangesAsync();
 
         return processingStatusResponse;
     }

@@ -39,15 +39,12 @@ builder.Services.AddTransient<IBrandBusiness, BrandBusiness>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(opt =>
-    {
-        opt.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-        opt.RoutePrefix = string.Empty;
-    });
-}
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "GoodOnYou Scrapper API");
+    options.RoutePrefix = "api/swagger";
+});
 
 app.UseHttpsRedirection();
 

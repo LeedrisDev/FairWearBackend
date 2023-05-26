@@ -3,6 +3,8 @@ using FluentAssertions;
 using GoodOnYouScrapper.API.Business.BrandBusiness;
 using GoodOnYouScrapper.API.Controllers;
 using GoodOnYouScrapper.API.Models;
+using GoodOnYouScrapper.API.Models.Request;
+using GoodOnYouScrapper.API.Models.Response;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -24,10 +26,10 @@ public class BrandControllerTester
     public async Task GetBrand_Returns_Ok_With_Brand_Information()
     {
         // Arrange
-        var brandName = "NorthFace";
-        var brandInformation = new BrandModel
+        var brand = new BrandRequest { Name = "NorthFace"};
+        var brandInformation = new BrandResponse
         {
-            Name = brandName,
+            Name = brand.Name,
             Country = "United States",
             EnvironmentRating = 5,
             PeopleRating = 5,
@@ -44,14 +46,14 @@ public class BrandControllerTester
             }
         };
 
-        _brandBusinessMock.Setup(x => x.GetBrandInformation(brandName)).ReturnsAsync(new ProcessingStatusResponse<BrandModel>
+        _brandBusinessMock.Setup(x => x.GetBrandInformation(brand.Name)).ReturnsAsync(new ProcessingStatusResponse<BrandResponse>
         {
             Status = HttpStatusCode.OK,
             Object = brandInformation
         });
 
         
-        var response = await _brandController.GetBrand(brandName);
+        var response = await _brandController.GetBrand(brand);
         
         response.Should().BeOfType<OkObjectResult>();
         
@@ -63,15 +65,15 @@ public class BrandControllerTester
     [TestMethod]
     public async Task GetBrand_Returns_NotFound_When_Brand_Is_Not_Found()
     {
-        var brandName = "NorthFace";
+        var brand = new BrandRequest { Name = "NorthFace"};
     
-        _brandBusinessMock.Setup(x => x.GetBrandInformation(brandName)).ReturnsAsync(new ProcessingStatusResponse<BrandModel>
+        _brandBusinessMock.Setup(x => x.GetBrandInformation(brand.Name)).ReturnsAsync(new ProcessingStatusResponse<BrandResponse>
         {
             Status = HttpStatusCode.NotFound,
             ErrorMessage = "Brand not found"
         });
     
-        var response = await _brandController.GetBrand(brandName);
+        var response = await _brandController.GetBrand(brand);
     
         response.Should().BeOfType<NotFoundObjectResult>();
         
@@ -83,15 +85,15 @@ public class BrandControllerTester
     [TestMethod]
     public async Task GetBrand_Returns_InternalServerError_When_An_Error_Occurs()
     {
-        var brandName = "NorthFace";
+        var brand = new BrandRequest { Name = "NorthFace"};
     
-        _brandBusinessMock.Setup(x => x.GetBrandInformation(brandName)).ReturnsAsync(new ProcessingStatusResponse<BrandModel>
+        _brandBusinessMock.Setup(x => x.GetBrandInformation(brand.Name)).ReturnsAsync(new ProcessingStatusResponse<BrandResponse>
         {
             Status = HttpStatusCode.InternalServerError,
             ErrorMessage = "An error occurred while retrieving brand formation."
         });
     
-        var response = await _brandController.GetBrand(brandName);
+        var response = await _brandController.GetBrand(brand);
     
         var result = response as ObjectResult;
     

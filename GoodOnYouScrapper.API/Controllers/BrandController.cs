@@ -1,7 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using GoodOnYouScrapper.API.Business.BrandBusiness;
-using GoodOnYouScrapper.API.Models;
+using GoodOnYouScrapper.API.Models.Request;
+using GoodOnYouScrapper.API.Models.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoodOnYouScrapper.API.Controllers;
@@ -23,14 +24,14 @@ public class BrandController: ControllerBase
     }
 
     /// <summary>Get brand information</summary>
-    /// <param name="brandName"> Brand name to get information from</param>
+    /// <param name="brandRequest">Brand object containing the brand name</param>
     /// <returns> Brand information </returns>
-    [HttpGet("{brandName}")]
-    [ProducesResponseType(typeof(BrandModel), (int)HttpStatusCode.OK)]
+    [HttpPost]
+    [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-    public async Task<IActionResult> GetBrand([Required] string brandName)
+    public async Task<IActionResult> GetBrand([Required][FromBody] BrandRequest brandRequest)
     {
-        var brandInformation = await _brandBusiness.GetBrandInformation(brandName);
+        var brandInformation = await _brandBusiness.GetBrandInformation(brandRequest.Name);
 
         return brandInformation.Status switch
         {

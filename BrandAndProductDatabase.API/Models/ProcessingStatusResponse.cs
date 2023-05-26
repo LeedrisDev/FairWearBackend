@@ -12,7 +12,6 @@ public class ProcessingStatusResponse<T>
     
     /// <summary><see cref="ErrorResponse"/> to be returned</summary>
     public ErrorResponse MessageObject { get; } = new();
-
     
     /// <summary>Message to be displayed if something went wrong</summary>
     public string ErrorMessage

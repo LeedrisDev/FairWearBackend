@@ -7,26 +7,17 @@ namespace BrandAndProductDatabase.API.DataAccess;
 public class BrandAndProductDbContext : DbContext
 {
     /// <inheritdoc />
-    public BrandAndProductDbContext()
-    {
-    }
+    public BrandAndProductDbContext() { }
 
     /// <inheritdoc />
-    public BrandAndProductDbContext(DbContextOptions<BrandAndProductDbContext> options) : base(options)
-    {
-    }
+    public BrandAndProductDbContext(DbContextOptions<BrandAndProductDbContext> options) : base(options) { }
 
     /// <summary>The Brands table.</summary>
     public virtual DbSet<BrandEntity> Brands { get; set; } = null!;
 
     /// <summary>The Products table.</summary>
     public virtual DbSet<ProductEntity> Products { get; set; } = null!;
-
-    /// <inheritdoc />
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql(
-            "User ID=fairwear;Password=fairwear;Host=localhost;Port=5432;Database=fairwear_brand_and_product_database;");
-
+    
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

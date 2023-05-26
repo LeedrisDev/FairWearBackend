@@ -16,6 +16,11 @@ public interface IProductBusiness
     /// <param name="id">The Id of the Product.</param>
     /// <returns>A <see cref="ProductDto"/>.</returns>
     Task<ProcessingStatusResponse<ProductDto>> GetProductByIdAsync(int id);
+    
+    /// <summary>Gets a Product by barcode.</summary>
+    /// <param name="barcode">The barcode of the Product.</param>
+    /// <returns>A <see cref="ProductDto"/>.</returns>
+    Task<ProcessingStatusResponse<ProductDto>> GetProductByBarcodeAsync(string barcode);
 
     /// <summary>Creates a Product.</summary>
     /// <param name="productDto">The Product to create.</param>

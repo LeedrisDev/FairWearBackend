@@ -1,8 +1,11 @@
-namespace GoodOnYouScrapper.API.Models;
+namespace GoodOnYouScrapper.API.Models.Response;
 
 /// <summary>Model for the brand</summary>
-public class BrandModel
+public class BrandResponse
 {
+     /// <summary>Id of the brand (to avoid mapping in calling service)</summary>
+     public int Id { get; set; } = 0;
+     
      /// <summary>Name of the brand</summary>
      public string? Name { get; set; }
      

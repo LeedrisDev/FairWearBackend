@@ -1,6 +1,23 @@
 services:
   
-#  traefik:
+  reverse-proxy:
+    container_name: traefik
+    restart: unless-stopped
+    depends_on: 
+      - reverse-proxy-https-helper
+    image: traefik:v2.10
+    ports:
+      - "80:80"
+      - "443:443"
+    labels:
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./TraefikConfig/TraefikFiles/traefik.yml:/etc/traefik/traefik.yml
+      - ./TraefikConfig/TraefikFiles/tls.yml:/etc/traefik/tls.yml
+      - ./TraefikConfig/Certs:/etc/ssl/traefik
+    networks:
+      - traefik-network
   
   brand_and_product_db:
     container_name: brand_and_product_db
@@ -17,9 +34,14 @@ services:
         context: .
         dockerfile: FairWearGateway.API/Dockerfile
     restart: on-failure
-    ports:
-      - "8080:80"  
-    
+    labels:
+      - "traefik.http.routers.gateway_api.rule=Host(`gateway.traefik.me`)"
+      - "traefik.http.routers.gateway_api-tls.tls.domains[0].main=gateway.traefik.me"
+      - "traefik.http.routers.gateway_api-tls.tls.domains[0].sans=gateway-*.traefik.me"
+      - "traefik.http.routers.gateway_api.tls=true"
+    networks: 
+      - traefik-network
+  
   brand_and_product_api:
     container_name: brand_and_product_api
     build:
@@ -46,3 +68,16 @@ services:
     restart: on-failure
     ports:
       - "8083:80"
+  
+  reverse-proxy-https-helper:
+    container_name: reverse_proxy_https_helper
+    image: alpine:3.17
+    command: sh -c "cd /etc/ssl/traefik
+      && wget traefik.me/cert.pem -O cert.pem
+      && wget traefik.me/privkey.pem -O privkey.pem"
+    volumes:
+      - ./TraefikConfig/Certs:/etc/ssl/traefik
+
+networks:
+    traefik-network:
+      driver: bridge

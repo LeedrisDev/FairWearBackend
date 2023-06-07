@@ -3,39 +3,36 @@ using FluentAssertions;
 
 namespace BrandAndProductDatabase.API.Tests.Models.Response;
 
+[TestClass]
 public class ProductCompositionResponseTester
 {
-    [TestClass]
-    public class ProductCompositionResponseTests
+    [TestMethod]
+    public void ProductCompositionResponse_SetAndGetPercentage_ShouldSetAndReturnPercentage()
     {
-        [TestMethod]
-        public void ProductCompositionResponse_SetAndGetPercentage_ShouldSetAndReturnPercentage()
-        {
-            // Arrange
-            var productCompositionResponse = new ProductCompositionResponse();
-            var percentage = 75;
+        // Arrange
+        var productCompositionResponse = new ProductCompositionResponse();
+        var percentage = 75;
 
-            // Act
-            productCompositionResponse.Percentage = percentage;
-            var result = productCompositionResponse.Percentage;
+        // Act
+        productCompositionResponse.Percentage = percentage;
+        var result = productCompositionResponse.Percentage;
 
-            // Assert
-            result.Should().Be(percentage);
-        }
+        // Assert
+        result.Should().Be(percentage);
+    }
 
-        [TestMethod]
-        public void ProductCompositionResponse_SetAndGetComponent_ShouldSetAndReturnComponent()
-        {
-            // Arrange
-            var productCompositionResponse = new ProductCompositionResponse();
-            var component = "Cotton";
+    [TestMethod]
+    public void ProductCompositionResponse_SetAndGetComponent_ShouldSetAndReturnComponent()
+    {
+        // Arrange
+        var productCompositionResponse = new ProductCompositionResponse();
+        var component = "Cotton";
 
-            // Act
-            productCompositionResponse.Component = component;
-            var result = productCompositionResponse.Component;
+        // Act
+        productCompositionResponse.Component = component;
+        var result = productCompositionResponse.Component;
 
-            // Assert
-            result.Should().Be(component);
-        }
+        // Assert
+        result.Should().Be(component);
     }
 }

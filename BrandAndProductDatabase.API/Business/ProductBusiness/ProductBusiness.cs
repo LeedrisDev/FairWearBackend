@@ -36,6 +36,67 @@ public class ProductBusiness : IProductBusiness
         return await _productRepository.GetByIdAsync(id);
     }
 
+    /// <inheritdoc />
+    public async Task<ProcessingStatusResponse<ProductInformationDto>> GetProductByUpcAsync(string upcCode)
+    {
+        var productDataResponse = await _productRepository.GetAllAsync();
+        
+        if (productDataResponse.Status != HttpStatusCode.OK)
+        {
+            return new ProcessingStatusResponse<ProductInformationDto>()
+            {
+                Status = productDataResponse.Status,
+                ErrorMessage = productDataResponse.ErrorMessage
+            };
+        }
+        
+        var product = productDataResponse.Object.FirstOrDefault(x => x.UpcCode == upcCode);
+        
+        if (product == null)
+        {
+            return new ProcessingStatusResponse<ProductInformationDto>()
+            {
+                Status = HttpStatusCode.NotFound,
+                ErrorMessage = $"Product with UpcCode {upcCode} does not exist."
+            };
+        }
+        
+        var brandDataResponse = await _brandRepository.GetByIdAsync(product.BrandId);
+        
+        if (brandDataResponse.Status != HttpStatusCode.OK)
+        {
+            return new ProcessingStatusResponse<ProductInformationDto>()
+            {
+                Status = brandDataResponse.Status,
+                ErrorMessage = brandDataResponse.ErrorMessage
+            };
+        }
+        
+        var brand = brandDataResponse.Object;
+
+        var productScore = new ProductScoreDto()
+        {
+            Moral = brand.PeopleRating,
+            Animal = brand.AnimalRating,
+            Environmental = brand.EnvironmentRating
+        };
+
+        return new ProcessingStatusResponse<ProductInformationDto>()
+        {
+            Object = new ProductInformationDto()
+            {
+                Name = product.Name,
+                Country = brand.Country,
+                Image = "No image found",
+                Scores = productScore,
+                GlobalScore = (productScore.Moral + productScore.Animal + productScore.Environmental) / 3,
+                Composition = Array.Empty<ProductCompositionDto>(),
+                Alternatives = Array.Empty<string>(),
+                Brand = brand.Name
+            }
+        };
+    }
+
     /// <inheritdoc/>
     public async Task<ProcessingStatusResponse<ProductDto>> GetProductByBarcodeAsync(string barcode)
     {

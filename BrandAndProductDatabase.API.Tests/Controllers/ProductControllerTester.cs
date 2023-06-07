@@ -147,7 +147,7 @@ public class ProductControllerTester
         var result = await controller.GetProductByIdAsync(1);
 
         // Assert
-        result.Should().BeOfType<NotFoundResult>();
+        result.Should().BeOfType<NotFoundObjectResult>();
         var notFoundResult = result as NotFoundResult;
         notFoundResult?.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
     }
@@ -300,7 +300,10 @@ public class ProductControllerTester
         result.Should().BeOfType<NotFoundObjectResult>();
         var notFoundResult = (NotFoundObjectResult)result;
         notFoundResult.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
-        notFoundResult.Value.Should().Be($"Product with ID {product.Id} not found.");
+        notFoundResult.Value.Should().BeEquivalentTo(new ErrorResponse()
+        {
+            Message = ($"Product with ID {product.Id} not found.")
+        });
     }
 
     [TestMethod]

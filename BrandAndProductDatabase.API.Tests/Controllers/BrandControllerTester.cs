@@ -185,7 +185,7 @@ public class BrandControllerTester
         var result = await controller.GetBrandByIdAsync(1);
 
         // Assert
-        result.Should().BeOfType<NotFoundResult>();
+        result.Should().BeOfType<NotFoundObjectResult>();
         var notFoundResult = result as NotFoundResult;
         notFoundResult?.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
     }
@@ -394,7 +394,7 @@ public class BrandControllerTester
             new ProcessingStatusResponse<BrandDto>()
             {
                 Status = HttpStatusCode.NotFound,
-                ErrorMessage = $"Brand with ID {brand.Id} not found."
+                MessageObject = { Message = $"Brand with ID {brand.Id} not found."}
             });
 
         var controller = new BrandController(_brandBusinessMock.Object, _mapper);
@@ -406,7 +406,10 @@ public class BrandControllerTester
         result.Should().BeOfType<NotFoundObjectResult>();
         var notFoundResult = (NotFoundObjectResult)result;
         notFoundResult.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
-        notFoundResult.Value.Should().Be($"Brand with ID {brand.Id} not found.");
+        notFoundResult.Value.Should().BeEquivalentTo(new ErrorResponse()
+        {
+            Message = ($"Brand with ID {brand.Id} not found.")
+        });
     }
 
     [TestMethod]

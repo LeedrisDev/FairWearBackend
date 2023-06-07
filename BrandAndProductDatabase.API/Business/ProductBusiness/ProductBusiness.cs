@@ -40,7 +40,7 @@ public class ProductBusiness : IProductBusiness
     public async Task<ProcessingStatusResponse<ProductInformationDto>> GetProductByUpcAsync(string upcCode)
     {
         var productDataResponse = await _productRepository.GetAllAsync();
-        
+
         if (productDataResponse.Status != HttpStatusCode.OK)
         {
             return new ProcessingStatusResponse<ProductInformationDto>()
@@ -49,9 +49,9 @@ public class ProductBusiness : IProductBusiness
                 ErrorMessage = productDataResponse.ErrorMessage
             };
         }
-        
+
         var product = productDataResponse.Object.FirstOrDefault(x => x.UpcCode == upcCode);
-        
+
         if (product == null)
         {
             return new ProcessingStatusResponse<ProductInformationDto>()
@@ -60,9 +60,9 @@ public class ProductBusiness : IProductBusiness
                 ErrorMessage = $"Product with UpcCode {upcCode} does not exist."
             };
         }
-        
+
         var brandDataResponse = await _brandRepository.GetByIdAsync(product.BrandId);
-        
+
         if (brandDataResponse.Status != HttpStatusCode.OK)
         {
             return new ProcessingStatusResponse<ProductInformationDto>()
@@ -71,7 +71,7 @@ public class ProductBusiness : IProductBusiness
                 ErrorMessage = brandDataResponse.ErrorMessage
             };
         }
-        
+
         var brand = brandDataResponse.Object;
 
         var productScore = new ProductScoreDto()
@@ -95,18 +95,6 @@ public class ProductBusiness : IProductBusiness
                 Brand = brand.Name
             }
         };
-    }
-
-    /// <inheritdoc/>
-    public async Task<ProcessingStatusResponse<ProductDto>> GetProductByBarcodeAsync(string barcode)
-    {
-        var repositoryResponse = await _productRepository.GetProductByBarcodeAsync(barcode);
-        if (repositoryResponse.Status == HttpStatusCode.OK)
-            return repositoryResponse;
-        
-        var productDataResponse = await _productData.GetProductByBarcode(barcode);
-        var entityFromDatabase = await _productRepository.AddAsync(productDataResponse.Object);
-        return entityFromDatabase;
     }
 
     /// <inheritdoc/>

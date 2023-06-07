@@ -410,4 +410,89 @@ public class ProductBusinessTester
         result.ErrorMessage.Should().Be($"Brand with Id {nonExistentBrandId} does not exist.");
         _productRepositoryMock.Verify(repo => repo.AddAsync(productDto), Times.Never);
     }
+
+    [TestMethod]
+    public async Task GetProductByUpcAsync_ReturnsOkResponse()
+    {
+        // Arrange
+        var upcCode = "123456789";
+        
+        var productsInDb = new List<ProductDto>
+        {
+            new()
+            {
+                Id = 1,
+                Name = "Product 1",
+                UpcCode = "123456789",
+                Category = "Category A",
+                Ranges = new List<string> { "Range A" },
+                BrandId = 1
+            },
+            new()
+            {
+                Id = 2,
+                Name = "Product 2",
+                UpcCode = "987654321",
+                Category = "Category B",
+                Ranges = new List<string> { "Range B" },
+                BrandId = 2
+            }
+        };
+
+        var brandInDb = new BrandDto()
+        {
+            Id = 1,
+            Name = "Brand 1",
+            Country = "Country 1",
+            EnvironmentRating = 2,
+            PeopleRating = 2,
+            AnimalRating = 2,
+            RatingDescription = "Rating 2",
+            Categories = new List<string> { "Category 2" },
+            Ranges = new List<string> { "Range 2" }
+        };
+        
+        var productScores = new ProductScoreDto
+        {
+            Moral = 2,
+            Animal = 2,
+            Environmental = 2
+        };
+
+        var productInformation = new ProductInformationDto()
+        {
+            Name = "Product 1",
+            Country = "Country 1",
+            Image = "No image found",
+            GlobalScore = (productScores.Animal + productScores.Environmental + productScores.Moral) / 3,
+            Scores = productScores,
+            Composition = Array.Empty<ProductCompositionDto>(),
+            Alternatives = Array.Empty<string>(),
+            Brand = "Brand 1"
+        };
+        
+        _productRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(
+            new ProcessingStatusResponse<IEnumerable<ProductDto>>()
+            {
+                Object = productsInDb
+            });
+
+        _brandRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(
+            new ProcessingStatusResponse<BrandDto>()
+            {
+                Object = brandInDb
+            });
+
+        var productBusiness =
+            new API.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object,
+                _brandRepositoryMock.Object, _productDataMock.Object);
+
+        // Act
+        var result = await productBusiness.GetProductByUpcAsync(upcCode);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Status.Should().Be(HttpStatusCode.OK);
+        result.Object.Should().BeEquivalentTo(productInformation);
+    }
 }

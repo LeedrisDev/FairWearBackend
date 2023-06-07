@@ -92,6 +92,33 @@ public class ProductControllerTester
         okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
         okResult.Value.Should().BeEquivalentTo(expected);
     }
+    
+    [TestMethod]
+    public async Task GetAllProductsAsync_Error_ReturnsStatusCodeResult()
+    {
+        // Arrange
+        _productBusinessMock.Setup(x => x.GetAllProductsAsync()).ReturnsAsync(
+            new ProcessingStatusResponse<IEnumerable<ProductDto>>()
+            {
+                Status = HttpStatusCode.InternalServerError,
+                MessageObject = { Message = "An error occurred."}
+            }
+        );
+        
+        var controller = new ProductController(_productBusinessMock.Object, _mapper);
+
+        // Act
+        var result = await controller.GetAllProductsAsync();
+        
+        // Assert
+        result.Should().BeOfType<ObjectResult>();
+        var objectResult = (ObjectResult)result;
+        objectResult.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+        objectResult.Value.Should().BeEquivalentTo(new ErrorResponse()
+        {
+            Message = "An error occurred."
+        });
+    }
 
     [TestMethod]
     public async Task GetProductByIdAsync_ReturnsOk_WhenProductExists()
@@ -150,6 +177,35 @@ public class ProductControllerTester
         result.Should().BeOfType<NotFoundObjectResult>();
         var notFoundResult = result as NotFoundResult;
         notFoundResult?.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+    }
+    
+    [TestMethod]
+    public async Task GetProductByIdAsync_Error_ReturnsStatusCodeResult()
+    {
+        // Arrange
+        const int id = 2;
+
+        _productBusinessMock.Setup(x => x.GetProductByIdAsync(It.IsAny<int>())).ReturnsAsync(
+            new ProcessingStatusResponse<ProductDto>()
+            {
+                Status = HttpStatusCode.InternalServerError,
+                MessageObject = { Message = "An error occurred."}
+            }
+        );
+        
+        var controller = new ProductController(_productBusinessMock.Object, _mapper);
+
+        // Act
+        var result = await controller.GetProductByIdAsync(id);
+        
+        // Assert
+        result.Should().BeOfType<ObjectResult>();
+        var objectResult = (ObjectResult)result;
+        objectResult.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+        objectResult.Value.Should().BeEquivalentTo(new ErrorResponse()
+        {
+            Message = "An error occurred."
+        });
     }
 
     [TestMethod]
@@ -305,6 +361,43 @@ public class ProductControllerTester
             Message = ($"Product with ID {product.Id} not found.")
         });
     }
+    
+    [TestMethod]
+    public async Task UpdateProductAsync_Error_ReturnsStatusCodeResult()
+    {
+        // Arrange
+        var product = new ProductResponse
+        {
+            Id = 1,
+            Name = "Product 1",
+            UpcCode = "123456789",
+            Category = "Category A",
+            Ranges = new List<string> { "Range A" },
+            BrandId = 1,
+        };
+
+        _productBusinessMock.Setup(x => x.UpdateProductAsync(It.IsAny<ProductDto>())).ReturnsAsync(
+            new ProcessingStatusResponse<ProductDto>()
+            {
+                Status = HttpStatusCode.InternalServerError,
+                MessageObject = { Message = "An error occurred."}
+            }
+        );
+        
+        var controller = new ProductController(_productBusinessMock.Object, _mapper);
+
+        // Act
+        var result = await controller.UpdateProductAsync(product);
+        
+        // Assert
+        result.Should().BeOfType<ObjectResult>();
+        var objectResult = (ObjectResult)result;
+        objectResult.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+        objectResult.Value.Should().BeEquivalentTo(new ErrorResponse()
+        {
+            Message = "An error occurred."
+        });
+    }
 
     [TestMethod]
     public async Task DeleteProductAsync_ReturnsNoContentResult_WhenProductIsDeleted()
@@ -366,5 +459,119 @@ public class ProductControllerTester
         result.Should().BeOfType<NotFoundResult>();
         var notFoundResult = (NotFoundResult)result;
         notFoundResult.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+    }
+
+    [TestMethod]
+    public async Task GetProductByUpcAsync_ReturnsOkResults()
+    {
+        // Arrange
+        const String upcCode = "12345";
+        
+        var productScores = new ProductScoreDto
+        {
+            Moral = 2,
+            Animal = 2,
+            Environmental = 3
+        };
+
+        var productComposition = new List<ProductCompositionDto>
+        {
+            new()
+            {
+                Percentage = 77,
+                Component = "viscose"
+            },
+            new()
+            {
+                Percentage = 23,
+                Component = "polyamide"
+            }
+        };
+        var productInformation = new ProductInformationDto()
+        {
+            Name = "White shirt",
+            Country = "Bangladesh",
+            Image = "image de ta maman",
+            GlobalScore = (productScores.Animal + productScores.Environmental + productScores.Moral) / 3,
+            Composition = productComposition.ToArray(),
+            Alternatives = Array.Empty<string>(),
+            Brand = "Bershka"
+        };
+
+        _productBusinessMock.Setup(x => x.GetProductByUpcAsync(It.IsAny<String>())).ReturnsAsync(
+            new ProcessingStatusResponse<ProductInformationDto>()
+            {
+                Object = productInformation
+            }
+        );
+        
+        var controller = new ProductController(_productBusinessMock.Object, _mapper);
+
+        // Act
+        var result = await controller.GetProductByUpcAsync(upcCode);
+        
+        // Assert
+        result.Should().BeOfType<OkObjectResult>();
+        var okResult = (OkObjectResult)result;
+        okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        okResult.Value.Should().BeEquivalentTo(_mapper.Map<ProductInformationResponse>(productInformation));
+    }
+    
+    [TestMethod]
+    public async Task GetProductByUpcAsync_NonExistingProduct_ReturnsNotFoundResult()
+    {
+        // Arrange
+        const String upcCode = "12345";
+
+        _productBusinessMock.Setup(x => x.GetProductByUpcAsync(It.IsAny<String>())).ReturnsAsync(
+            new ProcessingStatusResponse<ProductInformationDto>()
+            {
+                Status = HttpStatusCode.NotFound,
+                MessageObject = { Message = "Item not found"}
+            }
+        );
+        
+        var controller = new ProductController(_productBusinessMock.Object, _mapper);
+
+        // Act
+        var result = await controller.GetProductByUpcAsync(upcCode);
+        
+        // Assert
+        result.Should().BeOfType<NotFoundObjectResult>();
+        var notFoundResult = (NotFoundObjectResult)result;
+        notFoundResult.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+        notFoundResult.Value.Should().BeEquivalentTo(new ErrorResponse()
+        {
+            Message = "Item not found"
+        });
+    }
+    
+    [TestMethod]
+    public async Task GetProductByUpcAsync_Error_ReturnsStatusCodeResult()
+    {
+        // Arrange
+        const String upcCode = "12345";
+
+        _productBusinessMock.Setup(x => x.GetProductByUpcAsync(It.IsAny<String>())).ReturnsAsync(
+            new ProcessingStatusResponse<ProductInformationDto>()
+            {
+                Status = HttpStatusCode.InternalServerError,
+                MessageObject = { Message = "An error occurred."}
+            }
+        );
+        
+        var controller = new ProductController(_productBusinessMock.Object, _mapper);
+
+        // Act
+        var result = await controller.GetProductByUpcAsync(upcCode);
+        
+        // Assert
+        result.Should().BeOfType<ObjectResult>();
+        var objectResult = (ObjectResult)result;
+        objectResult.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+        objectResult.Value.Should().BeEquivalentTo(new ErrorResponse()
+        {
+            Message = "An error occurred."
+        });
     }
 }

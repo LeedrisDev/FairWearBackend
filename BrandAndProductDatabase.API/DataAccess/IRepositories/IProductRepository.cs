@@ -4,7 +4,7 @@ using BrandAndProductDatabase.API.Models.Dto;
 namespace BrandAndProductDatabase.API.DataAccess.IRepositories;
 
 /// <summary>Interface for ProductRepository</summary>
-public interface IProductRepository : IRepository<Models.Dto.ProductDto>
+public interface IProductRepository : IRepository<ProductDto>
 {
     /// <summary>Get a product by barcode.</summary>
     /// <param name="barcode"> The barcode of the product to get.</param>

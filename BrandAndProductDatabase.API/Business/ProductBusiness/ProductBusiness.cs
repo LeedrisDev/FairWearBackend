@@ -11,17 +11,15 @@ public class ProductBusiness : IProductBusiness
 {
     private readonly IBrandRepository _brandRepository;
     private readonly IProductRepository _productRepository;
-    private readonly IProductData _productData;
 
     /// <summary>Constructor for ProductBusiness.</summary>
     /// <param name="productRepository"></param>
     /// <param name="brandRepository"></param>
     /// <param name="productData"></param>
-    public ProductBusiness(IProductRepository productRepository, IBrandRepository brandRepository, IProductData productData)
+    public ProductBusiness(IProductRepository productRepository, IBrandRepository brandRepository)
     {
         _productRepository = productRepository;
         _brandRepository = brandRepository;
-        _productData = productData;
     }
 
     /// <inheritdoc/>

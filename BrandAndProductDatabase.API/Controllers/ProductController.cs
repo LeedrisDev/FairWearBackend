@@ -47,7 +47,7 @@ public class ProductController : ControllerBase
     /// <returns>An HTTP response containing a product information.</returns>
     [HttpGet("product/fake")]
     [ProducesResponseType(typeof(ProductInformationResponse), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> GetByUpcFakeAsync([FromQuery] string Upc)
+    public IActionResult GetByUpcFakeAsync([FromQuery] string upc)
     {
         var productScores = new ProductScoreResponse
         {
@@ -143,7 +143,7 @@ public class ProductController : ControllerBase
     /// <summary>Gets a Product information by its upc code.</summary>
     /// <param name="upc">The barcode of the Product to get.</param>
     /// <returns>An HTTP response containing the Product information.</returns>
-    [HttpGet("product/{upc:int}")]
+    [HttpGet("product/{upc}")]
     [ProducesResponseType(typeof(ProductInformationResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]

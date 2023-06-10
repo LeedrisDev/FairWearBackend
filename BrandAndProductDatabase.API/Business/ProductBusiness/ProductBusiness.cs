@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using BrandAndProductDatabase.API.DataAccess.IRepositories;
-using BrandAndProductDatabase.API.DataAccess.ProductData;
 using BrandAndProductDatabase.API.Models;
 using BrandAndProductDatabase.API.Models.Dto;
 
@@ -15,7 +14,6 @@ public class ProductBusiness : IProductBusiness
     /// <summary>Constructor for ProductBusiness.</summary>
     /// <param name="productRepository"></param>
     /// <param name="brandRepository"></param>
-    /// <param name="productData"></param>
     public ProductBusiness(IProductRepository productRepository, IBrandRepository brandRepository)
     {
         _productRepository = productRepository;

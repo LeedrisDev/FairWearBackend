@@ -82,4 +82,29 @@ public class BrandDataTester
         // Assert
         result.Status.Should().Be(HttpStatusCode.InternalServerError);
     }
+
+    [TestMethod]
+    public async Task GetBrandByNameAsync_ReturnsErrorForDeserializationFailure()
+    {
+        // Arrange
+        var expectedName = "ExampleBrand";
+
+        var expectedResponse = new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.OK,
+        };
+
+        _httpClientWrapperMock
+            .Setup(mock => mock.PostAsync(
+                AppConstants.GoodOnYouScrapperUrl,
+                It.IsAny<StringContent>()))
+            .ReturnsAsync(expectedResponse);
+
+        // Act
+        var result = await _brandData.GetBrandByNameAsync(expectedName);
+
+        // Assert
+        result.Status.Should().Be(HttpStatusCode.InternalServerError);
+        result.ErrorMessage.Should().Be("Error deserializing brand.");
+    }
 }

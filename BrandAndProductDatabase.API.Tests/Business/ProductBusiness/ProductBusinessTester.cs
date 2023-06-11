@@ -498,6 +498,107 @@ public class ProductBusinessTester
     }
 
     [TestMethod]
+    public async Task GetProductByUpcAsync_WithProductNotInDb_ReturnsOkResponse()
+    {
+        // Arrange
+        var upcCode = "123";
+
+        var productsInDb = new List<ProductDto>();
+
+        var productRetrieverDto = new ProductRetrieverDto()
+        {
+            UpcCode = upcCode,
+            BrandName = "NorthFace",
+            Name = "Etip Hardface Glove",
+            Category = "Gloves",
+            Ranges = new List<string>()
+            {
+                "Men", "Women"
+            }
+        };
+
+        var brand = new BrandDto()
+        {
+            Id = 1,
+            Name = "NorthFace",
+            Country = "USA",
+            EnvironmentRating = 1,
+            PeopleRating = 1,
+            AnimalRating = 1,
+            RatingDescription = "Rating",
+            Categories = new List<string> { "Category" },
+            Ranges = new List<string> { "Range" }
+        };
+
+        var product = new ProductDto()
+        {
+            Id = 1,
+            Name = "Etip Hardface Glove",
+            UpcCode = upcCode,
+            Category = "Category",
+            Ranges = new List<string> { "Range" },
+            BrandId = 1
+        };
+
+        var productScores = new ProductScoreDto
+        {
+            Moral = 1,
+            Animal = 1,
+            Environmental = 1
+        };
+
+        var productInformation = new ProductInformationDto()
+        {
+            Name = "Etip Hardface Glove",
+            Country = "USA",
+            Image = "No image found",
+            GlobalScore = (productScores.Animal + productScores.Environmental + productScores.Moral) / 3,
+            Scores = productScores,
+            Composition = Array.Empty<ProductCompositionDto>(),
+            Alternatives = Array.Empty<string>(),
+            Brand = "NorthFace"
+        };
+
+        _productRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(
+            new ProcessingStatusResponse<IEnumerable<ProductDto>>()
+            {
+                Object = new List<ProductDto>()
+            }
+        );
+
+        _productDataMock.Setup(x => x.GetProductByUpc(It.IsAny<string>())).ReturnsAsync(
+            new ProcessingStatusResponse<ProductRetrieverDto>()
+            {
+                Status = HttpStatusCode.OK,
+                Object = productRetrieverDto
+            });
+
+        _brandRepositoryMock.Setup(x => x.GetBrandByNameAsync(It.IsAny<string>())).ReturnsAsync(
+            new ProcessingStatusResponse<BrandDto>()
+            {
+                Object = brand
+            });
+
+        _productRepositoryMock.Setup(x => x.AddAsync(It.IsAny<ProductDto>())).ReturnsAsync(
+            new ProcessingStatusResponse<ProductDto>()
+            {
+                Object = product
+            });
+
+        var productBusiness =
+            new API.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object,
+                _brandRepositoryMock.Object, _productDataMock.Object);
+
+        // Act
+        var result = await productBusiness.GetProductByUpcAsync(upcCode);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Status.Should().Be(HttpStatusCode.OK);
+        result.Object.Should().BeEquivalentTo(productInformation);
+    }
+
+    [TestMethod]
     public async Task GetProductByUpcAsync_ReturnsNotFound()
     {
         // Arrange
@@ -529,6 +630,12 @@ public class ProductBusinessTester
             new ProcessingStatusResponse<IEnumerable<ProductDto>>()
             {
                 Object = productsInDb
+            });
+
+        _productDataMock.Setup(x => x.GetProductByUpc(It.IsAny<string>())).ReturnsAsync(
+            new ProcessingStatusResponse<ProductRetrieverDto>()
+            {
+                Status = HttpStatusCode.NotFound
             });
 
         var productBusiness =

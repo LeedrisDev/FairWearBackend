@@ -99,4 +99,26 @@ public class ProductData
         result.Status.Should().Be(HttpStatusCode.ServiceUnavailable);
         result.ErrorMessage.Should().Be($"Barcode service is unavailable.");
     }
+
+    [TestMethod]
+    public async Task GetProductByUpc_ReturnsInternalServerErrorForDeserializationFailure()
+    {
+        // Arrange
+        var expectedUpc = "123456789";
+        var expectedResponse = new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.OK,
+        };
+
+        _httpClientWrapperMock
+            .Setup(mock => mock.GetAsync($"{AppConstants.ProductDataRetrieverUrl}/{expectedUpc}"))
+            .ReturnsAsync(expectedResponse);
+
+        // Act
+        var result = await _productData.GetProductByUpc(expectedUpc);
+
+        // Assert
+        result.Status.Should().Be(HttpStatusCode.InternalServerError);
+        result.ErrorMessage.Should().Be($"Could not deserialize product.");
+    }
 }

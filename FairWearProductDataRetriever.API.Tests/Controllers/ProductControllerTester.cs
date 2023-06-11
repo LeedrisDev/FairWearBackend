@@ -4,7 +4,6 @@ using FairWearProductDataRetriever.API.Controllers;
 using FairWearProductDataRetriever.API.Models;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 using Moq;
 
 namespace ProductDataRetriever.Test.Controllers;
@@ -38,52 +37,57 @@ public class ProductControllerTester
             }
         };
 
-        _productBusinessMock.Setup(x => x.GetProductInformation(barcode)).ReturnsAsync(new ProcessingStatusResponse<ProductModel>
-        {
-            Status = HttpStatusCode.OK,
-            Object = productInformation
-        });
+        _productBusinessMock.Setup(x => x.GetProductInformation(barcode)).ReturnsAsync(
+            new ProcessingStatusResponse<ProductModel>
+            {
+                Status = HttpStatusCode.OK,
+                Object = productInformation
+            });
 
-        
+
         var response = await _productController.GetProduct(barcode);
-        
+
         response.Should().BeOfType<OkObjectResult>();
-        
+
         var result = response as OkObjectResult;
         result?.Value.Should().BeSameAs(productInformation);
-        
     }
-    
+
     [TestMethod]
     public async Task GetProduct_Returns_NotFound_When_Product_Is_Not_Found()
     {
         var barcode = "1234567890";
 
-        _productBusinessMock.Setup(x => x.GetProductInformation(barcode)).ReturnsAsync(new ProcessingStatusResponse<ProductModel>
-        {
-            Status = HttpStatusCode.NotFound,
-            ErrorMessage = "Product not found"
-        });
+        _productBusinessMock.Setup(x => x.GetProductInformation(barcode)).ReturnsAsync(
+            new ProcessingStatusResponse<ProductModel>
+            {
+                Status = HttpStatusCode.NotFound,
+                MessageObject = { Message = "Product not found" }
+            });
 
         var response = await _productController.GetProduct(barcode);
 
         response.Should().BeOfType<NotFoundObjectResult>();
-        
+
         var result = response as NotFoundObjectResult;
         result.Should().NotBeNull();
-        result?.Value.Should().Be("Product not found");
+
+        var errorResponse = result?.Value as ErrorResponse;
+        errorResponse.Should().NotBeNull();
+        errorResponse?.Message.Should().Be("Product not found");
     }
-    
+
     [TestMethod]
     public async Task GetProduct_Returns_InternalServerError_When_An_Error_Occurs()
     {
         var barcode = "1234567890";
 
-        _productBusinessMock.Setup(x => x.GetProductInformation(barcode)).ReturnsAsync(new ProcessingStatusResponse<ProductModel>
-        {
-            Status = HttpStatusCode.InternalServerError,
-            ErrorMessage = "An error occurred while retrieving product information."
-        });
+        _productBusinessMock.Setup(x => x.GetProductInformation(barcode)).ReturnsAsync(
+            new ProcessingStatusResponse<ProductModel>
+            {
+                Status = HttpStatusCode.InternalServerError,
+                MessageObject = { Message = "An error occurred while retrieving product information." }
+            });
 
         var response = await _productController.GetProduct(barcode);
 

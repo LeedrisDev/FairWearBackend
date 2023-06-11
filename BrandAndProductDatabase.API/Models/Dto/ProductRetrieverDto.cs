@@ -1,5 +1,8 @@
 ﻿namespace BrandAndProductDatabase.API.Models.Dto;
 
+/// <summary>
+/// DTO for retrieving a product from the productRetriever microservice.
+/// </summary>
 public class ProductRetrieverDto
 {
     /// <summary>UPC code of the product</summary>

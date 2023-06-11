@@ -16,6 +16,7 @@ public class ProductBusiness : IProductBusiness
     /// <summary>Constructor for ProductBusiness.</summary>
     /// <param name="productRepository"></param>
     /// <param name="brandRepository"></param>
+    /// <param name="productData"></param>
     public ProductBusiness(IProductRepository productRepository, IBrandRepository brandRepository,
         IProductData productData)
     {
@@ -65,7 +66,7 @@ public class ProductBusiness : IProductBusiness
                 };
             }
 
-            var productBrand = await _brandRepository.GetBrandByNameAsync(productDataResponse.Object.BrandName!);
+            var productBrand = await _brandRepository.GetBrandByNameAsync(productDataResponse.Object.BrandName);
 
             if (productBrand.Status != HttpStatusCode.OK)
             {

@@ -35,7 +35,7 @@ public class ProductData : IProductData
         if (!response.IsSuccessStatusCode)
         {
             processingStatusResponse.Status = HttpStatusCode.ServiceUnavailable;
-            processingStatusResponse.ErrorMessage = $"Barcode service is unavailable.";
+            processingStatusResponse.ErrorMessage = "Barcode service is unavailable.";
             return processingStatusResponse;
         }
 

@@ -24,11 +24,11 @@ public class BrandData : IBrandData
     public async Task<ProcessingStatusResponse<BrandDto>> GetBrandByNameAsync(string name)
     {
         var processingStatusResponse = new ProcessingStatusResponse<BrandDto>();
-        
+
         var data = new BrandRequest { Name = name };
         var json = JsonConvert.SerializeObject(data);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
-        
+
         var response = await _httpClientWrapper.PostAsync(AppConstants.GoodOnYouScrapperUrl, content);
         if (response.IsSuccessStatusCode)
         {
@@ -40,7 +40,7 @@ public class BrandData : IBrandData
                 processingStatusResponse.ErrorMessage = "Error deserializing brand.";
                 return processingStatusResponse;
             }
-            
+
             processingStatusResponse.Object = brandDto;
             processingStatusResponse.Status = response.StatusCode;
             return processingStatusResponse;

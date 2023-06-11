@@ -7,9 +7,9 @@ namespace BrandAndProductDatabase.API.DataAccess.ProductData;
 public interface IProductData
 {
     /// <summary>
-    /// Call the appropriate microservice to get a product by its name.
+    /// Call the appropriate microservice to get a product by its barcode.
     /// </summary>
-    /// <param name="barcode">Name of the product to get.</param>
+    /// <param name="upc">barcode of the product</param>
     /// <returns> A <see cref="ProcessingStatusResponse{T}"/> containing the product. If the product exists.</returns>
-    Task<ProcessingStatusResponse<ProductDto>> GetProductByBarcode(string barcode);
+    Task<ProcessingStatusResponse<ProductRetrieverDto>> GetProductByUpc(string upc);
 }

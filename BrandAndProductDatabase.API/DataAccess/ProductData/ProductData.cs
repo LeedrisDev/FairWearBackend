@@ -19,30 +19,30 @@ public class ProductData : IProductData
     }
 
     /// <inheritdoc/>
-    public async Task<ProcessingStatusResponse<ProductDto>> GetProductByBarcode(string barcode)
+    public async Task<ProcessingStatusResponse<ProductRetrieverDto>> GetProductByUpc(string upc)
     {
-        var processingStatusResponse = new ProcessingStatusResponse<ProductDto>();
-        
-        var response = await _httpClientWrapper.GetAsync($"{AppConstants.ProductDataRetrieverUrl}/{barcode}");
+        var processingStatusResponse = new ProcessingStatusResponse<ProductRetrieverDto>();
+
+        var response = await _httpClientWrapper.GetAsync($"{AppConstants.ProductDataRetrieverUrl}/{upc}");
 
         if (response.StatusCode == HttpStatusCode.NotFound)
         {
             processingStatusResponse.Status = HttpStatusCode.NotFound;
-            processingStatusResponse.ErrorMessage = $"Product with barcode {barcode} not found.";
+            processingStatusResponse.ErrorMessage = $"Product with barcode {upc} not found.";
             return processingStatusResponse;
         }
 
         if (!response.IsSuccessStatusCode)
         {
             processingStatusResponse.Status = HttpStatusCode.ServiceUnavailable;
-            processingStatusResponse.ErrorMessage = $"Barcode service is unavailable.";
+            processingStatusResponse.ErrorMessage = "Barcode service is unavailable.";
             return processingStatusResponse;
         }
 
         try
         {
-            var productDto = DeserializeProductDto(response);
-            processingStatusResponse.Object = productDto;
+            var productRetrieverDto = DeserializeProductRetrieverDto(response);
+            processingStatusResponse.Object = productRetrieverDto;
             return processingStatusResponse;
         }
         catch (ApplicationException e)
@@ -52,14 +52,14 @@ public class ProductData : IProductData
             return processingStatusResponse;
         }
     }
-    
-    private static ProductDto DeserializeProductDto(HttpResponseMessage response)
+
+    private static ProductRetrieverDto DeserializeProductRetrieverDto(HttpResponseMessage response)
     {
-        var json =  response.Content.ReadAsStringAsync().Result;
-        var deserializedObject = JsonConvert.DeserializeObject<ProductDto>(json);
+        var json = response.Content.ReadAsStringAsync().Result;
+        var deserializedObject = JsonConvert.DeserializeObject<ProductRetrieverDto>(json);
         if (deserializedObject == null)
             throw new ApplicationException("Could not deserialize product.");
-        
+
         return deserializedObject;
     }
 }

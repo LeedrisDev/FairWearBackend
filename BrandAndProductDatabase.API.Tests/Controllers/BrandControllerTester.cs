@@ -4,6 +4,7 @@ using BrandAndProductDatabase.API.Business.BrandBusiness;
 using BrandAndProductDatabase.API.Controllers;
 using BrandAndProductDatabase.API.Models;
 using BrandAndProductDatabase.API.Models.Dto;
+using BrandAndProductDatabase.API.Models.Request;
 using BrandAndProductDatabase.API.Models.Response;
 using BrandAndProductDatabase.API.Utils;
 using FluentAssertions;
@@ -185,7 +186,7 @@ public class BrandControllerTester
         var result = await controller.GetBrandByIdAsync(1);
 
         // Assert
-        result.Should().BeOfType<NotFoundResult>();
+        result.Should().BeOfType<NotFoundObjectResult>();
         var notFoundResult = result as NotFoundResult;
         notFoundResult?.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
     }
@@ -394,7 +395,7 @@ public class BrandControllerTester
             new ProcessingStatusResponse<BrandDto>()
             {
                 Status = HttpStatusCode.NotFound,
-                ErrorMessage = $"Brand with ID {brand.Id} not found."
+                MessageObject = { Message = $"Brand with ID {brand.Id} not found."}
             });
 
         var controller = new BrandController(_brandBusinessMock.Object, _mapper);
@@ -406,7 +407,10 @@ public class BrandControllerTester
         result.Should().BeOfType<NotFoundObjectResult>();
         var notFoundResult = (NotFoundObjectResult)result;
         notFoundResult.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
-        notFoundResult.Value.Should().Be($"Brand with ID {brand.Id} not found.");
+        notFoundResult.Value.Should().BeEquivalentTo(new ErrorResponse()
+        {
+            Message = ($"Brand with ID {brand.Id} not found.")
+        });
     }
 
     [TestMethod]
@@ -527,5 +531,111 @@ public class BrandControllerTester
         result.Should().BeOfType<ObjectResult>();
         var objectResult = (ObjectResult)result;
         objectResult.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+    }
+    
+    [TestMethod]
+    public async Task GetBrandByNameAsync_ExistingBrand_ReturnsOkResult()
+    {
+        // Arrange
+        var brandName = "BrandName";
+        var brandRequest = new BrandRequest { Name = brandName };
+
+        var brandResponse = new BrandResponse
+        {
+            Id = 1,
+            Name = brandName,
+            Country = "Country",
+            EnvironmentRating = 1,
+            PeopleRating = 2,
+            AnimalRating = 3,
+            RatingDescription = "Rating",
+            Categories = new List<string>() { "Category" },
+            Ranges = new List<string>() { "Range" }
+        };
+        
+        var businessResponse = new ProcessingStatusResponse<BrandDto>()
+        {
+            Object = new BrandDto()
+            {
+                Id = 1,
+                Name = brandName,
+                Country = "Country",
+                EnvironmentRating = 1,
+                PeopleRating = 2,
+                AnimalRating = 3,
+                RatingDescription = "Rating",
+                Categories = new List<string>() { "Category" },
+                Ranges = new List<string>() { "Range" }
+            },
+            Status = HttpStatusCode.OK
+        };
+        
+        _brandBusinessMock.Setup(b => b.GetBrandByNameAsync(brandName))
+            .ReturnsAsync(businessResponse);
+
+        // Act
+        var result = await _controller.GetBrandByNameAsync(brandRequest);
+
+        // Assert
+        result.Should().BeOfType<OkObjectResult>()
+            .Which.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        result.As<OkObjectResult>().Value.Should().BeEquivalentTo(brandResponse);
+    }
+
+    [TestMethod]
+    public async Task GetBrandByNameAsync_NonExistingBrand_ReturnsNotFoundResult()
+    {
+        // Arrange
+        var brandName = "BrandName";
+        var brandRequest = new BrandRequest { Name = brandName };
+
+        var businessResult = new ProcessingStatusResponse<BrandDto>()
+        {
+            Status = HttpStatusCode.NotFound,
+            MessageObject = { Message = $"Brand with Name {brandName} not found." }
+        };
+        _brandBusinessMock.Setup(b => b.GetBrandByNameAsync(brandName))
+            .ReturnsAsync(businessResult);
+
+        // Act
+        var result = await _controller.GetBrandByNameAsync(brandRequest);
+
+        // Assert
+        result.Should().BeOfType<NotFoundObjectResult>();
+        var notFoundResult = (NotFoundObjectResult)result;
+        notFoundResult.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+        notFoundResult.Value.Should().BeEquivalentTo(new ErrorResponse()
+        {
+            Message = $"Brand with Name {brandName} not found."
+        });
+    }
+
+    [TestMethod]
+    public async Task GetBrandByNameAsync_Error_ReturnsStatusCodeResult()
+    {
+        // Arrange
+        var brandName = "BrandName";
+        var brandRequest = new BrandRequest { Name = brandName };
+
+        var businessResult = new ProcessingStatusResponse<BrandDto>()
+        {
+            Status = HttpStatusCode.InternalServerError,
+            MessageObject = { Message = "An error occurred." }
+        };
+        
+        _brandBusinessMock.Setup(b => b.GetBrandByNameAsync(brandName))
+            .ReturnsAsync(businessResult);
+
+        // Act
+        var result = await _controller.GetBrandByNameAsync(brandRequest);
+    
+        // Assert
+        result.Should().BeOfType<ObjectResult>();
+        var objectResult = (ObjectResult)result;
+        objectResult.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+        objectResult.Value.Should().BeEquivalentTo(new ErrorResponse()
+        {
+            Message = "An error occurred."
+        });
     }
 }

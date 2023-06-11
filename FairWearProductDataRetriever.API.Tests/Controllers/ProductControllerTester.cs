@@ -62,7 +62,7 @@ public class ProductControllerTester
             new ProcessingStatusResponse<ProductModel>
             {
                 Status = HttpStatusCode.NotFound,
-                MessageObject = { Message = "Product not found" }
+                ErrorMessage = "Product not found"
             });
 
         var response = await _productController.GetProduct(barcode);
@@ -86,7 +86,7 @@ public class ProductControllerTester
             new ProcessingStatusResponse<ProductModel>
             {
                 Status = HttpStatusCode.InternalServerError,
-                MessageObject = { Message = "An error occurred while retrieving product information." }
+                ErrorMessage = "An error occurred while retrieving product information."
             });
 
         var response = await _productController.GetProduct(barcode);
@@ -95,5 +95,22 @@ public class ProductControllerTester
 
         result.Should().NotBeNull();
         result?.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+    }
+
+    [TestMethod]
+    public async Task GetProduct_Returns_BadRequest_When_Barcode_Invalid()
+    {
+        var barcode = "123sdas";
+
+        var response = await _productController.GetProduct(barcode);
+
+        response.Should().BeOfType<BadRequestObjectResult>();
+
+        var result = response as BadRequestObjectResult;
+        result.Should().NotBeNull();
+
+        var errorResponse = result?.Value as ErrorResponse;
+        errorResponse.Should().NotBeNull();
+        errorResponse?.Message.Should().Be("Barcode must be composed of only numbers.");
     }
 }

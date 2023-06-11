@@ -73,7 +73,7 @@ public class ProductController : ControllerBase
         {
             Name = "White shirt",
             Country = "Bangladesh",
-            Image = "image de ta maman",
+            Image = "no image",
             GlobalScore = (productScores.Animal + productScores.Environmental + productScores.Moral) / 3,
             Composition = productComposition.ToArray(),
             Alternatives = Array.Empty<string>(),

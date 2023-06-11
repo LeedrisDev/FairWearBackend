@@ -92,7 +92,7 @@ public class ProductControllerTester
         okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
         okResult.Value.Should().BeEquivalentTo(expected);
     }
-    
+
     [TestMethod]
     public async Task GetAllProductsAsync_Error_ReturnsStatusCodeResult()
     {
@@ -101,15 +101,15 @@ public class ProductControllerTester
             new ProcessingStatusResponse<IEnumerable<ProductDto>>()
             {
                 Status = HttpStatusCode.InternalServerError,
-                MessageObject = { Message = "An error occurred."}
+                MessageObject = { Message = "An error occurred." }
             }
         );
-        
+
         var controller = new ProductController(_productBusinessMock.Object, _mapper);
 
         // Act
         var result = await controller.GetAllProductsAsync();
-        
+
         // Assert
         result.Should().BeOfType<ObjectResult>();
         var objectResult = (ObjectResult)result;
@@ -178,7 +178,7 @@ public class ProductControllerTester
         var notFoundResult = result as NotFoundResult;
         notFoundResult?.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
     }
-    
+
     [TestMethod]
     public async Task GetProductByIdAsync_Error_ReturnsStatusCodeResult()
     {
@@ -189,15 +189,15 @@ public class ProductControllerTester
             new ProcessingStatusResponse<ProductDto>()
             {
                 Status = HttpStatusCode.InternalServerError,
-                MessageObject = { Message = "An error occurred."}
+                MessageObject = { Message = "An error occurred." }
             }
         );
-        
+
         var controller = new ProductController(_productBusinessMock.Object, _mapper);
 
         // Act
         var result = await controller.GetProductByIdAsync(id);
-        
+
         // Assert
         result.Should().BeOfType<ObjectResult>();
         var objectResult = (ObjectResult)result;
@@ -361,7 +361,7 @@ public class ProductControllerTester
             Message = ($"Product with ID {product.Id} not found.")
         });
     }
-    
+
     [TestMethod]
     public async Task UpdateProductAsync_Error_ReturnsStatusCodeResult()
     {
@@ -380,15 +380,15 @@ public class ProductControllerTester
             new ProcessingStatusResponse<ProductDto>()
             {
                 Status = HttpStatusCode.InternalServerError,
-                MessageObject = { Message = "An error occurred."}
+                MessageObject = { Message = "An error occurred." }
             }
         );
-        
+
         var controller = new ProductController(_productBusinessMock.Object, _mapper);
 
         // Act
         var result = await controller.UpdateProductAsync(product);
-        
+
         // Assert
         result.Should().BeOfType<ObjectResult>();
         var objectResult = (ObjectResult)result;
@@ -466,7 +466,7 @@ public class ProductControllerTester
     {
         // Arrange
         const String upcCode = "12345";
-        
+
         var productScores = new ProductScoreDto
         {
             Moral = 2,
@@ -505,19 +505,19 @@ public class ProductControllerTester
                 Object = productInformation
             }
         );
-        
+
         var controller = new ProductController(_productBusinessMock.Object, _mapper);
 
         // Act
         var result = await controller.GetProductByUpcAsync(upcCode);
-        
+
         // Assert
         result.Should().BeOfType<OkObjectResult>();
         var okResult = (OkObjectResult)result;
         okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
         okResult.Value.Should().BeEquivalentTo(_mapper.Map<ProductInformationResponse>(productInformation));
     }
-    
+
     [TestMethod]
     public async Task GetProductByUpcAsync_NonExistingProduct_ReturnsNotFoundResult()
     {
@@ -528,15 +528,15 @@ public class ProductControllerTester
             new ProcessingStatusResponse<ProductInformationDto>()
             {
                 Status = HttpStatusCode.NotFound,
-                MessageObject = { Message = "Item not found"}
+                MessageObject = { Message = "Item not found" }
             }
         );
-        
+
         var controller = new ProductController(_productBusinessMock.Object, _mapper);
 
         // Act
         var result = await controller.GetProductByUpcAsync(upcCode);
-        
+
         // Assert
         result.Should().BeOfType<NotFoundObjectResult>();
         var notFoundResult = (NotFoundObjectResult)result;
@@ -546,7 +546,7 @@ public class ProductControllerTester
             Message = "Item not found"
         });
     }
-    
+
     [TestMethod]
     public async Task GetProductByUpcAsync_Error_ReturnsStatusCodeResult()
     {
@@ -557,15 +557,15 @@ public class ProductControllerTester
             new ProcessingStatusResponse<ProductInformationDto>()
             {
                 Status = HttpStatusCode.InternalServerError,
-                MessageObject = { Message = "An error occurred."}
+                MessageObject = { Message = "An error occurred." }
             }
         );
-        
+
         var controller = new ProductController(_productBusinessMock.Object, _mapper);
 
         // Act
         var result = await controller.GetProductByUpcAsync(upcCode);
-        
+
         // Assert
         result.Should().BeOfType<ObjectResult>();
         var objectResult = (ObjectResult)result;
@@ -574,5 +574,34 @@ public class ProductControllerTester
         {
             Message = "An error occurred."
         });
+    }
+
+    [TestMethod]
+    public void GetByUpcFakeAsync_Returns_ProductInformationResponse()
+    {
+        // Arrange
+        var controller = new ProductController(_productBusinessMock.Object, _mapper);
+
+        // Act
+        var response = controller.GetByUpcFakeAsync("123456789");
+
+        // Assert
+        response.Should().BeOfType<OkObjectResult>();
+
+        var result = response as OkObjectResult;
+        result.Should().NotBeNull();
+        result?.Value.Should().BeOfType<ProductInformationResponse>();
+
+        var productInformation = result?.Value as ProductInformationResponse;
+        productInformation.Should().NotBeNull();
+        productInformation?.Name.Should().Be("White shirt");
+        productInformation?.Country.Should().Be("Bangladesh");
+        productInformation?.Image.Should().Be("no image");
+        productInformation?.GlobalScore.Should().Be(2);
+        productInformation?.Composition.Should().NotBeNull();
+        productInformation?.Composition.Should().HaveCount(2);
+        productInformation?.Alternatives.Should().NotBeNull();
+        productInformation?.Alternatives.Should().BeEmpty();
+        productInformation?.Brand.Should().Be("Bershka");
     }
 }

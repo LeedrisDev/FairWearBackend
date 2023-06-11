@@ -467,8 +467,8 @@ public class ProductBusinessTester
             Image = "No image found",
             GlobalScore = (productScores.Animal + productScores.Environmental + productScores.Moral) / 3,
             Scores = productScores,
-            Composition = Array.Empty<ProductCompositionDto>(),
-            Alternatives = Array.Empty<string>(),
+            Composition = new List<ProductCompositionDto>(),
+            Alternatives = new List<string>(),
             Brand = "Brand 1"
         };
 
@@ -554,8 +554,8 @@ public class ProductBusinessTester
             Image = "No image found",
             GlobalScore = (productScores.Animal + productScores.Environmental + productScores.Moral) / 3,
             Scores = productScores,
-            Composition = Array.Empty<ProductCompositionDto>(),
-            Alternatives = Array.Empty<string>(),
+            Composition = new List<ProductCompositionDto>(),
+            Alternatives = new List<string>(),
             Brand = "NorthFace"
         };
 

@@ -14,8 +14,8 @@
         /// The country of production the Product.
         /// </summary>
         public string Country { get; set; } = null!;
-        
-        
+
+
         /// <summary>
         /// The image url of the product
         /// </summary>
@@ -34,12 +34,12 @@
         /// <summary>
         /// The product composition of the product
         /// </summary>
-        public ProductCompositionDto[] Composition { get; set; } = null!;
+        public IEnumerable<ProductCompositionDto> Composition { get; set; } = null!;
 
         /// <summary>
         /// the Alternatives of the product
         /// </summary>
-        public string[] Alternatives { get; set; } = null!;
+        public IEnumerable<string> Alternatives { get; set; } = null!;
 
         /// <summary>
         /// The BrandId of the Product.
@@ -47,4 +47,3 @@
         public string Brand { get; set; } = null!;
     }
 }
-

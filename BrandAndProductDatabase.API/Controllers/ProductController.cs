@@ -75,8 +75,8 @@ public class ProductController : ControllerBase
             Country = "Bangladesh",
             Image = "no image",
             GlobalScore = (productScores.Animal + productScores.Environmental + productScores.Moral) / 3,
-            Composition = productComposition.ToArray(),
-            Alternatives = Array.Empty<string>(),
+            Composition = productComposition,
+            Alternatives = new List<string>(),
             Brand = "Bershka"
         };
 

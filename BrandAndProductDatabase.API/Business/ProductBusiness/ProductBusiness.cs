@@ -166,8 +166,8 @@ public class ProductBusiness : IProductBusiness
             Image = "No image found",
             Scores = productScore,
             GlobalScore = (productScore.Moral + productScore.Animal + productScore.Environmental) / 3,
-            Composition = Array.Empty<ProductCompositionDto>(),
-            Alternatives = Array.Empty<string>(),
+            Composition = new List<ProductCompositionDto>(),
+            Alternatives = new List<string>(),
             Brand = brandDto.Name
         };
 

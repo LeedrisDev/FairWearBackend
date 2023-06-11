@@ -13,5 +13,5 @@ public class ProductCompositionResponse
     /// <summary>
     /// Type of fabric in the Product.
     /// </summary>
-    public string? Component { get; set; }
+    public string Component { get; set; } = null!;
 }

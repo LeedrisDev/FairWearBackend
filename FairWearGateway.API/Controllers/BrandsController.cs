@@ -20,23 +20,12 @@ public class BrandsController : ControllerBase
     {
         _brandBusiness = brandBusiness;
     }
-    
-    /// <summary>Gets all brands.</summary>
-    [HttpGet("brands")]
-    [ProducesResponseType(typeof(IEnumerable<BrandResponse>), (int) HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.InternalServerError)]
-    public async Task<IActionResult> GetAllBrandsAsync()
-    {
-        var processingStatusResponse = await _brandBusiness.GetAllBrandsAsync();
-        
-        return processingStatusResponse.Status != HttpStatusCode.OK ? StatusCode((int) processingStatusResponse.Status, processingStatusResponse.MessageObject) : Ok(processingStatusResponse.Object);
-    }
-    
+
     /// <summary>Gets a brand by its id.</summary>
     [HttpGet("brand/{brandId:int}")]
-    [ProducesResponseType(typeof(BrandResponse), (int) HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.NotFound)]
-    [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.InternalServerError)]
+    [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
     public async Task<IActionResult> GetBrandByIdAsync([Required] int brandId)
     {
         var processingStatusResponse = await _brandBusiness.GetBrandByIdAsync(brandId);
@@ -48,12 +37,12 @@ public class BrandsController : ControllerBase
             _ => StatusCode((int)processingStatusResponse.Status, processingStatusResponse.MessageObject)
         };
     }
-    
+
     /// <summary>Gets a brand by its name.</summary>
     [HttpPost("brand/name")]
-    [ProducesResponseType(typeof(BrandResponse), (int) HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.NotFound)]
-    [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.InternalServerError)]
+    [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
     public async Task<IActionResult> GetBrandByNameAsync([Required] BrandRequest brandRequest)
     {
         var processingStatusResponse = await _brandBusiness.GetBrandByNameAsync(brandRequest.Name);
@@ -65,5 +54,4 @@ public class BrandsController : ControllerBase
             _ => StatusCode((int)processingStatusResponse.Status, processingStatusResponse.MessageObject)
         };
     }
-    
 }

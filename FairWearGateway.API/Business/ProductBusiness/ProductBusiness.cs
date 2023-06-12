@@ -4,7 +4,6 @@ using FairWearGateway.API.Models;
 
 namespace FairWearGateway.API.Business.ProductBusiness;
 
-
 /// <summary>Class that handles the business logic for the Product model.</summary>
 public class ProductBusiness : IProductBusiness
 {
@@ -14,12 +13,6 @@ public class ProductBusiness : IProductBusiness
     public ProductBusiness(IProductData productData)
     {
         _productData = productData;
-    }
-    
-    /// <inheritdoc/>
-    public async Task<ProcessingStatusResponse<IEnumerable<ProductResponse>>> GetAllProductsAsync()
-    {
-        return await _productData.GetAllProductsAsync();
     }
 
     /// <inheritdoc/>

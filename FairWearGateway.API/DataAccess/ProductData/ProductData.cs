@@ -1,5 +1,5 @@
-using BrandAndProductDatabase.API.Models.Response;
 using FairWearGateway.API.Models;
+using FairWearGateway.API.Models.Response;
 using FairWearGateway.API.Utils;
 using FairWearGateway.API.Utils.HttpClientWrapper;
 using Newtonsoft.Json;
@@ -34,6 +34,34 @@ public class ProductData : IProductData
         try
         {
             var product = await DeserializeResponse<ProductResponse>(response);
+            processingStatusResponse.Object = product;
+            return processingStatusResponse;
+        }
+        catch (ApplicationException e)
+        {
+            processingStatusResponse.Status = System.Net.HttpStatusCode.InternalServerError;
+            processingStatusResponse.ErrorMessage = e.Message;
+            return processingStatusResponse;
+        }
+    }
+
+    public async Task<ProcessingStatusResponse<ProductInformationResponse>> GetProductByUpcAsync(string upc)
+    {
+        var processingStatusResponse = new ProcessingStatusResponse<ProductInformationResponse>();
+
+        var response = await _httpClientWrapper.GetAsync($"{AppConstants.BrandAndProductApiUrl}/product/{upc}");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            processingStatusResponse.Status = response.StatusCode;
+            processingStatusResponse.ErrorMessage =
+                response.ReasonPhrase ?? $"Error while getting product information for {upc}";
+            return processingStatusResponse;
+        }
+
+        try
+        {
+            var product = await DeserializeResponse<ProductInformationResponse>(response);
             processingStatusResponse.Object = product;
             return processingStatusResponse;
         }

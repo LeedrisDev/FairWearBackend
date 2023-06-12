@@ -1,6 +1,6 @@
-using BrandAndProductDatabase.API.Models.Response;
 using FairWearGateway.API.DataAccess.ProductData;
 using FairWearGateway.API.Models;
+using FairWearGateway.API.Models.Response;
 
 namespace FairWearGateway.API.Business.ProductBusiness;
 
@@ -19,5 +19,10 @@ public class ProductBusiness : IProductBusiness
     public async Task<ProcessingStatusResponse<ProductResponse>> GetProductByIdAsync(int productId)
     {
         return await _productData.GetProductByIdAsync(productId);
+    }
+
+    public async Task<ProcessingStatusResponse<ProductInformationResponse>> GetProductByUpcAsync(string upc)
+    {
+        return await _productData.GetProductByUpcAsync(upc);
     }
 }

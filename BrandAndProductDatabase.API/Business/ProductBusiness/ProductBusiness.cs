@@ -173,7 +173,6 @@ public class ProductBusiness : IProductBusiness
             Scores = productScore,
             GlobalScore = (productScore.Moral + productScore.Animal + productScore.Environmental) / 3,
             Composition = new List<ProductCompositionDto>(),
-            Alternatives = new List<string>(),
             Brand = brandDto.Name
         };
 

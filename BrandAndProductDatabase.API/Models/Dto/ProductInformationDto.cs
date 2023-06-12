@@ -37,11 +37,6 @@ public class ProductInformationDto
     public IEnumerable<ProductCompositionDto> Composition { get; set; } = null!;
 
     /// <summary>
-    /// the Alternatives of the product
-    /// </summary>
-    public IEnumerable<string> Alternatives { get; set; } = null!;
-
-    /// <summary>
     /// The BrandId of the Product.
     /// </summary>
     public string Brand { get; set; } = null!;

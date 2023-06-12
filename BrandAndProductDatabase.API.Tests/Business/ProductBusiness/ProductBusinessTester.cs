@@ -471,7 +471,6 @@ public class ProductBusinessTester
             GlobalScore = (productScores.Animal + productScores.Environmental + productScores.Moral) / 3,
             Scores = productScores,
             Composition = new List<ProductCompositionDto>(),
-            Alternatives = new List<string>(),
             Brand = "Brand 1"
         };
 
@@ -558,7 +557,6 @@ public class ProductBusinessTester
             GlobalScore = (productScores.Animal + productScores.Environmental + productScores.Moral) / 3,
             Scores = productScores,
             Composition = new List<ProductCompositionDto>(),
-            Alternatives = new List<string>(),
             Brand = "NorthFace"
         };
 

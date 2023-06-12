@@ -76,7 +76,6 @@ public class ProductController : ControllerBase
             Image = "no image",
             GlobalScore = (productScores.Animal + productScores.Environmental + productScores.Moral) / 3,
             Composition = productComposition,
-            Alternatives = new List<string>(),
             Brand = "Bershka"
         };
 

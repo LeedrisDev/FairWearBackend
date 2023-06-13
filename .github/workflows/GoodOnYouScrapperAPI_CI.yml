@@ -167,4 +167,4 @@ jobs:
           context: .
           file: ./GoodOnYouScrapper.API/Dockerfile
           push: true
-          tags: "https://docker-registry.leedrisdev.engineer/goodonyou_scrapper_api:release-${{ github.run_number }}"
+          tags: docker-registry.leedrisdev.engineer/goodonyou_scrapper_api:release-${{ github.run_number }}

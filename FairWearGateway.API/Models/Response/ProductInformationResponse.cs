@@ -1,9 +1,9 @@
-﻿namespace BrandAndProductDatabase.API.Models.Dto;
+﻿namespace FairWearGateway.API.Models.Response;
 
 /// <summary>
-/// Class representing a ProductInformation in the business.
+/// Class representing a ProductInformation
 /// </summary>
-public class ProductInformationDto
+public class ProductInformationResponse
 {
     /// <summary>
     /// The Name of the Product.
@@ -29,12 +29,12 @@ public class ProductInformationDto
     /// <summary>
     /// The scores of the product
     /// </summary>
-    public ProductScoreDto Scores { get; set; } = null!;
+    public ProductScoreResponse Scores { get; set; } = null!;
 
     /// <summary>
     /// The product composition of the product
     /// </summary>
-    public IEnumerable<ProductCompositionDto> Composition { get; set; } = null!;
+    public IEnumerable<ProductCompositionResponse> Composition { get; set; } = null!;
 
     /// <summary>
     /// The BrandId of the Product.

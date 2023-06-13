@@ -25,7 +25,9 @@ public class BrandData : IBrandData
     {
         var processingStatusResponse = new ProcessingStatusResponse<BrandDto>();
 
-        var data = new BrandRequest { Name = name };
+        string treatedName = name.ToLowerInvariant().Replace(" ", "-").Replace("'", "");
+
+        var data = new BrandRequest { Name = treatedName };
         var json = JsonConvert.SerializeObject(data);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -41,6 +43,7 @@ public class BrandData : IBrandData
                 return processingStatusResponse;
             }
 
+            brandDto.Name = name;
             processingStatusResponse.Object = brandDto;
             processingStatusResponse.Status = response.StatusCode;
             return processingStatusResponse;

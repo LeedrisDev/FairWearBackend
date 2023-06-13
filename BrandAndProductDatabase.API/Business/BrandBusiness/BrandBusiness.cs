@@ -9,8 +9,8 @@ namespace BrandAndProductDatabase.API.Business.BrandBusiness;
 /// <summary>Business logic for brands database actions </summary>
 public class BrandBusiness : IBrandBusiness
 {
-    private readonly IBrandRepository _brandRepository;
     private readonly IBrandData _brandData;
+    private readonly IBrandRepository _brandRepository;
 
     /// <summary>
     /// Constructor for BrandBusiness.
@@ -39,13 +39,13 @@ public class BrandBusiness : IBrandBusiness
     public async Task<ProcessingStatusResponse<BrandDto>> GetBrandByNameAsync(string name)
     {
         var processingStatusResponse = await _brandRepository.GetBrandByNameAsync(name);
-        if (processingStatusResponse.Status == HttpStatusCode.OK) 
+        if (processingStatusResponse.Status == HttpStatusCode.OK)
             return processingStatusResponse;
-        
+
         var brandDataResponse = await _brandData.GetBrandByNameAsync(name);
-        if (brandDataResponse.Status != HttpStatusCode.OK) 
+        if (brandDataResponse.Status != HttpStatusCode.OK)
             return brandDataResponse;
-            
+
         var repositoryResponse = await _brandRepository.AddAsync(brandDataResponse.Object);
         return repositoryResponse;
     }

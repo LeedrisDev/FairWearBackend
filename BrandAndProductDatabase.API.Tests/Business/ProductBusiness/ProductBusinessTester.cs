@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using BrandAndProductDatabase.API.DataAccess.BrandData;
 using BrandAndProductDatabase.API.DataAccess.IRepositories;
 using BrandAndProductDatabase.API.DataAccess.ProductData;
 using BrandAndProductDatabase.API.Models;
@@ -11,6 +12,7 @@ namespace BrandAndProductDatabase.API.Tests.Business.ProductBusiness;
 [TestClass]
 public class ProductBusinessTester
 {
+    private Mock<IBrandData> _brandDataMock = null!;
     private Mock<IBrandRepository> _brandRepositoryMock = null!;
     private API.Business.ProductBusiness.ProductBusiness _productBusiness = null!;
     private Mock<IProductData> _productDataMock = null!;
@@ -22,6 +24,7 @@ public class ProductBusinessTester
         _productRepositoryMock = new Mock<IProductRepository>();
         _brandRepositoryMock = new Mock<IBrandRepository>();
         _productDataMock = new Mock<IProductData>();
+        _brandDataMock = new Mock<IBrandData>();
     }
 
     [TestMethod]
@@ -58,7 +61,7 @@ public class ProductBusinessTester
 
         var productBusiness =
             new API.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object,
-                _brandRepositoryMock.Object, _productDataMock.Object);
+                _brandRepositoryMock.Object, _productDataMock.Object, _brandDataMock.Object);
 
         // Act
         var result = await productBusiness.GetAllProductsAsync();
@@ -91,7 +94,7 @@ public class ProductBusinessTester
 
         var productBusiness =
             new API.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object,
-                _brandRepositoryMock.Object, _productDataMock.Object);
+                _brandRepositoryMock.Object, _productDataMock.Object, _brandDataMock.Object);
 
         // Act
         var result = await productBusiness.GetProductByIdAsync(productInDb.Id);
@@ -117,7 +120,7 @@ public class ProductBusinessTester
 
         var productBusiness =
             new API.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object,
-                _brandRepositoryMock.Object, _productDataMock.Object);
+                _brandRepositoryMock.Object, _productDataMock.Object, _brandDataMock.Object);
 
         // Act
         var result = await productBusiness.GetProductByIdAsync(productId);
@@ -165,7 +168,7 @@ public class ProductBusinessTester
 
         var productBusiness =
             new API.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object,
-                _brandRepositoryMock.Object, _productDataMock.Object);
+                _brandRepositoryMock.Object, _productDataMock.Object, _brandDataMock.Object);
 
         // Act
         var result = await productBusiness.CreateProductAsync(productDto);
@@ -220,7 +223,7 @@ public class ProductBusinessTester
 
         var productBusiness =
             new API.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object,
-                _brandRepositoryMock.Object, _productDataMock.Object);
+                _brandRepositoryMock.Object, _productDataMock.Object, _brandDataMock.Object);
 
         // Act
         var result = await productBusiness.UpdateProductAsync(productToUpdate);
@@ -259,7 +262,7 @@ public class ProductBusinessTester
             });
         var productBusiness =
             new API.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object,
-                _brandRepositoryMock.Object, _productDataMock.Object);
+                _brandRepositoryMock.Object, _productDataMock.Object, _brandDataMock.Object);
 
         // Act
         var result = await productBusiness.UpdateProductAsync(productToUpdate);
@@ -291,7 +294,7 @@ public class ProductBusinessTester
 
         var productBusiness =
             new API.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object,
-                _brandRepositoryMock.Object, _productDataMock.Object);
+                _brandRepositoryMock.Object, _productDataMock.Object, _brandDataMock.Object);
 
         // Act
         var result = await productBusiness.DeleteProductAsync(1);
@@ -314,7 +317,7 @@ public class ProductBusinessTester
 
         var productBusiness =
             new API.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object,
-                _brandRepositoryMock.Object, _productDataMock.Object);
+                _brandRepositoryMock.Object, _productDataMock.Object, _brandDataMock.Object);
 
         // Act
         var result = await productBusiness.DeleteProductAsync(1);
@@ -330,7 +333,7 @@ public class ProductBusinessTester
         // Arrange
         _productRepositoryMock = new Mock<IProductRepository>();
         _productBusiness = new API.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object,
-            _brandRepositoryMock.Object, _productDataMock.Object);
+            _brandRepositoryMock.Object, _productDataMock.Object, _brandDataMock.Object);
         const int nonExistentBrandId = 123;
         var productDto = new ProductDto { BrandId = nonExistentBrandId };
         _brandRepositoryMock
@@ -356,7 +359,7 @@ public class ProductBusinessTester
         // Arrange
         _productRepositoryMock = new Mock<IProductRepository>();
         _productBusiness = new API.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object,
-            _brandRepositoryMock.Object, _productDataMock.Object);
+            _brandRepositoryMock.Object, _productDataMock.Object, _brandDataMock.Object);
         const int existingBrandId = 456;
         var productDto = new ProductDto { BrandId = existingBrandId };
         var brandRepositoryResponse = new ProcessingStatusResponse<BrandDto>
@@ -391,7 +394,7 @@ public class ProductBusinessTester
         // Arrange
         _productRepositoryMock = new Mock<IProductRepository>();
         _productBusiness = new API.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object,
-            _brandRepositoryMock.Object, _productDataMock.Object);
+            _brandRepositoryMock.Object, _productDataMock.Object, _brandDataMock.Object);
 
         const int nonExistentBrandId = 123;
         var productDto = new ProductDto { BrandId = nonExistentBrandId };
@@ -468,7 +471,6 @@ public class ProductBusinessTester
             GlobalScore = (productScores.Animal + productScores.Environmental + productScores.Moral) / 3,
             Scores = productScores,
             Composition = new List<ProductCompositionDto>(),
-            Alternatives = new List<string>(),
             Brand = "Brand 1"
         };
 
@@ -486,7 +488,7 @@ public class ProductBusinessTester
 
         var productBusiness =
             new API.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object,
-                _brandRepositoryMock.Object, _productDataMock.Object);
+                _brandRepositoryMock.Object, _productDataMock.Object, _brandDataMock.Object);
 
         // Act
         var result = await productBusiness.GetProductByUpcAsync(upcCode);
@@ -555,7 +557,6 @@ public class ProductBusinessTester
             GlobalScore = (productScores.Animal + productScores.Environmental + productScores.Moral) / 3,
             Scores = productScores,
             Composition = new List<ProductCompositionDto>(),
-            Alternatives = new List<string>(),
             Brand = "NorthFace"
         };
 
@@ -573,7 +574,13 @@ public class ProductBusinessTester
                 Object = productRetrieverDto
             });
 
-        _brandRepositoryMock.Setup(x => x.GetBrandByNameAsync(It.IsAny<string>())).ReturnsAsync(
+        _brandDataMock.Setup(x => x.GetBrandByNameAsync(It.IsAny<string>())).ReturnsAsync(
+            new ProcessingStatusResponse<BrandDto>()
+            {
+                Object = brand
+            });
+
+        _brandRepositoryMock.Setup(x => x.AddAsync(It.IsAny<BrandDto>())).ReturnsAsync(
             new ProcessingStatusResponse<BrandDto>()
             {
                 Object = brand
@@ -587,7 +594,7 @@ public class ProductBusinessTester
 
         var productBusiness =
             new API.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object,
-                _brandRepositoryMock.Object, _productDataMock.Object);
+                _brandRepositoryMock.Object, _productDataMock.Object, _brandDataMock.Object);
 
         // Act
         var result = await productBusiness.GetProductByUpcAsync(upcCode);
@@ -640,7 +647,7 @@ public class ProductBusinessTester
 
         var productBusiness =
             new API.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object,
-                _brandRepositoryMock.Object, _productDataMock.Object);
+                _brandRepositoryMock.Object, _productDataMock.Object, _brandDataMock.Object);
 
         // Act
         var result = await productBusiness.GetProductByUpcAsync(upcCode);

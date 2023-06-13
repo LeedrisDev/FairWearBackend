@@ -101,21 +101,6 @@ public class ProductInformationResponseTester
     }
 
     [TestMethod]
-    public void ProductInformationResponse_SetAndGetAlternatives_ShouldSetAndReturnAlternatives()
-    {
-        // Arrange
-        var productInformationResponse = new ProductInformationResponse();
-        var alternatives = new[] { "Alternative 1", "Alternative 2" };
-
-        // Act
-        productInformationResponse.Alternatives = alternatives;
-        var result = productInformationResponse.Alternatives;
-
-        // Assert
-        result.Should().BeEquivalentTo(alternatives);
-    }
-
-    [TestMethod]
     public void ProductInformationResponse_SetAndGetBrand_ShouldSetAndReturnBrand()
     {
         // Arrange

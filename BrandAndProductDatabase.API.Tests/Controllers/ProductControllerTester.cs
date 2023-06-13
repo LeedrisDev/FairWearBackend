@@ -495,7 +495,6 @@ public class ProductControllerTester
             Scores = productScores,
             GlobalScore = (productScores.Animal + productScores.Environmental + productScores.Moral) / 3,
             Composition = productComposition.ToArray(),
-            Alternatives = Array.Empty<string>(),
             Brand = "Bershka"
         };
 
@@ -600,8 +599,6 @@ public class ProductControllerTester
         productInformation?.GlobalScore.Should().Be(2);
         productInformation?.Composition.Should().NotBeNull();
         productInformation?.Composition.Should().HaveCount(2);
-        productInformation?.Alternatives.Should().NotBeNull();
-        productInformation?.Alternatives.Should().BeEmpty();
         productInformation?.Brand.Should().Be("Bershka");
     }
 }

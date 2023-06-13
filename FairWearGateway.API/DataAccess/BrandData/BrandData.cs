@@ -8,7 +8,6 @@ using Newtonsoft.Json;
 
 namespace FairWearGateway.API.DataAccess.BrandData;
 
-
 /// <summary>Class that call the appropriate microservice to get all is related to brands.</summary>
 public class BrandData : IBrandData
 {
@@ -19,49 +18,21 @@ public class BrandData : IBrandData
     {
         _httpClientWrapper = httpClientWrapper;
     }
-    
-    /// <inheritdoc />
-    public async Task<ProcessingStatusResponse<IEnumerable<BrandResponse>>> GetAllBrandsAsync()
-    {
-        var processingStatusResponse = new ProcessingStatusResponse<IEnumerable<BrandResponse>>();
-        
-        var response = await _httpClientWrapper.GetAsync($"{AppConstants.BrandAndProductApiUrl}/brands");
-
-        if (!response.IsSuccessStatusCode)
-        {
-            processingStatusResponse.Status = response.StatusCode;
-            processingStatusResponse.ErrorMessage = response.ReasonPhrase ?? "Error while getting brands";
-            return processingStatusResponse;
-        }
-
-        try
-        {
-            var brands = await DeserializeResponse<IEnumerable<BrandResponse>>(response);
-            processingStatusResponse.Object = brands;
-            return processingStatusResponse;
-        }
-        catch (ApplicationException e)
-        {
-            processingStatusResponse.Status = System.Net.HttpStatusCode.InternalServerError;
-            processingStatusResponse.ErrorMessage = e.Message;
-            return processingStatusResponse;
-        }
-    }
 
     /// <inheritdoc />
     public async Task<ProcessingStatusResponse<BrandResponse>> GetBrandByIdAsync(int brandId)
     {
         var processingStatusResponse = new ProcessingStatusResponse<BrandResponse>();
-        
+
         var response = await _httpClientWrapper.GetAsync($"{AppConstants.BrandAndProductApiUrl}/brand/{brandId}");
-        
+
         if (!response.IsSuccessStatusCode)
         {
             processingStatusResponse.Status = response.StatusCode;
             processingStatusResponse.ErrorMessage = response.ReasonPhrase ?? "Error while getting brand";
             return processingStatusResponse;
         }
-        
+
         try
         {
             var brand = await DeserializeResponse<BrandResponse>(response);
@@ -82,18 +53,18 @@ public class BrandData : IBrandData
         var request = new BrandRequest { Name = name };
         var json = JsonConvert.SerializeObject(request);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
-        
+
         var processingStatusResponse = new ProcessingStatusResponse<BrandResponse>();
-        
+
         var response = await _httpClientWrapper.PostAsync($"{AppConstants.BrandAndProductApiUrl}/brand/name", content);
-        
+
         if (!response.IsSuccessStatusCode)
         {
             processingStatusResponse.Status = response.StatusCode;
             processingStatusResponse.ErrorMessage = response.ReasonPhrase ?? "Error while getting brand";
             return processingStatusResponse;
         }
-        
+
         try
         {
             var brand = await DeserializeResponse<BrandResponse>(response);

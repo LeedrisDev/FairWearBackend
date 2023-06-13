@@ -1,6 +1,5 @@
-using System.Text;
-using BrandAndProductDatabase.API.Models.Response;
 using FairWearGateway.API.Models;
+using FairWearGateway.API.Models.Response;
 using FairWearGateway.API.Utils;
 using FairWearGateway.API.Utils.HttpClientWrapper;
 using Newtonsoft.Json;
@@ -17,49 +16,21 @@ public class ProductData : IProductData
     {
         _httpClientWrapper = httpClientWrapper;
     }
-    
-    /// <inheritdoc />
-    public async Task<ProcessingStatusResponse<IEnumerable<ProductResponse>>> GetAllProductsAsync()
-    {
-        var processingStatusResponse = new ProcessingStatusResponse<IEnumerable<ProductResponse>>();
-        
-        var response = await _httpClientWrapper.GetAsync($"{AppConstants.BrandAndProductApiUrl}/products");
-
-        if (!response.IsSuccessStatusCode)
-        {
-            processingStatusResponse.Status = response.StatusCode;
-            processingStatusResponse.ErrorMessage = response.ReasonPhrase ?? "Error while getting products";
-            return processingStatusResponse;
-        }
-
-        try
-        {
-            var products = await DeserializeResponse<IEnumerable<ProductResponse>>(response);
-            processingStatusResponse.Object = products;
-            return processingStatusResponse;
-        }
-        catch (ApplicationException e)
-        {
-            processingStatusResponse.Status = System.Net.HttpStatusCode.InternalServerError;
-            processingStatusResponse.ErrorMessage = e.Message;
-            return processingStatusResponse;
-        }
-    }
 
     /// <inheritdoc />
     public async Task<ProcessingStatusResponse<ProductResponse>> GetProductByIdAsync(int productId)
     {
         var processingStatusResponse = new ProcessingStatusResponse<ProductResponse>();
-        
+
         var response = await _httpClientWrapper.GetAsync($"{AppConstants.BrandAndProductApiUrl}/product/{productId}");
-        
+
         if (!response.IsSuccessStatusCode)
         {
             processingStatusResponse.Status = response.StatusCode;
             processingStatusResponse.ErrorMessage = response.ReasonPhrase ?? "Error while getting product";
             return processingStatusResponse;
         }
-        
+
         try
         {
             var product = await DeserializeResponse<ProductResponse>(response);
@@ -73,7 +44,36 @@ public class ProductData : IProductData
             return processingStatusResponse;
         }
     }
-    
+
+    /// <inheritdoc />
+    public async Task<ProcessingStatusResponse<ProductInformationResponse>> GetProductByUpcAsync(string upc)
+    {
+        var processingStatusResponse = new ProcessingStatusResponse<ProductInformationResponse>();
+
+        var response = await _httpClientWrapper.GetAsync($"{AppConstants.BrandAndProductApiUrl}/product/{upc}");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            processingStatusResponse.Status = response.StatusCode;
+            processingStatusResponse.ErrorMessage =
+                response.ReasonPhrase ?? $"Error while getting product information for {upc}";
+            return processingStatusResponse;
+        }
+
+        try
+        {
+            var product = await DeserializeResponse<ProductInformationResponse>(response);
+            processingStatusResponse.Object = product;
+            return processingStatusResponse;
+        }
+        catch (ApplicationException e)
+        {
+            processingStatusResponse.Status = System.Net.HttpStatusCode.InternalServerError;
+            processingStatusResponse.ErrorMessage = e.Message;
+            return processingStatusResponse;
+        }
+    }
+
 
     private static async Task<T> DeserializeResponse<T>(HttpResponseMessage response)
     {

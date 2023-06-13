@@ -1,4 +1,4 @@
-﻿namespace BrandAndProductDatabase.API.Models.Response;
+﻿namespace FairWearGateway.API.Models.Response;
 
 /// <summary>
 /// Controller product response.

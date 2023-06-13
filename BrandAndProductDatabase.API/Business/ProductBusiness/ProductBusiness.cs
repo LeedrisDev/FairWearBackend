@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using BrandAndProductDatabase.API.DataAccess.BrandData;
 using BrandAndProductDatabase.API.DataAccess.IRepositories;
 using BrandAndProductDatabase.API.DataAccess.ProductData;
 using BrandAndProductDatabase.API.Models;
@@ -9,6 +10,7 @@ namespace BrandAndProductDatabase.API.Business.ProductBusiness;
 /// <summary>Logic for product repository operations</summary>
 public class ProductBusiness : IProductBusiness
 {
+    private readonly IBrandData _brandData;
     private readonly IBrandRepository _brandRepository;
     private readonly IProductData _productData;
     private readonly IProductRepository _productRepository;
@@ -17,12 +19,14 @@ public class ProductBusiness : IProductBusiness
     /// <param name="productRepository"></param>
     /// <param name="brandRepository"></param>
     /// <param name="productData"></param>
+    /// <param name="brandData"></param>
     public ProductBusiness(IProductRepository productRepository, IBrandRepository brandRepository,
-        IProductData productData)
+        IProductData productData, IBrandData brandData)
     {
         _productRepository = productRepository;
         _brandRepository = brandRepository;
         _productData = productData;
+        _brandData = brandData;
     }
 
     /// <inheritdoc/>
@@ -66,16 +70,18 @@ public class ProductBusiness : IProductBusiness
                 };
             }
 
-            var productBrand = await _brandRepository.GetBrandByNameAsync(productDataResponse.Object.BrandName);
+            var productBrand = await _brandData.GetBrandByNameAsync(productDataResponse.Object.BrandName);
 
             if (productBrand.Status != HttpStatusCode.OK)
             {
                 return new ProcessingStatusResponse<ProductInformationDto>()
                 {
-                    Status = HttpStatusCode.InternalServerError,
-                    ErrorMessage = $"Could not find enough information for {upcCode}"
+                    Status = productBrand.Status,
+                    ErrorMessage = productBrand.ErrorMessage
                 };
             }
+
+            productBrand = await _brandRepository.AddAsync(productBrand.Object);
 
             var entityFromDatabase = await _productRepository.AddAsync(
                 new ProductDto()
@@ -167,7 +173,6 @@ public class ProductBusiness : IProductBusiness
             Scores = productScore,
             GlobalScore = (productScore.Moral + productScore.Animal + productScore.Environmental) / 3,
             Composition = new List<ProductCompositionDto>(),
-            Alternatives = new List<string>(),
             Brand = brandDto.Name
         };
 

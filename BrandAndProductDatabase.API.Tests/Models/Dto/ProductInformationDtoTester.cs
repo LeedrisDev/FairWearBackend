@@ -101,21 +101,6 @@ public class ProductInformationDtoTester
     }
 
     [TestMethod]
-    public void ProductInformationDto_SetAndGetAlternatives_ShouldSetAndReturnAlternatives()
-    {
-        // Arrange
-        var productInformationDto = new ProductInformationDto();
-        var alternatives = new[] { "Alternative 1", "Alternative 2" };
-
-        // Act
-        productInformationDto.Alternatives = alternatives;
-        var result = productInformationDto.Alternatives;
-
-        // Assert
-        result.Should().BeEquivalentTo(alternatives);
-    }
-
-    [TestMethod]
     public void ProductInformationDto_SetAndGetBrand_ShouldSetAndReturnBrand()
     {
         // Arrange

@@ -1,9 +1,9 @@
-﻿namespace BrandAndProductDatabase.API.Models.Dto;
+﻿namespace FairWearGateway.API.Models.Response;
 
 /// <summary>
-/// Class representing a ProductComposition in the business.
+/// Class representing a ProductComposition
 /// </summary>
-public class ProductCompositionDto
+public class ProductCompositionResponse
 {
     /// <summary>
     /// Percentage of the type of fabrics in the Product.

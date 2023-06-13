@@ -45,6 +45,7 @@ public class ProductData : IProductData
         }
     }
 
+    /// <inheritdoc />
     public async Task<ProcessingStatusResponse<ProductInformationResponse>> GetProductByUpcAsync(string upc)
     {
         var processingStatusResponse = new ProcessingStatusResponse<ProductInformationResponse>();

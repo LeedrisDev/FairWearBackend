@@ -21,6 +21,7 @@ public class ProductBusiness : IProductBusiness
         return await _productData.GetProductByIdAsync(productId);
     }
 
+    /// <inheritdoc />
     public async Task<ProcessingStatusResponse<ProductInformationResponse>> GetProductByUpcAsync(string upc)
     {
         return await _productData.GetProductByUpcAsync(upc);

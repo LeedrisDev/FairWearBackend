@@ -160,10 +160,12 @@ jobs:
           registry: ${{ secrets.REGISTRY_URL }}
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Set Docker image tag
-        id: set_tag
-        run: echo "::set-output name=tag::${{ github.ref_name/\//_ }}-${{ github.run_number }}"
+        
+      - name: Replace character
+        id: replace_char
+        run: |
+          modified_string=$(echo "${{ github.ref_name }}" | sed 's/\//_/g')
+          echo "::set-env name=BRANCH_NAME::$modified_string"
 
       - name: Build and push
         uses: docker/build-push-action@v4
@@ -171,4 +173,4 @@ jobs:
           context: .
           file: ./GoodOnYouScrapper.API/Dockerfile
           push: true
-          tags: ${{ secrets.REGISTRY_URL}}/goodonyou_scrapper_api:${{ steps.set_tag.outputs.tag }}
+          tags: ${{ secrets.REGISTRY_URL}}/goodonyou_scrapper_api:$BRANCH_NAME-${{ github.run_number }}

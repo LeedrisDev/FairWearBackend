@@ -25,6 +25,10 @@ services:
         context: .
         dockerfile: Databases/BrandsAndProductsDatabase/Dockerfile
     restart: on-failure
+    environment:
+      - POSTGRES_USER=fairwear
+      - POSTGRES_PASSWORD=fairwear
+      - POSTGRES_DB=fairwear_brand_and_product_database
     ports: 
       - "5432:5432"
     

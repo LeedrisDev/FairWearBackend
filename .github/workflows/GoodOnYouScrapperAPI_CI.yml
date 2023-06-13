@@ -163,7 +163,7 @@ jobs:
 
       - name: Set Docker image tag
         id: set_tag
-        run: echo "::set-output name=tag::${{ env.GITHUB_REF_NAME/\\//_ }}-${{ github.run_number }}"
+        run: echo "::set-output name=tag::${{ env.GITHUB_REF_NAME/\//_ }}-${{ github.run_number }}"
 
       - name: Build and push
         uses: docker/build-push-action@v4

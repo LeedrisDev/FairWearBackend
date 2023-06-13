@@ -163,7 +163,7 @@ jobs:
         
       - name: Replace character
         id: replace_char
-        run: echo "$BRANCH_NAME=$(echo "${{ steps.set_string.outputs.my_string }}" | sed 's/\//_/g')" >> $GITHUB_ENV
+        run: echo "$BRANCH_NAME=$(echo "${{ github.ref_name }}" | sed 's/\//_/g')" >> $GITHUB_ENV
 
       - name: Build and push
         uses: docker/build-push-action@v4

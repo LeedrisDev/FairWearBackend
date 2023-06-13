@@ -170,9 +170,9 @@ jobs:
           tags: |
             docker-registry.leedrisdev.engineer/goodonyou_scrapper_api:release-${{ github.run_number }}
             docker-registry.leedrisdev.engineer/goodonyou_scrapper_api:latest
-          platforms: |
-            linux/amd64
-            linux/arm64
+#          platforms: |
+#            linux/amd64
+#            linux/arm64
 
       - uses: sarisia/actions-status-discord@v1
         if: always()

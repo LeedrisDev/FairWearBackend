@@ -12,6 +12,7 @@ on:
       - 'FairWearGateway.API/**'
       - '.github/workflows/FairWearAPIGatewayCI.yml'
       - '.github/workflows/FairWearAPIGatewayCI.yml'
+      - 'Scripts/**'
 
 jobs:
   linter:

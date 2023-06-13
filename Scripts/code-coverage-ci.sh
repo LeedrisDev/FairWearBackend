@@ -52,4 +52,3 @@ if (( $(echo "$coverage < $THRESHOLD" | bc -l) )); then
 else
   echo -e "\033[0;32mCode coverage is $coverage%, which meets the threshold of $THRESHOLD%. Pipeline continues...\033[0m"
 fi
-

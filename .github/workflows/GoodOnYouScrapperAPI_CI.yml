@@ -161,11 +161,14 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Set Docker image tag
+        id: set_tag
+        run: echo "::set-output name=tag::${{ env.GITHUB_REF_NAME/\\//_ }}-${{ github.run_number }}"
+
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           context: .
           file: ./GoodOnYouScrapper.API/Dockerfile
           push: true
-          tags: ${{ secrets.REGISTRY_URL}}/goodonyou_scrapper_api:${{ github.ref_name/\\//_ }}-${{ github.run_number }}
-          
+          tags: ${{ secrets.REGISTRY_URL}}/goodonyou_scrapper_api:${{ steps.set_tag.outputs.tag }}

@@ -3,12 +3,13 @@ services:
   reverse-proxy:
     container_name: traefik
     restart: unless-stopped
-    depends_on: 
+    depends_on:
       - reverse-proxy-https-helper
     image: traefik:v2.10
     ports:
       - "80:80"
       - "443:443"
+      - "8080:8080"
     labels:
       - "traefik.http.services.traefik.loadbalancer.server.port=8080"
     volumes:
@@ -19,28 +20,33 @@ services:
     networks:
       - traefik-network
   
-  brand_and_product_db:
-    container_name: brand_and_product_db
-    build:
-        context: .
-        dockerfile: Databases/BrandsAndProductsDatabase/Dockerfile
-    restart: on-failure
-    ports: 
-      - "5432:5432"
-    
+      
   gateway_api:
     container_name: gateway_api
     build:
-        context: .
-        dockerfile: FairWearGateway.API/Dockerfile
+      context: .
+      dockerfile: FairWearGateway.API/Dockerfile
     restart: on-failure
     labels:
+      - "traefik.docker.network=fairwearbackend_traefik-network"
       - "traefik.http.routers.gateway_api.rule=Host(`gateway.traefik.me`)"
-      - "traefik.http.routers.gateway_api-tls.tls.domains[0].main=gateway.traefik.me"
-      - "traefik.http.routers.gateway_api-tls.tls.domains[0].sans=gateway-*.traefik.me"
       - "traefik.http.routers.gateway_api.tls=true"
-    networks: 
+    networks:
       - traefik-network
+      - fairwear_internal_network
+  
+  
+  brand_and_product_db:
+    container_name: brand_and_product_db
+    build:
+      context: .
+      dockerfile: Databases/BrandsAndProductsDatabase/Dockerfile
+    restart: on-failure
+    ports:
+      - "5432:5432"
+    networks:
+      - fairwear_internal_network
+  
   
   brand_and_product_api:
     container_name: brand_and_product_api
@@ -50,6 +56,9 @@ services:
     restart: on-failure
     ports:
       - "8081:80"
+    networks: 
+      - fairwear_internal_network
+  
   
   product_data_retriever_api:
     container_name: product_data_retriever_api
@@ -59,6 +68,9 @@ services:
     restart: on-failure
     ports:
       - "8082:80"
+    networks:
+      - fairwear_internal_network
+  
   
   good_on_you_scrapper_api:
     container_name: good_on_you_scrapper_api
@@ -68,16 +80,20 @@ services:
     restart: on-failure
     ports:
       - "8083:80"
+    networks:
+      - fairwear_internal_network
+  
   
   reverse-proxy-https-helper:
     container_name: reverse_proxy_https_helper
     image: alpine:3.17
     command: sh -c "cd /etc/ssl/traefik
       && wget traefik.me/cert.pem -O cert.pem
-      && wget traefik.me/privkey.pem -O privkey.pem"
+      && wget traefik.me/privkey.pem -O cert-key.pem"
     volumes:
       - ./TraefikConfig/Certs:/etc/ssl/traefik
 
 networks:
-    traefik-network:
-      driver: bridge
+  traefik-network:
+  
+  fairwear_internal_network:

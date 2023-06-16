@@ -7,7 +7,7 @@ namespace FairWearGateway.API.Tests.Models.Response;
 public class ErrorResponseTester
 {
     [TestMethod]
-    public void BrandResponse_Ranges_ShouldBeSettable()
+    public void ErrorResponse_Message_ShouldBeSettable()
     {
         // Arrange
         var errorResponse = new ErrorResponse();

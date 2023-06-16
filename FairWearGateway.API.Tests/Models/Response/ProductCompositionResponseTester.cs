@@ -4,7 +4,7 @@ using FluentAssertions;
 namespace FairWearGateway.API.Tests.Models.Response;
 
 [TestClass]
-public class ProductCompositionTester
+public class ProductCompositionResponseTester
 {
     [TestMethod]
     public void ProductCompositionResponse_Percentage_ShouldBeSettable()

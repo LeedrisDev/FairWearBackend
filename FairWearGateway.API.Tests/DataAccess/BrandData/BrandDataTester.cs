@@ -51,26 +51,6 @@ public class BrandDataTester
         result.Object.Should().BeEquivalentTo(brandResponse);
     }
 
-    // [TestMethod]
-    // public async Task GetBrandByIdAsync_ReturnsErrorResponse()
-    // {
-    //     // Arrange
-    //     var brandId = 1;
-    //
-    //     var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.NotFound);
-    //     httpResponseMessage.ReasonPhrase = "Brand not found";
-    //
-    //     _httpClientWrapperMock.Setup(m => m.GetAsync(It.IsAny<string>()))
-    //         .ReturnsAsync(httpResponseMessage);
-    //
-    //     // Act
-    //     var brandData = new API.DataAccess.BrandData.BrandData(_httpClientWrapperMock.Object);
-    //     var result = await brandData.GetBrandByIdAsync(brandId);
-    //
-    //     // Assert
-    //     result.Status.Should().Be(HttpStatusCode.NotFound);
-    //     result.ErrorMessage.Should().Be("Brand not found");
-    // }
 
     [TestMethod]
     public async Task GetBrandByNameAsync_ReturnsBrandResponse()

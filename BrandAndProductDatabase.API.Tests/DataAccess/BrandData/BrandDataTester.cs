@@ -86,7 +86,7 @@ public class BrandDataTester
     [TestMethod]
     public async Task GetBrandByNameAsync_ReturnsErrorForDeserializationFailure()
     {
-        // Arrange
+        // Arrange  
         var expectedName = "ExampleBrand";
 
         var expectedResponse = new HttpResponseMessage

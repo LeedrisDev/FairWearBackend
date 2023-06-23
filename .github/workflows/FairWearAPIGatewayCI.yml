@@ -9,6 +9,7 @@ on:
       - hotfix/*
       - release/*
       - fix/*
+      
     paths:
       - 'FairWearGateway.API/**'
       - '.github/workflows/FairWearAPIGatewayCI.yml'

@@ -117,10 +117,26 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-gateway-tests-
           
-      - name: 'Temporary command'
-        run: echo "Test code come here"
+      - name: 'Install dependencies'
+        run: |
+          dotnet restore FairWearGateway.API.Tests/FairWearGateway.API.Tests.csproj
+          dotnet restore FairWearGateway.API/FairWearGateway.API.csproj 
   
-  
+      - name: 'Run tests'
+        run: dotnet test --no-restore  --verbosity normal FairWearGateway.API.Tests/FairWearGateway.API.Tests.csproj
+
+      - name: 'Code Coverage'
+        run: ./Scripts/code-coverage-ci.sh -p FairWearGateway.API.Tests/FairWearGateway.API.Tests.csproj -t 70
+      
+      - uses: sarisia/actions-status-discord@v1
+        if: always()
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          status: ${{ job.status }}
+          title: "Build & Test  FairWear Gateway API"
+          username: GitHub Actions
+          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+          
   deploy:
     name: 'Deploy'
     needs:

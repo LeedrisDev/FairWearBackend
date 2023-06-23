@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrandAndProductDatabase.API
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrandAndProductDatabase.API.Tests", "BrandAndProductDatabase.API.Tests\BrandAndProductDatabase.API.Tests.csproj", "{85755176-D22D-44D6-B0B8-93AF38B6133C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FairWearGateway.API.Tests", "FairWearGateway.API.Tests\FairWearGateway.API.Tests.csproj", "{1BE7138B-BE21-43DD-AFF5-9F21220A77EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +50,9 @@ Global
 		{85755176-D22D-44D6-B0B8-93AF38B6133C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85755176-D22D-44D6-B0B8-93AF38B6133C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{85755176-D22D-44D6-B0B8-93AF38B6133C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BE7138B-BE21-43DD-AFF5-9F21220A77EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BE7138B-BE21-43DD-AFF5-9F21220A77EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BE7138B-BE21-43DD-AFF5-9F21220A77EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BE7138B-BE21-43DD-AFF5-9F21220A77EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

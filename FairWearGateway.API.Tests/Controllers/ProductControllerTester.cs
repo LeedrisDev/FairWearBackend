@@ -54,6 +54,53 @@ public class ProductControllerTester
     }
 
     [TestMethod]
+    public async Task GetProductByIdAsync_ReturnsNotFound_WhenProductDoesNotExist()
+    {
+        // Arrange
+        var productId = 1;
+        var processingStatusResponse = new ProcessingStatusResponse<ProductResponse>()
+        {
+            Status = HttpStatusCode.NotFound,
+        };
+
+        _productBusinessMock.Setup(m => m.GetProductByIdAsync(It.IsAny<int>()))
+            .ReturnsAsync(processingStatusResponse);
+
+        // Act
+        var productsController = new API.Controllers.ProductsController(_productBusinessMock.Object);
+        var actionResult = await productsController.GetProductByIdAsync(productId);
+        var notFoundResult = actionResult as NotFoundObjectResult;
+
+        // Assert
+        notFoundResult.Should().NotBeNull();
+        notFoundResult.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+    }
+
+    [TestMethod]
+    public async Task GetProductByIdAsync_Error_ReturnsStatusCodeResult()
+    {
+        // Arrange
+        var productId = 1;
+        var processingStatusResponse = new ProcessingStatusResponse<ProductResponse>()
+        {
+            Status = HttpStatusCode.InternalServerError,
+        };
+
+
+        _productBusinessMock.Setup(m => m.GetProductByIdAsync(It.IsAny<int>()))
+            .ReturnsAsync(processingStatusResponse);
+
+        // Act
+        var productsController = new API.Controllers.ProductsController(_productBusinessMock.Object);
+        var actionResult = await productsController.GetProductByIdAsync(productId);
+
+        // Assert
+        actionResult.Should().BeOfType<ObjectResult>();
+        var objectResult = (ObjectResult)actionResult;
+        objectResult.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+    }
+
+    [TestMethod]
     public async Task GetProductByUpcAsync_ReturnsOkResultWithProductInformationResponse()
     {
         // Arrange
@@ -95,5 +142,54 @@ public class ProductControllerTester
         okResult.Should().NotBeNull();
         okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
         okResult.Value.Should().BeEquivalentTo(productInformationResponse);
+    }
+
+    [TestMethod]
+    public async Task GetProductByUpcAsync_ReturnsNotFound_WhenProductDoesNotExist()
+    {
+        // Arrange
+        var upc = "123456";
+
+        var processingStatusResponse = new ProcessingStatusResponse<ProductInformationResponse>()
+        {
+            Status = HttpStatusCode.NotFound,
+        };
+
+        _productBusinessMock.Setup(m => m.GetProductByUpcAsync(It.IsAny<string>()))
+            .ReturnsAsync(processingStatusResponse);
+
+        // Act
+        var productsController = new API.Controllers.ProductsController(_productBusinessMock.Object);
+        var actionResult = await productsController.GetProductByUpcAsync(upc);
+        var notFoundResult = actionResult as NotFoundObjectResult;
+
+        // Assert
+        notFoundResult.Should().NotBeNull();
+        notFoundResult.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+    }
+
+
+    [TestMethod]
+    public async Task GetProductByUpcAsync_Error_ReturnsStatusCodeResult()
+    {
+        // Arrange
+        var upc = "123456";
+
+        var processingStatusResponse = new ProcessingStatusResponse<ProductInformationResponse>()
+        {
+            Status = HttpStatusCode.InternalServerError,
+        };
+
+        _productBusinessMock.Setup(m => m.GetProductByUpcAsync(It.IsAny<string>()))
+            .ReturnsAsync(processingStatusResponse);
+
+        // Act
+        var productsController = new API.Controllers.ProductsController(_productBusinessMock.Object);
+        var actionResult = await productsController.GetProductByUpcAsync(upc);
+
+        // Assert
+        actionResult.Should().BeOfType<ObjectResult>();
+        var objectResult = (ObjectResult)actionResult;
+        objectResult.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
     }
 }

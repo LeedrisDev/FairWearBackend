@@ -58,6 +58,50 @@ public class BrandControllerTester
     }
 
     [TestMethod]
+    public async Task GetBrandByIdAsync_ReturnsNotFound_WhenBrandDoesNotExist()
+    {
+        // Arrange
+
+        var businessResponse = new ProcessingStatusResponse<BrandResponse>()
+        {
+            Status = HttpStatusCode.NotFound
+        };
+
+        _brandBusinessMock.Setup(b => b.GetBrandByIdAsync(It.IsAny<int>())).ReturnsAsync(businessResponse);
+        var brandsController = new API.Controllers.BrandsController(_brandBusinessMock.Object);
+
+        // Act
+        var result = await brandsController.GetBrandByIdAsync(1);
+
+        // Assert
+        result.Should().BeOfType<NotFoundObjectResult>();
+        var notFoundResult = result as NotFoundResult;
+        notFoundResult?.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+    }
+
+    [TestMethod]
+    public async Task GetBrandByIdAsync_ReturnsErrorStatusCode_WhenBrandBusinessFails()
+    {
+        // Arrange
+        var businessResult = new ProcessingStatusResponse<BrandResponse>()
+        {
+            Status = HttpStatusCode.InternalServerError
+        };
+
+        _brandBusinessMock.Setup(b => b.GetBrandByIdAsync(It.IsAny<int>())).ReturnsAsync(businessResult);
+
+
+        // Act
+        var brandsController = new API.Controllers.BrandsController(_brandBusinessMock.Object);
+        var result = await brandsController.GetBrandByIdAsync(1);
+
+        // Assert
+        result.Should().BeOfType<ObjectResult>();
+        var objectResult = (ObjectResult)result;
+        objectResult.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+    }
+
+    [TestMethod]
     public async Task GetBrandByNameAsync_ReturnsOkResultWithBrandResponse()
     {
         // Arrange
@@ -96,5 +140,64 @@ public class BrandControllerTester
         okResult.Should().NotBeNull();
         okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
         okResult.Value.Should().BeEquivalentTo(brandResponse);
+    }
+
+    [TestMethod]
+    public async Task GetBrandByNameAsync_NonExistingBrand_ReturnsNotFoundResult()
+    {
+        // Arrange
+        var brandName = "BrandName";
+        var brandRequest = new BrandRequest { Name = brandName };
+
+        var businessResult = new ProcessingStatusResponse<BrandResponse>()
+        {
+            Status = HttpStatusCode.NotFound,
+            MessageObject = { Message = $"Brand with Name {brandName} not found." }
+        };
+        _brandBusinessMock.Setup(b => b.GetBrandByNameAsync(brandName))
+            .ReturnsAsync(businessResult);
+
+        // Act
+        var brandsController = new API.Controllers.BrandsController(_brandBusinessMock.Object);
+        var result = await brandsController.GetBrandByNameAsync(brandRequest);
+
+        // Assert
+        result.Should().BeOfType<NotFoundObjectResult>();
+        var notFoundResult = (NotFoundObjectResult)result;
+        notFoundResult.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+        notFoundResult.Value.Should().BeEquivalentTo(new ErrorResponse()
+        {
+            Message = $"Brand with Name {brandName} not found."
+        });
+    }
+
+    [TestMethod]
+    public async Task GetBrandByNameAsync_Error_ReturnsStatusCodeResult()
+    {
+        // Arrange
+        var brandName = "BrandName";
+        var brandRequest = new BrandRequest { Name = brandName };
+
+        var businessResult = new ProcessingStatusResponse<BrandResponse>()
+        {
+            Status = HttpStatusCode.InternalServerError,
+            MessageObject = { Message = "An error occurred." }
+        };
+
+        _brandBusinessMock.Setup(b => b.GetBrandByNameAsync(brandName))
+            .ReturnsAsync(businessResult);
+
+        // Act
+        var brandsController = new API.Controllers.BrandsController(_brandBusinessMock.Object);
+        var result = await brandsController.GetBrandByNameAsync(brandRequest);
+
+        // Assert
+        result.Should().BeOfType<ObjectResult>();
+        var objectResult = (ObjectResult)result;
+        objectResult.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+        objectResult.Value.Should().BeEquivalentTo(new ErrorResponse()
+        {
+            Message = "An error occurred."
+        });
     }
 }

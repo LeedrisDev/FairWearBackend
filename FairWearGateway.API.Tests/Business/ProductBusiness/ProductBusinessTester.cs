@@ -51,6 +51,27 @@ public class ProductBusinessTester
     }
 
     [TestMethod]
+    public async Task GetProductByIdAsync_ReturnsNotFound_WhenProductDoesNotExist()
+    {
+        // Arrange
+        var productId = 1;
+        var businessResponse = new ProcessingStatusResponse<ProductResponse>()
+        {
+            Status = HttpStatusCode.NotFound
+        };
+
+        _productDataMock.Setup(m => m.GetProductByIdAsync(It.IsAny<int>()))
+            .ReturnsAsync(businessResponse);
+
+        // Act
+        var productBusiness = new API.Business.ProductBusiness.ProductBusiness(_productDataMock.Object);
+        var result = await productBusiness.GetProductByIdAsync(productId);
+
+        // Assert
+        result.Status.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [TestMethod]
     public async Task GetProductByUpcAsync_ReturnsProductInformationResponse()
     {
         // Arrange
@@ -89,5 +110,27 @@ public class ProductBusinessTester
         // Assert
         result.Status.Should().Be(HttpStatusCode.OK);
         result.Object.Should().BeEquivalentTo(productInformationResponse);
+    }
+
+    [TestMethod]
+    public async Task GetProductByUpcAsync_ReturnsNotFound_WhenProductDoesNotExist()
+    {
+        // Arrange
+        var upc = "123456789";
+
+        var processingStatusResponse = new ProcessingStatusResponse<ProductInformationResponse>()
+        {
+            Status = HttpStatusCode.NotFound,
+        };
+
+        _productDataMock.Setup(m => m.GetProductByUpcAsync(It.IsAny<string>()))
+            .ReturnsAsync(processingStatusResponse);
+
+        // Act
+        var productBusiness = new API.Business.ProductBusiness.ProductBusiness(_productDataMock.Object);
+        var result = await productBusiness.GetProductByUpcAsync(upc);
+
+        // Assert
+        result.Status.Should().Be(HttpStatusCode.NotFound);
     }
 }

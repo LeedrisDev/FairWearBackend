@@ -1,10 +1,10 @@
 services:
   
-  reverse-proxy:
+  treafik:
     container_name: traefik
     restart: unless-stopped
     depends_on:
-      - reverse-proxy-https-helper
+      - traefik-helper
     image: traefik:v2.10
     ports:
       - "80:80"
@@ -27,6 +27,9 @@ services:
       context: .
       dockerfile: FairWearGateway.API/Dockerfile
     restart: on-failure
+    environment:
+      - BRAND_AND_PRODUCT_API_SERVICE_HOST=brand_and_product_api
+      - BRAND_AND_PRODUCT_API_SERVICE_PORT_HTTP=80
     labels:
       - "traefik.docker.network=fairwearbackend_traefik-network"
       - "traefik.http.routers.gateway_api.rule=Host(`gateway.traefik.me`)"
@@ -34,7 +37,7 @@ services:
     networks:
       - traefik-network
       - fairwear_internal_network
-  
+
   
   brand_and_product_db:
     container_name: brand_and_product_db
@@ -42,6 +45,10 @@ services:
       context: .
       dockerfile: Databases/BrandsAndProductsDatabase/Dockerfile
     restart: on-failure
+    environment:
+      - POSTGRES_USER=fairwear
+      - POSTGRES_PASSWORD=fairwear
+      - POSTGRES_DB=fairwear_brand_and_product_database
     ports:
       - "5432:5432"
     networks:
@@ -54,6 +61,13 @@ services:
         context: .
         dockerfile: BrandAndProductDatabase.API/Dockerfile
     restart: on-failure
+    environment:
+      - GOODONYOU_SCRAPPER_SERVICE_HOST=good_on_you_scrapper_api
+      - GOODONYOU_SCRAPPER_SERVICE_PORT_HTTP=80
+      - PRODUCT_DATA_RETRIEVER_SERVICE_HOST=product_data_retriever_api
+      - PRODUCT_DATA_RETRIEVER_SERVICE_PORT_HTTP=80
+      - BRAND_AND_PRODUCT_DB_SERVICE_HOST=brand_and_product_db
+      - BRAND_AND_PRODUCT_DB_SERVICE_PORT_HTTP=5432
     ports:
       - "8081:80"
     networks: 
@@ -84,8 +98,8 @@ services:
       - fairwear_internal_network
   
   
-  reverse-proxy-https-helper:
-    container_name: reverse_proxy_https_helper
+  traefik-helper:
+    container_name: traefik-helper
     image: alpine:3.17
     command: sh -c "cd /etc/ssl/traefik
       && wget traefik.me/cert.pem -O cert.pem

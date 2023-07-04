@@ -25,7 +25,7 @@ public class BrandBusiness: IBrandBusiness
         _processingStatusResponse = new ProcessingStatusResponse<BrandResponse>();
         _brandData = brandData;
     }
-    
+
     /// <inheritdoc/>
     public async Task<ProcessingStatusResponse<BrandResponse>> GetBrandInformation(string brandName)
     {
@@ -39,13 +39,11 @@ public class BrandBusiness: IBrandBusiness
         }
         catch (HttpRequestException e)
         {
-            _processingStatusResponse.Status = e.StatusCode?? HttpStatusCode.InternalServerError;
+            _processingStatusResponse.Status = e.StatusCode ?? HttpStatusCode.InternalServerError;
             _processingStatusResponse.ErrorMessage = e.Message;
             return _processingStatusResponse;
         }
-        
-        // TODO: Implement the rest of the logic
-        
+
         var brandModel = new BrandResponse
         {
             Name = brandName,
@@ -55,12 +53,12 @@ public class BrandBusiness: IBrandBusiness
             AnimalRating = GetRating(htmlDocument, AppConstants.XPathAnimalRating),
             RatingDescription = GetRatingDescription(htmlDocument),
             Categories = GetBrandCategories(htmlDocument),
-            Ranges = GetBrandRanges(htmlDocument),
+            Ranges = GetBrandRanges(htmlDocument)
         };
 
         _processingStatusResponse.Status = HttpStatusCode.OK;
         _processingStatusResponse.Object = brandModel;
-        
+
         return _processingStatusResponse;
     }
 
@@ -88,9 +86,8 @@ public class BrandBusiness: IBrandBusiness
             .InnerHtml;
 
         if (rating != null)
-        {
             return rating[0] - '0';
-        }
+
         return -1;
     }
 
@@ -105,15 +102,15 @@ public class BrandBusiness: IBrandBusiness
             .First()
             .ChildNodes;
 
-        StringBuilder sb = new StringBuilder();
-        
+        var sb = new StringBuilder();
+
         foreach (var node in ratingSummaryNodes)
         {
             if (node.Name == "ul")
             {
                 foreach (var li in node.ChildNodes)
                 {
-                    sb.Append("\t" + "- "+ li.InnerText + "\n");
+                    sb.Append("\t" + "- " + li.InnerText + "\n");
                 }
             }
             else
@@ -124,10 +121,10 @@ public class BrandBusiness: IBrandBusiness
             if (node.NextSibling is { Name: "p" })
                 sb.Append('\n');
         }
-        
+
         return sb.ToString();
     }
-    
+
     /// <summary>
     /// Retrieves the location of a brand
     /// </summary>
@@ -140,10 +137,10 @@ public class BrandBusiness: IBrandBusiness
             .SelectNodes(AppConstants.XPathBrandCountry)
             .First()
             .InnerText;
-        
+
         return country.StartsWith("location: ") ? country.Substring("location: ".Length) : "";
     }
-    
+
     private static string[] GetBrandCategories(HtmlDocument doc)
     {
         var sideBar = doc
@@ -151,7 +148,7 @@ public class BrandBusiness: IBrandBusiness
             .SelectNodes(AppConstants.XPathSideBar)
             .First()
             .ChildNodes;
-        
+
         var listCategories = new List<String>();
         var divList = sideBar.Where(row => row.Name == "div").ToList();
 
@@ -166,44 +163,44 @@ public class BrandBusiness: IBrandBusiness
                     var str = HttpUtility.HtmlDecode(node.InnerText);
                     listCategories.Add(str);
                 }
+
                 return listCategories.ToArray();
 
             }
         }
+
         return listCategories.ToArray();
     }
-    
-    
-    private static string[] GetBrandRanges(HtmlDocument doc)
+
+
+    private static IEnumerable<string> GetBrandRanges(HtmlDocument doc)
     {
         var sideBar = doc
             .DocumentNode
             .SelectNodes(AppConstants.XPathSideBar)
             .First()
             .ChildNodes;
-        
+
         var divList = sideBar.Where(row => row.Name == "div").ToList();
-        
-        var listRanges = new List<String>();
-        
+
+        var listRanges = new List<string>();
+
         foreach (var row in divList)
         {
-            if (row.FirstChild.InnerText == "RANGE")
+            if (row.FirstChild.InnerText != "RANGE") 
+                continue;
+            
+            row.ChildNodes.RemoveAt(0);
+            foreach (var node in row.ChildNodes)
             {
-                row.ChildNodes.RemoveAt(0);
-                foreach (var node in row.ChildNodes)
-                {
-                    var str = HttpUtility.HtmlDecode(node.InnerText);
-                    str = Regex.Replace(str, @"[^\w]", string.Empty);
-                    listRanges.Add(str);
-                }
-
-                return listRanges.ToArray();
+                var str = HttpUtility.HtmlDecode(node.InnerText);
+                str = Regex.Replace(str, @"[^\w]", string.Empty);
+                listRanges.Add(str);
             }
+
+            return listRanges.ToArray();
         }
 
         return listRanges.ToArray();
     }
-
-
 }

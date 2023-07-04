@@ -5,6 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 
+// Validate required environment variables
+EnvironmentValidator.ValidateRequiredVariables();
+
 // Dependency Injection
 DependencyInjectionConfiguration.Configure(builder.Services);
 

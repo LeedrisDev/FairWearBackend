@@ -2,6 +2,9 @@ using BrandAndProductDatabase.API.Config;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Validate required environment variables
+EnvironmentValidator.ValidateRequiredVariables();
+
 // Add services to the container.
 
 builder.Services.AddControllers();

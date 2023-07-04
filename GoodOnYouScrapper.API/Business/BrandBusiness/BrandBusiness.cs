@@ -31,9 +31,11 @@ public class BrandBusiness: IBrandBusiness
     {
         HtmlDocument htmlDocument;
 
+        var treatedBrandName = TreatBrandName(brandName);
+
         try
         {
-            htmlDocument = await _brandData.GetBrandPageHtml(brandName);
+            htmlDocument = await _brandData.GetBrandPageHtml(treatedBrandName);
         }
         catch (HttpRequestException e)
         {
@@ -61,8 +63,18 @@ public class BrandBusiness: IBrandBusiness
         
         return _processingStatusResponse;
     }
-    
-    
+
+    private static string TreatBrandName(string brandName)
+    {
+        var treatedName = brandName
+            .ToLowerInvariant()
+            .Replace(" ", "-")
+            .Replace("'", "");
+
+        return treatedName;
+    }
+
+
     /// <summary>Retrieves the rating for a specific category</summary>
     /// <param name="doc">Document to retrieve the information from</param>
     /// <param name="xpath">Path of the content in the source document</param>

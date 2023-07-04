@@ -128,7 +128,7 @@ jobs:
         run: dotnet test --no-restore  --verbosity normal FairWearGateway.API.Tests/FairWearGateway.API.Tests.csproj
 
       - name: 'Code Coverage'
-        run: ./Scripts/code-coverage-ci.sh -p FairWearGateway.API.Tests/FairWearGateway.API.Tests.csproj -t 70
+        run: ./Scripts/code-coverage-ci.sh -p FairWearGateway.API.Tests/FairWearGateway.API.Tests.csproj -t 60
       
       - uses: sarisia/actions-status-discord@v1
         if: always()

@@ -22,7 +22,7 @@ public static class DependencyInjectionConfiguration
         services.AddDbContext<BrandAndProductDbContext>(options =>
         {
             options.UseNpgsql(
-                "User ID=fairwear;Password=fairwear;Host=brand_and_product_db;Port=5432;Database=fairwear_brand_and_product_database;");
+                $"User ID=fairwear;Password=fairwear;Host={AppConstants.BrandAndProductDatabaseHost};Port={AppConstants.BrandAndProductDatabasePort};Database=fairwear_brand_and_product_database;");
         });
 
         // Services

@@ -40,6 +40,31 @@ namespace BrandAndProductDatabase.Service.Services
             }
         }
 
+        public override async Task<BrandResponse> GetBrandByIdAsync(BrandByIdRequest request, ServerCallContext context)
+        {
+            var brand = await _brandBusiness.GetBrandByIdAsync(request.Id);
+
+            return brand.Status switch
+            {
+                HttpStatusCode.NotFound => throw new RpcException(new Status(StatusCode.NotFound, brand.ErrorMessage)),
+                HttpStatusCode.OK => _mapper.Map<BrandResponse>(brand.Object),
+                _ => throw new RpcException(new Status(StatusCode.Internal, brand.ErrorMessage))
+            };
+        }
+
+        public override async Task<BrandResponse> GetBrandByNameAsync(BrandByNameRequest request,
+            ServerCallContext context)
+        {
+            var brand = await _brandBusiness.GetBrandByNameAsync(request.Name);
+
+            return brand.Status switch
+            {
+                HttpStatusCode.NotFound => throw new RpcException(new Status(StatusCode.NotFound, brand.ErrorMessage)),
+                HttpStatusCode.OK => _mapper.Map<BrandResponse>(brand.Object),
+                _ => throw new RpcException(new Status(StatusCode.Internal, brand.ErrorMessage))
+            };
+        }
+
         public override async Task<BrandResponse> CreateBrandAsync(BrandRequest request, ServerCallContext context)
         {
             var createdBrand = await _brandBusiness.CreateBrandAsync(_mapper.Map<BrandDto>(request));
@@ -48,6 +73,42 @@ namespace BrandAndProductDatabase.Service.Services
             {
                 HttpStatusCode.OK => _mapper.Map<BrandResponse>(createdBrand.Object),
                 _ => throw new RpcException(new Status(StatusCode.Internal, createdBrand.ErrorMessage))
+            };
+        }
+
+        public override async Task<BrandResponse> UpdateBrandAsync(BrandResponse request, ServerCallContext context)
+        {
+            var updatedBrand = await _brandBusiness.UpdateBrandAsync(_mapper.Map<BrandDto>(request));
+
+            return updatedBrand.Status switch
+            {
+                HttpStatusCode.NotFound => throw new RpcException(new Status(StatusCode.NotFound,
+                    updatedBrand.ErrorMessage)),
+                HttpStatusCode.OK => _mapper.Map<BrandResponse>(updatedBrand.Object),
+                _ => throw new RpcException(new Status(StatusCode.Internal, updatedBrand.ErrorMessage))
+            };
+        }
+
+        public override async Task<Empty> DeleteBrandAsync(BrandByIdRequest request, ServerCallContext context)
+        {
+            var brand = await _brandBusiness.GetBrandByIdAsync(request.Id);
+
+            if (brand.Status != HttpStatusCode.OK)
+            {
+                return brand.Status switch
+                {
+                    HttpStatusCode.NotFound => throw new RpcException(new Status(StatusCode.NotFound,
+                        brand.ErrorMessage)),
+                    _ => throw new RpcException(new Status(StatusCode.Internal, brand.ErrorMessage))
+                };
+            }
+
+            var deleteBrand = await _brandBusiness.DeleteBrandAsync(request.Id);
+
+            return deleteBrand.Status switch
+            {
+                HttpStatusCode.OK => new Empty(),
+                _ => throw new RpcException(new Status(StatusCode.Internal, brand.ErrorMessage))
             };
         }
     }

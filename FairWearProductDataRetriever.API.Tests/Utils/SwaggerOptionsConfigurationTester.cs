@@ -1,4 +1,4 @@
-using FairWearProductDataRetriever.API.Utils;
+using FairWearProductDataRetriever.Service.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Moq;
@@ -22,9 +22,9 @@ public class SwaggerOptionsConfigurationTester
         providerMock.Setup(p => p.ApiVersionDescriptions).Returns(apiVersionDescriptions);
 
         var swaggerOptionsConfiguration = new SwaggerOptionsConfiguration(providerMock.Object);
-        
+
         swaggerOptionsConfiguration.Configure(options);
-        
+
         Assert.AreEqual(2, options.SwaggerGeneratorOptions.SwaggerDocs.Count);
         Assert.IsTrue(options.SwaggerGeneratorOptions.SwaggerDocs.ContainsKey("v1"));
         Assert.IsTrue(options.SwaggerGeneratorOptions.SwaggerDocs.ContainsKey("v2"));
@@ -33,10 +33,9 @@ public class SwaggerOptionsConfigurationTester
         Assert.AreEqual(AppConstants.ApiName, v1Info.Title);
         Assert.AreEqual("1.0", v1Info.Version);
         Assert.AreEqual($" {AppConstants.ApiVersionDeprecatedDescription}", v1Info.Description);
-        
+
         var v2Info = options.SwaggerGeneratorOptions.SwaggerDocs["v2"];
         Assert.AreEqual(AppConstants.ApiName, v2Info.Title);
         Assert.AreEqual("2.0", v2Info.Version);
     }
-
 }

@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\brandService.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\BrandService.proto" GrpcServices="Server"/>
   </ItemGroup>
 
 </Project>

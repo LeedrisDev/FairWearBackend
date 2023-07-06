@@ -2,6 +2,7 @@ using System.Net;
 using System.Web;
 using FairWearProductDataRetriever.Service.DataAccess.ProductData;
 using FairWearProductDataRetriever.Service.Models;
+using FairWearProductDataRetriever.Service.Protos;
 using FairWearProductDataRetriever.Service.Utils;
 using HtmlAgilityPack;
 
@@ -10,19 +11,19 @@ namespace FairWearProductDataRetriever.Service.Business.ProductBusiness;
 /// <summary>Business logic for retrieving product information.</summary>
 public class ProductBusiness : IProductBusiness
 {
-    private readonly ProcessingStatusResponse<ProductModel> _processingStatusResponse;
+    private readonly ProcessingStatusResponse<ProductResponse> _processingStatusResponse;
     private readonly IProductData _productData;
 
     /// <summary>/// Constructor</summary>
     /// <param name="productData">DataAccess of products</param>
     public ProductBusiness(IProductData productData)
     {
-        _processingStatusResponse = new ProcessingStatusResponse<ProductModel>();
+        _processingStatusResponse = new ProcessingStatusResponse<ProductResponse>();
         _productData = productData;
     }
 
     /// <inheritdoc/>
-    public async Task<ProcessingStatusResponse<ProductModel>> GetProductInformation(string barcode)
+    public async Task<ProcessingStatusResponse<ProductResponse>> GetProductInformation(string barcode)
     {
         HtmlDocument htmlDocument;
 
@@ -41,7 +42,7 @@ public class ProductBusiness : IProductBusiness
             return _processingStatusResponse;
         }
 
-        var productModel = new ProductModel()
+        var productResponse = new ProductResponse()
         {
             UpcCode = barcode,
             Name = GetProductName(htmlDocument),
@@ -50,7 +51,7 @@ public class ProductBusiness : IProductBusiness
         };
 
         _processingStatusResponse.Status = HttpStatusCode.OK;
-        _processingStatusResponse.Object = productModel;
+        _processingStatusResponse.Object = productResponse;
 
         return _processingStatusResponse;
     }

@@ -1,4 +1,4 @@
-namespace FairWearProductDataRetriever.API.Models;
+namespace FairWearProductDataRetriever.Service.Models;
 
 /// <summary>Model for a product</summary>
 public class ProductModel

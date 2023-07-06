@@ -1,17 +1,17 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text.RegularExpressions;
-using FairWearProductDataRetriever.API.Business.ProductBusiness;
-using FairWearProductDataRetriever.API.Models;
+using FairWearProductDataRetriever.Service.Business.ProductBusiness;
+using FairWearProductDataRetriever.Service.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FairWearProductDataRetriever.API.Controllers;
+namespace FairWearProductDataRetriever.Service.Controllers;
 
 /// <summary>Controller for retrieving product information.</summary>
 [ApiController]
 [Route("api/product")]
 [Produces("application/json")]
-public class ProductController: ControllerBase
+public class ProductController : ControllerBase
 {
     private readonly IProductBusiness _productBusiness;
 
@@ -21,7 +21,7 @@ public class ProductController: ControllerBase
     {
         _productBusiness = productBusiness;
     }
-    
+
     /// <summary> Get product information from a barcode.</summary>
     /// <param name="barcode">Barcode of the product.</param>
     /// <returns> Product information.</returns>
@@ -44,7 +44,7 @@ public class ProductController: ControllerBase
             _ => StatusCode((int)productInformation.Status, productInformation.MessageObject)
         };
     }
-    
+
     private static bool IsBarcodeValid(string barcode)
     {
         // return barcode.Length == 13;

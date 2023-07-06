@@ -1,4 +1,4 @@
-using FairWearProductDataRetriever.API.Models;
+using FairWearProductDataRetriever.Service.Models;
 
 namespace ProductDataRetriever.Test.Models;
 
@@ -15,7 +15,7 @@ public class ProductModelTester
 
         Assert.AreEqual("193392069882", product.UpcCode);
     }
-    
+
     [TestMethod]
     public void Create_ProductModel_With_Name()
     {
@@ -63,5 +63,4 @@ public class ProductModelTester
         Assert.AreEqual("Men", product.Ranges.ElementAt(0));
         Assert.AreEqual("Women", product.Ranges.ElementAt(1));
     }
-
 }

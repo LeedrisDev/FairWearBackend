@@ -1,14 +1,14 @@
-﻿using Grpc.Core;
-using System.Net;
+﻿using System.Net;
 using GoodOnYouScrapper.Service.Business.BrandBusiness;
-using GoodOnYouScrapper.Service.Proto;
+using GoodOnYouScrapper.Service.Protos;
+using Grpc.Core;
 
 namespace GoodOnYouScrapper.Service.Services
 {
-    public class BrandService : Proto.BrandService.BrandServiceBase
+    public class BrandService : Protos.BrandService.BrandServiceBase
     {
-        private readonly ILogger<BrandService> _logger;
         private readonly IBrandBusiness _brandBusiness;
+        private readonly ILogger<BrandService> _logger;
 
         public BrandService(IBrandBusiness brandBusiness, ILogger<BrandService> logger)
         {
@@ -22,11 +22,11 @@ namespace GoodOnYouScrapper.Service.Services
 
             return brandInformation.Status switch
             {
-                HttpStatusCode.NotFound => throw new RpcException(new Status(StatusCode.NotFound, brandInformation.ErrorMessage)),
+                HttpStatusCode.NotFound => throw new RpcException(new Status(StatusCode.NotFound,
+                    brandInformation.ErrorMessage)),
                 HttpStatusCode.OK => brandInformation.Object,
                 _ => throw new RpcException(new Status(StatusCode.Internal, brandInformation.ErrorMessage))
             };
         }
-        
     }
 }

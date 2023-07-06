@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using GoodOnYouScrapper.Service.DataAccess.BrandData;
 using GoodOnYouScrapper.Service.Models;
-using GoodOnYouScrapper.Service.Proto;
+using GoodOnYouScrapper.Service.Protos;
 using GoodOnYouScrapper.Service.Utils;
 using HtmlAgilityPack;
 
@@ -13,10 +13,10 @@ namespace GoodOnYouScrapper.Service.Business.BrandBusiness;
 /// <summary>
 /// 
 /// </summary>
-public class BrandBusiness: IBrandBusiness
+public class BrandBusiness : IBrandBusiness
 {
-    private readonly ProcessingStatusResponse<BrandResponse> _processingStatusResponse;
     private readonly IBrandData _brandData;
+    private readonly ProcessingStatusResponse<BrandResponse> _processingStatusResponse;
 
     /// <summary>Constructor</summary>
     /// <param name="brandData">Data access layer for the brand</param>
@@ -166,7 +166,6 @@ public class BrandBusiness: IBrandBusiness
                 }
 
                 return listCategories.ToArray();
-
             }
         }
 
@@ -188,9 +187,9 @@ public class BrandBusiness: IBrandBusiness
 
         foreach (var row in divList)
         {
-            if (row.FirstChild.InnerText != "RANGE") 
+            if (row.FirstChild.InnerText != "RANGE")
                 continue;
-            
+
             row.ChildNodes.RemoveAt(0);
             foreach (var node in row.ChildNodes)
             {

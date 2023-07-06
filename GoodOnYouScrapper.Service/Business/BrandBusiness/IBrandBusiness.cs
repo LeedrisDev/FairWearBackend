@@ -1,5 +1,5 @@
 using GoodOnYouScrapper.Service.Models;
-using GoodOnYouScrapper.Service.Proto;
+using GoodOnYouScrapper.Service.Protos;
 
 namespace GoodOnYouScrapper.Service.Business.BrandBusiness;
 

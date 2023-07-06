@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option csharp_namespace = "BrandAndProductDatabase.Service.Protos";
+
+// Services
+service BrandService {
+    rpc GetAllBrandsAsync (google.protobuf.Empty) returns (stream BrandResponse);
+    rpc CreateBrandAsync (BrandRequest) returns (BrandResponse);
+}
+
+// Requests
+message BrandByNameRequest {
+    string name = 1;
+}
+
+message BrandByIdRequest {
+    int32 id = 1;
+}
+
+message BrandRequest {
+    string name = 1;
+    string country = 2;
+    int32 environmentRating = 3;
+    int32 peopleRating = 4;
+    int32 animalRating = 5;
+    string ratingDescription = 6;
+    repeated string categories = 7;
+    repeated string ranges = 8;
+}
+
+// Responses
+message BrandResponse {
+    int32 id = 1;
+    string name = 2;
+    string country = 3;
+    int32 environmentRating = 4;
+    int32 peopleRating = 5;
+    int32 animalRating = 6;
+    string ratingDescription = 7;
+    repeated string categories = 8;
+    repeated string ranges = 9;
+}
+
+
+

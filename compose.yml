@@ -55,11 +55,29 @@ services:
       - fairwear_internal_network
   
   
-  brand_and_product_api:
-    container_name: brand_and_product_api
+#  brand_and_product_api:
+#    container_name: brand_and_product_api
+#    build:
+#        context: .
+#        dockerfile: BrandAndProductDatabase.API/Dockerfile
+#    restart: on-failure
+#    environment:
+#      - GOODONYOU_SCRAPPER_SERVICE_HOST=good_on_you_scrapper_api
+#      - GOODONYOU_SCRAPPER_SERVICE_PORT_HTTP=80
+#      - PRODUCT_DATA_RETRIEVER_SERVICE_HOST=product_data_retriever_api
+#      - PRODUCT_DATA_RETRIEVER_SERVICE_PORT_HTTP=80
+#      - BRAND_AND_PRODUCT_DB_SERVICE_HOST=brand_and_product_db
+#      - BRAND_AND_PRODUCT_DB_SERVICE_PORT_HTTP=5432
+#    ports:
+#      - "8081:80"
+#    networks: 
+#      - fairwear_internal_network
+  
+  brand_and_product_service:
+    container_name: brand_and_product_service
     build:
-        context: .
-        dockerfile: BrandAndProductDatabase.API/Dockerfile
+      context: .
+      dockerfile: BrandAndProductDatabase.Service/Dockerfile
     restart: on-failure
     environment:
       - GOODONYOU_SCRAPPER_SERVICE_HOST=good_on_you_scrapper_api
@@ -70,7 +88,7 @@ services:
       - BRAND_AND_PRODUCT_DB_SERVICE_PORT_HTTP=5432
     ports:
       - "8081:80"
-    networks: 
+    networks:
       - fairwear_internal_network
   
   

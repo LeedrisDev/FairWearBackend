@@ -7,8 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.49.0"/>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.46"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BrandAndProductDatabase.Service\BrandAndProductDatabase.Service.csproj"/>
   </ItemGroup>
 
   <ItemGroup>

@@ -1,10 +1,10 @@
-using GoodOnYouScrapper.Service.Business.BrandBusiness;
-using GoodOnYouScrapper.Service.DataAccess.BrandData;
-using GoodOnYouScrapper.Service.Services;
-using GoodOnYouScrapper.Service.Utils.HttpClientWrapper;
-using HtmlAgilityPack;
+using BrandAndProductDatabase.Service.Config;
+using BrandAndProductDatabase.Service.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Validate required environment variables
+EnvironmentValidator.ValidateRequiredVariables();
 
 // Additional configuration is required to successfully run gRPC on macOS.
 // For instructions on how to configure Kestrel and gRPC clients on macOS, visit https://go.microsoft.com/fwlink/?linkid=2099682
@@ -12,16 +12,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddGrpc();
 
-// Dependency Injection
-builder.Services.AddHttpClient<IHttpClientWrapper, HttpClientWrapper>();
-builder.Services.AddTransient<HtmlDocument>();
-builder.Services.AddTransient<IBrandData, BrandData>();
-builder.Services.AddTransient<IBrandBusiness, BrandBusiness>();
-
+DependencyInjectionConfiguration.Configure(builder.Services);
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
 app.MapGrpcService<BrandService>();
 app.MapGet("/",
     () =>

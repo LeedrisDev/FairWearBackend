@@ -1,5 +1,5 @@
 using System.Net;
-using FairWearProductDataRetriever.Service.DataAccess.ProductData;
+using FairWearProductDataRetriever.API.DataAccess.ProductData;
 using HtmlAgilityPack;
 using Moq;
 
@@ -17,7 +17,7 @@ public class ProductBusinessTest
             .ReturnsAsync(GetTestHtmlDocument("LevisProductData.html"));
 
         var productBusiness =
-            new FairWearProductDataRetriever.Service.Business.ProductBusiness.ProductBusiness(_productBusinessMock
+            new FairWearProductDataRetriever.API.Business.ProductBusiness.ProductBusiness(_productBusinessMock
                 .Object);
         var barcode = "3665115029871";
 
@@ -36,7 +36,7 @@ public class ProductBusinessTest
             .ReturnsAsync(GetTestHtmlDocument("NotFoundData.html"));
 
         var productBusiness =
-            new FairWearProductDataRetriever.Service.Business.ProductBusiness.ProductBusiness(_productBusinessMock
+            new FairWearProductDataRetriever.API.Business.ProductBusiness.ProductBusiness(_productBusinessMock
                 .Object);
         var barcode = "3102271165352";
 

@@ -1,4 +1,4 @@
-using FairWearProductDataRetriever.Service.Models;
+using FairWearProductDataRetriever.API.Models;
 
 namespace ProductDataRetriever.Test.Models;
 

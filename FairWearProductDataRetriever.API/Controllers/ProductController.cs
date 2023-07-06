@@ -1,11 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text.RegularExpressions;
-using FairWearProductDataRetriever.Service.Business.ProductBusiness;
-using FairWearProductDataRetriever.Service.Models;
+using FairWearProductDataRetriever.API.Business.ProductBusiness;
+using FairWearProductDataRetriever.API.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FairWearProductDataRetriever.Service.Controllers;
+namespace FairWearProductDataRetriever.API.Controllers;
 
 /// <summary>Controller for retrieving product information.</summary>
 [ApiController]

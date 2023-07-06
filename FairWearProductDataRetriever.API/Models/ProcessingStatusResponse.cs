@@ -1,6 +1,6 @@
 using System.Net;
 
-namespace FairWearProductDataRetriever.Service.Models;
+namespace FairWearProductDataRetriever.API.Models;
 
 /// <summary>Class to handle the response of the API</summary>
 public class ProcessingStatusResponse<T>

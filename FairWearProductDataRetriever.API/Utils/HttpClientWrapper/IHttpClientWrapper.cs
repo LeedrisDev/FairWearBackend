@@ -1,4 +1,4 @@
-namespace FairWearProductDataRetriever.Service.Utils.HttpClientWrapper;
+namespace FairWearProductDataRetriever.API.Utils.HttpClientWrapper;
 
 /// <summary>Wrapper for the <see cref="HttpClient"/> class</summary>
 public interface IHttpClientWrapper

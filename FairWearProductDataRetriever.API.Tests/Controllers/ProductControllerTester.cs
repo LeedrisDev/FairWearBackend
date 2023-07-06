@@ -1,7 +1,7 @@
 using System.Net;
-using FairWearProductDataRetriever.Service.Business.ProductBusiness;
-using FairWearProductDataRetriever.Service.Controllers;
-using FairWearProductDataRetriever.Service.Models;
+using FairWearProductDataRetriever.API.Business.ProductBusiness;
+using FairWearProductDataRetriever.API.Controllers;
+using FairWearProductDataRetriever.API.Models;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;

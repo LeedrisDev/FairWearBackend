@@ -1,7 +1,7 @@
 using System.Reflection;
 using Microsoft.OpenApi.Models;
 
-namespace FairWearProductDataRetriever.Service.Config;
+namespace FairWearProductDataRetriever.API.Config;
 
 /// <summary>Static class that configures the Swagger documentation.</summary>
 public static class SwaggerConfiguration

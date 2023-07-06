@@ -1,6 +1,6 @@
-using FairWearProductDataRetriever.Service.Models;
+using FairWearProductDataRetriever.API.Models;
 
-namespace FairWearProductDataRetriever.Service.Business.ProductBusiness;
+namespace FairWearProductDataRetriever.API.Business.ProductBusiness;
 
 /// <summary>Interface for the product business.</summary>
 public interface IProductBusiness

@@ -1,5 +1,5 @@
 using System.Net;
-using FairWearProductDataRetriever.Service.Utils.HttpClientWrapper;
+using FairWearProductDataRetriever.API.Utils.HttpClientWrapper;
 using FluentAssertions;
 using HtmlAgilityPack;
 using Moq;
@@ -18,7 +18,7 @@ public class ProductDataTester
         const string barcode = "193392069882";
         var httpClient = new HttpClientWrapper(new HttpClient());
         var productData =
-            new FairWearProductDataRetriever.Service.DataAccess.ProductData.ProductData(httpClient,
+            new FairWearProductDataRetriever.API.DataAccess.ProductData.ProductData(httpClient,
                 _htmlDocumentMock.Object);
 
         var result = await productData.GetBarcodeInfoPageHtml(barcode);
@@ -39,7 +39,7 @@ public class ProductDataTester
 
         const string barcode = "193392069882";
         var productData =
-            new FairWearProductDataRetriever.Service.DataAccess.ProductData.ProductData(_httpClientMock.Object,
+            new FairWearProductDataRetriever.API.DataAccess.ProductData.ProductData(_httpClientMock.Object,
                 _htmlDocumentMock.Object);
 
         await productData
@@ -60,7 +60,7 @@ public class ProductDataTester
 
         const string barcode = "203392069882";
         var productData =
-            new FairWearProductDataRetriever.Service.DataAccess.ProductData.ProductData(_httpClientMock.Object,
+            new FairWearProductDataRetriever.API.DataAccess.ProductData.ProductData(_httpClientMock.Object,
                 _htmlDocumentMock.Object);
 
         await productData

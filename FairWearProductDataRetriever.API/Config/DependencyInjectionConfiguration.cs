@@ -1,9 +1,9 @@
-using FairWearProductDataRetriever.Service.Business.ProductBusiness;
-using FairWearProductDataRetriever.Service.DataAccess.ProductData;
-using FairWearProductDataRetriever.Service.Utils.HttpClientWrapper;
+using FairWearProductDataRetriever.API.Business.ProductBusiness;
+using FairWearProductDataRetriever.API.DataAccess.ProductData;
+using FairWearProductDataRetriever.API.Utils.HttpClientWrapper;
 using HtmlAgilityPack;
 
-namespace FairWearProductDataRetriever.Service.Config;
+namespace FairWearProductDataRetriever.API.Config;
 
 /// <summary>Static class that configures the dependency injection.</summary>
 public static class DependencyInjectionConfiguration

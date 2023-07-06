@@ -1,6 +1,6 @@
 using HtmlAgilityPack;
 
-namespace FairWearProductDataRetriever.Service.DataAccess.ProductData;
+namespace FairWearProductDataRetriever.API.DataAccess.ProductData;
 
 /// <summary>Interface for the product data access.</summary>
 public interface IProductData

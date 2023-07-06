@@ -1,8 +1,8 @@
-using FairWearProductDataRetriever.Service.Utils;
-using FairWearProductDataRetriever.Service.Utils.HttpClientWrapper;
+using FairWearProductDataRetriever.API.Utils;
+using FairWearProductDataRetriever.API.Utils.HttpClientWrapper;
 using HtmlAgilityPack;
 
-namespace FairWearProductDataRetriever.Service.DataAccess.ProductData;
+namespace FairWearProductDataRetriever.API.DataAccess.ProductData;
 
 /// <summary>Data access for retrieving product information</summary>
 public class ProductData : IProductData

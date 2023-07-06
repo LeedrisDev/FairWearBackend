@@ -1,4 +1,4 @@
-using FairWearProductDataRetriever.Service.Utils;
+using FairWearProductDataRetriever.API.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Moq;

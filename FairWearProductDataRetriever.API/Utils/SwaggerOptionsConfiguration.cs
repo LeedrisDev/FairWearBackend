@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace FairWearProductDataRetriever.Service.Utils;
+namespace FairWearProductDataRetriever.API.Utils;
 
 /// <summary>Configures the Swagger options</summary>
 public class SwaggerOptionsConfiguration : IConfigureNamedOptions<SwaggerGenOptions>

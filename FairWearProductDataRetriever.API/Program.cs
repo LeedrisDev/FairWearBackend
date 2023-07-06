@@ -1,4 +1,4 @@
-using FairWearProductDataRetriever.Service.Config;
+using FairWearProductDataRetriever.API.Config;
 
 var builder = WebApplication.CreateBuilder(args);
 

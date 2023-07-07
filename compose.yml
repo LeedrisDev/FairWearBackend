@@ -28,7 +28,7 @@ services:
       dockerfile: FairWearGateway.API/Dockerfile
     restart: on-failure
     environment:
-      - BRAND_AND_PRODUCT_API_SERVICE_HOST=brand_and_product_api
+      - BRAND_AND_PRODUCT_API_SERVICE_HOST=brand_and_product_service
       - BRAND_AND_PRODUCT_API_SERVICE_PORT_HTTP=80
     labels:
       - "traefik.docker.network=fairwearbackend_traefik-network"

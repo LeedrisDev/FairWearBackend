@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
@@ -10,8 +10,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+        <PackageReference Include="Grpc.AspNetCore" Version="2.49.0"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Protobuf Include="..\BrandAndProductDatabase.Service\Protos\BrandService.proto" GrpcServices="Client">
+            <Link>Protos\BrandService.proto</Link>
+        </Protobuf>
+        <Protobuf Include="..\BrandAndProductDatabase.Service\Protos\ProductService.proto" GrpcServices="Client">
+            <Link>Protos\ProductService.proto</Link>
+        </Protobuf>
     </ItemGroup>
 
 </Project>

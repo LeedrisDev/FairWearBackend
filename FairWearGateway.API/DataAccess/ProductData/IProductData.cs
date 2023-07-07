@@ -1,5 +1,5 @@
+using BrandAndProductDatabase.Service.Protos;
 using FairWearGateway.API.Models;
-using FairWearGateway.API.Models.Response;
 
 namespace FairWearGateway.API.DataAccess.ProductData;
 
@@ -11,7 +11,7 @@ public interface IProductData
     /// <returns>
     /// A <see cref="ProcessingStatusResponse{T}"/> instance, that contains the product object if the call succeed
     /// </returns>
-    Task<ProcessingStatusResponse<ProductResponse>> GetProductByIdAsync(int productId);
+    ProcessingStatusResponse<ProductResponse> GetProductById(int productId);
 
     /// <summary>
     /// Call the appropriate microservice to get a product by its Barcode (UPC)
@@ -20,5 +20,5 @@ public interface IProductData
     /// <returns>
     /// A <see cref="ProcessingStatusResponse{T}"/> instance, that contains the product information object if the call succeed
     /// </returns>
-    Task<ProcessingStatusResponse<ProductInformationResponse>> GetProductByUpcAsync(string upc);
+    ProcessingStatusResponse<ProductInformationResponse> GetProductByUpc(string upc);
 }

@@ -1,92 +1,82 @@
-using System.Text;
+using System.Net;
+using BrandAndProductDatabase.Service.Protos;
 using FairWearGateway.API.Models;
-using FairWearGateway.API.Models.Request;
-using FairWearGateway.API.Models.Response;
 using FairWearGateway.API.Utils;
-using FairWearGateway.API.Utils.HttpClientWrapper;
-using Newtonsoft.Json;
+using Grpc.Core;
+using Grpc.Net.Client;
 
 namespace FairWearGateway.API.DataAccess.BrandData;
 
 /// <summary>Class that call the appropriate microservice to get all is related to brands.</summary>
 public class BrandData : IBrandData
 {
-    private readonly IHttpClientWrapper _httpClientWrapper;
+    private readonly GrpcChannel _channel;
+    private readonly BrandService.BrandServiceClient _client;
 
     /// <summary>Constructor</summary>
-    public BrandData(IHttpClientWrapper httpClientWrapper)
+    public BrandData()
     {
-        _httpClientWrapper = httpClientWrapper;
+        _channel = GrpcChannel.ForAddress(AppConstants.BrandAndProductServiceUrl);
+        _client = new BrandService.BrandServiceClient(_channel);
     }
 
     /// <inheritdoc />
-    public async Task<ProcessingStatusResponse<BrandResponse>> GetBrandByIdAsync(int brandId)
+    public ProcessingStatusResponse<BrandResponse> GetBrandById(int brandId)
     {
         var processingStatusResponse = new ProcessingStatusResponse<BrandResponse>();
 
-        var response = await _httpClientWrapper.GetAsync($"{AppConstants.BrandAndProductApiUrl}/brand/{brandId}");
-
-        if (!response.IsSuccessStatusCode)
-        {
-            processingStatusResponse.Status = response.StatusCode;
-            processingStatusResponse.ErrorMessage = response.ReasonPhrase ?? "Error while getting brand";
-            return processingStatusResponse;
-        }
+        var data = new BrandByIdRequest { Id = brandId };
 
         try
         {
-            var brand = await DeserializeResponse<BrandResponse>(response);
-            processingStatusResponse.Object = brand;
-            return processingStatusResponse;
+            var response = _client.GetBrandByIdAsync(data);
+            processingStatusResponse.Status = HttpStatusCode.OK;
+            processingStatusResponse.Object = response;
         }
-        catch (ApplicationException e)
+        catch (RpcException e)
         {
-            processingStatusResponse.Status = System.Net.HttpStatusCode.InternalServerError;
-            processingStatusResponse.ErrorMessage = e.Message;
-            return processingStatusResponse;
+            if (e.Status.StatusCode == StatusCode.NotFound)
+            {
+                processingStatusResponse.Status = HttpStatusCode.NotFound;
+                processingStatusResponse.ErrorMessage = $"Brand with id {brandId} could not be found";
+            }
+            else
+            {
+                processingStatusResponse.Status = HttpStatusCode.InternalServerError;
+                processingStatusResponse.ErrorMessage = e.Message;
+            }
         }
+
+        return processingStatusResponse;
     }
 
     /// <inheritdoc />
-    public async Task<ProcessingStatusResponse<BrandResponse>> GetBrandByNameAsync(string name)
+    public ProcessingStatusResponse<BrandResponse> GetBrandByName(string name)
     {
-        var request = new BrandRequest { Name = name };
-        var json = JsonConvert.SerializeObject(request);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-
         var processingStatusResponse = new ProcessingStatusResponse<BrandResponse>();
 
-        var response = await _httpClientWrapper.PostAsync($"{AppConstants.BrandAndProductApiUrl}/brand/name", content);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            processingStatusResponse.Status = response.StatusCode;
-            processingStatusResponse.ErrorMessage = response.ReasonPhrase ?? "Error while getting brand";
-            return processingStatusResponse;
-        }
+        var data = new BrandByNameRequest { Name = name };
 
         try
         {
-            var brand = await DeserializeResponse<BrandResponse>(response);
-            processingStatusResponse.Object = brand;
-            return processingStatusResponse;
+            var response = _client.GetBrandByNameAsync(data);
+            processingStatusResponse.Status = HttpStatusCode.OK;
+            processingStatusResponse.Object = response;
         }
-        catch (ApplicationException e)
+        catch (RpcException e)
         {
-            processingStatusResponse.Status = System.Net.HttpStatusCode.InternalServerError;
-            processingStatusResponse.ErrorMessage = e.Message;
-            return processingStatusResponse;
+            if (e.Status.StatusCode == StatusCode.NotFound)
+            {
+                processingStatusResponse.Status = HttpStatusCode.NotFound;
+                processingStatusResponse.ErrorMessage = $"Brand with name {name} could not be found";
+            }
+            else
+            {
+                processingStatusResponse.Status = HttpStatusCode.InternalServerError;
+                processingStatusResponse.ErrorMessage = e.Message;
+            }
         }
-    }
 
-    private static async Task<T> DeserializeResponse<T>(HttpResponseMessage response)
-    {
-        var responseString = await response.Content.ReadAsStringAsync();
-        var deserializedObject = JsonConvert.DeserializeObject<T>(responseString);
-
-        if (deserializedObject == null)
-            throw new ApplicationException("Cannot deserialize response");
-
-        return deserializedObject;
+        return processingStatusResponse;
     }
 }

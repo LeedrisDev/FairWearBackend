@@ -1,88 +1,82 @@
+using System.Net;
+using BrandAndProductDatabase.Service.Protos;
 using FairWearGateway.API.Models;
-using FairWearGateway.API.Models.Response;
 using FairWearGateway.API.Utils;
-using FairWearGateway.API.Utils.HttpClientWrapper;
-using Newtonsoft.Json;
+using Grpc.Core;
+using Grpc.Net.Client;
 
 namespace FairWearGateway.API.DataAccess.ProductData;
 
 /// <summary>Class that implements the <see cref="IProductData"/> interface.</summary>
 public class ProductData : IProductData
 {
-    private readonly IHttpClientWrapper _httpClientWrapper;
+    private readonly GrpcChannel _channel;
+    private readonly ProductService.ProductServiceClient _client;
 
     /// <summary>Constructor</summary>
-    public ProductData(IHttpClientWrapper httpClientWrapper)
+    public ProductData()
     {
-        _httpClientWrapper = httpClientWrapper;
+        _channel = GrpcChannel.ForAddress(AppConstants.BrandAndProductServiceUrl);
+        _client = new ProductService.ProductServiceClient(_channel);
     }
 
     /// <inheritdoc />
-    public async Task<ProcessingStatusResponse<ProductResponse>> GetProductByIdAsync(int productId)
+    public ProcessingStatusResponse<ProductResponse> GetProductById(int productId)
     {
         var processingStatusResponse = new ProcessingStatusResponse<ProductResponse>();
 
-        var response = await _httpClientWrapper.GetAsync($"{AppConstants.BrandAndProductApiUrl}/product/{productId}");
-
-        if (!response.IsSuccessStatusCode)
-        {
-            processingStatusResponse.Status = response.StatusCode;
-            processingStatusResponse.ErrorMessage = response.ReasonPhrase ?? "Error while getting product";
-            return processingStatusResponse;
-        }
+        var data = new ProductByIdRequest { Id = productId };
 
         try
         {
-            var product = await DeserializeResponse<ProductResponse>(response);
-            processingStatusResponse.Object = product;
-            return processingStatusResponse;
+            var response = _client.GetProductByIdAsync(data);
+            processingStatusResponse.Status = HttpStatusCode.OK;
+            processingStatusResponse.Object = response;
         }
-        catch (ApplicationException e)
+        catch (RpcException e)
         {
-            processingStatusResponse.Status = System.Net.HttpStatusCode.InternalServerError;
-            processingStatusResponse.ErrorMessage = e.Message;
-            return processingStatusResponse;
+            if (e.Status.StatusCode == StatusCode.NotFound)
+            {
+                processingStatusResponse.Status = HttpStatusCode.NotFound;
+                processingStatusResponse.ErrorMessage = $"Product with id {productId} could not be found";
+            }
+            else
+            {
+                processingStatusResponse.Status = HttpStatusCode.InternalServerError;
+                processingStatusResponse.ErrorMessage = e.Message;
+            }
         }
+
+        return processingStatusResponse;
     }
 
     /// <inheritdoc />
-    public async Task<ProcessingStatusResponse<ProductInformationResponse>> GetProductByUpcAsync(string upc)
+    public ProcessingStatusResponse<ProductInformationResponse> GetProductByUpc(string upc)
     {
         var processingStatusResponse = new ProcessingStatusResponse<ProductInformationResponse>();
 
-        var response = await _httpClientWrapper.GetAsync($"{AppConstants.BrandAndProductApiUrl}/product/{upc}");
-
-        if (!response.IsSuccessStatusCode)
-        {
-            processingStatusResponse.Status = response.StatusCode;
-            processingStatusResponse.ErrorMessage =
-                response.ReasonPhrase ?? $"Error while getting product information for {upc}";
-            return processingStatusResponse;
-        }
+        var data = new ProductByUpcRequest { UpcCode = upc };
 
         try
         {
-            var product = await DeserializeResponse<ProductInformationResponse>(response);
-            processingStatusResponse.Object = product;
-            return processingStatusResponse;
+            var response = _client.GetProductByUpcAsync(data);
+            processingStatusResponse.Status = HttpStatusCode.OK;
+            processingStatusResponse.Object = response;
         }
-        catch (ApplicationException e)
+        catch (RpcException e)
         {
-            processingStatusResponse.Status = System.Net.HttpStatusCode.InternalServerError;
-            processingStatusResponse.ErrorMessage = e.Message;
-            return processingStatusResponse;
+            if (e.Status.StatusCode == StatusCode.NotFound)
+            {
+                processingStatusResponse.Status = HttpStatusCode.NotFound;
+                processingStatusResponse.ErrorMessage = $"Product with barcode {upc} could not be found";
+            }
+            else
+            {
+                processingStatusResponse.Status = HttpStatusCode.InternalServerError;
+                processingStatusResponse.ErrorMessage = e.Message;
+            }
         }
-    }
 
-
-    private static async Task<T> DeserializeResponse<T>(HttpResponseMessage response)
-    {
-        var responseString = await response.Content.ReadAsStringAsync();
-        var deserializedObject = JsonConvert.DeserializeObject<T>(responseString);
-
-        if (deserializedObject == null)
-            throw new ApplicationException("Cannot deserialize response");
-
-        return deserializedObject;
+        return processingStatusResponse;
     }
 }

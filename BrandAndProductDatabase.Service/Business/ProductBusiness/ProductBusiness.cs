@@ -147,7 +147,7 @@ public class ProductBusiness : IProductBusiness
             };
         }
 
-        return await _productRepository.UpdateAsync(productDto);
+        return await _productRepository.UpdateProductAsync(productDto);
     }
 
     /// <inheritdoc/>

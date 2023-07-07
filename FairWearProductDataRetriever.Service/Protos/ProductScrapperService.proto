@@ -3,7 +3,7 @@ syntax = "proto3";
 option csharp_namespace = "FairWearProductDataRetriever.Service.Protos";
 
 // The Product service definition.
-service ProductService {
+service ProductScrapperService {
     rpc GetProduct (ProductRequest) returns (ProductResponse);
 }
 

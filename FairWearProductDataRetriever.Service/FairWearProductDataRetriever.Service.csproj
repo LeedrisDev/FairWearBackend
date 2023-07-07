@@ -12,6 +12,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Protobuf Include="Protos\ProductService.proto" GrpcServices="Server"/>
+        <Protobuf Include="Protos\ProductScrapperService.proto" GrpcServices="Server"/>
     </ItemGroup>
 </Project>

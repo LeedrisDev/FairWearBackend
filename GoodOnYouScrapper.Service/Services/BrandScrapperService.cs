@@ -25,7 +25,7 @@ public class BrandScrapperService : Protos.BrandScrapperService.BrandScrapperSer
     /// <summary>Get brand information</summary>
     /// <param name="request">Object containing the brand name</param>
     /// <returns> Brand information </returns>
-    public override async Task<BrandResponse> GetBrand(BrandRequest request, ServerCallContext context)
+    public override async Task<BrandScrapperResponse> GetBrand(BrandScrapperRequest request, ServerCallContext context)
     {
         var brandInformation = await _brandBusiness.GetBrandInformation(request.Name);
 

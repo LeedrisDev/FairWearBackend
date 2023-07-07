@@ -17,11 +17,11 @@ public static class AppConstants
 
     /// <summary>URL for the Good On You Scrapper microservice.</summary>
     public static readonly string GoodOnYouScrapperUrl =
-        $"http://{GoodOnYouScrapperServiceHost}:{GoodOnYouScrapperServicePortHttp}/api/brand";
+        $"http://{GoodOnYouScrapperServiceHost}:{GoodOnYouScrapperServicePortHttp}";
 
     /// <summary>URL for the Product Data Retriever microservice.</summary>
     public static readonly string ProductDataRetrieverUrl =
-        $"http://{ProductDataRetrieverServiceHost}:{ProductDataRetrieverServicePortHttp}/api/product";
+        $"http://{ProductDataRetrieverServiceHost}:{ProductDataRetrieverServicePortHttp}";
 
     /// <summary>Host of the Brand and Product Database.</summary>
     public static readonly string BrandAndProductDatabaseHost =

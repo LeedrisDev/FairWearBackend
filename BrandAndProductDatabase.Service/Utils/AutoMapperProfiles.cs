@@ -2,6 +2,7 @@ using AutoMapper;
 using BrandAndProductDatabase.Service.Models.Dto;
 using BrandAndProductDatabase.Service.Models.Entity;
 using BrandAndProductDatabase.Service.Protos;
+using GoodOnYouScrapper.Service.Protos;
 
 namespace BrandAndProductDatabase.Service.Utils;
 
@@ -29,6 +30,7 @@ public class AutoMapperProfiles : Profile
         // Response to Dto
         CreateMap<BrandResponse, BrandDto>();
         CreateMap<BrandRequest, BrandDto>();
+        CreateMap<BrandScrapperResponse, BrandDto>();
         CreateMap<ProductResponse, ProductDto>();
         CreateMap<ProductRequest, ProductDto>();
 

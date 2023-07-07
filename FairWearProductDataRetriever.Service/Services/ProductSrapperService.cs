@@ -26,7 +26,8 @@ public class ProductSrapperService : Protos.ProductScrapperService.ProductScrapp
     /// <param name="request">Object containing barcode of the product.</param>
     /// <param name="context">gRPC context</param>
     /// <returns> Product information.</returns>
-    public override async Task<ProductResponse> GetProduct(ProductRequest request, ServerCallContext context)
+    public override async Task<ProductScrapperResponse> GetProduct(ProductScrapperRequest request,
+        ServerCallContext context)
     {
         var productInformation = await _productBusiness.GetProductInformation(request.UpcCode);
 

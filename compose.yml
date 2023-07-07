@@ -80,9 +80,9 @@ services:
       dockerfile: BrandAndProductDatabase.Service/Dockerfile
     restart: on-failure
     environment:
-      - GOODONYOU_SCRAPPER_SERVICE_HOST=good_on_you_scrapper_api
+      - GOODONYOU_SCRAPPER_SERVICE_HOST=good_on_you_scrapper_service
       - GOODONYOU_SCRAPPER_SERVICE_PORT_HTTP=80
-      - PRODUCT_DATA_RETRIEVER_SERVICE_HOST=product_data_retriever_api
+      - PRODUCT_DATA_RETRIEVER_SERVICE_HOST=product_data_retriever_service
       - PRODUCT_DATA_RETRIEVER_SERVICE_PORT_HTTP=80
       - BRAND_AND_PRODUCT_DB_SERVICE_HOST=brand_and_product_db
       - BRAND_AND_PRODUCT_DB_SERVICE_PORT_HTTP=5432
@@ -92,23 +92,45 @@ services:
       - fairwear_internal_network
   
   
-  product_data_retriever_api:
-    container_name: product_data_retriever_api
+#  product_data_retriever_api:
+#    container_name: product_data_retriever_api
+#    build:
+#        context: .
+#        dockerfile: FairWearProductDataRetriever.API/Dockerfile
+#    restart: on-failure
+#    ports:
+#      - "8082:80"
+#    networks:
+#      - fairwear_internal_network
+#  
+  
+  product_data_retriever_service:
+    container_name: product_data_retriever_service
     build:
-        context: .
-        dockerfile: FairWearProductDataRetriever.API/Dockerfile
+      context: .
+      dockerfile: FairWearProductDataRetriever.Service/Dockerfile
     restart: on-failure
     ports:
       - "8082:80"
     networks:
       - fairwear_internal_network
   
-  
-  good_on_you_scrapper_api:
-    container_name: good_on_you_scrapper_api
+#  good_on_you_scrapper_api:
+#    container_name: good_on_you_scrapper_api
+#    build:
+#      context: .
+#      dockerfile: GoodOnYouScrapper.API/Dockerfile
+#    restart: on-failure
+#    ports:
+#      - "8083:80"
+#    networks:
+#      - fairwear_internal_network
+
+  good_on_you_scrapper_service:
+    container_name: good_on_you_scrapper_service
     build:
       context: .
-      dockerfile: GoodOnYouScrapper.API/Dockerfile
+      dockerfile: GoodOnYouScrapper.Service/Dockerfile
     restart: on-failure
     ports:
       - "8083:80"

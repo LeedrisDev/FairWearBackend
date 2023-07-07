@@ -42,7 +42,7 @@ public class BrandBusiness : IBrandBusiness
         if (processingStatusResponse.Status == HttpStatusCode.OK)
             return processingStatusResponse;
 
-        var brandDataResponse = await _brandData.GetBrandByNameAsync(name);
+        var brandDataResponse = _brandData.GetBrandByName(name);
         if (brandDataResponse.Status != HttpStatusCode.OK)
             return brandDataResponse;
 

@@ -9,5 +9,5 @@ public interface IProductBusiness
     /// <summary>Retrieves information for a product.</summary>
     /// <param name="barcode"></param>
     /// <returns></returns>
-    public Task<ProcessingStatusResponse<ProductResponse>> GetProductInformation(string barcode);
+    public Task<ProcessingStatusResponse<ProductScrapperResponse>> GetProductInformation(string barcode);
 }

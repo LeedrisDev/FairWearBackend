@@ -9,5 +9,5 @@ public interface IBrandData
     /// <summary>Call the appropriate microservice to get a brand by its name.</summary>
     /// <param name="name"> Name of the brand to get.</param>
     /// <returns>A <see cref="ProcessingStatusResponse{T}"/> containing the brand. If the brand exists.</returns>
-    Task<ProcessingStatusResponse<BrandDto>> GetBrandByNameAsync(string name);
+    ProcessingStatusResponse<BrandDto> GetBrandByName(string name);
 }

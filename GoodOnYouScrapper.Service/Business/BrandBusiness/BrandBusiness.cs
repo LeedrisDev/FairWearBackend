@@ -16,18 +16,18 @@ namespace GoodOnYouScrapper.Service.Business.BrandBusiness;
 public class BrandBusiness : IBrandBusiness
 {
     private readonly IBrandData _brandData;
-    private readonly ProcessingStatusResponse<BrandResponse> _processingStatusResponse;
+    private readonly ProcessingStatusResponse<BrandScrapperResponse> _processingStatusResponse;
 
     /// <summary>Constructor</summary>
     /// <param name="brandData">Data access layer for the brand</param>
     public BrandBusiness(IBrandData brandData)
     {
-        _processingStatusResponse = new ProcessingStatusResponse<BrandResponse>();
+        _processingStatusResponse = new ProcessingStatusResponse<BrandScrapperResponse>();
         _brandData = brandData;
     }
 
     /// <inheritdoc/>
-    public async Task<ProcessingStatusResponse<BrandResponse>> GetBrandInformation(string brandName)
+    public async Task<ProcessingStatusResponse<BrandScrapperResponse>> GetBrandInformation(string brandName)
     {
         HtmlDocument htmlDocument;
 
@@ -44,7 +44,7 @@ public class BrandBusiness : IBrandBusiness
             return _processingStatusResponse;
         }
 
-        var brandModel = new BrandResponse
+        var brandModel = new BrandScrapperResponse
         {
             Name = brandName,
             Country = GetBrandCountry(htmlDocument),

@@ -59,7 +59,7 @@ public class ProductBusiness : IProductBusiness
 
         if (product == null)
         {
-            var productDataResponse = await _productData.GetProductByUpc(upcCode);
+            var productDataResponse = _productData.GetProductByUpc(upcCode);
 
             if (productDataResponse.Status != HttpStatusCode.OK)
             {
@@ -70,7 +70,7 @@ public class ProductBusiness : IProductBusiness
                 };
             }
 
-            var productBrand = await _brandData.GetBrandByNameAsync(productDataResponse.Object.BrandName);
+            var productBrand = _brandData.GetBrandByName(productDataResponse.Object.BrandName);
 
             if (productBrand.Status != HttpStatusCode.OK)
             {

@@ -8,5 +8,5 @@ public interface IBrandBusiness
 {
     /// <summary>Retrieves information for a brand on the GoodOnYou website</summary>
     /// <param name="brandName">Name of the brand to retrieve information for</param>
-    public Task<ProcessingStatusResponse<BrandResponse>> GetBrandInformation(string brandName);
+    public Task<ProcessingStatusResponse<BrandScrapperResponse>> GetBrandInformation(string brandName);
 }

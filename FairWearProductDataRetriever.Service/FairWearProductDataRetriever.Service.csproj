@@ -4,6 +4,7 @@
         <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -12,6 +13,16 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Folder Include="Protos\"/>
+    </ItemGroup>
+
+    <ItemGroup>
         <Protobuf Include="Protos\ProductScrapperService.proto" GrpcServices="Server"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
     </ItemGroup>
 </Project>

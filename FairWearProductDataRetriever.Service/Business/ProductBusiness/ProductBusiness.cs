@@ -11,19 +11,19 @@ namespace FairWearProductDataRetriever.Service.Business.ProductBusiness;
 /// <summary>Business logic for retrieving product information.</summary>
 public class ProductBusiness : IProductBusiness
 {
-    private readonly ProcessingStatusResponse<ProductResponse> _processingStatusResponse;
+    private readonly ProcessingStatusResponse<ProductScrapperResponse> _processingStatusResponse;
     private readonly IProductData _productData;
 
     /// <summary>/// Constructor</summary>
     /// <param name="productData">DataAccess of products</param>
     public ProductBusiness(IProductData productData)
     {
-        _processingStatusResponse = new ProcessingStatusResponse<ProductResponse>();
+        _processingStatusResponse = new ProcessingStatusResponse<ProductScrapperResponse>();
         _productData = productData;
     }
 
     /// <inheritdoc/>
-    public async Task<ProcessingStatusResponse<ProductResponse>> GetProductInformation(string barcode)
+    public async Task<ProcessingStatusResponse<ProductScrapperResponse>> GetProductInformation(string barcode)
     {
         HtmlDocument htmlDocument;
 
@@ -42,7 +42,7 @@ public class ProductBusiness : IProductBusiness
             return _processingStatusResponse;
         }
 
-        var productResponse = new ProductResponse()
+        var productResponse = new ProductScrapperResponse()
         {
             UpcCode = barcode,
             Name = GetProductName(htmlDocument),

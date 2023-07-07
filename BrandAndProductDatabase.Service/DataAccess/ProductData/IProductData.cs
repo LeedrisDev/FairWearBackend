@@ -1,5 +1,5 @@
 using BrandAndProductDatabase.Service.Models;
-using BrandAndProductDatabase.Service.Models.Dto;
+using FairWearProductDataRetriever.Service.Protos;
 
 namespace BrandAndProductDatabase.Service.DataAccess.ProductData;
 
@@ -11,5 +11,5 @@ public interface IProductData
     /// </summary>
     /// <param name="upc">barcode of the product</param>
     /// <returns> A <see cref="ProcessingStatusResponse{T}"/> containing the product. If the product exists.</returns>
-    Task<ProcessingStatusResponse<ProductRetrieverDto>> GetProductByUpc(string upc);
+    ProcessingStatusResponse<ProductScrapperResponse> GetProductByUpc(string upc);
 }

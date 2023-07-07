@@ -4,6 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,11 +13,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BrandAndProductDatabase.Service\BrandAndProductDatabase.Service.csproj"/>
+    <Protobuf Include="Protos\BrandScrapperService.proto" GrpcServices="Server"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\BrandScrapperService.proto" GrpcServices="Server"/>
+    <Content Include="..\.dockerignore">
+      <Link>.dockerignore</Link>
+    </Content>
   </ItemGroup>
 
 </Project>

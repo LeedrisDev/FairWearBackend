@@ -10,14 +10,13 @@ namespace FairWearGateway.API.DataAccess.ProductData;
 /// <summary>Class that implements the <see cref="IProductData"/> interface.</summary>
 public class ProductData : IProductData
 {
-    private readonly GrpcChannel _channel;
     private readonly ProductService.ProductServiceClient _client;
 
     /// <summary>Constructor</summary>
     public ProductData()
     {
-        _channel = GrpcChannel.ForAddress(AppConstants.BrandAndProductServiceUrl);
-        _client = new ProductService.ProductServiceClient(_channel);
+        var channel = GrpcChannel.ForAddress(AppConstants.BrandAndProductServiceUrl);
+        _client = new ProductService.ProductServiceClient(channel);
     }
 
     /// <inheritdoc />

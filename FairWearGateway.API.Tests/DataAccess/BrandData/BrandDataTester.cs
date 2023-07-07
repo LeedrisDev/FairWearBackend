@@ -16,7 +16,7 @@ public class BrandDataTests
     public void TestInitialize()
     {
         mockClient = new Mock<BrandService.BrandServiceClient>();
-        brandData = new API.DataAccess.BrandData.BrandData { _client = mockClient.Object };
+        brandData = new API.DataAccess.BrandData.BrandData { };
     }
 
     [TestMethod]

@@ -10,14 +10,13 @@ namespace FairWearGateway.API.DataAccess.BrandData;
 /// <summary>Class that call the appropriate microservice to get all is related to brands.</summary>
 public class BrandData : IBrandData
 {
-    private readonly GrpcChannel _channel;
-    public BrandService.BrandServiceClient _client;
+    private readonly BrandService.BrandServiceClient _client;
 
     /// <summary>Constructor</summary>
     public BrandData()
     {
-        _channel = GrpcChannel.ForAddress(AppConstants.BrandAndProductServiceUrl);
-        _client = new BrandService.BrandServiceClient(_channel);
+        var channel = GrpcChannel.ForAddress(AppConstants.BrandAndProductServiceUrl);
+        _client = new BrandService.BrandServiceClient(channel);
     }
 
     /// <inheritdoc />

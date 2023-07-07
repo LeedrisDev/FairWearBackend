@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\BrandService.proto" GrpcServices="Server"/>
+    <Protobuf Include="Protos\BrandScrapperService.proto" GrpcServices="Server"/>
   </ItemGroup>
 
 </Project>

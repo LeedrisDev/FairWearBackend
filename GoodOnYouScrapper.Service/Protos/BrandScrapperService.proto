@@ -2,12 +2,11 @@ syntax = "proto3";
 
 option csharp_namespace = "GoodOnYouScrapper.Service.Protos";
 
-service BrandService {
+service BrandScrapperService {
     rpc GetBrand (BrandRequest) returns (BrandResponse);
 }
 
 // The request message containing the name of the brand.
-
 message BrandRequest {
     string name = 1;
 }

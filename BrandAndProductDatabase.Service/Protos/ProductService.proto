@@ -1,3 +1,66 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
+
 option csharp_namespace = "BrandAndProductDatabase.Service.Protos";
+
+// Services
+service ProductService {
+    rpc GetAllProductsAsync (google.protobuf.Empty) returns (stream ProductResponse);
+    rpc GetProductByIdAsync (ProductByIdRequest) returns (ProductResponse);
+    rpc GetProductByUpcAsync (ProductByUpcRequest) returns (ProductInformationResponse);
+    rpc CreateProductAsync (ProductRequest) returns (ProductResponse);
+    rpc UpdateProductAsync (ProductResponse) returns (ProductResponse);
+    rpc DeleteProductAsync (ProductByIdRequest) returns (google.protobuf.Empty);
+}
+
+// Requests
+message ProductByUpcRequest {
+    string upcCode = 1;
+}
+
+message ProductByIdRequest {
+    int32 id = 1;
+}
+
+message ProductRequest {
+    string upcCode = 2;
+    string name = 3;
+    string category = 4;
+    repeated string ranges = 5;
+    int32 brandId = 6;
+}
+
+// Responses
+message ProductResponse {
+    int32 id = 1;
+    string upcCode = 2;
+    string name = 3;
+    string category = 4;
+    repeated string ranges = 5;
+    int32 brandId = 6;
+}
+
+message ProductScoreResponse {
+    int32 moral = 1;
+    int32 animal = 2;
+    int32 environmental = 3;
+}
+
+message ProductCompositionResponse {
+    int32 percentage = 1;
+    string component = 2;
+}
+
+message ProductInformationResponse {
+    string name = 1;
+    string country = 2;
+    string image = 3;
+    int32 globalScore = 4;
+    ProductScoreResponse scores = 5;
+    repeated ProductCompositionResponse composition = 6;
+    string brand = 7;
+}
+
+
+

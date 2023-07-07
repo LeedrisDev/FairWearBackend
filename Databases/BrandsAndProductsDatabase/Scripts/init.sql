@@ -21,5 +21,5 @@ CREATE TABLE products (
   name VARCHAR NOT NULL,
   category VARCHAR,
   ranges VARCHAR[],
-  brand_id INTEGER NOT NULL REFERENCES brands(id)
+  brand_id INTEGER NOT NULL REFERENCES brands(id) ON DELETE CASCADE
 );

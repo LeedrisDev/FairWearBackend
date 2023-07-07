@@ -75,7 +75,7 @@ public class BrandAndProductDbContext : DbContext
 
             entity.HasOne(d => d.BrandEntity).WithMany(p => p.Products)
                 .HasForeignKey(d => d.BrandId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade) // Changed from ClientSetNull to Cascade
                 .HasConstraintName("products_brand_id_fkey");
         });
     }

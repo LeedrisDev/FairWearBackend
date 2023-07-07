@@ -138,7 +138,7 @@ public class ProductBusiness : IProductBusiness
     public async Task<ProcessingStatusResponse<ProductDto>> UpdateProductAsync(ProductDto productDto)
     {
         var brandExists = await _brandRepository.GetByIdAsync(productDto.BrandId);
-        if (brandExists.Status == HttpStatusCode.NotFound)
+        if (brandExists.Status != HttpStatusCode.OK)
         {
             return new ProcessingStatusResponse<ProductDto>()
             {

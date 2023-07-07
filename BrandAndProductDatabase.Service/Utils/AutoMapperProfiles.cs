@@ -21,15 +21,16 @@ public class AutoMapperProfiles : Profile
 
         // Dto to Response
         CreateMap<BrandDto, BrandResponse>();
-        // CreateMap<ProductDto, ProductResponse>();
-        // CreateMap<ProductInformationDto, ProductInformationResponse>();
-        // CreateMap<ProductCompositionDto, ProductCompositionResponse>();
-        // CreateMap<ProductScoreDto, ProductScoreResponse>();
+        CreateMap<ProductDto, ProductResponse>();
+        CreateMap<ProductInformationDto, ProductInformationResponse>();
+        CreateMap<ProductCompositionDto, ProductCompositionResponse>();
+        CreateMap<ProductScoreDto, ProductScoreResponse>();
 
         // Response to Dto
         CreateMap<BrandResponse, BrandDto>();
         CreateMap<BrandRequest, BrandDto>();
-        // CreateMap<ProductResponse, ProductDto>();
+        CreateMap<ProductResponse, ProductDto>();
+        CreateMap<ProductRequest, ProductDto>();
 
 
         // CreateMap<ProductInformationResponse, ProductInformationDto>();

@@ -1,7 +1,9 @@
 using BrandAndProductDatabase.Service.Business.BrandBusiness;
+using BrandAndProductDatabase.Service.Business.ProductBusiness;
 using BrandAndProductDatabase.Service.DataAccess;
 using BrandAndProductDatabase.Service.DataAccess.BrandData;
 using BrandAndProductDatabase.Service.DataAccess.IRepositories;
+using BrandAndProductDatabase.Service.DataAccess.ProductData;
 using BrandAndProductDatabase.Service.DataAccess.Repositories;
 using BrandAndProductDatabase.Service.Utils;
 using BrandAndProductDatabase.Service.Utils.HttpClientWrapper;
@@ -28,12 +30,12 @@ public static class DependencyInjectionConfiguration
 
         // DataAccess
         services.AddTransient<IBrandRepository, BrandRepository>();
-        // services.AddTransient<IProductRepository, ProductRepository>();
+        services.AddTransient<IProductRepository, ProductRepository>();
         services.AddTransient<IBrandData, BrandData>();
-        // services.AddTransient<IProductData, ProductData>();
+        services.AddTransient<IProductData, ProductData>();
 
         // Business
         services.AddTransient<IBrandBusiness, BrandBusiness>();
-        // services.AddTransient<IProductBusiness, ProductBusiness>();
+        services.AddTransient<IProductBusiness, ProductBusiness>();
     }
 }

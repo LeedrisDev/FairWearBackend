@@ -11,7 +11,7 @@ namespace FairWearGateway.API.DataAccess.BrandData;
 public class BrandData : IBrandData
 {
     private readonly GrpcChannel _channel;
-    private readonly BrandService.BrandServiceClient _client;
+    public BrandService.BrandServiceClient _client;
 
     /// <summary>Constructor</summary>
     public BrandData()

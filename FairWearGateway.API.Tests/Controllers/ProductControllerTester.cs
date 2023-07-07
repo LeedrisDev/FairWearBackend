@@ -1,7 +1,7 @@
 ﻿using System.Net;
+using BrandAndProductDatabase.Service.Protos;
 using FairWearGateway.API.Business.ProductBusiness;
 using FairWearGateway.API.Models;
-using FairWearGateway.API.Models.Response;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -30,21 +30,23 @@ public class ProductControllerTester
             Name = "Product 1",
             UpcCode = "123456789",
             Category = "Category A",
-            Ranges = new List<string> { "Range A" },
             BrandId = 1
         };
+
+        productResponse.Ranges.AddRange(new List<string> { "Range A" });
+
         var processingStatusResponse = new ProcessingStatusResponse<ProductResponse>()
         {
             Status = HttpStatusCode.OK,
             Object = productResponse
         };
 
-        _productBusinessMock.Setup(m => m.GetProductByIdAsync(productId))
-            .ReturnsAsync(processingStatusResponse);
+        _productBusinessMock.Setup(m => m.GetProductById(productId))
+            .Returns(processingStatusResponse);
 
         // Act
         var productsController = new API.Controllers.ProductsController(_productBusinessMock.Object);
-        var actionResult = await productsController.GetProductByIdAsync(productId);
+        var actionResult = productsController.GetProductById(productId);
         var okResult = actionResult as OkObjectResult;
 
         // Assert
@@ -63,12 +65,12 @@ public class ProductControllerTester
             Status = HttpStatusCode.NotFound,
         };
 
-        _productBusinessMock.Setup(m => m.GetProductByIdAsync(It.IsAny<int>()))
-            .ReturnsAsync(processingStatusResponse);
+        _productBusinessMock.Setup(m => m.GetProductById(It.IsAny<int>()))
+            .Returns(processingStatusResponse);
 
         // Act
         var productsController = new API.Controllers.ProductsController(_productBusinessMock.Object);
-        var actionResult = await productsController.GetProductByIdAsync(productId);
+        var actionResult = productsController.GetProductById(productId);
         var notFoundResult = actionResult as NotFoundObjectResult;
 
         // Assert
@@ -87,12 +89,12 @@ public class ProductControllerTester
         };
 
 
-        _productBusinessMock.Setup(m => m.GetProductByIdAsync(It.IsAny<int>()))
-            .ReturnsAsync(processingStatusResponse);
+        _productBusinessMock.Setup(m => m.GetProductById(It.IsAny<int>()))
+            .Returns(processingStatusResponse);
 
         // Act
         var productsController = new API.Controllers.ProductsController(_productBusinessMock.Object);
-        var actionResult = await productsController.GetProductByIdAsync(productId);
+        var actionResult = productsController.GetProductById(productId);
 
         // Assert
         actionResult.Should().BeOfType<ObjectResult>();
@@ -120,9 +122,10 @@ public class ProductControllerTester
             Image = "No image found",
             GlobalScore = (productScores.Animal + productScores.Environmental + productScores.Moral) / 3,
             Scores = productScores,
-            Composition = new List<ProductCompositionResponse>(),
             Brand = "Brand 1"
         };
+
+        productInformationResponse.Composition.AddRange(new List<ProductCompositionResponse>());
 
         var processingStatusResponse = new ProcessingStatusResponse<ProductInformationResponse>()
         {
@@ -130,12 +133,12 @@ public class ProductControllerTester
             Object = productInformationResponse
         };
 
-        _productBusinessMock.Setup(m => m.GetProductByUpcAsync(upc))
-            .ReturnsAsync(processingStatusResponse);
+        _productBusinessMock.Setup(m => m.GetProductByUpc(upc))
+            .Returns(processingStatusResponse);
 
         // Act
         var productsController = new API.Controllers.ProductsController(_productBusinessMock.Object);
-        var actionResult = await productsController.GetProductByUpcAsync(upc);
+        var actionResult = productsController.GetProductByUpc(upc);
         var okResult = actionResult as OkObjectResult;
 
         // Assert
@@ -155,12 +158,12 @@ public class ProductControllerTester
             Status = HttpStatusCode.NotFound,
         };
 
-        _productBusinessMock.Setup(m => m.GetProductByUpcAsync(It.IsAny<string>()))
-            .ReturnsAsync(processingStatusResponse);
+        _productBusinessMock.Setup(m => m.GetProductByUpc(It.IsAny<string>()))
+            .Returns(processingStatusResponse);
 
         // Act
         var productsController = new API.Controllers.ProductsController(_productBusinessMock.Object);
-        var actionResult = await productsController.GetProductByUpcAsync(upc);
+        var actionResult = productsController.GetProductByUpc(upc);
         var notFoundResult = actionResult as NotFoundObjectResult;
 
         // Assert
@@ -180,12 +183,12 @@ public class ProductControllerTester
             Status = HttpStatusCode.InternalServerError,
         };
 
-        _productBusinessMock.Setup(m => m.GetProductByUpcAsync(It.IsAny<string>()))
-            .ReturnsAsync(processingStatusResponse);
+        _productBusinessMock.Setup(m => m.GetProductByUpc(It.IsAny<string>()))
+            .Returns(processingStatusResponse);
 
         // Act
         var productsController = new API.Controllers.ProductsController(_productBusinessMock.Object);
-        var actionResult = await productsController.GetProductByUpcAsync(upc);
+        var actionResult = productsController.GetProductByUpc(upc);
 
         // Assert
         actionResult.Should().BeOfType<ObjectResult>();

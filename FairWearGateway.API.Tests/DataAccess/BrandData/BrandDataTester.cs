@@ -8,7 +8,7 @@ using Moq;
 namespace FairWearGateway.API.Tests.DataAccess.BrandData;
 
 [TestClass]
-public class BrandDataTests
+public class BrandDataTester
 {
     private API.DataAccess.BrandData.BrandData _brandData;
     private Mock<BrandService.BrandServiceClient> _mockBrandServiceClient;

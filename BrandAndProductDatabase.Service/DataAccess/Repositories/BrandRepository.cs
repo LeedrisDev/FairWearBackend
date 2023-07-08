@@ -12,16 +12,14 @@ namespace BrandAndProductDatabase.Service.DataAccess.Repositories;
 public class BrandRepository : Repository<BrandDto, BrandEntity>, IBrandRepository
 {
     /// <summary>Constructor for BrandRepository</summary>
-    public BrandRepository(BrandAndProductDbContext context, IMapper mapper) : base(context, mapper)
-    {
-    }
+    public BrandRepository(BrandAndProductDbContext context, IMapper mapper) : base(context, mapper) { }
 
     /// <inheritdoc/>
     public async Task<ProcessingStatusResponse<BrandDto>> GetBrandByNameAsync(string name)
     {
         var processingStatusResponse = new ProcessingStatusResponse<BrandDto>();
-
-        var brand = await DbSet.FirstOrDefaultAsync(x => x.Name == name);
+        
+        var brand = await DbSet.FirstOrDefaultAsync(x => x.Name.ToLower() == name);
         if (brand == null)
         {
             processingStatusResponse.Status = HttpStatusCode.NotFound;

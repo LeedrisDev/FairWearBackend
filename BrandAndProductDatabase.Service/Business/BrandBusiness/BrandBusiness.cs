@@ -38,11 +38,12 @@ public class BrandBusiness : IBrandBusiness
     /// <inheritdoc/>
     public async Task<ProcessingStatusResponse<BrandDto>> GetBrandByNameAsync(string name)
     {
-        var processingStatusResponse = await _brandRepository.GetBrandByNameAsync(name);
+        var brandName = TreatBrandName(name);
+        var processingStatusResponse = await _brandRepository.GetBrandByNameAsync(brandName);
         if (processingStatusResponse.Status == HttpStatusCode.OK)
             return processingStatusResponse;
 
-        var brandDataResponse = _brandData.GetBrandByName(name);
+        var brandDataResponse = _brandData.GetBrandByName(brandName);
         if (brandDataResponse.Status != HttpStatusCode.OK)
             return brandDataResponse;
 
@@ -66,5 +67,15 @@ public class BrandBusiness : IBrandBusiness
     public async Task<ProcessingStatusResponse<BrandDto>> DeleteBrandAsync(int id)
     {
         return await _brandRepository.DeleteAsync(id);
+    }
+    
+    private static string TreatBrandName(string brandName)
+    {
+        var treatedName = brandName
+            .ToLower()
+            .Replace(" ", "-")
+            .Replace("'", "");
+
+        return treatedName;
     }
 }

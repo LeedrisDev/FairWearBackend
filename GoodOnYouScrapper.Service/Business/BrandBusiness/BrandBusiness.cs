@@ -31,11 +31,9 @@ public class BrandBusiness : IBrandBusiness
     {
         HtmlDocument htmlDocument;
 
-        var treatedBrandName = TreatBrandName(brandName);
-
         try
         {
-            htmlDocument = await _brandData.GetBrandPageHtml(treatedBrandName);
+            htmlDocument = await _brandData.GetBrandPageHtml(brandName);
         }
         catch (HttpRequestException e)
         {
@@ -46,12 +44,12 @@ public class BrandBusiness : IBrandBusiness
 
         var brandModel = new BrandScrapperResponse
         {
-            Name = brandName,
+            Name = GetBrandName(htmlDocument),
             Country = GetBrandCountry(htmlDocument),
             EnvironmentRating = GetRating(htmlDocument, AppConstants.XPathEnvironmentRating),
             PeopleRating = GetRating(htmlDocument, AppConstants.XPathPeopleRating),
             AnimalRating = GetRating(htmlDocument, AppConstants.XPathAnimalRating),
-            RatingDescription = GetRatingDescription(htmlDocument),
+            RatingDescription = GetRatingDescription(htmlDocument)
         };
 
         brandModel.Categories.AddRange(GetBrandCategories(htmlDocument));
@@ -63,14 +61,18 @@ public class BrandBusiness : IBrandBusiness
         return _processingStatusResponse;
     }
 
-    private static string TreatBrandName(string brandName)
+    private static string GetBrandName(HtmlDocument doc)
     {
-        var treatedName = brandName
-            .ToLowerInvariant()
-            .Replace(" ", "-")
-            .Replace("'", "");
+        var brandName = doc
+            .DocumentNode
+            .SelectNodes(AppConstants.XPathBrandName)
+            .First()
+            .InnerText
+            .Trim();
 
-        return treatedName;
+        Console.WriteLine(brandName);
+
+        return brandName;
     }
 
 
@@ -108,12 +110,9 @@ public class BrandBusiness : IBrandBusiness
         foreach (var node in ratingSummaryNodes)
         {
             if (node.Name == "ul")
-            {
                 foreach (var li in node.ChildNodes)
-                {
                     sb.Append("\t" + "- " + li.InnerText + "\n");
-                }
-            }
+            
             else
             {
                 sb.Append(node.InnerText + "\n");
@@ -142,7 +141,7 @@ public class BrandBusiness : IBrandBusiness
         return country.StartsWith("location: ") ? country.Substring("location: ".Length) : "";
     }
 
-    private static string[] GetBrandCategories(HtmlDocument doc)
+    private static IEnumerable<string> GetBrandCategories(HtmlDocument doc)
     {
         var sideBar = doc
             .DocumentNode
@@ -156,17 +155,17 @@ public class BrandBusiness : IBrandBusiness
 
         foreach (var row in divList)
         {
-            if (row.FirstChild.InnerText == "CATEGORIES")
+            if (row.FirstChild.InnerText != "CATEGORIES") 
+                continue;
+            
+            row.ChildNodes.RemoveAt(0);
+            foreach (var node in row.FirstChild.ChildNodes)
             {
-                row.ChildNodes.RemoveAt(0);
-                foreach (var node in row.FirstChild.ChildNodes)
-                {
-                    var str = HttpUtility.HtmlDecode(node.InnerText);
-                    listCategories.Add(str);
-                }
-
-                return listCategories.ToArray();
+                var str = HttpUtility.HtmlDecode(node.InnerText);
+                listCategories.Add(str);
             }
+
+            return listCategories.ToArray();
         }
 
         return listCategories.ToArray();
@@ -193,9 +192,9 @@ public class BrandBusiness : IBrandBusiness
             row.ChildNodes.RemoveAt(0);
             foreach (var node in row.ChildNodes)
             {
-                var str = HttpUtility.HtmlDecode(node.InnerText);
-                str = Regex.Replace(str, @"[^\w]", string.Empty);
-                listRanges.Add(str);
+                var nodeInnerText = HttpUtility.HtmlDecode(node.InnerText);
+                nodeInnerText = Regex.Replace(nodeInnerText, @"[^\w]", string.Empty);
+                listRanges.Add(nodeInnerText);
             }
 
             return listRanges.ToArray();

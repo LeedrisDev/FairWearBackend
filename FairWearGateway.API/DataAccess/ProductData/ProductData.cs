@@ -1,9 +1,8 @@
 using System.Net;
 using BrandAndProductDatabase.Service.Protos;
 using FairWearGateway.API.Models;
-using FairWearGateway.API.Utils;
 using Grpc.Core;
-using Grpc.Net.Client;
+using Grpc.Net.ClientFactory;
 
 namespace FairWearGateway.API.DataAccess.ProductData;
 
@@ -13,10 +12,9 @@ public class ProductData : IProductData
     private readonly ProductService.ProductServiceClient _client;
 
     /// <summary>Constructor</summary>
-    public ProductData()
+    public ProductData(GrpcClientFactory grpcClientFactory)
     {
-        var channel = GrpcChannel.ForAddress(AppConstants.BrandAndProductServiceUrl);
-        _client = new ProductService.ProductServiceClient(channel);
+        _client = grpcClientFactory.CreateClient<ProductService.ProductServiceClient>("ProductService");
     }
 
     /// <inheritdoc />

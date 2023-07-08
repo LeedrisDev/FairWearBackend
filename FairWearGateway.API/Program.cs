@@ -17,6 +17,7 @@ builder.Services.AddGrpcClient<BrandService.BrandServiceClient>("BrandService",
     o => { o.Address = new Uri(AppConstants.BrandAndProductServiceUrl); });
 builder.Services.AddGrpcClient<ProductService.ProductServiceClient>("ProductService",
     o => { o.Address = new Uri(AppConstants.BrandAndProductServiceUrl); });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 SwaggerConfiguration.Configure(builder.Services);

@@ -24,7 +24,7 @@ public class ProductService : Protos.ProductService.ProductServiceBase
     public override async Task GetAllProductsAsync(Empty request, IServerStreamWriter<ProductResponse> responseStream,
         ServerCallContext context)
     {
-        var productList = await _productBusiness.GetAllProductsAsync();
+        var productList = await _productBusiness.GetAllProductsAsync(new Dictionary<string, string>());
 
         if (productList.Status != HttpStatusCode.OK)
         {

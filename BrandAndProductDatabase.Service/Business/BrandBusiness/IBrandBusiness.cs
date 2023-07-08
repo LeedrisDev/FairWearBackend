@@ -10,7 +10,7 @@ public interface IBrandBusiness
 {
     /// <summary>Gets all the Brands.</summary>
     /// <returns>A list of <see cref="BrandDto"/>.</returns>
-    Task<ProcessingStatusResponse<IEnumerable<BrandDto>>> GetAllBrandsAsync();
+    Task<ProcessingStatusResponse<IEnumerable<BrandDto>>> GetAllBrandsAsync(Dictionary<string, string> filters);
 
     /// <summary>Gets a Brand by Id.</summary>
     /// <param name="id">The Id of the Brand.</param>

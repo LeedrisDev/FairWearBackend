@@ -1,3 +1,4 @@
+using BrandAndProductDatabase.Service.DataAccess.Filters;
 using BrandAndProductDatabase.Service.Models;
 
 namespace BrandAndProductDatabase.Service.DataAccess.IRepositories;
@@ -10,8 +11,9 @@ public interface IRepository<TModel>
     where TModel : class, IObjectWithId
 {
     /// <summary>Gets all entities from the data store.</summary>
+    /// <param name="filter">Contains filters to apply.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-    Task<ProcessingStatusResponse<IEnumerable<TModel>>> GetAllAsync();
+    Task<ProcessingStatusResponse<IEnumerable<TModel>>> GetAllAsync(GenericFilter<IFilter> filter);
 
     /// <summary>Gets a single entity from the data store by its ID.</summary>
     /// <param name="id">The ID of the entity to retrieve.</param>

@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using BrandAndProductDatabase.Service.DataAccess.BrandData;
+using BrandAndProductDatabase.Service.DataAccess.Filters;
 using BrandAndProductDatabase.Service.DataAccess.IRepositories;
 using BrandAndProductDatabase.Service.DataAccess.ProductData;
 using BrandAndProductDatabase.Service.Models;
@@ -12,6 +13,7 @@ public class ProductBusiness : IProductBusiness
 {
     private readonly IBrandData _brandData;
     private readonly IBrandRepository _brandRepository;
+    private readonly IFilterFactory<IFilter> _filterFactory;
     private readonly IProductData _productData;
     private readonly IProductRepository _productRepository;
 
@@ -21,18 +23,21 @@ public class ProductBusiness : IProductBusiness
     /// <param name="productData"></param>
     /// <param name="brandData"></param>
     public ProductBusiness(IProductRepository productRepository, IBrandRepository brandRepository,
-        IProductData productData, IBrandData brandData)
+        IProductData productData, IBrandData brandData, IFilterFactory<IFilter> filterFactory)
     {
         _productRepository = productRepository;
         _brandRepository = brandRepository;
         _productData = productData;
         _brandData = brandData;
+        _filterFactory = filterFactory;
     }
 
     /// <inheritdoc/>
-    public async Task<ProcessingStatusResponse<IEnumerable<ProductDto>>> GetAllProductsAsync()
+    public async Task<ProcessingStatusResponse<IEnumerable<ProductDto>>> GetAllProductsAsync(
+        Dictionary<string, string> filters)
     {
-        return await _productRepository.GetAllAsync();
+        var filter = _filterFactory.CreateFilter(filters);
+        return await _productRepository.GetAllAsync(filter);
     }
 
     /// <inheritdoc/>
@@ -44,7 +49,8 @@ public class ProductBusiness : IProductBusiness
     /// <inheritdoc />
     public async Task<ProcessingStatusResponse<ProductInformationDto>> GetProductByUpcAsync(string upcCode)
     {
-        var productResponse = await _productRepository.GetAllAsync();
+        var emptyFilter = _filterFactory.CreateFilter(new Dictionary<string, string>());
+        var productResponse = await _productRepository.GetAllAsync(emptyFilter);
 
         if (productResponse.Status != HttpStatusCode.OK)
         {

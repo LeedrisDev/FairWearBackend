@@ -32,7 +32,7 @@ public class BrandService : Protos.BrandService.BrandServiceBase
             throw new RpcException(new Status(StatusCode.Internal, brandList.ErrorMessage));
         }
 
-        foreach (BrandDto brand in brandList.Object)
+        foreach (var brand in brandList.Object)
         {
             await responseStream.WriteAsync(_mapper.Map<BrandResponse>(brand));
         }

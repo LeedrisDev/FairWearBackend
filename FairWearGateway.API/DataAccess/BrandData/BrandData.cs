@@ -40,7 +40,7 @@ public class BrandData : IBrandData
             else
             {
                 processingStatusResponse.Status = HttpStatusCode.InternalServerError;
-                processingStatusResponse.ErrorMessage = e.Message;
+                processingStatusResponse.ErrorMessage = e.Status.Detail;
             }
         }
 
@@ -70,7 +70,7 @@ public class BrandData : IBrandData
             else
             {
                 processingStatusResponse.Status = HttpStatusCode.InternalServerError;
-                processingStatusResponse.ErrorMessage = e.Message;
+                processingStatusResponse.ErrorMessage = e.Status.Detail;
             }
         }
 

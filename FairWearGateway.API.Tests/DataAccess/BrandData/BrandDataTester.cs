@@ -2,57 +2,165 @@
 using BrandAndProductDatabase.Service.Protos;
 using FluentAssertions;
 using Grpc.Core;
+using Grpc.Net.ClientFactory;
 using Moq;
 
 namespace FairWearGateway.API.Tests.DataAccess.BrandData;
 
-// [TestClass]
+[TestClass]
 public class BrandDataTests
 {
-    private API.DataAccess.BrandData.BrandData brandData;
-    private Mock<BrandService.BrandServiceClient> mockClient;
+    private API.DataAccess.BrandData.BrandData _brandData;
+    private Mock<BrandService.BrandServiceClient> _mockBrandServiceClient;
+    private Mock<GrpcClientFactory> _mockGrpcClientFactory;
 
     [TestInitialize]
-    public void TestInitialize()
+    public void Setup()
     {
-        mockClient = new Mock<BrandService.BrandServiceClient>();
-        brandData = new API.DataAccess.BrandData.BrandData { };
+        _mockGrpcClientFactory = new Mock<GrpcClientFactory>();
+        _mockBrandServiceClient = new Mock<BrandService.BrandServiceClient>();
+        _mockGrpcClientFactory
+            .Setup(f => f.CreateClient<BrandService.BrandServiceClient>("BrandService"))
+            .Returns(_mockBrandServiceClient.Object);
+        _brandData = new API.DataAccess.BrandData.BrandData(_mockGrpcClientFactory.Object);
     }
 
     [TestMethod]
-    public void GetBrandById_WhenRpcExceptionIsThrown_ReturnsErrorResponse()
+    public async Task GetBrandById_Should_Return_Correct_Brand_When_Id_Exists()
     {
         // Arrange
-        var brandId = 123;
-        var expectedErrorMessage = "Brand with id 123 could not be found";
-        mockClient.Setup(c => c.GetBrandByIdAsync(It.IsAny<BrandByIdRequest>(), null, null, default))
-            .Throws(new RpcException(new Status(StatusCode.NotFound, "Not Found")));
+        int testBrandId = 1;
+        var testBrandResponse = new BrandResponse
+        {
+            Id = 1,
+            Name = "Brand 1",
+            Country = "Country 1",
+            EnvironmentRating = 1,
+            PeopleRating = 1,
+            AnimalRating = 1,
+            RatingDescription = "Rating 1",
+        };
+        testBrandResponse.Categories.AddRange(new List<string> { "Category 1" });
+        testBrandResponse.Ranges.AddRange(new List<string> { "Range 1" });
+
+
+        _mockBrandServiceClient
+            .Setup(c => c.GetBrandByIdAsync(It.IsAny<BrandByIdRequest>(), null, null, new CancellationToken()))
+            .Returns(testBrandResponse);
 
         // Act
-        var response = brandData.GetBrandById(brandId);
+        var result = _brandData.GetBrandById(testBrandId);
 
         // Assert
-        response.Status.Should().Be(HttpStatusCode.NotFound);
-        response.ErrorMessage.Should().Be(expectedErrorMessage);
-        response.Object.Should().BeNull();
+        result.Status.Should().Be(HttpStatusCode.OK);
+        result.Object.Should().BeEquivalentTo(testBrandResponse);
     }
 
     [TestMethod]
-    public void GetBrandByName_WhenRpcExceptionIsThrown_ReturnsErrorResponse()
+    public async Task GetBrandById_Should_Return_NotFound_When_Id_Does_Not_Exists()
     {
         // Arrange
-        var brandName = "SomeBrand";
-        var expectedErrorMessage = "Brand with name SomeBrand could not be found";
-        mockClient.Setup(c => c.GetBrandByNameAsync(It.IsAny<BrandByNameRequest>(), null, null, default))
-            .Throws(new RpcException(new Status(StatusCode.NotFound, "Not Found")));
+        int testBrandId = 1;
+
+        _mockBrandServiceClient
+            .Setup(c => c.GetBrandByIdAsync(It.IsAny<BrandByIdRequest>(), null, null, new CancellationToken()))
+            .Throws(new RpcException(new Status(StatusCode.NotFound,
+                $"Brand with id {testBrandId} could not be found")));
 
         // Act
-        var response = brandData.GetBrandByName(brandName);
+        var result = _brandData.GetBrandById(testBrandId);
 
         // Assert
-        response.Status.Should().Be(HttpStatusCode.NotFound);
-        response.ErrorMessage.Should().Be(expectedErrorMessage);
-        response.Object.Should().BeNull();
+        result.Status.Should().Be(HttpStatusCode.NotFound);
+        result.ErrorMessage.Should().Be($"Brand with id {testBrandId} could not be found");
+    }
+
+    [TestMethod]
+    public async Task GetBrandById_Should_Return_InternalServerError_On_Exception()
+    {
+        // Arrange
+        int testBrandId = 1;
+
+        _mockBrandServiceClient
+            .Setup(c => c.GetBrandByIdAsync(It.IsAny<BrandByIdRequest>(), null, null, new CancellationToken()))
+            .Throws(new RpcException(new Status(StatusCode.Internal,
+                "Internal Server Error")));
+
+        // Act
+        var result = _brandData.GetBrandById(testBrandId);
+
+        // Assert
+        result.Status.Should().Be(HttpStatusCode.InternalServerError);
+        result.ErrorMessage.Should().Be("Internal Server Error");
+    }
+
+    [TestMethod]
+    public async Task GetBrandByName_Should_Return_Correct_Brand_When_Name_Exists()
+    {
+        // Arrange
+        string testBrandName = "Nike";
+        var testBrandResponse = new BrandResponse
+        {
+            Id = 1,
+            Name = "Nike",
+            Country = "USA",
+            EnvironmentRating = 1,
+            PeopleRating = 1,
+            AnimalRating = 1,
+            RatingDescription = "Rating 1",
+        };
+        testBrandResponse.Categories.AddRange(new List<string> { "Category 1" });
+        testBrandResponse.Ranges.AddRange(new List<string> { "Range 1" });
+
+
+        _mockBrandServiceClient
+            .Setup(c => c.GetBrandByNameAsync(It.IsAny<BrandByNameRequest>(), null, null, new CancellationToken()))
+            .Returns(testBrandResponse);
+
+        // Act
+        var result = _brandData.GetBrandByName(testBrandName);
+
+        // Assert
+        result.Status.Should().Be(HttpStatusCode.OK);
+        result.Object.Should().BeEquivalentTo(testBrandResponse);
+    }
+
+    [TestMethod]
+    public async Task GetBrandByName_Should_Return_NotFound_When_Name_Does_Not_Exists()
+    {
+        // Arrange
+        string testBrandName = "UNKNOWN";
+
+        _mockBrandServiceClient
+            .Setup(c => c.GetBrandByNameAsync(It.IsAny<BrandByNameRequest>(), null, null, new CancellationToken()))
+            .Throws(new RpcException(new Status(StatusCode.NotFound,
+                $"Brand with id {testBrandName} could not be found")));
+
+        // Act
+        var result = _brandData.GetBrandByName(testBrandName);
+
+        // Assert
+        result.Status.Should().Be(HttpStatusCode.NotFound);
+        result.ErrorMessage.Should().Be($"Brand with name {testBrandName} could not be found");
+    }
+
+    [TestMethod]
+    public async Task GetBrandByName_Should_Return_InternalServerError_On_Exception()
+    {
+        // Arrange
+        string testBrandName = "UNKNOWN";
+
+        _mockBrandServiceClient
+            .Setup(c => c.GetBrandByNameAsync(It.IsAny<BrandByNameRequest>(), null, null, new CancellationToken()))
+            .Throws(new RpcException(new Status(StatusCode.Internal,
+                "Internal Server Error")));
+
+        // Act
+        var result = _brandData.GetBrandByName(testBrandName);
+
+        // Assert
+        result.Status.Should().Be(HttpStatusCode.InternalServerError);
+        result.ErrorMessage.Should().Be("Internal Server Error");
     }
 }
 

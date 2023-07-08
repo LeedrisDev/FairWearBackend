@@ -16,7 +16,7 @@ public class ProductDataTests
     public void TestInitialize()
     {
         mockClient = new Mock<ProductService.ProductServiceClient>();
-        productData = new API.DataAccess.ProductData.ProductData { };
+        // productData = new API.DataAccess.ProductData.ProductData { };
     }
 
     [TestMethod]

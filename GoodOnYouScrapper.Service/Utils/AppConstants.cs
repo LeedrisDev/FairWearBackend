@@ -3,9 +3,9 @@ namespace GoodOnYouScrapper.Service.Utils;
 /// <summary>Class representing constants used in the application</summary>
 public abstract class AppConstants
 {
-    /// <summary>Api name</summary>
-    public const string ApiName = "GoodOnYou Scrapper Web API (.NET 7)"; 
-    
+    /// <summary>XPath for the brand name in the brand page</summary>
+    public const string XPathBrandName = "//*[@id='brand-hero-summary']/h1";
+
     /// <summary>Api description</summary>
     public const string ApiDescription = "This API allows you to get information about a brand from GoodOnYou website.";
 

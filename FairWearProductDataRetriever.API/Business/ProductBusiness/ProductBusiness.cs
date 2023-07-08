@@ -20,7 +20,7 @@ public class ProductBusiness : IProductBusiness
         _processingStatusResponse = new ProcessingStatusResponse<ProductModel>();
         _productData = productData;
     }
-    
+
     /// <inheritdoc/>
     public async Task<ProcessingStatusResponse<ProductModel>> GetProductInformation(string barcode)
     {
@@ -48,7 +48,7 @@ public class ProductBusiness : IProductBusiness
             BrandName = GetProductBrandName(htmlDocument),
             Category = GetProductCategory(htmlDocument),
         };
-        
+
         _processingStatusResponse.Status = HttpStatusCode.OK;
         _processingStatusResponse.Object = productModel;
 
@@ -59,7 +59,7 @@ public class ProductBusiness : IProductBusiness
     /// <param name="doc">Html document of the product from go-upc</param>
     /// <returns></returns>
     private static string GetProductBrandName(HtmlDocument doc)
-    { 
+    {
         var nodes = doc.DocumentNode
             .SelectSingleNode(AppConstants.PathInformationTable)
             .ChildNodes
@@ -67,14 +67,14 @@ public class ProductBusiness : IProductBusiness
 
         var brandNode =
             nodes.Find(
-            node => node.ChildNodes.Any( child => child.Name == "td" && child.FirstChild.InnerText == "Brand")
+                node => node.ChildNodes.Any(child => child.Name == "td" && child.FirstChild.InnerText == "Brand")
             )?.ChildNodes.Where(node => node.Name == "td").ToList();
 
 
         var str = HttpUtility.HtmlDecode(brandNode?[1].InnerText ?? "");
         return str;
     }
-    
+
     /// <summary>Retrieve product name from the html document.</summary>
     /// <param name="doc">Html document of the product from go-upc</param>
     /// <returns></returns>
@@ -85,8 +85,8 @@ public class ProductBusiness : IProductBusiness
 
         return node.InnerText;
     }
-    
-    
+
+
     /// <summary>Retrieves product category from the html document.</summary>
     /// <param name="doc">Html document of the product from go-upc</param>
     /// <returns></returns>
@@ -106,7 +106,7 @@ public class ProductBusiness : IProductBusiness
         var str = HttpUtility.HtmlDecode(categoryNodes?[1].InnerText ?? "");
         return str;
     }
-    
+
     /// <summary>Checks if the product was not found.</summary>
     /// <param name="doc">Html document of the product from go-upc</param>
     /// <returns></returns>
@@ -120,7 +120,7 @@ public class ProductBusiness : IProductBusiness
         }
 
         var text = node.InnerText;
-        
+
         return text.Contains("Sorry, we were not able to find a product for");
     }
 }

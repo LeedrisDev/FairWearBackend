@@ -6,7 +6,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace FairWearProductDataRetriever.API.Utils;
 
 /// <summary>Configures the Swagger options</summary>
-public class SwaggerOptionsConfiguration: IConfigureNamedOptions<SwaggerGenOptions>
+public class SwaggerOptionsConfiguration : IConfigureNamedOptions<SwaggerGenOptions>
 {
     private readonly IApiVersionDescriptionProvider _provider;
 
@@ -16,7 +16,7 @@ public class SwaggerOptionsConfiguration: IConfigureNamedOptions<SwaggerGenOptio
     {
         _provider = provider;
     }
-    
+
     /// <inheritdoc/>
     public void Configure(SwaggerGenOptions options)
     {
@@ -28,13 +28,13 @@ public class SwaggerOptionsConfiguration: IConfigureNamedOptions<SwaggerGenOptio
                 CreateVersionInfo(description));
         }
     }
-    
+
     /// <inheritdoc/>
     public void Configure(string? name, SwaggerGenOptions options)
     {
         Configure(options);
-    }   
-    
+    }
+
     /// <summary>Create information about the version of the API</summary>
     /// <param name="desc"></param>
     /// <returns>Information about the API</returns>

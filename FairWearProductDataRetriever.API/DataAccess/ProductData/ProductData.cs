@@ -7,9 +7,9 @@ namespace FairWearProductDataRetriever.API.DataAccess.ProductData;
 /// <summary>Data access for retrieving product information</summary>
 public class ProductData : IProductData
 {
-    private readonly IHttpClientWrapper _httpClient;
     private readonly HtmlDocument _htmlDocument;
-    
+    private readonly IHttpClientWrapper _httpClient;
+
     /// <summary>Constructor</summary>
     /// <param name="httpClient">The <see cref="IHttpClientWrapper"/> to use</param>
     /// <param name="htmlDocument">The <see cref="HtmlDocument"/> to use</param>
@@ -18,7 +18,7 @@ public class ProductData : IProductData
         _httpClient = httpClient;
         _htmlDocument = htmlDocument;
     }
-    
+
     /// <inheritdoc/>
     public async Task<HtmlDocument> GetBarcodeInfoPageHtml(string barCode)
     {
@@ -26,7 +26,7 @@ public class ProductData : IProductData
         _htmlDocument.LoadHtml(productPage);
         return _htmlDocument;
     }
-    
+
     /// <summary>
     /// Retrieves the product page
     /// </summary>

@@ -1,7 +1,7 @@
 ﻿using System.Net;
+using BrandAndProductDatabase.Service.Protos;
 using FairWearGateway.API.DataAccess.BrandData;
 using FairWearGateway.API.Models;
-using FairWearGateway.API.Models.Response;
 using FluentAssertions;
 using Moq;
 
@@ -32,21 +32,23 @@ public class BrandBusinessTester
             PeopleRating = 4,
             AnimalRating = 3,
             RatingDescription = "Description 1",
-            Categories = new List<string> { "Category 1", "Category 2" },
-            Ranges = new List<string> { "Range 1", "Range 2" }
         };
+
+        brandResponse.Categories.AddRange(new List<string> { "Category 1", "Category 2" });
+        brandResponse.Categories.AddRange(new List<string> { "Range 1", "Range 2" });
+
         var processingStatusResponse = new ProcessingStatusResponse<BrandResponse>()
         {
             Status = HttpStatusCode.OK,
             Object = brandResponse
         };
 
-        _brandDataMock.Setup(m => m.GetBrandByIdAsync(brandId))
-            .ReturnsAsync(processingStatusResponse);
+        _brandDataMock.Setup(m => m.GetBrandById(brandId))
+            .Returns(processingStatusResponse);
 
         // Act
         var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandDataMock.Object);
-        var result = await brandBusiness.GetBrandByIdAsync(brandId);
+        var result = brandBusiness.GetBrandById(brandId);
 
         // Assert
         result.Status.Should().Be(HttpStatusCode.OK);
@@ -67,9 +69,10 @@ public class BrandBusinessTester
             PeopleRating = 4,
             AnimalRating = 3,
             RatingDescription = "Description 1",
-            Categories = new List<string> { "Category 1", "Category 2" },
-            Ranges = new List<string> { "Range 1", "Range 2" }
         };
+
+        brandResponse.Categories.AddRange(new List<string> { "Category 1", "Category 2" });
+        brandResponse.Categories.AddRange(new List<string> { "Range 1", "Range 2" });
 
         var processingStatusResponse = new ProcessingStatusResponse<BrandResponse>()
         {
@@ -77,12 +80,12 @@ public class BrandBusinessTester
             Object = brandResponse
         };
 
-        _brandDataMock.Setup(m => m.GetBrandByNameAsync(brandName))
-            .ReturnsAsync(processingStatusResponse);
+        _brandDataMock.Setup(m => m.GetBrandByName(brandName))
+            .Returns(processingStatusResponse);
 
         // Act
         var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandDataMock.Object);
-        var result = await brandBusiness.GetBrandByNameAsync(brandName);
+        var result = brandBusiness.GetBrandByName(brandName);
 
         // Assert
         result.Status.Should().Be(HttpStatusCode.OK);

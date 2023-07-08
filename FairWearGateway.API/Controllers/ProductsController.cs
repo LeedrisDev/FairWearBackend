@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net;
+using BrandAndProductDatabase.Service.Protos;
 using FairWearGateway.API.Business.ProductBusiness;
 using FairWearGateway.API.Models.Response;
 using Microsoft.AspNetCore.Mvc;
@@ -25,9 +26,9 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(typeof(ProductResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
-    public async Task<IActionResult> GetProductByIdAsync([Required] int productId)
+    public IActionResult GetProductById([Required] int productId)
     {
-        var processingStatusResponse = await _productBusiness.GetProductByIdAsync(productId);
+        var processingStatusResponse = _productBusiness.GetProductById(productId);
 
         return processingStatusResponse.Status switch
         {
@@ -42,9 +43,9 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(typeof(ProductInformationResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
-    public async Task<IActionResult> GetProductByUpcAsync([Required] string upc)
+    public IActionResult GetProductByUpc([Required] string upc)
     {
-        var processingStatusResponse = await _productBusiness.GetProductByUpcAsync(upc);
+        var processingStatusResponse = _productBusiness.GetProductByUpc(upc);
 
         return processingStatusResponse.Status switch
         {

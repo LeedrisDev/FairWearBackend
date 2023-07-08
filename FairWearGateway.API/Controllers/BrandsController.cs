@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net;
+using BrandAndProductDatabase.Service.Protos;
 using FairWearGateway.API.Business.BrandBusiness;
-using FairWearGateway.API.Models.Request;
 using FairWearGateway.API.Models.Response;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,9 +26,9 @@ public class BrandsController : ControllerBase
     [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
-    public async Task<IActionResult> GetBrandByIdAsync([Required] int brandId)
+    public IActionResult GetBrandById([Required] int brandId)
     {
-        var processingStatusResponse = await _brandBusiness.GetBrandByIdAsync(brandId);
+        var processingStatusResponse = _brandBusiness.GetBrandById(brandId);
 
         return processingStatusResponse.Status switch
         {
@@ -43,9 +43,9 @@ public class BrandsController : ControllerBase
     [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
-    public async Task<IActionResult> GetBrandByNameAsync([Required] BrandRequest brandRequest)
+    public IActionResult GetBrandByName([Required] BrandByNameRequest brandRequest)
     {
-        var processingStatusResponse = await _brandBusiness.GetBrandByNameAsync(brandRequest.Name);
+        var processingStatusResponse = _brandBusiness.GetBrandByName(brandRequest.Name);
 
         return processingStatusResponse.Status switch
         {

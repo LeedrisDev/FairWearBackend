@@ -1,79 +1,101 @@
 ﻿using System.Net;
-using FairWearGateway.API.Models.Response;
-using FairWearGateway.API.Utils.HttpClientWrapper;
+using BrandAndProductDatabase.Service.Protos;
 using FluentAssertions;
+using Grpc.Core;
+using Grpc.Net.ClientFactory;
 using Moq;
-using Newtonsoft.Json;
 
 namespace FairWearGateway.API.Tests.DataAccess.ProductData;
 
 [TestClass]
 public class ProductDataTester
 {
-    private Mock<IHttpClientWrapper> _httpClientWrapperMock;
+    private Mock<GrpcClientFactory> _mockGrpcClientFactory;
+    private Mock<ProductService.ProductServiceClient> _mockProductServiceClient;
+    private API.DataAccess.ProductData.ProductData _productData;
 
     [TestInitialize]
-    public void Initialize()
+    public void Setup()
     {
-        _httpClientWrapperMock = new Mock<IHttpClientWrapper>();
+        _mockGrpcClientFactory = new Mock<GrpcClientFactory>();
+        _mockProductServiceClient = new Mock<ProductService.ProductServiceClient>();
+        _mockGrpcClientFactory
+            .Setup(f => f.CreateClient<ProductService.ProductServiceClient>("ProductService"))
+            .Returns(_mockProductServiceClient.Object);
+        _productData = new API.DataAccess.ProductData.ProductData(_mockGrpcClientFactory.Object);
     }
 
     [TestMethod]
-    public async Task GetProductByIdAsync_ReturnsProductResponse()
+    public async Task GetProductById_Should_Return_Correct_Product_When_Id_Exists()
     {
         // Arrange
-        var productId = 1;
-        var productResponse = new ProductResponse
+        int testProductId = 1;
+        var testProductResponse = new ProductResponse
         {
-            Id = productId,
+            Id = 1,
             Name = "Product 1",
             UpcCode = "123456789",
             Category = "Category A",
-            Ranges = new List<string> { "Range A" },
             BrandId = 1
         };
 
-        var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK);
-        httpResponseMessage.Content = new StringContent(JsonConvert.SerializeObject(productResponse));
+        testProductResponse.Ranges.AddRange(new List<string> { "Range A" });
 
-        _httpClientWrapperMock.Setup(m => m.GetAsync(It.IsAny<string>()))
-            .ReturnsAsync(httpResponseMessage);
+        _mockProductServiceClient
+            .Setup(c => c.GetProductByIdAsync(It.IsAny<ProductByIdRequest>(), null, null, new CancellationToken()))
+            .Returns(testProductResponse);
 
         // Act
-        var productData = new API.DataAccess.ProductData.ProductData(_httpClientWrapperMock.Object);
-        var result = await productData.GetProductByIdAsync(productId);
+        var result = _productData.GetProductById(testProductId);
 
         // Assert
         result.Status.Should().Be(HttpStatusCode.OK);
-        result.Object.Should().BeEquivalentTo(productResponse);
+        result.Object.Should().BeEquivalentTo(testProductResponse);
     }
 
     [TestMethod]
-    public async Task GetProductByIdAsync_ReturnsErrorResponse()
+    public async Task GetProductById_Should_Return_NotFound_When_Id_Does_Not_Exists()
     {
         // Arrange
-        var productId = 1;
+        int testProductId = 1;
 
-        var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.NotFound);
-        httpResponseMessage.ReasonPhrase = "Product not found";
-
-        _httpClientWrapperMock.Setup(m => m.GetAsync(It.IsAny<string>()))
-            .ReturnsAsync(httpResponseMessage);
+        _mockProductServiceClient
+            .Setup(c => c.GetProductByIdAsync(It.IsAny<ProductByIdRequest>(), null, null, new CancellationToken()))
+            .Throws(new RpcException(new Status(StatusCode.NotFound,
+                $"Product with id {testProductId} could not be found")));
 
         // Act
-        var productData = new API.DataAccess.ProductData.ProductData(_httpClientWrapperMock.Object);
-        var result = await productData.GetProductByIdAsync(productId);
+        var result = _productData.GetProductById(testProductId);
 
         // Assert
         result.Status.Should().Be(HttpStatusCode.NotFound);
-        result.ErrorMessage.Should().Be("Product not found");
+        result.ErrorMessage.Should().Be($"Product with id {testProductId} could not be found");
     }
 
     [TestMethod]
-    public async Task GetProductByUpcAsync_ReturnsProductInfoResponse()
+    public async Task GetProductById_Should_Return_InternalServerError_On_Exception()
     {
         // Arrange
-        var upc = "1234567890";
+        int testProductId = 1;
+
+        _mockProductServiceClient
+            .Setup(c => c.GetProductByIdAsync(It.IsAny<ProductByIdRequest>(), null, null, new CancellationToken()))
+            .Throws(new RpcException(new Status(StatusCode.Internal,
+                "Internal Server Error")));
+
+        // Act
+        var result = _productData.GetProductById(testProductId);
+
+        // Assert
+        result.Status.Should().Be(HttpStatusCode.InternalServerError);
+        result.ErrorMessage.Should().Be("Internal Server Error");
+    }
+
+    [TestMethod]
+    public async Task GetProductByUpc_Should_Return_Correct_Product_When_Upc_Exists()
+    {
+        // Arrange
+        string testProductUpc = "123456789012";
 
         var productScores = new ProductScoreResponse()
         {
@@ -82,50 +104,65 @@ public class ProductDataTester
             Environmental = 2
         };
 
-        var productInfoResponse = new ProductInformationResponse
+        var testProductInformationResponse = new ProductInformationResponse
         {
             Name = "Product 1",
             Country = "Country 1",
             Image = "No image found",
             GlobalScore = (productScores.Animal + productScores.Environmental + productScores.Moral) / 3,
             Scores = productScores,
-            Composition = new List<ProductCompositionResponse>(),
             Brand = "Brand 1"
         };
 
-        var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK);
-        httpResponseMessage.Content = new StringContent(JsonConvert.SerializeObject(productInfoResponse));
+        testProductInformationResponse.Composition.AddRange(new List<ProductCompositionResponse>());
 
-        _httpClientWrapperMock.Setup(m => m.GetAsync(It.IsAny<string>()))
-            .ReturnsAsync(httpResponseMessage);
+        _mockProductServiceClient
+            .Setup(c => c.GetProductByUpcAsync(It.IsAny<ProductByUpcRequest>(), null, null, new CancellationToken()))
+            .Returns(testProductInformationResponse);
 
         // Act
-        var productData = new API.DataAccess.ProductData.ProductData(_httpClientWrapperMock.Object);
-        var result = await productData.GetProductByUpcAsync(upc);
+        var result = _productData.GetProductByUpc(testProductUpc);
 
         // Assert
         result.Status.Should().Be(HttpStatusCode.OK);
-        result.Object.Should().BeEquivalentTo(productInfoResponse);
+        result.Object.Should().BeEquivalentTo(testProductInformationResponse);
     }
 
     [TestMethod]
-    public async Task GetProductByUpcAsync_ReturnsErrorResponse()
+    public async Task GetProductByUpc_Should_Return_NotFound_When_Upc_Does_Not_Exists()
     {
         // Arrange
-        var upc = "1234567890";
+        string testProductUpc = "123456789012";
 
-        var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
-        httpResponseMessage.ReasonPhrase = "Invalid UPC";
-
-        _httpClientWrapperMock.Setup(m => m.GetAsync(It.IsAny<string>()))
-            .ReturnsAsync(httpResponseMessage);
+        _mockProductServiceClient
+            .Setup(c => c.GetProductByUpcAsync(It.IsAny<ProductByUpcRequest>(), null, null, new CancellationToken()))
+            .Throws(new RpcException(new Status(StatusCode.NotFound,
+                $"Product with barcode {testProductUpc} could not be found")));
 
         // Act
-        var productData = new API.DataAccess.ProductData.ProductData(_httpClientWrapperMock.Object);
-        var result = await productData.GetProductByUpcAsync(upc);
+        var result = _productData.GetProductByUpc(testProductUpc);
 
         // Assert
-        result.Status.Should().Be(HttpStatusCode.BadRequest);
-        result.ErrorMessage.Should().Be("Invalid UPC");
+        result.Status.Should().Be(HttpStatusCode.NotFound);
+        result.ErrorMessage.Should().Be($"Product with barcode {testProductUpc} could not be found");
+    }
+
+    [TestMethod]
+    public async Task GetProductByUpc_Should_Return_InternalServerError_On_Exception()
+    {
+        // Arrange
+        string testProductUpc = "123456789012";
+
+        _mockProductServiceClient
+            .Setup(c => c.GetProductByUpcAsync(It.IsAny<ProductByUpcRequest>(), null, null, new CancellationToken()))
+            .Throws(new RpcException(new Status(StatusCode.Internal,
+                "Internal Server Error")));
+
+        // Act
+        var result = _productData.GetProductByUpc(testProductUpc);
+
+        // Assert
+        result.Status.Should().Be(HttpStatusCode.InternalServerError);
+        result.ErrorMessage.Should().Be("Internal Server Error");
     }
 }

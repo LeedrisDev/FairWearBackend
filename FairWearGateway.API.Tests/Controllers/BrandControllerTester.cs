@@ -1,7 +1,7 @@
 ﻿using System.Net;
+using BrandAndProductDatabase.Service.Protos;
 using FairWearGateway.API.Business.BrandBusiness;
 using FairWearGateway.API.Models;
-using FairWearGateway.API.Models.Request;
 using FairWearGateway.API.Models.Response;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -34,21 +34,24 @@ public class BrandControllerTester
             PeopleRating = 4,
             AnimalRating = 3,
             RatingDescription = "Description 1",
-            Categories = new List<string> { "Category 1", "Category 2" },
-            Ranges = new List<string> { "Range 1", "Range 2" }
         };
+
+        brandResponse.Categories.AddRange(new List<string> { "Category 1", "Category 2" });
+        brandResponse.Ranges.AddRange(new List<string> { "Range 1", "Range 2" });
+
+
         var processingStatusResponse = new ProcessingStatusResponse<BrandResponse>()
         {
             Status = HttpStatusCode.OK,
             Object = brandResponse
         };
 
-        _brandBusinessMock.Setup(m => m.GetBrandByIdAsync(brandId))
-            .ReturnsAsync(processingStatusResponse);
+        _brandBusinessMock.Setup(m => m.GetBrandById(brandId))
+            .Returns(processingStatusResponse);
 
         // Act
         var brandsController = new API.Controllers.BrandsController(_brandBusinessMock.Object);
-        var actionResult = await brandsController.GetBrandByIdAsync(brandId);
+        var actionResult = brandsController.GetBrandById(brandId);
         var okResult = actionResult as OkObjectResult;
 
         // Assert
@@ -67,11 +70,11 @@ public class BrandControllerTester
             Status = HttpStatusCode.NotFound
         };
 
-        _brandBusinessMock.Setup(b => b.GetBrandByIdAsync(It.IsAny<int>())).ReturnsAsync(businessResponse);
+        _brandBusinessMock.Setup(b => b.GetBrandById(It.IsAny<int>())).Returns(businessResponse);
         var brandsController = new API.Controllers.BrandsController(_brandBusinessMock.Object);
 
         // Act
-        var result = await brandsController.GetBrandByIdAsync(1);
+        var result = brandsController.GetBrandById(1);
 
         // Assert
         result.Should().BeOfType<NotFoundObjectResult>();
@@ -88,12 +91,12 @@ public class BrandControllerTester
             Status = HttpStatusCode.InternalServerError
         };
 
-        _brandBusinessMock.Setup(b => b.GetBrandByIdAsync(It.IsAny<int>())).ReturnsAsync(businessResult);
+        _brandBusinessMock.Setup(b => b.GetBrandById(It.IsAny<int>())).Returns(businessResult);
 
 
         // Act
         var brandsController = new API.Controllers.BrandsController(_brandBusinessMock.Object);
-        var result = await brandsController.GetBrandByIdAsync(1);
+        var result = brandsController.GetBrandById(1);
 
         // Assert
         result.Should().BeOfType<ObjectResult>();
@@ -115,25 +118,27 @@ public class BrandControllerTester
             PeopleRating = 4,
             AnimalRating = 3,
             RatingDescription = "Description 1",
-            Categories = new List<string> { "Category 1", "Category 2" },
-            Ranges = new List<string> { "Range 1", "Range 2" }
         };
+
+        brandResponse.Categories.AddRange(new List<string> { "Category 1", "Category 2" });
+        brandResponse.Categories.AddRange(new List<string> { "Range 1", "Range 2" });
+
         var processingStatusResponse = new ProcessingStatusResponse<BrandResponse>()
         {
             Status = HttpStatusCode.OK,
             Object = brandResponse
         };
-        var brandRequest = new BrandRequest
+        var brandRequest = new BrandByNameRequest()
         {
             Name = brandName
         };
 
-        _brandBusinessMock.Setup(m => m.GetBrandByNameAsync(brandName))
-            .ReturnsAsync(processingStatusResponse);
+        _brandBusinessMock.Setup(m => m.GetBrandByName(brandName))
+            .Returns(processingStatusResponse);
 
         // Act
         var brandsController = new API.Controllers.BrandsController(_brandBusinessMock.Object);
-        var actionResult = await brandsController.GetBrandByNameAsync(brandRequest);
+        var actionResult = brandsController.GetBrandByName(brandRequest);
         var okResult = actionResult as OkObjectResult;
 
         // Assert
@@ -147,19 +152,19 @@ public class BrandControllerTester
     {
         // Arrange
         var brandName = "BrandName";
-        var brandRequest = new BrandRequest { Name = brandName };
+        var brandRequest = new BrandByNameRequest { Name = brandName };
 
         var businessResult = new ProcessingStatusResponse<BrandResponse>()
         {
             Status = HttpStatusCode.NotFound,
             MessageObject = { Message = $"Brand with Name {brandName} not found." }
         };
-        _brandBusinessMock.Setup(b => b.GetBrandByNameAsync(brandName))
-            .ReturnsAsync(businessResult);
+        _brandBusinessMock.Setup(b => b.GetBrandByName(brandName))
+            .Returns(businessResult);
 
         // Act
         var brandsController = new API.Controllers.BrandsController(_brandBusinessMock.Object);
-        var result = await brandsController.GetBrandByNameAsync(brandRequest);
+        var result = brandsController.GetBrandByName(brandRequest);
 
         // Assert
         result.Should().BeOfType<NotFoundObjectResult>();
@@ -176,7 +181,7 @@ public class BrandControllerTester
     {
         // Arrange
         var brandName = "BrandName";
-        var brandRequest = new BrandRequest { Name = brandName };
+        var brandRequest = new BrandByNameRequest { Name = brandName };
 
         var businessResult = new ProcessingStatusResponse<BrandResponse>()
         {
@@ -184,12 +189,12 @@ public class BrandControllerTester
             MessageObject = { Message = "An error occurred." }
         };
 
-        _brandBusinessMock.Setup(b => b.GetBrandByNameAsync(brandName))
-            .ReturnsAsync(businessResult);
+        _brandBusinessMock.Setup(b => b.GetBrandByName(brandName))
+            .Returns(businessResult);
 
         // Act
         var brandsController = new API.Controllers.BrandsController(_brandBusinessMock.Object);
-        var result = await brandsController.GetBrandByNameAsync(brandRequest);
+        var result = brandsController.GetBrandByName(brandRequest);
 
         // Assert
         result.Should().BeOfType<ObjectResult>();

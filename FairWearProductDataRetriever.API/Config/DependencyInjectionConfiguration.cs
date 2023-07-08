@@ -14,10 +14,10 @@ public static class DependencyInjectionConfiguration
         // Services
         services.AddHttpClient<IHttpClientWrapper, HttpClientWrapper>();
         services.AddTransient<HtmlDocument>();
-        
+
         // DataAccess
         services.AddTransient<IProductData, ProductData>();
-        
+
         // Business
         services.AddTransient<IProductBusiness, ProductBusiness>();
     }

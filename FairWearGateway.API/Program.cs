@@ -1,4 +1,6 @@
+using BrandAndProductDatabase.Service.Protos;
 using FairWearGateway.API.Config;
+using FairWearGateway.API.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,11 @@ EnvironmentValidator.ValidateRequiredVariables();
 
 // Dependency Injection
 DependencyInjectionConfiguration.Configure(builder.Services);
+
+builder.Services.AddGrpcClient<BrandService.BrandServiceClient>("BrandService",
+    o => { o.Address = new Uri(AppConstants.BrandAndProductServiceUrl); });
+builder.Services.AddGrpcClient<ProductService.ProductServiceClient>("ProductService",
+    o => { o.Address = new Uri(AppConstants.BrandAndProductServiceUrl); });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -1,5 +1,5 @@
+using BrandAndProductDatabase.Service.Protos;
 using FairWearGateway.API.Models;
-using FairWearGateway.API.Models.Response;
 
 namespace FairWearGateway.API.DataAccess.BrandData;
 
@@ -11,12 +11,12 @@ public interface IBrandData
     /// <returns>
     /// A <see cref="ProcessingStatusResponse{T}"/> instance, that contains the brand object if the call succeed
     /// </returns>
-    Task<ProcessingStatusResponse<BrandResponse>> GetBrandByIdAsync(int brandId);
+    ProcessingStatusResponse<BrandResponse> GetBrandById(int brandId);
 
     /// <summary>Call the appropriate microservice to get a brand by its name.</summary>
     /// <param name="name">Name of the wanted brand</param>
     /// <returns>
     /// A <see cref="ProcessingStatusResponse{T}"/> instance, that contains the brand object if the call succeed.
     /// </returns>
-    Task<ProcessingStatusResponse<BrandResponse>> GetBrandByNameAsync(string name);
+    ProcessingStatusResponse<BrandResponse> GetBrandByName(string name);
 }

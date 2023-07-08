@@ -7,6 +7,11 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <PackageId>FairWearGateway.API</PackageId>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <ExcludeFromCodeCoverage>
+            <!-- Add patterns to exclude auto-generated gRPC files -->
+            **/*.grpc.cs;
+            **/*.proto.cs
+        </ExcludeFromCodeCoverage>
     </PropertyGroup>
 
     <ItemGroup>

@@ -25,5 +25,5 @@ public interface IBrandBusiness
     /// <returns>
     /// A <see cref="ProcessingStatusResponse{T}"/> instance, that contains the list of brand object if the call succeed.
     /// </returns>
-    Task<ProcessingStatusResponse<IEnumerable<BrandResponse>>> GetAllBrand(Dictionary<string, string> filters);
+    Task<ProcessingStatusResponse<IEnumerable<BrandResponse>>> GetAllBrands(Dictionary<string, string> filters);
 }

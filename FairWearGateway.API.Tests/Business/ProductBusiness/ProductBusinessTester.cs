@@ -134,4 +134,46 @@ public class ProductBusinessTester
         // Assert
         result.Status.Should().Be(HttpStatusCode.NotFound);
     }
+
+    [TestMethod]
+    public async Task GetAllProducts_ReturnsListProductResponse()
+    {
+        // Arrange
+        var productResponse = new List<ProductResponse>
+        {
+            new ProductResponse
+            {
+                Id = 1,
+                Name = "Product 1",
+                UpcCode = "123456789",
+                Category = "Category A",
+                BrandId = 1
+            },
+            new ProductResponse
+            {
+                Id = 2,
+                Name = "Product 2",
+                UpcCode = "123456789",
+                Category = "Category A",
+                BrandId = 1
+            }
+        };
+
+        var processingStatusResponse = new ProcessingStatusResponse<IEnumerable<ProductResponse>>()
+        {
+            Status = HttpStatusCode.OK,
+            Object = productResponse
+        };
+
+        _productDataMock.Setup(m => m.GetAllProducts(new Dictionary<string, string>()))
+            .ReturnsAsync(processingStatusResponse);
+
+        // Act
+        var productBusiness = new API.Business.ProductBusiness.ProductBusiness(_productDataMock.Object);
+        var result = await productBusiness.GetAllProducts(new Dictionary<string, string>());
+
+        // Assert
+        result.Status.Should().Be(HttpStatusCode.OK);
+        result.Object.Should().BeEquivalentTo(productResponse);
+    }
 }

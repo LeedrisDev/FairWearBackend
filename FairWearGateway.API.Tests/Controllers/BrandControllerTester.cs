@@ -205,4 +205,83 @@ public class BrandControllerTester
             Message = "An error occurred."
         });
     }
+
+    [TestMethod]
+    public async Task GetAllBrandsAsync_ReturnsBrandList()
+    {
+        // Arrange
+
+        var filterRequest = new Dictionary<string, string>();
+
+        var businessResult = new ProcessingStatusResponse<IEnumerable<BrandResponse>>()
+        {
+            Status = HttpStatusCode.OK,
+            Object = new List<BrandResponse>
+            {
+                new BrandResponse()
+                {
+                    Id = 1,
+                    Name = "Nike",
+                    Country = "USA",
+                    EnvironmentRating = 5,
+                    PeopleRating = 4,
+                    AnimalRating = 3,
+                    RatingDescription = "Description 1",
+                },
+                new BrandResponse()
+                {
+                    Id = 2,
+                    Name = "Adidas",
+                    Country = "USA",
+                    EnvironmentRating = 5,
+                    PeopleRating = 4,
+                    AnimalRating = 3,
+                    RatingDescription = "Description 1",
+                }
+            }
+        };
+
+        _brandBusinessMock.Setup(b => b.GetAllBrands(filterRequest))
+            .ReturnsAsync(businessResult);
+
+        // Act
+        var brandsController = new API.Controllers.BrandsController(_brandBusinessMock.Object);
+        var result = await brandsController.GetAllBrandsAsync(filterRequest);
+        var okResult = result as OkObjectResult;
+
+        // Assert
+        okResult.Should().NotBeNull();
+        okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        okResult.Value.Should().BeEquivalentTo(businessResult.Object);
+    }
+
+
+    [TestMethod]
+    public async Task GetAllBrandsAsync_Error_ReturnsStatusCodeResult()
+    {
+        // Arrange
+        var filterRequest = new Dictionary<string, string>();
+
+        var businessResult = new ProcessingStatusResponse<IEnumerable<BrandResponse>>()
+        {
+            Status = HttpStatusCode.InternalServerError,
+            MessageObject = { Message = "An error occurred." }
+        };
+
+        _brandBusinessMock.Setup(b => b.GetAllBrands(filterRequest))
+            .ReturnsAsync(businessResult);
+
+        // Act
+        var brandsController = new API.Controllers.BrandsController(_brandBusinessMock.Object);
+        var result = await brandsController.GetAllBrandsAsync(filterRequest);
+
+        // Assert
+        result.Should().BeOfType<ObjectResult>();
+        var objectResult = (ObjectResult)result;
+        objectResult.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+        objectResult.Value.Should().BeEquivalentTo(new ErrorResponse()
+        {
+            Message = "An error occurred."
+        });
+    }
 }

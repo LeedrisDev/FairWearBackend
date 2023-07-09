@@ -2,6 +2,7 @@
 using BrandAndProductDatabase.Service.Protos;
 using FairWearGateway.API.Business.ProductBusiness;
 using FairWearGateway.API.Models;
+using FairWearGateway.API.Models.Response;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -194,5 +195,80 @@ public class ProductControllerTester
         actionResult.Should().BeOfType<ObjectResult>();
         var objectResult = (ObjectResult)actionResult;
         objectResult.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+    }
+
+    [TestMethod]
+    public async Task GetAllProductsAsync_ReturnsBrandList()
+    {
+        // Arrange
+
+        var filterRequest = new Dictionary<string, string>();
+
+        var businessResult = new ProcessingStatusResponse<IEnumerable<ProductResponse>>()
+        {
+            Status = HttpStatusCode.OK,
+            Object = new List<ProductResponse>
+            {
+                new ProductResponse
+                {
+                    Id = 1,
+                    Name = "Product 1",
+                    UpcCode = "123456789",
+                    Category = "Category A",
+                    BrandId = 1
+                },
+                new ProductResponse
+                {
+                    Id = 2,
+                    Name = "Product 1",
+                    UpcCode = "123456789",
+                    Category = "Category A",
+                    BrandId = 1
+                }
+            }
+        };
+
+        _productBusinessMock.Setup(b => b.GetAllProducts(filterRequest))
+            .ReturnsAsync(businessResult);
+
+        // Act
+        var productsController = new API.Controllers.ProductsController(_productBusinessMock.Object);
+        var result = await productsController.GetAllProductsAsync(filterRequest);
+        var okResult = result as OkObjectResult;
+
+        // Assert
+        okResult.Should().NotBeNull();
+        okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        okResult.Value.Should().BeEquivalentTo(businessResult.Object);
+    }
+
+
+    [TestMethod]
+    public async Task GetAllProductsAsync_Error_ReturnsStatusCodeResult()
+    {
+        // Arrange
+        var filterRequest = new Dictionary<string, string>();
+
+        var businessResult = new ProcessingStatusResponse<IEnumerable<ProductResponse>>()
+        {
+            Status = HttpStatusCode.InternalServerError,
+            MessageObject = { Message = "An error occurred." }
+        };
+
+        _productBusinessMock.Setup(b => b.GetAllProducts(filterRequest))
+            .ReturnsAsync(businessResult);
+
+        // Act
+        var productsController = new API.Controllers.ProductsController(_productBusinessMock.Object);
+        var result = await productsController.GetAllProductsAsync(filterRequest);
+
+        // Assert
+        result.Should().BeOfType<ObjectResult>();
+        var objectResult = (ObjectResult)result;
+        objectResult.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+        objectResult.Value.Should().BeEquivalentTo(new ErrorResponse()
+        {
+            Message = "An error occurred."
+        });
     }
 }

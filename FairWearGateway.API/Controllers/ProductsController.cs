@@ -54,4 +54,19 @@ public class ProductsController : ControllerBase
             _ => StatusCode((int)processingStatusResponse.Status, processingStatusResponse.MessageObject)
         };
     }
+
+    /// <summary>Gets all products.</summary>
+    [HttpGet("product")]
+    [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
+    public async Task<IActionResult> GetAllProductsAsync([FromQuery] Dictionary<string, string> filters)
+    {
+        var processingStatusResponse = await _productBusiness.GetAllProducts(filters);
+
+        return processingStatusResponse.Status switch
+        {
+            HttpStatusCode.OK => Ok(processingStatusResponse.Object),
+            _ => StatusCode((int)processingStatusResponse.Status, processingStatusResponse.MessageObject)
+        };
+    }
 }

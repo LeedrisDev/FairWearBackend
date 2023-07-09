@@ -26,4 +26,11 @@ public class ProductBusiness : IProductBusiness
     {
         return _productData.GetProductByUpc(upc);
     }
+
+    /// <inheritdoc />
+    public async Task<ProcessingStatusResponse<IEnumerable<ProductResponse>>> GetAllProducts(
+        Dictionary<string, string> filters)
+    {
+        return await _productData.GetAllProducts(filters);
+    }
 }

@@ -19,4 +19,11 @@ public interface IBrandBusiness
     /// A <see cref="ProcessingStatusResponse{T}"/> instance, that contains the brand object if the call succeed.
     /// </returns>
     ProcessingStatusResponse<BrandResponse> GetBrandByName(string brandName);
+
+    /// <summary>Call the data access to get all brands.</summary>
+    /// <param name="filters">filters to apply to list of brands</param>
+    /// <returns>
+    /// A <see cref="ProcessingStatusResponse{T}"/> instance, that contains the list of brand object if the call succeed.
+    /// </returns>
+    Task<ProcessingStatusResponse<IEnumerable<BrandResponse>>> GetAllBrands(Dictionary<string, string> filters);
 }

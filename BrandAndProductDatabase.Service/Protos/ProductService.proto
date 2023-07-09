@@ -6,7 +6,7 @@ option csharp_namespace = "BrandAndProductDatabase.Service.Protos";
 
 // Services
 service ProductService {
-    rpc GetAllProductsAsync (google.protobuf.Empty) returns (stream ProductResponse);
+    rpc GetAllProductsAsync (ProductFilterList) returns (stream ProductResponse);
     rpc GetProductByIdAsync (ProductByIdRequest) returns (ProductResponse);
     rpc GetProductByUpcAsync (ProductByUpcRequest) returns (ProductInformationResponse);
     rpc CreateProductAsync (ProductRequest) returns (ProductResponse);
@@ -21,6 +21,15 @@ message ProductByUpcRequest {
 
 message ProductByIdRequest {
     int32 id = 1;
+}
+
+message ProductFilterList {
+    repeated ProductFilter filters = 1;
+}
+
+message ProductFilter {
+    string key = 1;
+    string value = 2;
 }
 
 message ProductRequest {

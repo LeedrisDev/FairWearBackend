@@ -91,4 +91,50 @@ public class BrandBusinessTester
         result.Status.Should().Be(HttpStatusCode.OK);
         result.Object.Should().BeEquivalentTo(brandResponse);
     }
+
+    [TestMethod]
+    public async Task GetAllBrands_ReturnsListBrandResponse()
+    {
+        // Arrange
+        var brandResponse = new List<BrandResponse>
+        {
+            new BrandResponse()
+            {
+                Id = 1,
+                Name = "Nike",
+                Country = "USA",
+                EnvironmentRating = 5,
+                PeopleRating = 4,
+                AnimalRating = 3,
+                RatingDescription = "Description 1",
+            },
+            new BrandResponse()
+            {
+                Id = 2,
+                Name = "Adidas",
+                Country = "USA",
+                EnvironmentRating = 5,
+                PeopleRating = 4,
+                AnimalRating = 3,
+                RatingDescription = "Description 1",
+            }
+        };
+
+        var processingStatusResponse = new ProcessingStatusResponse<IEnumerable<BrandResponse>>()
+        {
+            Status = HttpStatusCode.OK,
+            Object = brandResponse
+        };
+
+        _brandDataMock.Setup(m => m.GetAllBrands(new Dictionary<string, string>()))
+            .ReturnsAsync(processingStatusResponse);
+
+        // Act
+        var brandBusiness = new API.Business.BrandBusiness.BrandBusiness(_brandDataMock.Object);
+        var result = await brandBusiness.GetAllBrands(new Dictionary<string, string>());
+
+        // Assert
+        result.Status.Should().Be(HttpStatusCode.OK);
+        result.Object.Should().BeEquivalentTo(brandResponse);
+    }
 }

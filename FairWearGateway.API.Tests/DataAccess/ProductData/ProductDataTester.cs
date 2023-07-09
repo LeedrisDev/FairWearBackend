@@ -165,4 +165,79 @@ public class ProductDataTester
         result.Status.Should().Be(HttpStatusCode.InternalServerError);
         result.ErrorMessage.Should().Be("Internal Server Error");
     }
+
+    [TestMethod]
+    public async Task GetAllProducts_ReturnsCorrectProducts()
+    {
+        // Arrange
+
+        var expectedProductResponses = new List<ProductResponse>
+        {
+            new ProductResponse
+            {
+                Id = 1,
+                Name = "Product 1",
+                UpcCode = "123456789",
+                Category = "Category A",
+                BrandId = 1
+            },
+            new ProductResponse
+            {
+                Id = 2,
+                Name = "Product 2",
+                UpcCode = "123456789",
+                Category = "Category A",
+                BrandId = 1
+            }
+        };
+
+        var asyncResponseCallMock = new Mock<IAsyncStreamReader<ProductResponse>>();
+        var moveNextResponses = new Queue<bool>();
+        foreach (var _ in expectedProductResponses)
+        {
+            moveNextResponses.Enqueue(true);
+        }
+
+        moveNextResponses.Enqueue(false); // End of enumeration
+
+        asyncResponseCallMock.Setup(a => a.MoveNext(CancellationToken.None))
+            .ReturnsAsync(moveNextResponses.Dequeue);
+
+        int index = 0;
+        asyncResponseCallMock.Setup(a => a.Current)
+            .Returns(() => expectedProductResponses[index++]);
+
+        var asyncResponse =
+            new AsyncServerStreamingCall<ProductResponse>(asyncResponseCallMock.Object, null, null, null, null);
+
+
+        _mockProductServiceClient
+            .Setup(b => b.GetAllProductsAsync(It.IsAny<ProductFilterList>(), null, default, default))
+            .Returns(asyncResponse);
+
+
+        // Act
+        var actualProductResponse = await _productData.GetAllProducts(new Dictionary<string, string>());
+
+        // Assert
+        actualProductResponse.Status.Should().Be(HttpStatusCode.OK);
+        actualProductResponse.Object.Should().BeEquivalentTo(expectedProductResponses);
+    }
+
+    [TestMethod]
+    public async Task GetAllProducts_ReturnsInternalServerError_WhenRpcFails()
+    {
+        // Arrange
+        var rpcException = new RpcException(new Status(StatusCode.Internal, "Internal Server error"));
+
+        _mockProductServiceClient
+            .Setup(b => b.GetAllProductsAsync(It.IsAny<ProductFilterList>(), null, default, default))
+            .Throws(rpcException);
+
+        // Act
+        var actualResponse = await _productData.GetAllProducts(new Dictionary<string, string>());
+
+        // Assert
+        actualResponse.Status.Should().Be(HttpStatusCode.InternalServerError);
+    }
 }

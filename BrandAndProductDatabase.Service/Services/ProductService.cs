@@ -21,10 +21,18 @@ public class ProductService : Protos.ProductService.ProductServiceBase
         _mapper = mapper;
     }
 
-    public override async Task GetAllProductsAsync(Empty request, IServerStreamWriter<ProductResponse> responseStream,
+    public override async Task GetAllProductsAsync(ProductFilterList request,
+        IServerStreamWriter<ProductResponse> responseStream,
         ServerCallContext context)
     {
-        var productList = await _productBusiness.GetAllProductsAsync();
+        var filters = new Dictionary<string, string>();
+
+        foreach (ProductFilter filter in request.Filters)
+        {
+            filters.Add(filter.Key, filter.Value);
+        }
+
+        var productList = await _productBusiness.GetAllProductsAsync(filters);
 
         if (productList.Status != HttpStatusCode.OK)
         {

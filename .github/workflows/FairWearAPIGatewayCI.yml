@@ -12,7 +12,7 @@ on:
       
     paths:
       - 'FairWearGateway.API/**'
-      - '.github/workflows/FairWearAPIGatewayCI.yml'
+      - 'FairWearGateway.API.Tests/**'
       - '.github/workflows/FairWearAPIGatewayCI.yml'
       - 'Scripts/**'
 

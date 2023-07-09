@@ -26,4 +26,11 @@ public class BrandBusiness : IBrandBusiness
     {
         return _brandData.GetBrandByName(brandName);
     }
+
+    /// <inheritdoc/>
+    public async Task<ProcessingStatusResponse<IEnumerable<BrandResponse>>> GetAllBrands(
+        Dictionary<string, string> filters)
+    {
+        return await _brandData.GetAllBrands(filters);
+    }
 }

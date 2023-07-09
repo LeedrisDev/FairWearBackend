@@ -162,4 +162,69 @@ public class BrandDataTester
         result.Status.Should().Be(HttpStatusCode.InternalServerError);
         result.ErrorMessage.Should().Be("Internal Server Error");
     }
+
+    [TestMethod]
+    public async Task GetAllBrands_ReturnsCorrectBrands()
+    {
+        // Arrange
+
+        var expectedBrandResponses = new List<BrandResponse>
+        {
+            new BrandResponse
+            {
+                /* set properties as needed */
+            },
+            new BrandResponse
+            {
+                /* set properties as needed */
+            }
+        };
+
+        var asyncResponseCallMock = new Mock<IAsyncStreamReader<BrandResponse>>();
+        var moveNextResponses = new Queue<bool>();
+        foreach (var _ in expectedBrandResponses)
+        {
+            moveNextResponses.Enqueue(true);
+        }
+
+        moveNextResponses.Enqueue(false); // End of enumeration
+
+        asyncResponseCallMock.Setup(a => a.MoveNext(CancellationToken.None))
+            .ReturnsAsync(moveNextResponses.Dequeue);
+
+        int index = 0;
+        asyncResponseCallMock.Setup(a => a.Current)
+            .Returns(() => expectedBrandResponses[index++]);
+
+        var asyncResponse =
+            new AsyncServerStreamingCall<BrandResponse>(asyncResponseCallMock.Object, null, null, null, null);
+
+        _mockBrandServiceClient.Setup(b => b.GetAllBrandsAsync(It.IsAny<BrandFilterList>(), null, default, default))
+            .Returns(asyncResponse);
+
+
+        // Act
+        var actualBrandResponse = await _brandData.GetAllBrands(new Dictionary<string, string>());
+
+        // Assert
+        actualBrandResponse.Status.Should().Be(HttpStatusCode.OK);
+        actualBrandResponse.Object.Should().BeEquivalentTo(expectedBrandResponses);
+    }
+
+    [TestMethod]
+    public async Task GetAllBrands_ReturnsInternalServerError_WhenRpcFails()
+    {
+        // Arrange
+        var rpcException = new RpcException(new Status(StatusCode.Internal, "Internal Server error"));
+
+        _mockBrandServiceClient
+            .Setup(b => b.GetAllBrandsAsync(It.IsAny<BrandFilterList>(), null, default, default))
+            .Throws(rpcException);
+
+        // Act
+        var actualResponse = await _brandData.GetAllBrands(new Dictionary<string, string>());
+
+        // Assert
+        actualResponse.Status.Should().Be(HttpStatusCode.InternalServerError);
+    }
 }

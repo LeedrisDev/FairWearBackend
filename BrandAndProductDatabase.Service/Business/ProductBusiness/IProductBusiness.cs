@@ -10,7 +10,7 @@ public interface IProductBusiness
 {
     /// <summary>Gets all the Products.</summary>
     /// <returns>A list of <see cref="Models.Dto.ProductDto"/>.</returns>
-    Task<ProcessingStatusResponse<IEnumerable<ProductDto>>> GetAllProductsAsync();
+    Task<ProcessingStatusResponse<IEnumerable<ProductDto>>> GetAllProductsAsync(Dictionary<string, string> filters);
 
     /// <summary>Gets a Product by Id.</summary>
     /// <param name="id">The Id of the Product.</param>

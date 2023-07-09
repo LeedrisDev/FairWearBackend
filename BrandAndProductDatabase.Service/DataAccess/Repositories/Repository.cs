@@ -1,5 +1,7 @@
+using System.Linq.Expressions;
 using System.Net;
 using AutoMapper;
+using BrandAndProductDatabase.Service.DataAccess.Filters;
 using BrandAndProductDatabase.Service.DataAccess.IRepositories;
 using BrandAndProductDatabase.Service.Models;
 using Microsoft.EntityFrameworkCore;
@@ -35,12 +37,21 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
     }
 
     /// <inheritdoc/>
-    public async Task<ProcessingStatusResponse<IEnumerable<TModel>>> GetAllAsync()
+    public async Task<ProcessingStatusResponse<IEnumerable<TModel>>> GetAllAsync(GenericFilter<IFilter> filter)
     {
         var processingStatusResponse = new ProcessingStatusResponse<IEnumerable<TModel>>();
-
-        var entities = await DbSet.ToListAsync();
-        processingStatusResponse.Object = Mapper.Map<IEnumerable<TModel>>(entities);
+        try
+        {
+            var filteredQuery = ApplyFilter(Context.Set<TEntity>(), filter);
+            var entities = await filteredQuery.ToListAsync();
+            processingStatusResponse.Object = Mapper.Map<IEnumerable<TModel>>(entities);
+            processingStatusResponse.Status = HttpStatusCode.OK;
+        }
+        catch (Exception ex)
+        {
+            processingStatusResponse.Status = HttpStatusCode.BadRequest;
+            processingStatusResponse.ErrorMessage = ex.Message;
+        }
 
         return processingStatusResponse;
     }
@@ -114,5 +125,27 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
         await Context.SaveChangesAsync();
 
         return processingStatusResponse;
+    }
+
+    private IQueryable<TEntity> ApplyFilter(IQueryable<TEntity> query, GenericFilter<IFilter> filter)
+    {
+        foreach (var filterItem in filter.Filters)
+            if (filterItem is EqualFilter<string> equalFilter)
+            {
+                // Use the property name dynamically
+                var parameter = Expression.Parameter(typeof(TEntity), "a");
+                var property = Expression.Property(parameter, equalFilter.PropertyName);
+
+                // Convert the filter value to the property type
+                var convertedValue = Convert.ChangeType(equalFilter.Value, property.Type);
+
+                var filterValue = Expression.Constant(convertedValue);
+                var equalExpression = Expression.Equal(property, filterValue);
+                var lambdaExpression = Expression.Lambda<Func<TEntity, bool>>(equalExpression, parameter);
+                query = query.Where(lambdaExpression);
+            }
+
+        // Handle other filter types here as needed
+        return query;
     }
 }

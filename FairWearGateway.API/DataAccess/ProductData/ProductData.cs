@@ -76,4 +76,38 @@ public class ProductData : IProductData
 
         return processingStatusResponse;
     }
+
+    /// <inheritdoc />
+    public async Task<ProcessingStatusResponse<IEnumerable<ProductResponse>>> GetAllProducts(
+        Dictionary<string, string> filters)
+    {
+        var processingStatusResponse = new ProcessingStatusResponse<IEnumerable<ProductResponse>>();
+
+        var data = new ProductFilterList();
+
+        foreach (KeyValuePair<string, string> kvp in filters)
+        {
+            data.Filters.Add(new ProductFilter { Key = kvp.Key, Value = kvp.Value });
+        }
+
+        try
+        {
+            var response = _client.GetAllProductsAsync(data);
+            var brandList = new List<ProductResponse>();
+            while (await response.ResponseStream.MoveNext())
+            {
+                brandList.Add(response.ResponseStream.Current);
+            }
+
+            processingStatusResponse.Status = HttpStatusCode.OK;
+            processingStatusResponse.Object = brandList;
+        }
+        catch (RpcException e)
+        {
+            processingStatusResponse.Status = HttpStatusCode.InternalServerError;
+            processingStatusResponse.ErrorMessage = e.Status.Detail;
+        }
+
+        return processingStatusResponse;
+    }
 }

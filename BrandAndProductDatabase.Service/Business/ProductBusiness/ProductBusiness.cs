@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using BrandAndProductDatabase.Service.DataAccess.BrandData;
+using BrandAndProductDatabase.Service.DataAccess.Filters;
 using BrandAndProductDatabase.Service.DataAccess.IRepositories;
 using BrandAndProductDatabase.Service.DataAccess.ProductData;
 using BrandAndProductDatabase.Service.Models;
@@ -12,6 +13,7 @@ public class ProductBusiness : IProductBusiness
 {
     private readonly IBrandData _brandData;
     private readonly IBrandRepository _brandRepository;
+    private readonly IFilterFactory<IFilter> _filterFactory;
     private readonly IProductData _productData;
     private readonly IProductRepository _productRepository;
 
@@ -21,18 +23,21 @@ public class ProductBusiness : IProductBusiness
     /// <param name="productData"></param>
     /// <param name="brandData"></param>
     public ProductBusiness(IProductRepository productRepository, IBrandRepository brandRepository,
-        IProductData productData, IBrandData brandData)
+        IProductData productData, IBrandData brandData, IFilterFactory<IFilter> filterFactory)
     {
         _productRepository = productRepository;
         _brandRepository = brandRepository;
         _productData = productData;
         _brandData = brandData;
+        _filterFactory = filterFactory;
     }
 
     /// <inheritdoc/>
-    public async Task<ProcessingStatusResponse<IEnumerable<ProductDto>>> GetAllProductsAsync()
+    public async Task<ProcessingStatusResponse<IEnumerable<ProductDto>>> GetAllProductsAsync(
+        Dictionary<string, string> filters)
     {
-        return await _productRepository.GetAllAsync();
+        var filter = _filterFactory.CreateFilter(filters);
+        return await _productRepository.GetAllAsync(filter);
     }
 
     /// <inheritdoc/>
@@ -44,7 +49,12 @@ public class ProductBusiness : IProductBusiness
     /// <inheritdoc />
     public async Task<ProcessingStatusResponse<ProductInformationDto>> GetProductByUpcAsync(string upcCode)
     {
-        var productResponse = await _productRepository.GetAllAsync();
+        var filterDict = new Dictionary<string, string>();
+        filterDict.Add("UpcCode", upcCode);
+
+        var upcFilter = _filterFactory.CreateFilter(filterDict);
+
+        var productResponse = await _productRepository.GetAllAsync(upcFilter);
 
         if (productResponse.Status != HttpStatusCode.OK)
         {
@@ -55,9 +65,9 @@ public class ProductBusiness : IProductBusiness
             };
         }
 
-        var product = productResponse.Object.FirstOrDefault(x => x.UpcCode == upcCode);
+        //var product = productResponse.Object.FirstOrDefault(x => x.UpcCode == upcCode);
 
-        if (product == null)
+        if (productResponse.Object.ToList().Count == 0)
         {
             var productDataResponse = _productData.GetProductByUpc(upcCode);
 
@@ -98,6 +108,8 @@ public class ProductBusiness : IProductBusiness
                 Object = ProductDtoToProductInformation(entityFromDatabase.Object, productBrand.Object)
             };
         }
+
+        var product = productResponse.Object.First();
 
         var brandDataResponse = await _brandRepository.GetByIdAsync(product.BrandId);
 

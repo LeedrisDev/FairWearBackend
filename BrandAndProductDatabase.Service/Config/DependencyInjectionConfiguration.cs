@@ -2,6 +2,7 @@ using BrandAndProductDatabase.Service.Business.BrandBusiness;
 using BrandAndProductDatabase.Service.Business.ProductBusiness;
 using BrandAndProductDatabase.Service.DataAccess;
 using BrandAndProductDatabase.Service.DataAccess.BrandData;
+using BrandAndProductDatabase.Service.DataAccess.Filters;
 using BrandAndProductDatabase.Service.DataAccess.IRepositories;
 using BrandAndProductDatabase.Service.DataAccess.ProductData;
 using BrandAndProductDatabase.Service.DataAccess.Repositories;
@@ -33,6 +34,7 @@ public static class DependencyInjectionConfiguration
         services.AddTransient<IProductRepository, ProductRepository>();
         services.AddTransient<IBrandData, BrandData>();
         services.AddTransient<IProductData, ProductData>();
+        services.AddTransient<IFilterFactory<IFilter>, GenericFilterFactory<IFilter>>();
 
         // Business
         services.AddTransient<IBrandBusiness, BrandBusiness>();

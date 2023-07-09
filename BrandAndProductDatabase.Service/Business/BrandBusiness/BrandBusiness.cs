@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using BrandAndProductDatabase.Service.DataAccess.BrandData;
+using BrandAndProductDatabase.Service.DataAccess.Filters;
 using BrandAndProductDatabase.Service.DataAccess.IRepositories;
 using BrandAndProductDatabase.Service.Models;
 using BrandAndProductDatabase.Service.Models.Dto;
@@ -11,22 +12,27 @@ public class BrandBusiness : IBrandBusiness
 {
     private readonly IBrandData _brandData;
     private readonly IBrandRepository _brandRepository;
+    private readonly IFilterFactory<IFilter> _filterFactory;
 
     /// <summary>
     /// Constructor for BrandBusiness.
     /// </summary>
     /// <param name="brandRepository"></param>
     /// <param name="brandData"></param>
-    public BrandBusiness(IBrandRepository brandRepository, IBrandData brandData)
+    public BrandBusiness(IBrandRepository brandRepository, IBrandData brandData, IFilterFactory<IFilter> filterFactory)
     {
         _brandRepository = brandRepository;
         _brandData = brandData;
+        _filterFactory = filterFactory;
     }
 
     /// <inheritdoc/>
-    public async Task<ProcessingStatusResponse<IEnumerable<BrandDto>>> GetAllBrandsAsync()
+    public async Task<ProcessingStatusResponse<IEnumerable<BrandDto>>> GetAllBrandsAsync(
+        Dictionary<string, string> filters)
     {
-        return await _brandRepository.GetAllAsync();
+        var filter = _filterFactory.CreateFilter(filters);
+
+        return await _brandRepository.GetAllAsync(filter);
     }
 
     /// <inheritdoc/>

@@ -87,8 +87,6 @@ public class ProductData : IProductData
 
         foreach (KeyValuePair<string, string> kvp in filters)
         {
-            string key = kvp.Key;
-            string value = kvp.Value;
             data.Filters.Add(new ProductFilter { Key = kvp.Key, Value = kvp.Value });
         }
 

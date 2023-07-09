@@ -87,8 +87,6 @@ public class BrandData : IBrandData
 
         foreach (KeyValuePair<string, string> kvp in filters)
         {
-            string key = kvp.Key;
-            string value = kvp.Value;
             data.Filters.Add(new BrandFilter { Key = kvp.Key, Value = kvp.Value });
         }
 

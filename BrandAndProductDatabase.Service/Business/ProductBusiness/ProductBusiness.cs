@@ -49,8 +49,12 @@ public class ProductBusiness : IProductBusiness
     /// <inheritdoc />
     public async Task<ProcessingStatusResponse<ProductInformationDto>> GetProductByUpcAsync(string upcCode)
     {
-        var emptyFilter = _filterFactory.CreateFilter(new Dictionary<string, string>());
-        var productResponse = await _productRepository.GetAllAsync(emptyFilter);
+        var filterDict = new Dictionary<string, string>();
+        filterDict.Add("UpcCode", upcCode);
+
+        var upcFilter = _filterFactory.CreateFilter(filterDict);
+
+        var productResponse = await _productRepository.GetAllAsync(upcFilter);
 
         if (productResponse.Status != HttpStatusCode.OK)
         {
@@ -61,9 +65,9 @@ public class ProductBusiness : IProductBusiness
             };
         }
 
-        var product = productResponse.Object.FirstOrDefault(x => x.UpcCode == upcCode);
+        //var product = productResponse.Object.FirstOrDefault(x => x.UpcCode == upcCode);
 
-        if (product == null)
+        if (productResponse.Object.ToList().Count == 0)
         {
             var productDataResponse = _productData.GetProductByUpc(upcCode);
 
@@ -104,6 +108,8 @@ public class ProductBusiness : IProductBusiness
                 Object = ProductDtoToProductInformation(entityFromDatabase.Object, productBrand.Object)
             };
         }
+
+        var product = productResponse.Object.First();
 
         var brandDataResponse = await _brandRepository.GetByIdAsync(product.BrandId);
 

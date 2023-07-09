@@ -22,13 +22,13 @@ public class BrandService : Protos.BrandService.BrandServiceBase
         _mapper = mapper;
     }
 
-    public override async Task GetAllBrandsAsync(BrandFilters request,
+    public override async Task GetAllBrandsAsync(BrandFilterList request,
         IServerStreamWriter<BrandResponse> responseStream,
         ServerCallContext context)
     {
         var filters = new Dictionary<string, string>();
 
-        foreach (Filter filter in request.Filters)
+        foreach (BrandFilter filter in request.Filters)
         {
             filters.Add(filter.Key, filter.Value);
         }

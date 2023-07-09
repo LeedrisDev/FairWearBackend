@@ -76,4 +76,40 @@ public class BrandData : IBrandData
 
         return processingStatusResponse;
     }
+
+    /// <inheritdoc />
+    public async Task<ProcessingStatusResponse<IEnumerable<BrandResponse>>> GetAllBrands(
+        Dictionary<string, string> filters)
+    {
+        var processingStatusResponse = new ProcessingStatusResponse<IEnumerable<BrandResponse>>();
+
+        var data = new BrandFilterList();
+
+        foreach (KeyValuePair<string, string> kvp in filters)
+        {
+            string key = kvp.Key;
+            string value = kvp.Value;
+            data.Filters.Add(new BrandFilter { Key = kvp.Key, Value = kvp.Value });
+        }
+
+        try
+        {
+            var response = _client.GetAllBrandsAsync(data);
+            var brandList = new List<BrandResponse>();
+            while (await response.ResponseStream.MoveNext())
+            {
+                brandList.Add(response.ResponseStream.Current);
+            }
+
+            processingStatusResponse.Status = HttpStatusCode.OK;
+            processingStatusResponse.Object = brandList;
+        }
+        catch (RpcException e)
+        {
+            processingStatusResponse.Status = HttpStatusCode.InternalServerError;
+            processingStatusResponse.ErrorMessage = e.Status.Detail;
+        }
+
+        return processingStatusResponse;
+    }
 }

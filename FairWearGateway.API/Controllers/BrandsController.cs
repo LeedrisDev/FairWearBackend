@@ -54,4 +54,19 @@ public class BrandsController : ControllerBase
             _ => StatusCode((int)processingStatusResponse.Status, processingStatusResponse.MessageObject)
         };
     }
+
+    [HttpGet("brands")]
+    [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
+    public async Task<IActionResult> GetAllBrandsAsync([FromQuery] Dictionary<string, string> filters)
+    {
+        var processingStatusResponse = await _brandBusiness.GetAllBrand(filters);
+
+        return processingStatusResponse.Status switch
+        {
+            HttpStatusCode.OK => Ok(processingStatusResponse.Object),
+            _ => StatusCode((int)processingStatusResponse.Status, processingStatusResponse.MessageObject)
+        };
+    }
 }

@@ -1,9 +1,7 @@
 using System.Net;
 using BrandAndProductDatabase.Service.Protos;
 using FairWearGateway.API.Models;
-using FairWearGateway.API.Utils;
 using Grpc.Core;
-using Grpc.Net.Client;
 
 namespace FairWearGateway.API.DataAccess.BrandData;
 

@@ -10,8 +10,6 @@ builder.Services.AddControllers();
 // Validate required environment variables
 EnvironmentValidator.ValidateRequiredVariables();
 
-AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-
 // Dependency Injection
 DependencyInjectionConfiguration.Configure(builder.Services);
 

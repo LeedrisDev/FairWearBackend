@@ -15,9 +15,9 @@ DependencyInjectionConfiguration.Configure(builder.Services);
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(builder =>
+    options.AddDefaultPolicy(corsPolicyBuilder =>
     {
-        builder.AllowAnyOrigin()
+        corsPolicyBuilder.AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod();
     });

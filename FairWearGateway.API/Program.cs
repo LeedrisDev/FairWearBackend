@@ -1,7 +1,7 @@
 using BrandAndProductDatabase.Service.Protos;
 using FairWearGateway.API.Config;
 using FairWearGateway.API.Utils;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,6 +9,8 @@ builder.Services.AddControllers();
 
 // Validate required environment variables
 EnvironmentValidator.ValidateRequiredVariables();
+
+AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
 // Dependency Injection
 DependencyInjectionConfiguration.Configure(builder.Services);

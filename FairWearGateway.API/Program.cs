@@ -1,7 +1,7 @@
 using BrandAndProductDatabase.Service.Protos;
 using FairWearGateway.API.Config;
 using FairWearGateway.API.Utils;
-
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,6 +12,8 @@ EnvironmentValidator.ValidateRequiredVariables();
 
 // Dependency Injection
 DependencyInjectionConfiguration.Configure(builder.Services);
+
+builder.Configuration["Kestrel:EndpointDefaults:Protocols"] = "Http1AndHttp2";
 
 builder.Services.AddCors(options =>
 {

@@ -13,8 +13,6 @@ EnvironmentValidator.ValidateRequiredVariables();
 // Dependency Injection
 DependencyInjectionConfiguration.Configure(builder.Services);
 
-builder.Configuration["Kestrel:EndpointDefaults:Protocols"] = "Http1AndHttp2";
-
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(corsPolicyBuilder =>

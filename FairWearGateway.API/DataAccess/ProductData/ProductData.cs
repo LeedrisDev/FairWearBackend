@@ -65,7 +65,7 @@ public class ProductData : IProductData
             if (e.Status.StatusCode == StatusCode.NotFound)
             {
                 processingStatusResponse.Status = HttpStatusCode.NotFound;
-                processingStatusResponse.ErrorMessage = $"Product with barcode {upc} could not be found";
+                processingStatusResponse.ErrorMessage = e.Status.Detail;
             }
             else
             {

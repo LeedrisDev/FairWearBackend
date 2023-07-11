@@ -1,7 +1,4 @@
-using BrandAndProductDatabase.Service.Protos;
 using FairWearGateway.API.Config;
-using FairWearGateway.API.Utils;
-using Grpc.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 

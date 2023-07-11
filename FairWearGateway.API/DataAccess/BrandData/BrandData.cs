@@ -13,10 +13,11 @@ public class BrandData : IBrandData
     private readonly BrandService.BrandServiceClient _client;
 
     /// <summary>Constructor</summary>
-    public BrandData()
+    public BrandData(BrandService.BrandServiceClient client)
     {
-        var channel = GrpcChannel.ForAddress(AppConstants.BrandAndProductServiceUrl);
-        _client = new BrandService.BrandServiceClient(channel);
+        // var channel = GrpcChannel.ForAddress(AppConstants.BrandAndProductServiceUrl);
+        // _client = new BrandService.BrandServiceClient(channel);
+        _client = client;
     }
 
     /// <inheritdoc />

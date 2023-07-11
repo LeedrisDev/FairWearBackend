@@ -1,4 +1,6 @@
+using BrandAndProductDatabase.Service.Protos;
 using FairWearGateway.API.Config;
+using FairWearGateway.API.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,11 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
+});
+
+builder.Services.AddGrpcClient<BrandService.BrandServiceClient>(options =>
+{
+    options.Address = new Uri(AppConstants.BrandAndProductServiceUrl);
 });
 
 // builder.Services.AddGrpcClient<BrandService.BrandServiceClient>("BrandService",

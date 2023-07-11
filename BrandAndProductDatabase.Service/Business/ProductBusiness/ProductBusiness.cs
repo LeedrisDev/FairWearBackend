@@ -65,8 +65,6 @@ public class ProductBusiness : IProductBusiness
             };
         }
 
-        //var product = productResponse.Object.FirstOrDefault(x => x.UpcCode == upcCode);
-
         if (productResponse.Object.ToList().Count == 0)
         {
             var productDataResponse = _productData.GetProductByUpc(upcCode);
@@ -80,7 +78,12 @@ public class ProductBusiness : IProductBusiness
                 };
             }
 
-            var productBrand = _brandData.GetBrandByName(productDataResponse.Object.BrandName);
+            var treatedName = productDataResponse.Object.BrandName
+                .ToLower()
+                .Replace(" ", "-")
+                .Replace("'", "");
+
+            var productBrand = _brandData.GetBrandByName(treatedName);
 
             if (productBrand.Status != HttpStatusCode.OK)
             {

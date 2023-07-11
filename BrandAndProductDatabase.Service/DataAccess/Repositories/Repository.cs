@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using System.Net;
+using System.Reflection;
 using AutoMapper;
 using BrandAndProductDatabase.Service.DataAccess.Filters;
 using BrandAndProductDatabase.Service.DataAccess.IRepositories;
@@ -132,16 +133,21 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
         foreach (var filterItem in filter.Filters)
             if (filterItem is EqualFilter<string> equalFilter)
             {
-                // Use the property name dynamically
                 var parameter = Expression.Parameter(typeof(TEntity), "a");
                 var property = Expression.Property(parameter, equalFilter.PropertyName);
 
                 // Convert the filter value to the property type
-                var convertedValue = Convert.ChangeType(equalFilter.Value, property.Type);
+                var convertedValue = Convert.ChangeType(equalFilter.Value.ToLower(), property.Type);
 
                 var filterValue = Expression.Constant(convertedValue);
-                var equalExpression = Expression.Equal(property, filterValue);
-                var lambdaExpression = Expression.Lambda<Func<TEntity, bool>>(equalExpression, parameter);
+                MethodInfo startsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) });
+                MethodInfo toLowerMethod = typeof(string).GetMethod("ToLower", new Type[] { });
+
+                var toLowerExpression = Expression.Call(property, toLowerMethod);
+
+                var startsWithExpression = Expression.Call(toLowerExpression, startsWithMethod, filterValue);
+
+                var lambdaExpression = Expression.Lambda<Func<TEntity, bool>>(startsWithExpression, parameter);
                 query = query.Where(lambdaExpression);
             }
 

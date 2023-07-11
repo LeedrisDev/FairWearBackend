@@ -13,6 +13,16 @@ EnvironmentValidator.ValidateRequiredVariables();
 // Dependency Injection
 DependencyInjectionConfiguration.Configure(builder.Services);
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(corsPolicyBuilder =>
+    {
+        corsPolicyBuilder.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddGrpcClient<BrandService.BrandServiceClient>("BrandService",
     o => { o.Address = new Uri(AppConstants.BrandAndProductServiceUrl); });
 builder.Services.AddGrpcClient<ProductService.ProductServiceClient>("ProductService",
@@ -32,6 +42,8 @@ app.UseSwaggerUI(options =>
 });
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 

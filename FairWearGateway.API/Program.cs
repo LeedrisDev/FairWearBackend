@@ -1,6 +1,7 @@
 using BrandAndProductDatabase.Service.Protos;
 using FairWearGateway.API.Config;
 using FairWearGateway.API.Utils;
+using Grpc.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,9 +25,10 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddGrpcClient<BrandService.BrandServiceClient>(options =>
-{
-    options.Address = new Uri(AppConstants.BrandAndProductServiceUrl);
-});
+    {
+        options.Address = new Uri(AppConstants.BrandAndProductServiceUrl);
+    })
+    .ConfigureChannel(channelOptions => { channelOptions.Credentials = ChannelCredentials.Insecure; });
 
 // builder.Services.AddGrpcClient<BrandService.BrandServiceClient>("BrandService",
 //     o => { o.Address = new Uri(AppConstants.BrandAndProductServiceUrl); });

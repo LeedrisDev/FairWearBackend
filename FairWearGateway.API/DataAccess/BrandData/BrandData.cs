@@ -13,9 +13,9 @@ public class BrandData : IBrandData
     /// <summary>Constructor</summary>
     public BrandData(BrandService.BrandServiceClient client)
     {
+        _client = client;
         // var channel = GrpcChannel.ForAddress(AppConstants.BrandAndProductServiceUrl);
         // _client = new BrandService.BrandServiceClient(channel);
-        _client = client;
     }
 
     /// <inheritdoc />

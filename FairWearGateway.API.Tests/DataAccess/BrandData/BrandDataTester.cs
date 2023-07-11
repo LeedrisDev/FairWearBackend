@@ -22,7 +22,7 @@ public class BrandDataTester
         _mockGrpcClientFactory
             .Setup(f => f.CreateClient<BrandService.BrandServiceClient>("BrandService"))
             .Returns(_mockBrandServiceClient.Object);
-        _brandData = new API.DataAccess.BrandData.BrandData(_mockGrpcClientFactory.Object);
+        _brandData = new API.DataAccess.BrandData.BrandData();
     }
 
     [TestMethod]

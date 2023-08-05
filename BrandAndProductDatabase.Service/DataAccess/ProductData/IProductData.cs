@@ -1,5 +1,5 @@
 using BrandAndProductDatabase.Service.Models;
-using FairWearProductDataRetriever.Service.Protos;
+using ProductDataRetriever.Service.Protos;
 
 namespace BrandAndProductDatabase.Service.DataAccess.ProductData;
 

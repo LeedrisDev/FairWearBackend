@@ -2,7 +2,7 @@ using System.Net;
 using AutoMapper;
 using BrandAndProductDatabase.Service.Models;
 using BrandAndProductDatabase.Service.Utils;
-using FairWearProductDataRetriever.Service.Protos;
+using ProductDataRetriever.Service.Protos;
 using Grpc.Core;
 using Grpc.Net.Client;
 

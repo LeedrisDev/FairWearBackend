@@ -29,7 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\FairWearProductDataRetriever.API\FairWearProductDataRetriever.API.csproj" />
+      <ProjectReference Include="..\ProductDataRetriever.Service\ProductDataRetriever.Service.csproj" />
     </ItemGroup>
 
 </Project>

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FairWearGateway.API", "Fair
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FairWearProductDataRetriever.API", "FairWearProductDataRetriever.API\FairWearProductDataRetriever.API.csproj", "{2E2CC2A2-E61C-4AD4-9908-E556A83D5336}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FairWearProductDataRetriever.API.Tests", "FairWearProductDataRetriever.API.Tests\FairWearProductDataRetriever.API.Tests.csproj", "{5930D285-80B9-4620-8D72-B4F260BA826E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductDataRetriever.Service.Tests", "ProductDataRetriever.Service.Tests\ProductDataRetriever.Service.Tests.csproj", "{5930D285-80B9-4620-8D72-B4F260BA826E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoodOnYouScrapper.Service.Tests", "GoodOnYouScrapper.Service.Tests\GoodOnYouScrapper.Service.Tests.csproj", "{82C52078-8910-4F5D-89B3-905CDD284989}"
 EndProject

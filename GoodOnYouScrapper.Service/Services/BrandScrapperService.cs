@@ -24,6 +24,7 @@ public class BrandScrapperService : Protos.BrandScrapperService.BrandScrapperSer
 
     /// <summary>Get brand information</summary>
     /// <param name="request">Object containing the brand name</param>
+    /// <param name="context"> Server context</param>
     /// <returns> Brand information </returns>
     public override async Task<BrandScrapperResponse> GetBrand(BrandScrapperRequest request, ServerCallContext context)
     {

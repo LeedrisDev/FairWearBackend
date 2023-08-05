@@ -10,7 +10,7 @@ on:
       - release/*
       - fix/*
     paths:
-      - 'BrandAndProductDatabase.Service/**'
+      - 'BrandAndProductDatabase.Servicez`/**'
       - 'BrandAndProductDatabase.API.Tests/**'
       - '.github/workflows/BrandAndProductDatabaseAPI.yml'
       - 'Scripts/**'
@@ -145,7 +145,7 @@ jobs:
       - build
       - test
     runs-on: ubuntu-latest
-    if: contains(github.ref, 'release') || contains(github.ref, 'develop') || contains(github.ref, 'master')
+#    if: contains(github.ref, 'release') || contains(github.ref, 'develop') || contains(github.ref, 'master')
     steps:
       - uses: actions/checkout@v3
         

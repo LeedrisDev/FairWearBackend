@@ -18,9 +18,9 @@ public class BrandBusinessTester
         _brandDataMock.Setup(m => m.GetBrandPageHtml(It.IsAny<string>()))
             .ReturnsAsync(GetTestHtmlDocument(fileName));
         
-        var brandBusiness = new GoodOnYouScrapper.API.Business.BrandBusiness.BrandBusiness(_brandDataMock.Object);
+        var brandBusiness = new GoodOnYouScrapper.Service.Business.BrandBusiness.BrandBusiness(_brandDataMock.Object);
         var mock = _brandDataMock.Object;
-        var brandName = "Levis";
+        const string brandName = "Levis";
 
         var result = await brandBusiness.GetBrandInformation(brandName);
         Assert.AreEqual(environmentRating, result.Object.EnvironmentRating);

@@ -8,18 +8,15 @@ namespace ProductDataRetriever.Service.Services;
 /// <summary>
 /// Service for retrieving product information.
 /// </summary>
-public class ProductSrapperService : Protos.ProductScrapperService.ProductScrapperServiceBase
+public class ProductScrapperService : Protos.ProductScrapperService.ProductScrapperServiceBase
 {
-    private readonly ILogger<ProductSrapperService> _logger;
     private readonly IProductBusiness _productBusiness;
 
     /// <summary>Constructor</summary>
     /// <param name="productBusiness"> Product business.</param>
-    /// <param name="logger"> logger.</param>
-    public ProductSrapperService(IProductBusiness productBusiness, ILogger<ProductSrapperService> logger)
+    public ProductScrapperService(IProductBusiness productBusiness)
     {
         _productBusiness = productBusiness;
-        _logger = logger;
     }
 
     /// <summary> Get product information from a barcode.</summary>

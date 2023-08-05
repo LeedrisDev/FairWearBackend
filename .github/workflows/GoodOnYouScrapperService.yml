@@ -56,7 +56,7 @@ jobs:
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           status: ${{ job.status }}
-          title: "Linter on GoodOnYou Scrapper API"
+          title: "Linter on GoodOnYou Scrapper Service"
           username: GitHub Actions
           avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
 
@@ -93,7 +93,7 @@ jobs:
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           status: ${{ job.status }}
-          title: "Build & Test GoodOnYou Scrapper API"
+          title: "Build & Test GoodOnYou Scrapper Service"
           username: GitHub Actions
           avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
   
@@ -122,8 +122,8 @@ jobs:
 
       - name: 'Install dependencies'
         run: |
-          dotnet restore ./GoodOnYouScrapper.Service.Tests/GoodOnYouScrapper.API.Tests.csproj
-          dotnet restore ./GoodOnYouScrapper.Service/GoodOnYouScrapper.API.csproj  
+          dotnet restore ./GoodOnYouScrapper.Service.Tests/GoodOnYouScrapper.Service.Tests.csproj
+          dotnet restore ./GoodOnYouScrapper.Service/GoodOnYouScrapper.Service.csproj  
           
       - name: 'Run tests'
         run: dotnet test --no-restore  --verbosity normal GoodOnYouScrapper.Service.Tests/GoodOnYouScrapper.Service.Tests.csproj
@@ -136,7 +136,7 @@ jobs:
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           status: ${{ job.status }}
-          title: "Build & Test GoodOnYou Scrapper API"
+          title: "Build & Test GoodOnYou Scrapper Service"
           username: GitHub Actions
           avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
   
@@ -182,6 +182,6 @@ jobs:
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           status: ${{ job.status }}
-          title: "Deliver GoodOnYou Scrapper API to Registry"
+          title: "Deliver GoodOnYou Scrapper Service to Registry"
           username: GitHub Actions
           avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png

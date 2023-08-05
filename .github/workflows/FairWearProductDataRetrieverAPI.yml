@@ -149,7 +149,7 @@ jobs:
       - build
       - test
     runs-on: ubuntu-latest
-    if: contains(github.ref, 'release') || contains(github.ref, 'develop') || contains(github.ref, 'master')
+#    if: contains(github.ref, 'release') || contains(github.ref, 'develop') || contains(github.ref, 'master')
     steps:
       - uses: actions/checkout@v3
         
@@ -173,7 +173,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./FairWearProductDataRetriever.API/Dockerfile
+          file: ./FairWearProductDataRetriever.Service/Dockerfile
           push: true
           tags: |
             docker-registry.leedrisdev.engineer/data_retriever_api:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}

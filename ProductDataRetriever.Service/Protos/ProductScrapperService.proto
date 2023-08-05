@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "FairWearProductDataRetriever.Service.Protos";
+option csharp_namespace = "ProductDataRetriever.Service.Protos";
 
 // The Product service definition.
 service ProductScrapperService {

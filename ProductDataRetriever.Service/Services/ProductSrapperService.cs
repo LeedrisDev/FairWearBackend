@@ -1,9 +1,9 @@
 ﻿using System.Net;
-using FairWearProductDataRetriever.Service.Business.ProductBusiness;
-using FairWearProductDataRetriever.Service.Protos;
+using ProductDataRetriever.Service.Protos;
 using Grpc.Core;
+using ProductDataRetriever.Service.Business.ProductBusiness;
 
-namespace FairWearProductDataRetriever.Service.Services;
+namespace ProductDataRetriever.Service.Services;
 
 /// <summary>
 /// Service for retrieving product information.

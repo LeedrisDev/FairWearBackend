@@ -1,4 +1,4 @@
-namespace FairWearProductDataRetriever.Service.Models;
+namespace ProductDataRetriever.Service.Models;
 
 /// <summary>Model for error response</summary>
 public class ErrorResponse

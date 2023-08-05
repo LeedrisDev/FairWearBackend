@@ -1,7 +1,7 @@
-using FairWearProductDataRetriever.Service.Business.ProductBusiness;
-using FairWearProductDataRetriever.Service.DataAccess.ProductData;
-using FairWearProductDataRetriever.Service.Services;
-using FairWearProductDataRetriever.Service.Utils.HttpClientWrapper;
+using ProductDataRetriever.Service.Business.ProductBusiness;
+using ProductDataRetriever.Service.DataAccess.ProductData;
+using ProductDataRetriever.Service.Services;
+using ProductDataRetriever.Service.Utils.HttpClientWrapper;
 using HtmlAgilityPack;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,4 +1,4 @@
-namespace FairWearProductDataRetriever.Service.Utils;
+namespace ProductDataRetriever.Service.Utils;
 
 /// <summary>Contains all constants used in the API.</summary>
 public abstract class AppConstants

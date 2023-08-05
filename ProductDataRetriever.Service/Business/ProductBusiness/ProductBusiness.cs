@@ -1,12 +1,12 @@
 using System.Net;
 using System.Web;
-using FairWearProductDataRetriever.Service.DataAccess.ProductData;
-using FairWearProductDataRetriever.Service.Models;
-using FairWearProductDataRetriever.Service.Protos;
-using FairWearProductDataRetriever.Service.Utils;
+using ProductDataRetriever.Service.Protos;
 using HtmlAgilityPack;
+using ProductDataRetriever.Service.DataAccess.ProductData;
+using ProductDataRetriever.Service.Models;
+using ProductDataRetriever.Service.Utils;
 
-namespace FairWearProductDataRetriever.Service.Business.ProductBusiness;
+namespace ProductDataRetriever.Service.Business.ProductBusiness;
 
 /// <summary>Business logic for retrieving product information.</summary>
 public class ProductBusiness : IProductBusiness

@@ -10,7 +10,7 @@ on:
       - release/*
       - fix/*
     paths:
-      - 'BrandAndProductDatabase.API/**'
+      - 'BrandAndProductDatabase.Service/**'
       - 'BrandAndProductDatabase.API.Tests/**'
       - '.github/workflows/BrandAndProductDatabaseAPI.yml'
       - 'Scripts/**'

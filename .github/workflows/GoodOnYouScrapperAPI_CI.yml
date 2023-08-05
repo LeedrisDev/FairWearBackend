@@ -10,7 +10,7 @@ on:
       - release/*
       - fix/*
     paths:
-      - 'GoodOnYouScrapper.API/**'
+      - 'GoodOnYouScrapper.Service/**'
       - 'GoodOnYouScrapper.API.Tests/**'
       - '.github/workflows/GoodOnYouScrapperAPI_CI.yml'
       - 'Scripts/**'

@@ -27,13 +27,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Protobuf Include="..\FairWearProductDataRetriever.Service\Protos\ProductScrapperService.proto" GrpcServices="Client">
-            <Link>Protos\ProductScrapperService.proto</Link>
-        </Protobuf>
-        <Protobuf Include="..\GoodOnYouScrapper.Service\Protos\BrandScrapperService.proto" GrpcServices="Client">
-            <Link>Protos\BrandScrapperService.proto</Link>
-        </Protobuf>
+        <Protobuf Include="..\GoodOnYouScrapper.Service\Protos\BrandScrapperService.proto" GrpcServices="Client"/>
         <Protobuf Include="Protos\BrandService.proto" GrpcServices="Server"/>
+        <Protobuf Include="Protos\ProductScrapperService.proto" GrpcServices="Client"/>
         <Protobuf Include="Protos\ProductService.proto" GrpcServices="Server"/>
     </ItemGroup>
 

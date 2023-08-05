@@ -1,8 +1,8 @@
-using GoodOnYouScrapper.API.DataAccess.BrandData;
+using GoodOnYouScrapper.Service.DataAccess.BrandData;
 using HtmlAgilityPack;
 using Moq;
 
-namespace GoodOnYouScrapper.API.Tests.Business.BrandBusiness;
+namespace GoodOnYouScrapper.Service.Tests.Business.BrandBusiness;
 
 [TestClass]
 public class BrandBusinessTester

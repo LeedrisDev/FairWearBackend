@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FairWearProductDataRetrieve
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoodOnYouScrapper.API", "GoodOnYouScrapper.API\GoodOnYouScrapper.API.csproj", "{6837512C-16AC-4E31-B453-EA0BE3C8A4E9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoodOnYouScrapper.API.Tests", "GoodOnYouScrapper.API.Tests\GoodOnYouScrapper.API.Tests.csproj", "{82C52078-8910-4F5D-89B3-905CDD284989}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoodOnYouScrapper.Service.Tests", "GoodOnYouScrapper.Service.Tests\GoodOnYouScrapper.Service.Tests.csproj", "{82C52078-8910-4F5D-89B3-905CDD284989}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrandAndProductDatabase.API", "BrandAndProductDatabase.API\BrandAndProductDatabase.API.csproj", "{73BD25C4-39B9-473B-AB49-EEDA022C4301}"
 EndProject

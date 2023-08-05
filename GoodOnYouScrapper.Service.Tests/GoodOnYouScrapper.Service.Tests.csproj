@@ -26,7 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\GoodOnYouScrapper.API\GoodOnYouScrapper.API.csproj" />
+      <ProjectReference Include="..\GoodOnYouScrapper.Service\GoodOnYouScrapper.Service.csproj" />
     </ItemGroup>
 
 </Project>

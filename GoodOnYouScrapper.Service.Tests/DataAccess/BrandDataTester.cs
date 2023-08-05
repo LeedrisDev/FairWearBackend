@@ -1,11 +1,11 @@
 using System.Net;
 using FluentAssertions;
-using GoodOnYouScrapper.API.DataAccess.BrandData;
-using GoodOnYouScrapper.API.Utils.HttpClientWrapper;
+using GoodOnYouScrapper.Service.DataAccess.BrandData;
+using GoodOnYouScrapper.Service.Utils.HttpClientWrapper;
 using HtmlAgilityPack;
 using Moq;
 
-namespace GoodOnYouScrapper.API.Tests.DataAccess;
+namespace GoodOnYouScrapper.Service.Tests.DataAccess;
 
 [TestClass]
 public class BrandDataTester

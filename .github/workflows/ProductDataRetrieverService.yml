@@ -1,4 +1,4 @@
-name: Product Data Retriever API CI
+name: Product Data Retriever Service CI/CD
 
 on:
   push:
@@ -10,9 +10,9 @@ on:
       - release/*
       - fix/*
     paths:
-      - 'FairWearProductDataRetriever.API/**'
-      - 'FairWearProductDataRetriever.API.Tests/**'
-      - '.github/workflows/FairWearProductDataRetrieverAPI.yml'
+      - 'ProductDataRetriever.Service/**'
+      - 'ProductDataRetriever.Service.Tests/**'
+      - '.github/workflows/ProductDataRetrieverService.yml'
       - 'Scripts/**'
 
 jobs:
@@ -43,7 +43,7 @@ jobs:
           export PATH=$PATH:~/.dotnet/tools
 
       - name: Run ReSharper InspectCode
-        run: jb inspectcode FairWearProductDataRetriever.API/FairWearProductDataRetriever.API.csproj -o=resharper-report.xml -f=Xml -verbosity=INFO -no-swea
+        run: jb inspectcode ProductDataRetriever.Service/ProductDataRetriever.Service.csproj -o=resharper-report.xml -f=Xml -verbosity=INFO -no-swea
 
       - name: Check Resharper results
         run: |
@@ -56,7 +56,7 @@ jobs:
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           status: ${{ job.status }}
-          title: "Linter Product Data Retriever API"
+          title: "Linter Product Data Retriever Service"
           username: GitHub Actions
           avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
   
@@ -84,17 +84,17 @@ jobs:
             ${{ runner.os }}-nuget-product-data-retriever-
 
       - name: 'Install dependencies'
-        run: dotnet restore ./FairWearProductDataRetriever.API/FairWearProductDataRetriever.API.csproj
+        run: dotnet restore ./ProductDataRetriever.Service/ProductDataRetriever.Service.csproj
 
       - name: Build
-        run: dotnet build ./FairWearProductDataRetriever.API/FairWearProductDataRetriever.API.csproj --configuration Release --no-restore
+        run: dotnet build ./ProductDataRetriever.Service/ProductDataRetriever.Service.csproj --configuration Release --no-restore
 
       - uses: sarisia/actions-status-discord@v1
         if: always() && (job.status == 'failure' || job.status == 'cancelled')
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           status: ${{ job.status }}
-          title: "Build & Test Product Data Retriever API"
+          title: "Build & Test Product Data Retriever Service"
           username: GitHub Actions
           avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
   
@@ -124,21 +124,21 @@ jobs:
 
       - name: 'Install dependencies'
         run: |
-          dotnet restore ./FairWearProductDataRetriever.API.Tests/FairWearProductDataRetriever.API.Tests.csproj
-          dotnet restore ./FairWearProductDataRetriever.API/FairWearProductDataRetriever.API.csproj
+          dotnet restore ./ProductDataRetriever.Service.Tests/ProductDataRetriever.Service.Tests.csproj
+          dotnet restore ./ProductDataRetriever.Service/ProductDataRetriever.Service.csproj
           
       - name: 'Run tests'
-        run: dotnet test --no-restore  --verbosity normal FairWearProductDataRetriever.API.Tests/FairWearProductDataRetriever.API.Tests.csproj
+        run: dotnet test --no-restore  --verbosity normal ProductDataRetriever.Service.Tests/ProductDataRetriever.Service.Tests.csproj
   
       - name: 'Code Coverage'
-        run: ./Scripts/code-coverage-ci.sh -p FairWearProductDataRetriever.API.Tests/FairWearProductDataRetriever.API.Tests.csproj -t 75
+        run: ./Scripts/code-coverage-ci.sh -p ProductDataRetriever.Service.Tests/ProductDataRetriever.Service.Tests.csproj -t 75
 
       - uses: sarisia/actions-status-discord@v1
         if: always()
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           status: ${{ job.status }}
-          title: "Build & Test Product Data Retriever API"
+          title: "Build & Test Product Data Retriever Service"
           username: GitHub Actions
           avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
           
@@ -173,18 +173,18 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./FairWearProductDataRetriever.Service/Dockerfile
+          file: ./ProductDataRetriever.Service/Dockerfile
           push: true
           tags: |
-            docker-registry.leedrisdev.engineer/data_retriever_api:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}
-            docker-registry.leedrisdev.engineer/data_retriever_api:latest
+            docker-registry.leedrisdev.engineer/product_data_retriever_service:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}
+            docker-registry.leedrisdev.engineer/product_data_retriever_service:latest
 
       - uses: sarisia/actions-status-discord@v1
         if: always()
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           status: ${{ job.status }}
-          title: "Deliver Data Retriever API to Registry"
+          title: "Deliver Product Data Retriever Service to Registry"
           username: GitHub Actions
           avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
           

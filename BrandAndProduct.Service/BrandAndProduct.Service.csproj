@@ -5,6 +5,11 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <ExcludeFromCodeCoverage>
+            <!-- Add patterns to exclude auto-generated gRPC files -->
+            **/*.grpc.cs;
+            **/*.proto.cs
+        </ExcludeFromCodeCoverage>
     </PropertyGroup>
 
     <ItemGroup>
@@ -34,8 +39,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="..\.dockerignore">
-            <Link>.dockerignore</Link>
-        </Content>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 </Project>

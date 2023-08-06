@@ -1,20 +1,20 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine3.17 AS base
+﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine3.18 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine3.18 AS build
 WORKDIR /src
-COPY ["BrandAndProductDatabase.Service/BrandAndProductDatabase.Service.csproj", "BrandAndProductDatabase.Service/"]
-RUN dotnet restore "BrandAndProductDatabase.Service/BrandAndProductDatabase.Service.csproj"
+COPY ["BrandAndProduct.Service/BrandAndProduct.Service.csproj", "BrandAndProduct.Service/"]
+RUN dotnet restore "BrandAndProduct.Service/BrandAndProduct.Service.csproj"
 COPY . .
-WORKDIR "/src/BrandAndProductDatabase.Service"
-RUN dotnet build "BrandAndProductDatabase.Service.csproj" -c Release -o /app/build
+WORKDIR "/src/BrandAndProduct.Service"
+RUN dotnet build "BrandAndProduct.Service.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "BrandAndProductDatabase.Service.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "BrandAndProduct.Service.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "BrandAndProductDatabase.Service.dll"]
+ENTRYPOINT ["dotnet", "BrandAndProduct.Service.dll"]

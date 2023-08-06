@@ -3,7 +3,7 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine3.18 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["BrandAndProduct.Service/BrandAndProduct.Service.csproj", "BrandAndProduct.Service/"]
 RUN dotnet restore "BrandAndProduct.Service/BrandAndProduct.Service.csproj"

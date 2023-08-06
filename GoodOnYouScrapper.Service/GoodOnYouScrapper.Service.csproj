@@ -21,6 +21,7 @@
     <Protobuf Include="Protos\BrandScrapperService.proto" GrpcServices="Server"/>
   </ItemGroup>
 
+
   <ItemGroup>
     <Content Include="..\.dockerignore">
       <Link>.dockerignore</Link>

@@ -3,10 +3,9 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine3.18 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["GoodOnYouScrapper.Service/GoodOnYouScrapper.Service.csproj", "GoodOnYouScrapper.Service/"]
-COPY ["BrandAndProductDatabase.Service/BrandAndProductDatabase.Service.csproj", "BrandAndProductDatabase.Service/"]
 RUN dotnet restore "GoodOnYouScrapper.Service/GoodOnYouScrapper.Service.csproj"
 COPY . .
 WORKDIR "/src/GoodOnYouScrapper.Service"

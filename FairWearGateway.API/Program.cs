@@ -1,4 +1,4 @@
-using BrandAndProductDatabase.Service.Protos;
+using BrandAndProduct.Service.Protos;
 using FairWearGateway.API.Config;
 using FairWearGateway.API.Utils;
 using Grpc.Core;

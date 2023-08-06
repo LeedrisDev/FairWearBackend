@@ -1,4 +1,4 @@
-using BrandAndProductDatabase.Service.Protos;
+using BrandAndProduct.Service.Protos;
 using FairWearGateway.API.DataAccess.BrandData;
 using FairWearGateway.API.Models;
 

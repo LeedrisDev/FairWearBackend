@@ -1,4 +1,4 @@
-using BrandAndProductDatabase.Service.Protos;
+using BrandAndProduct.Service.Protos;
 using FairWearGateway.API.Models;
 
 namespace FairWearGateway.API.Business.BrandBusiness;

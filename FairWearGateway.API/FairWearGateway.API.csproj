@@ -21,11 +21,23 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Protobuf Include="..\BrandAndProductDatabase.Service\Protos\BrandService.proto" GrpcServices="Client">
-            <Link>Protos\BrandService.proto</Link>
+        <Protobuf Include="..\BrandAndProduct.Service\Protos\BrandService.proto">
+          <GrpcServices>Client</GrpcServices>
+          <Access>Public</Access>
+          <ProtoCompile>True</ProtoCompile>
+          <CompileOutputs>True</CompileOutputs>
+          <OutputDir>obj\Debug\net7.0\</OutputDir>
+          <Generator>MSBuild:Compile</Generator>
+          <Link>Protos\BrandService.proto</Link>
         </Protobuf>
-        <Protobuf Include="..\BrandAndProductDatabase.Service\Protos\ProductService.proto" GrpcServices="Client">
-            <Link>Protos\ProductService.proto</Link>
+        <Protobuf Include="..\BrandAndProduct.Service\Protos\ProductService.proto">
+          <GrpcServices>Client</GrpcServices>
+          <Access>Public</Access>
+          <ProtoCompile>True</ProtoCompile>
+          <CompileOutputs>True</CompileOutputs>
+          <OutputDir>obj\Debug\net7.0\</OutputDir>
+          <Generator>MSBuild:Compile</Generator>
+          <Link>Protos\ProductService.proto</Link>
         </Protobuf>
     </ItemGroup>
 

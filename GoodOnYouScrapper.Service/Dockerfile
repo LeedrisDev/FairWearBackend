@@ -1,9 +1,9 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine3.17 AS base
+﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine3.18 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine3.18 AS build
 WORKDIR /src
 COPY ["GoodOnYouScrapper.Service/GoodOnYouScrapper.Service.csproj", "GoodOnYouScrapper.Service/"]
 COPY ["BrandAndProductDatabase.Service/BrandAndProductDatabase.Service.csproj", "BrandAndProductDatabase.Service/"]

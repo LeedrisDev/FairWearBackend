@@ -1,4 +1,4 @@
-name: Brand & Product Database API CI
+name: Brand & Product Service CI/CD
 
 on:
   push:
@@ -10,9 +10,9 @@ on:
       - release/*
       - fix/*
     paths:
-      - 'BrandAndProductDatabase.Servicez`/**'
-      - 'BrandAndProductDatabase.API.Tests/**'
-      - '.github/workflows/BrandAndProductDatabaseAPI.yml'
+      - 'BrandAndProduct.Service/**'
+      - 'BrandAndProduct.Service.Tests/**'
+      - '.github/workflows/BrandAndProductService.yml'
       - 'Scripts/**'
         
 jobs:
@@ -42,7 +42,7 @@ jobs:
           export PATH=$PATH:~/.dotnet/tools
 
       - name: Run ReSharper InspectCode
-        run: jb inspectcode BrandAndProductDatabase.API/BrandAndProductDatabase.API.csproj -o=resharper-report.xml -f=Xml -verbosity=INFO -no-swea
+        run: jb inspectcode BrandAndProduct.Service/BrandAndProduct.Service.csproj -o=resharper-report.xml -f=Xml -verbosity=INFO -no-swea
 
       - name: Check Resharper results
         run: |
@@ -55,7 +55,7 @@ jobs:
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           status: ${{ job.status }}
-          title: "Linter Brand & Product Database API"
+          title: "Linter Brand & Product Database Service"
           username: GitHub Actions
           avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
           
@@ -76,22 +76,22 @@ jobs:
         with:
           path: ~/.nuget/packages
           # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-nuget-brand-and-product-database-api-${{ hashFiles('**/packages.lock.json') }}
+          key: ${{ runner.os }}-nuget-brand-and-product-database-Service-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-nuget-brand-and-product-database-api-
+            ${{ runner.os }}-nuget-brand-and-product-database-Service-
 
       - name: 'Install dependencies'
-        run: dotnet restore BrandAndProductDatabase.API/BrandAndProductDatabase.API.csproj
+        run: dotnet restore BrandAndProduct.Service/BrandAndProduct.Service.csproj
 
       - name: Build
-        run: dotnet build BrandAndProductDatabase.API/BrandAndProductDatabase.API.csproj --configuration Release --no-restore
+        run: dotnet build BrandAndProduct.Service/BrandAndProduct.Service.csproj --configuration Release --no-restore
 
       - uses: sarisia/actions-status-discord@v1
         if: always() && (job.status == 'failure' || job.status == 'cancelled')
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           status: ${{ job.status }}
-          title: "Build & Test Brand & Product Database API"
+          title: "Build & Test Brand & Product Database Service"
           username: GitHub Actions
           avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
           
@@ -114,27 +114,27 @@ jobs:
         with:
           path: ~/.nuget/packages
           # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-nuget-brand-and-product-database-api-tests-${{ hashFiles('**/packages.lock.json') }}
+          key: ${{ runner.os }}-nuget-brand-and-product-database-Service-tests-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-nuget-brand-and-product-database-api-tests-
+            ${{ runner.os }}-nuget-brand-and-product-database-Service-tests-
 
       - name: 'Install dependencies'
         run: |
-          dotnet restore BrandAndProductDatabase.API.Tests/BrandAndProductDatabase.API.Tests.csproj
-          dotnet restore BrandAndProductDatabase.API/BrandAndProductDatabase.API.csproj 
+          dotnet restore BrandAndProduct.Service.Tests/BrandAndProduct.Service.Tests.csproj
+          dotnet restore BrandAndProduct.Service/BrandAndProduct.Service.csproj 
           
       - name: 'Run tests'
-        run: dotnet test --no-restore  --verbosity normal BrandAndProductDatabase.API.Tests/BrandAndProductDatabase.API.Tests.csproj
+        run: dotnet test --no-restore  --verbosity normal BrandAndProduct.Service.Tests/BrandAndProduct.Service.Tests.csproj
 
       - name: 'Code Coverage'
-        run: ./Scripts/code-coverage-ci.sh -p BrandAndProductDatabase.API.Tests/BrandAndProductDatabase.API.Tests.csproj -t 75
+        run: ./Scripts/code-coverage-ci.sh -p BrandAndProduct.Service.Tests/BrandAndProduct.Service.Tests.csproj -t 75
 
       - uses: sarisia/actions-status-discord@v1
         if: always()
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           status: ${{ job.status }}
-          title: "Build & Test Brand & Product Database API"
+          title: "Build & Test Brand & Product Database Service"
           username: GitHub Actions
           avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
           
@@ -145,7 +145,7 @@ jobs:
       - build
       - test
     runs-on: ubuntu-latest
-#    if: contains(github.ref, 'release') || contains(github.ref, 'develop') || contains(github.ref, 'master')
+    if: contains(github.ref, 'release') || contains(github.ref, 'develop') || contains(github.ref, 'master')
     steps:
       - uses: actions/checkout@v3
         
@@ -169,17 +169,17 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./BrandAndProductDatabase.Service/Dockerfile
+          file: ./BrandAndProduct.Service/Dockerfile
           push: true
           tags: |
-            docker-registry.leedrisdev.engineer/brand_and_product_api:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}
-            docker-registry.leedrisdev.engineer/brand_and_product_api:latest
+            docker-registry.leedrisdev.engineer/brand_and_product_service:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}
+            docker-registry.leedrisdev.engineer/brand_and_product_service:latest
 
       - uses: sarisia/actions-status-discord@v1
         if: always()
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           status: ${{ job.status }}
-          title: "Deliver Brand & Product Database API to Registry"
+          title: "Deliver Brand & Product Database Service to Registry"
           username: GitHub Actions
           avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png

@@ -46,9 +46,9 @@ services:
       dockerfile: Databases/BrandsAndProductsDatabase/Dockerfile
     restart: on-failure
     environment:
-      - POSTGRES_USER=fairwear
-      - POSTGRES_PASSWORD=fairwear
-      - POSTGRES_DB=fairwear_brand_and_product_database
+      - POSTGRES_USER=sa
+      - POSTGRES_PASSWORD=sa
+      - POSTGRES_DB=brand_and_product_db
     ports:
       - "5432:5432"
     networks:
@@ -70,7 +70,7 @@ services:
       - BRAND_AND_PRODUCT_DB_SERVICE_PORT_HTTP=5432
       - BRAND_AND_PRODUCT_DB_USER=sa
       - BRAND_AND_PRODUCT_DB_PASSWORD=sa
-      - BRAND_AND_PRODUCT_DB_DATABASE_NAME=brand_and_product_db
+      - BRAND_AND_PRODUCT_DB_NAME=brand_and_product_db
     ports:
       - "8081:80"
     networks:

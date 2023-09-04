@@ -162,7 +162,7 @@ jobs:
       - name: Login to Docker Registry
         uses: docker/login-action@v2
         with:
-          registry: https://docker-registry.leedrisdev.engineer
+          registry: https://registry.leedrisdev.com
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
@@ -173,8 +173,8 @@ jobs:
           file: ./FairWearGateway.API/Dockerfile
           push: true
           tags: |
-            docker-registry.leedrisdev.engineer/gateway_api:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}
-            docker-registry.leedrisdev.engineer/gateway_api:latest
+            registry.leedrisdev.com/gateway_api:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}
+            registry.leedrisdev.com/gateway_api:latest
 
       - uses: sarisia/actions-status-discord@v1
         if: always()

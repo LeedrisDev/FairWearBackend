@@ -21,8 +21,7 @@ public static class DependencyInjectionConfiguration
         // DbContext
         services.AddDbContext<BrandAndProductDbContext>(options =>
         {
-            options.UseNpgsql(
-                $"User ID=fairwear;Password=fairwear;Host={AppConstants.BrandAndProductDatabaseHost};Port={AppConstants.BrandAndProductDatabasePort};Database=fairwear_brand_and_product_database;");
+            options.UseNpgsql(AppConstants.Database.BrandAndProductConnectionString);
         });
 
         // Services

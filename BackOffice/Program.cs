@@ -1,7 +1,15 @@
+using BackOffice.Config;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Validate required environment variables
+EnvironmentValidator.ValidateRequiredVariables();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+// Configure dependency injection.
+DependencyInjectionConfiguration.Configure(builder.Services);
 
 var app = builder.Build();
 

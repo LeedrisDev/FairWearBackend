@@ -10,6 +10,7 @@
             **/*.grpc.cs;
             **/*.proto.cs
         </ExcludeFromCodeCoverage>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>

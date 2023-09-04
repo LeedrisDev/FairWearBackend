@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace BackOffice.Pages;
+namespace BackOffice.Pages.Brands;
 
 public class Brands : PageModel
 {

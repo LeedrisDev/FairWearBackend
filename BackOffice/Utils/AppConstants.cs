@@ -1,7 +1,9 @@
 namespace BackOffice.Utils;
 
+/// <summary>Static class that contains the application constants.</summary>
 public abstract class AppConstants
 {
+    /// <summary>Constant related to the databases.</summary>
     public static class Database
     {
         private static readonly string Host = Environment.GetEnvironmentVariable("BRAND_AND_PRODUCT_DB_SERVICE_HOST")!;
@@ -10,6 +12,7 @@ public abstract class AppConstants
         private static readonly string Password = Environment.GetEnvironmentVariable("BRAND_AND_PRODUCT_DB_PASSWORD")!;
         private static readonly string DatabaseName = Environment.GetEnvironmentVariable("BRAND_AND_PRODUCT_DB_DATABASE_NAME")!;
         
-        public static string ConnectionString => $"User ID={User};Password={Password};Host={Host};Port={Port};Database={DatabaseName};";
+        /// <summary>Connection string to the Brand and Product database.</summary>
+        public static string BrandAndProductConnectionString => $"User ID={User};Password={Password};Host={Host};Port={Port};Database={DatabaseName};";
     }
 }

@@ -1,4 +1,4 @@
-\c fairwear_brand_and_product_database;
+\c brand_and_product_db;
 
 DROP TABLE IF EXISTS brands;
 DROP TABLE IF EXISTS products;

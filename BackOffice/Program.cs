@@ -5,11 +5,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Validate required environment variables
 EnvironmentValidator.ValidateRequiredVariables();
 
-// Add services to the container.
-builder.Services.AddRazorPages();
-
 // Configure dependency injection.
 DependencyInjectionConfiguration.Configure(builder.Services);
+
+// Add services to the container.
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 

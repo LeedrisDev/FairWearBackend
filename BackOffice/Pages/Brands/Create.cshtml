@@ -1,0 +1,70 @@
+@page
+@model BackOffice.Pages.Brands.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>BrandEntity</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="BrandEntity.Name" class="control-label"></label>
+                <input asp-for="BrandEntity.Name" class="form-control" />
+                <span asp-validation-for="BrandEntity.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BrandEntity.Country" class="control-label"></label>
+                <input asp-for="BrandEntity.Country" class="form-control" />
+                <span asp-validation-for="BrandEntity.Country" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BrandEntity.EnvironmentRating" class="control-label"></label>
+                <input asp-for="BrandEntity.EnvironmentRating" class="form-control" />
+                <span asp-validation-for="BrandEntity.EnvironmentRating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BrandEntity.PeopleRating" class="control-label"></label>
+                <input asp-for="BrandEntity.PeopleRating" class="form-control" />
+                <span asp-validation-for="BrandEntity.PeopleRating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BrandEntity.AnimalRating" class="control-label"></label>
+                <input asp-for="BrandEntity.AnimalRating" class="form-control" />
+                <span asp-validation-for="BrandEntity.AnimalRating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BrandEntity.RatingDescription" class="control-label"></label>
+                <input asp-for="BrandEntity.RatingDescription" class="form-control" />
+                <span asp-validation-for="BrandEntity.RatingDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BrandEntity.Categories" class="control-label"></label>
+                <input asp-for="BrandEntity.Categories" class="form-control" />
+                <span asp-validation-for="BrandEntity.Categories" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BrandEntity.Ranges" class="control-label"></label>
+                <input asp-for="BrandEntity.Ranges" class="form-control" />
+                <span asp-validation-for="BrandEntity.Ranges" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,79 @@
+@page
+@model BackOffice.Pages.Brands.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BrandEntity[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BrandEntity[0].Country)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BrandEntity[0].EnvironmentRating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BrandEntity[0].PeopleRating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BrandEntity[0].AnimalRating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BrandEntity[0].RatingDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BrandEntity[0].Categories)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BrandEntity[0].Ranges)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.BrandEntity) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Country)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EnvironmentRating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PeopleRating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AnimalRating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RatingDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categories)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ranges)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

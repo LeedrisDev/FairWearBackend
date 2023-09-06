@@ -29,15 +29,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.BrandEntity[0].AnimalRating)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BrandEntity[0].RatingDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BrandEntity[0].Categories)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BrandEntity[0].Ranges)
-            </th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -58,15 +49,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.AnimalRating)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RatingDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Categories)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ranges)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |

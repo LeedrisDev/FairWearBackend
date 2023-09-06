@@ -2,11 +2,11 @@
 @model BackOffice.Pages.Brands.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Brands";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Brands</h1>
 
 <p>
     <a asp-page="Create">Create New</a>
@@ -38,7 +38,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.BrandEntity[0].Ranges)
             </th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>

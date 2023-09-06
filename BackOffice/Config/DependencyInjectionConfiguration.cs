@@ -11,6 +11,6 @@ public abstract class DependencyInjectionConfiguration
     public static void Configure(IServiceCollection services)
     {
         services.AddDbContext<BrandAndProductDbContext>(options =>
-            options.UseNpgsql(AppConstants.Database.ConnectionString));
+            options.UseNpgsql(AppConstants.Database.BrandAndProductConnectionString));
     }
 }

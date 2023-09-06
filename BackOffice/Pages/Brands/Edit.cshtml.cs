@@ -8,6 +8,8 @@ namespace BackOffice.Pages.Brands;
 
 public class EditModel : PageModel
 {
+    [BindProperty] public BrandEntity BrandEntity { get; set; } = default!;
+    
     private readonly BrandAndProductDbContext _context;
 
     public EditModel(BrandAndProductDbContext context)
@@ -15,22 +17,16 @@ public class EditModel : PageModel
         _context = context;
     }
 
-    [BindProperty]
-    public BrandEntity BrandEntity { get; set; } = default!;
-
     public async Task<IActionResult> OnGetAsync(int? id)
     {
-        if (id == null || _context.Brands == null)
-        {
+        if (id == null)
             return NotFound();
-        }
 
-        var brandentity =  await _context.Brands.FirstOrDefaultAsync(m => m.Id == id);
-        if (brandentity == null)
-        {
+        var brandEntity =  await _context.Brands.FirstOrDefaultAsync(m => m.Id == id);
+        if (brandEntity == null)
             return NotFound();
-        }
-        BrandEntity = brandentity;
+        
+        BrandEntity = brandEntity;
         return Page();
     }
 
@@ -52,13 +48,9 @@ public class EditModel : PageModel
         catch (DbUpdateConcurrencyException)
         {
             if (!BrandEntityExists(BrandEntity.Id))
-            {
                 return NotFound();
-            }
-            else
-            {
-                throw;
-            }
+
+            throw;
         }
 
         return RedirectToPage("./Index");
@@ -66,6 +58,6 @@ public class EditModel : PageModel
 
     private bool BrandEntityExists(int id)
     {
-        return (_context.Brands?.Any(e => e.Id == id)).GetValueOrDefault();
+        return _context.Brands.Any(e => e.Id == id);
     }
 }

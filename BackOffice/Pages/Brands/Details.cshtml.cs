@@ -8,6 +8,8 @@ namespace BackOffice.Pages.Brands;
 
 public class DetailsModel : PageModel
 {
+    public BrandEntity BrandEntity { get; set; } = default!; 
+    
     private readonly BrandAndProductDbContext _context;
 
     public DetailsModel(BrandAndProductDbContext context)
@@ -15,22 +17,17 @@ public class DetailsModel : PageModel
         _context = context;
     }
 
-    public BrandEntity BrandEntity { get; set; } = default!; 
-
     public async Task<IActionResult> OnGetAsync(int? id)
     {
         if (id == null)
+        {
             return NotFound();
 
-        var brandentity = await _context.Brands.FirstOrDefaultAsync(m => m.Id == id);
-        if (brandentity == null)
-        {
+        var brandEntity = await _context.Brands.FirstOrDefaultAsync(m => m.Id == id);
+        if (brandEntity == null)
             return NotFound();
-        }
-        else 
-        {
-            BrandEntity = brandentity;
-        }
+
+        BrandEntity = brandEntity;
         return Page();
     }
 }

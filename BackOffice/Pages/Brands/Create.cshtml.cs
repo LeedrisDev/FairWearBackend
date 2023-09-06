@@ -7,6 +7,8 @@ namespace BackOffice.Pages.Brands;
 
 public class CreateModel : PageModel
 {
+    [BindProperty] public BrandEntity BrandEntity { get; set; } = default!;
+    
     private readonly BrandAndProductDbContext _context;
 
     public CreateModel(BrandAndProductDbContext context)
@@ -19,17 +21,11 @@ public class CreateModel : PageModel
         return Page();
     }
 
-    [BindProperty]
-    public BrandEntity BrandEntity { get; set; } = default!;
-        
-
     // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
     public async Task<IActionResult> OnPostAsync()
     {
-        if (!ModelState.IsValid || _context.Brands == null || BrandEntity == null)
-        {
+        if (!ModelState.IsValid)
             return Page();
-        }
 
         _context.Brands.Add(BrandEntity);
         await _context.SaveChangesAsync();

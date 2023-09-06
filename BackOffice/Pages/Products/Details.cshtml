@@ -1,0 +1,50 @@
+@page
+@model BackOffice.Pages.Products.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>ProductEntity</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProductEntity.UpcCode)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProductEntity.UpcCode)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProductEntity.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProductEntity.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProductEntity.Category)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProductEntity.Category)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProductEntity.Ranges)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProductEntity.Ranges)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProductEntity.BrandEntity)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProductEntity.BrandEntity.Id)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.ProductEntity?.Id">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

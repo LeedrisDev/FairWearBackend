@@ -1,5 +1,5 @@
 using BackOffice.DataAccess;
-using BackOffice.DataAccess.Entity;
+using BackOffice.DataAccess.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;

@@ -1,4 +1,4 @@
-﻿using BackOffice.DataAccess.Entity;
+﻿using BackOffice.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackOffice.DataAccess;

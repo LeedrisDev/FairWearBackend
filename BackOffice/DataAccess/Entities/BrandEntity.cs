@@ -1,4 +1,4 @@
-﻿namespace BackOffice.DataAccess.Entity;
+﻿namespace BackOffice.DataAccess.Entities;
 
 /// <summary>Class representing a Brand in database.</summary>
 public class BrandEntity

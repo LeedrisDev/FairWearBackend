@@ -1,8 +1,8 @@
 using BackOffice.DataAccess;
+using BackOffice.DataAccess.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using BackOffice.DataAccess.Entity;
 
 namespace BackOffice.Pages.Brands;
 

@@ -1,4 +1,4 @@
-﻿namespace BackOffice.DataAccess.Entity;
+﻿namespace BackOffice.DataAccess.Entities;
 
 /// <summary>Class representing a Product in database.</summary>
 public class ProductEntity

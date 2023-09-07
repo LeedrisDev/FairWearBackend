@@ -1,63 +1,50 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using BackOffice.DataAccess;
+using BackOffice.DataAccess.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using BackOffice.DataAccess;
-using BackOffice.DataAccess.Entity;
 
-namespace BackOffice.Pages.Products
+namespace BackOffice.Pages.Products;
+
+public class DeleteModel : PageModel
 {
-    public class DeleteModel : PageModel
+    [BindProperty] public ProductEntity ProductEntity { get; set; } = default!;
+        
+    private readonly BrandAndProductDbContext _context;
+
+    public DeleteModel(BrandAndProductDbContext context)
     {
-        private readonly BackOffice.DataAccess.BrandAndProductDbContext _context;
+        _context = context;
+    }
 
-        public DeleteModel(BackOffice.DataAccess.BrandAndProductDbContext context)
-        {
-            _context = context;
-        }
+    public async Task<IActionResult> OnGetAsync(int? id)
+    {
+        if (id == null)
+            return NotFound();
 
-        [BindProperty]
-      public ProductEntity ProductEntity { get; set; } = default!;
+        var productEntity = await _context.Products.FirstOrDefaultAsync(m => m.Id == id);
 
-        public async Task<IActionResult> OnGetAsync(int? id)
-        {
-            if (id == null || _context.Products == null)
-            {
-                return NotFound();
-            }
+        if (productEntity == null)
+            return NotFound();
 
-            var productentity = await _context.Products.FirstOrDefaultAsync(m => m.Id == id);
+        ProductEntity = productEntity;
+        return Page();
+    }
 
-            if (productentity == null)
-            {
-                return NotFound();
-            }
-            else 
-            {
-                ProductEntity = productentity;
-            }
-            return Page();
-        }
+    public async Task<IActionResult> OnPostAsync(int? id)
+    {
+        if (id == null)
+            return NotFound();
+            
+        var productEntity = await _context.Products.FindAsync(id);
 
-        public async Task<IActionResult> OnPostAsync(int? id)
-        {
-            if (id == null || _context.Products == null)
-            {
-                return NotFound();
-            }
-            var productentity = await _context.Products.FindAsync(id);
-
-            if (productentity != null)
-            {
-                ProductEntity = productentity;
-                _context.Products.Remove(ProductEntity);
-                await _context.SaveChangesAsync();
-            }
-
+        if (productEntity == null) 
             return RedirectToPage("./Index");
-        }
+            
+        ProductEntity = productEntity;
+        _context.Products.Remove(ProductEntity);
+        await _context.SaveChangesAsync();
+
+        return RedirectToPage("./Index");
     }
 }

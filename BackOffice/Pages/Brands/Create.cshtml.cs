@@ -5,31 +5,45 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BackOffice.Pages.Brands;
 
+/// <summary>PageModel class for creating a new BrandEntity.</summary>
 public class CreateModel : PageModel
 {
+    /// <summary>Property to bind data from the form to this model.</summary>
     [BindProperty] public BrandEntity BrandEntity { get; set; } = default!;
-    
+
     private readonly BrandAndProductDbContext _context;
 
+    /// <summary>Constructor to initialize the CreateModel with the database context.</summary>
+    /// <param name="context">The database context for BrandEntity.</param>
     public CreateModel(BrandAndProductDbContext context)
     {
         _context = context;
     }
 
+    /// <summary>HTTP GET request handler for displaying the create form.</summary>
+    /// <returns>The Razor Page for creating a new BrandEntity.</returns>
     public IActionResult OnGet()
     {
         return Page();
     }
 
-    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+    /// <summary>HTTP POST request handler for form submission.</summary>
+    /// <returns>
+    /// If the model state is valid, adds the BrandEntity to the database and redirects to the Index page.
+    /// If the model state is not valid, returns the current page with validation errors.
+    /// </returns>
     public async Task<IActionResult> OnPostAsync()
     {
         if (!ModelState.IsValid)
-            return Page();
+            return Page(); // Return the current page with validation errors
 
+        // Add the BrandEntity to the database
         _context.Brands.Add(BrandEntity);
+
+        // Save changes to the database asynchronously
         await _context.SaveChangesAsync();
 
+        // Redirect to the Index page after successful creation
         return RedirectToPage("./Index");
     }
 }

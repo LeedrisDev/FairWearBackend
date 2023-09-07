@@ -1,32 +1,26 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using BackOffice.DataAccess;
 using BackOffice.DataAccess.Entity;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
-namespace BackOffice.Pages.Brands
+namespace BackOffice.Pages.Brands;
+
+public class IndexModel : PageModel
 {
-    public class IndexModel : PageModel
+    private readonly BrandAndProductDbContext _context;
+
+    public IndexModel(BrandAndProductDbContext context)
     {
-        private readonly BackOffice.DataAccess.BrandAndProductDbContext _context;
+        _context = context;
+    }
 
-        public IndexModel(BackOffice.DataAccess.BrandAndProductDbContext context)
+    public IList<BrandEntity> BrandEntity { get;set; } = default!;
+
+    public async Task OnGetAsync()
+    {
+        if (_context.Brands != null)
         {
-            _context = context;
-        }
-
-        public IList<BrandEntity> BrandEntity { get;set; } = default!;
-
-        public async Task OnGetAsync()
-        {
-            if (_context.Brands != null)
-            {
-                BrandEntity = await _context.Brands.ToListAsync();
-            }
+            BrandEntity = await _context.Brands.ToListAsync();
         }
     }
 }

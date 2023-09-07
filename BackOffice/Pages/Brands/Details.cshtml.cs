@@ -20,7 +20,6 @@ public class DetailsModel : PageModel
     public async Task<IActionResult> OnGetAsync(int? id)
     {
         if (id == null)
-        {
             return NotFound();
 
         var brandEntity = await _context.Brands.FirstOrDefaultAsync(m => m.Id == id);

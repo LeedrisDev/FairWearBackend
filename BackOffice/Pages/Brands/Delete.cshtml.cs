@@ -10,8 +10,7 @@ namespace BackOffice.Pages.Brands;
 public class DeleteModel : PageModel
 {
     /// <summary>Property to bind the BrandEntity for deletion.</summary>
-    [BindProperty]
-    public BrandEntity BrandEntity { get; set; } = default!;
+    [BindProperty] public BrandEntity BrandEntity { get; set; } = default!;
 
     private readonly BrandAndProductDbContext _context;
 
@@ -24,7 +23,10 @@ public class DeleteModel : PageModel
 
     /// <summary>HTTP GET request handler for displaying the delete confirmation page.</summary>
     /// <param name="id">The ID of the BrandEntity to delete.</param>
-    /// <returns>If the ID is not provided or the BrandEntity is not found, returns a "Not Found" result; otherwise, displays the delete confirmation page.</returns>
+    /// <returns>
+    /// If the ID is not provided or the BrandEntity is not found, returns a "Not Found" result;
+    /// otherwise, displays the delete confirmation page.
+    /// </returns>
     public async Task<IActionResult> OnGetAsync(int? id)
     {
         if (id == null)

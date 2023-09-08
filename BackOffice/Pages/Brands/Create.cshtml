@@ -6,6 +6,8 @@
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
+<link rel="stylesheet" href="~/css/form_ticket.css"/>
+
 <h1>Create Brand</h1>
 
 <hr />
@@ -57,7 +59,7 @@
                 </div>
             </div>
             
-            <div class="form-group">
+            <div class="form-group mt-3">
                 <label class="control-label">Rating description</label>
                 <textarea asp-for="BrandEntity.RatingDescription" class="form-control" rows="10"></textarea>
                 <span asp-validation-for="BrandEntity.RatingDescription" class="text-danger"></span>
@@ -67,19 +69,30 @@
             
             <!-- Diverse -->
             <h3>Diverse</h3>
-            <div class="form-group">
-                <label asp-for="BrandEntity.Categories" class="control-label"></label>
-                <input asp-for="BrandEntity.Categories" class="form-control" />
-                <span asp-validation-for="BrandEntity.Categories" class="text-danger"></span>
+            
+            <!-- Display created tickets -->
+            <div id="categories-list">
+                <!-- The created tickets will be displayed here -->
             </div>
             <div class="form-group">
+                <label class="control-label">Categories</label>
+                <div class="input-group">
+                    <input asp-for="BrandEntity.Categories" class="form-control" id="categories-input" style="max-width: 350px"/>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-primary ms-3" id="add-category">Add</button>
+                    </div>
+                </div>
+                <span asp-validation-for="BrandEntity.Categories" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mt-3">
                 <label asp-for="BrandEntity.Ranges" class="control-label"></label>
                 <input asp-for="BrandEntity.Ranges" class="form-control" />
                 <span asp-validation-for="BrandEntity.Ranges" class="text-danger"></span>
             </div>
             
             <!-- Submit Button -->
-            <div class="form-group">
+            <div class="form-group mt-3">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
@@ -95,3 +108,5 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script src="~/js/form_ticket.js"></script>

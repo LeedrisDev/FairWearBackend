@@ -1,0 +1,37 @@
+/* Style for the ticket container */
+.category {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px; /* Adjust the margin as needed */
+}
+
+/* Style for the colored rectangle */
+.category-rectangle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: lightgreen; /* Set the background color to your desired color */
+    opacity: 0.4; /* Set the opacity to desired value */
+    margin-right: 10px; /* Adjust the margin as needed */
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+/* Style for the text */
+.category-text {
+    color: black; /* Set the text color */
+}
+
+/* Style for the delete button */
+.delete-category {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+/* Style the cross icon */
+.delete-category::before {
+    content: '×'; /* Use '×' symbol for the cross */
+    font-size: 20px; /* Adjust the size as needed */
+    color: rgb(128, 128, 128); /* Set the color to gray */
+}

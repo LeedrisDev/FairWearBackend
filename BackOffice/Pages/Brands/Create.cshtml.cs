@@ -36,6 +36,14 @@ public class CreateModel : PageModel
     {
         if (!ModelState.IsValid)
             return Page(); // Return the current page with validation errors
+        
+        // Check if a brand with the same name already exists in the database
+        if (_context.Brands.Any(b => b.Name.ToLower() == BrandEntity.Name.ToLower()))
+        {
+            // If a brand with the same name exists, add a model error
+            ModelState.AddModelError(string.Empty, "Brand with the same name already exists.");
+            return Page(); // Return the current page with the alert
+        }
 
         // Add the BrandEntity to the database
         _context.Brands.Add(BrandEntity);

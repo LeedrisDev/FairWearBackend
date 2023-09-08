@@ -9,10 +9,17 @@
 <h1>Create Brand</h1>
 
 <hr />
+
+@if (Model.ModelState.ErrorCount > 0)
+{
+    <div class="alert alert-danger">
+        <strong>Error:</strong> @Model.ModelState.Values.SelectMany(v => v.Errors).FirstOrDefault()?.ErrorMessage
+    </div>
+}
+
 <div class="row">
     <div class="col-md-4">
         <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="BrandEntity.Name" class="control-label"></label>
                 <input asp-for="BrandEntity.Name" class="form-control" />

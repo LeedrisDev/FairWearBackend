@@ -1,4 +1,6 @@
-﻿namespace BackOffice.DataAccess.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BackOffice.DataAccess.Entities;
 
 /// <summary>Class representing a Brand in database.</summary>
 public class BrandEntity
@@ -10,12 +12,15 @@ public class BrandEntity
     public string Country { get; set; } = null!;
 
     /// <summary>The EnvironmentRating of the Brand.</summary>
+    [Range(0, 5, ErrorMessage = "Value must be between 0 and 5")]
     public int EnvironmentRating { get; set; }
 
     /// <summary>The PeopleRating of the Brand.</summary>
+    [Range(0, 5, ErrorMessage = "Value must be between 0 and 5")]
     public int PeopleRating { get; set; }
 
     /// <summary>The AnimalRating of the Brand.</summary>
+    [Range(0, 5, ErrorMessage = "Value must be between 0 and 5")]
     public int AnimalRating { get; set; }
 
     /// <summary>The RatingDescription of the Brand.</summary>

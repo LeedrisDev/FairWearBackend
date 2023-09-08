@@ -1,25 +1,35 @@
 \c brand_and_product_db;
 
-DROP TABLE IF EXISTS brands;
-DROP TABLE IF EXISTS products;
-
-CREATE TABLE brands (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR NOT NULL UNIQUE,
-  country VARCHAR NOT NULL,
-  environment_rating INTEGER NOT NULL,
-  people_rating INTEGER NOT NULL,
-  animal_rating INTEGER NOT NULL,
-  rating_description VARCHAR NOT NULL,
-  categories VARCHAR[] NOT NULL,
-  ranges VARCHAR[] NOT NULL
+create table if not exists brands
+(
+    id                 serial,
+    name               varchar             not null,
+    country            varchar             not null,
+    environment_rating integer             not null,
+    people_rating      integer             not null,
+    animal_rating      integer             not null,
+    rating_description varchar             not null,
+    categories         character varying[] not null,
+    ranges             character varying[] not null,
+    primary key (id),
+    unique (name),
+    constraint check_environment_rating
+        check ((environment_rating >= 0) AND (environment_rating <= 5)),
+    constraint check_people_rating
+        check ((people_rating >= 0) AND (people_rating <= 5)),
+    constraint check_animal_rating
+        check ((animal_rating >= 0) AND (animal_rating <= 5))
 );
 
-CREATE TABLE products (
-  id SERIAL PRIMARY KEY,
-  upc_code VARCHAR NOT NULL,
-  name VARCHAR NOT NULL,
-  category VARCHAR,
-  ranges VARCHAR[],
-  brand_id INTEGER NOT NULL REFERENCES brands(id) ON DELETE CASCADE
+create table if not exists products
+(
+    id       serial,
+    upc_code varchar not null,
+    name     varchar not null,
+    category varchar,
+    ranges   character varying[],
+    brand_id integer not null,
+    primary key (id),
+    foreign key (brand_id) references brands
+        on delete cascade
 );

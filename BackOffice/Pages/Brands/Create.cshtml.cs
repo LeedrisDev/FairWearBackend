@@ -2,6 +2,7 @@ using BackOffice.DataAccess;
 using BackOffice.DataAccess.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 
 namespace BackOffice.Pages.Brands;
 
@@ -44,6 +45,18 @@ public class CreateModel : PageModel
             ModelState.AddModelError(string.Empty, "Brand with the same name already exists.");
             return Page(); // Return the current page with the alert
         }
+
+        var categories = JsonConvert.DeserializeObject<List<string>>(BrandEntity.Categories.First());
+        var ranges = JsonConvert.DeserializeObject<List<string>>(BrandEntity.Ranges.First());
+
+        if (categories == null || ranges == null)
+        {
+            ModelState.AddModelError(string.Empty, "Categories and ranges cannot be empty.");
+            return Page();
+        }
+
+        BrandEntity.Categories = categories;
+        BrandEntity.Ranges = ranges;
 
         // Add the BrandEntity to the database
         _context.Brands.Add(BrandEntity);

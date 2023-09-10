@@ -5,6 +5,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const addCategoryButton = document.getElementById("add-category");
     const categories = []; // Array to store created categories
 
+    const rangesInput = document.getElementById("ranges-input");
+    const rangesList = document.getElementById("ranges-list");
+    const addRangeButton = document.getElementById("add-range");
+    const ranges = []; // Array to store created ranges
+
     function addCategory() {
         const categoryText = categoriesInput.value.trim();
         if (categoryText !== "") {
@@ -18,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Create the text element
             const categoryTextElement = document.createElement("span");
-            categoryTextElement.className = "category-text margin-y-0";
+            categoryTextElement.className = "category-text";
             categoryTextElement.textContent = categoryText;
             categoryRectangle.appendChild(categoryTextElement);
 
@@ -40,19 +45,66 @@ document.addEventListener("DOMContentLoaded", function () {
             // Add the ticket to the list
             categoriesList.appendChild(categoryElement);
             categoriesInput.value = "";
+            categories.push(categoryText);
+
+            console.warn(categories)
         }
     }
 
-    // Handle "Add" button click
+    function addRange() {
+        const rangeText = rangesInput.value.trim();
+        if (rangeText !== "") {
+            const rangeElement = document.createElement("div");
+            rangeElement.className = "range";
+
+            // Create the colored rectangle element
+            const rangeRectangle = document.createElement("div");
+            rangeRectangle.className = "range-rectangle";
+            rangeElement.appendChild(rangeRectangle);
+
+            // Create the text element
+            const rangeTextElement = document.createElement("span");
+            rangeTextElement.className = "range-text margin-y-0";
+            rangeTextElement.textContent = rangeText;
+            rangeRectangle.appendChild(rangeTextElement);
+
+            // Create the delete button
+            const deleteButton = document.createElement("button");
+            deleteButton.className = "delete-range";
+            rangeRectangle.appendChild(deleteButton);
+            deleteButton.addEventListener("click", function () {
+                // Remove the range element from the DOM
+                rangeElement.remove();
+
+                // Remove the range text from the ranges array
+                const rangeIndex = ranges.indexOf(rangeText);
+                if (rangeIndex !== -1) {
+                    ranges.splice(rangeIndex, 1);
+                }
+            });
+
+            // Add the range to the list
+            rangesList.appendChild(rangeElement);
+            rangesInput.value = "";
+            ranges.push(rangeText);
+        }
+    }
+
+    // Handle "Add" button click for categories
     addCategoryButton.addEventListener("click", addCategory);
+
+    // Handle "Add" button click for ranges
+    addRangeButton.addEventListener("click", addRange);
 
     // Handle form submission
     document.querySelector("form").addEventListener("submit", function () {
-        // Transform the categories array into a JSON string and store it in a hidden input field
-        const categoriesInput = document.createElement("input");
-        categoriesInput.type = "hidden";
-        categoriesInput.name = "BrandEntity.Categories";
-        categoriesInput.value = JSON.stringify(categories);
-        this.appendChild(categoriesInput); // Append the hidden input to the form
+        // Transform the categories and ranges arrays into JSON strings and store them in hidden input fields
+        if (categories.length > 0) {
+            categoriesInput.value = JSON.stringify(categories);
+        }
+        
+        if (ranges.length > 0) {
+            rangesInput.value = JSON.stringify(ranges);
+        }
     });
 });

@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using AutoMapper;
 using BrandAndProduct.Service.DataAccess;
+using BrandAndProduct.Service.DataAccess.Filters;
 using BrandAndProduct.Service.DataAccess.Repositories;
 using BrandAndProduct.Service.Models.Dto;
 using BrandAndProduct.Service.Models.Entity;
@@ -63,7 +64,11 @@ public class ProductRepositoryTester
         var repository = new ProductRepository(_context, _mapper);
 
         // Act
-        var result = await repository.GetAllAsync();
+        var filterDict = new Dictionary<string, string>();
+        var genericFilter = new GenericFilterFactory<IFilter>();
+        var filter = genericFilter.CreateFilter(filterDict);
+
+        var result = await repository.GetAllAsync(filter);
 
         // Assert
         result.Should().NotBeNull();

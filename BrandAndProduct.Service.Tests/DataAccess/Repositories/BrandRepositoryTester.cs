@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using AutoMapper;
 using BrandAndProduct.Service.DataAccess;
+using BrandAndProduct.Service.DataAccess.Filters;
 using BrandAndProduct.Service.DataAccess.Repositories;
 using BrandAndProduct.Service.Models.Dto;
 using BrandAndProduct.Service.Models.Entity;
@@ -69,7 +70,10 @@ public class BrandRepositoryTester
         var repository = new BrandRepository(_context, _mapper);
 
         // Act
-        var result = await repository.GetAllAsync();
+        var filterDict = new Dictionary<string, string>();
+        var genericFilter = new GenericFilterFactory<IFilter>();
+        var filter = genericFilter.CreateFilter(filterDict);
+        var result = await repository.GetAllAsync(filter);
 
         // Assert
         result.Should().NotBeNull();
@@ -413,6 +417,7 @@ public class BrandRepositoryTester
 
         _context.Brands.AddRange(brands);
         await _context.SaveChangesAsync();
+
         var repository = new BrandRepository(_context, _mapper);
 
         var expectedObject = _mapper.Map<BrandDto>(brands.First());
@@ -420,7 +425,6 @@ public class BrandRepositoryTester
         var result = await repository.GetBrandByNameAsync(brandName);
 
         // Assert
-        // result.Should().BeEquivalentTo(expectedResponse);
         result.Should().NotBeNull();
         result.Status.Should().Be(HttpStatusCode.OK);
         result.Object.Should().NotBeNull();

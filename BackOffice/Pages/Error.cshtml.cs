@@ -14,15 +14,6 @@ public class ErrorModel : PageModel
     /// <summary>Gets a boolean value indicating whether the request identifier is available and not empty.</summary>
     public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
-    private readonly ILogger<ErrorModel> _logger;
-
-    /// <summary>Constructor to initialize the ErrorModel with a logger.</summary>
-    /// <param name="logger">The logger for the ErrorModel.</param>
-    public ErrorModel(ILogger<ErrorModel> logger)
-    {
-        _logger = logger;
-    }
-
     /// <summary>HTTP GET request handler for the error page.</summary>
     public void OnGet()
     {

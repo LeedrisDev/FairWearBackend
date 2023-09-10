@@ -69,8 +69,8 @@ public class BrandBusiness : IBrandBusiness
             .First()
             .InnerText
             .Trim();
-
-        Console.WriteLine(brandName);
+        
+        brandName = WebUtility.HtmlDecode(brandName);
 
         return brandName;
     }

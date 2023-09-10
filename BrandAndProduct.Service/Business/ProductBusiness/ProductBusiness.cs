@@ -22,6 +22,7 @@ public class ProductBusiness : IProductBusiness
     /// <param name="brandRepository"></param>
     /// <param name="productData"></param>
     /// <param name="brandData"></param>
+    /// <param name="filterFactory"></param>
     public ProductBusiness(IProductRepository productRepository, IBrandRepository brandRepository,
         IProductData productData, IBrandData brandData, IFilterFactory<IFilter> filterFactory)
     {

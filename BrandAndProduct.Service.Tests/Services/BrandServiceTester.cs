@@ -120,7 +120,6 @@ public class BrandServiceTester
             .ReturnsAsync(brandList);
 
         var request = new BrandFilterList();
-        //
 
         var responseStream = new TestServerStreamWriter<BrandResponse>(_context);
 

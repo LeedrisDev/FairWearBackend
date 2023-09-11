@@ -18,12 +18,12 @@ namespace BrandAndProduct.Service.Tests.Services;
 [TestClass]
 public class BrandServiceTester
 {
-    private Mock<IBrandBusiness> _brandBusinessMock;
-    private BrandService _brandService;
-    private CancellationTokenSource _cancellationTokenSource;
-    private ServerCallContext _context;
-    private Mock<ILogger<BrandService>> _logger;
-    private IMapper _mapper;
+    private Mock<IBrandBusiness> _brandBusinessMock = null!;
+    private BrandService _brandService = null!;
+    private CancellationTokenSource _cancellationTokenSource = null!;
+    private ServerCallContext _context = null!;
+    private Mock<ILogger<BrandService>> _logger = null!;
+    private IMapper _mapper = null!;
 
     [TestInitialize]
     public void Initialize()
@@ -142,7 +142,7 @@ public class BrandServiceTester
     }
 
     [TestMethod]
-    public async Task GetAllBrandsAsync_ReturnsErrorStatusCode_WhenBrandBusinessFails()
+    public void GetAllBrandsAsync_ReturnsErrorStatusCode_WhenBrandBusinessFails()
     {
         // Arrange
         var businessResult = new ProcessingStatusResponse<IEnumerable<BrandDto>>()
@@ -167,8 +167,6 @@ public class BrandServiceTester
     public async Task GetBrandByIdAsync_ReturnsOk_WhenBrandExists()
     {
         // Arrange
-        int brandId = 1;
-
         var businessResponse = new ProcessingStatusResponse<BrandDto>()
         {
             Object = new BrandDto()
@@ -224,7 +222,7 @@ public class BrandServiceTester
         // Act
         try
         {
-            var result = await _brandService.GetBrandByIdAsync(request, _context);
+            await _brandService.GetBrandByIdAsync(request, _context);
         }
         catch (RpcException e)
         {
@@ -255,7 +253,7 @@ public class BrandServiceTester
         // Act
         try
         {
-            var result = await _brandService.GetBrandByIdAsync(request, _context);
+            await _brandService.GetBrandByIdAsync(request, _context);
         }
         catch (RpcException e)
         {
@@ -347,7 +345,7 @@ public class BrandServiceTester
         // Act
         try
         {
-            var result = await _brandService.CreateBrandAsync(brandRequest, _context);
+            await _brandService.CreateBrandAsync(brandRequest, _context);
         }
         catch (RpcException e)
         {
@@ -431,7 +429,7 @@ public class BrandServiceTester
         // Act
         try
         {
-            var result = await _brandService.UpdateBrandAsync(brand, _context);
+            await _brandService.UpdateBrandAsync(brand, _context);
         }
         catch (RpcException e)
         {
@@ -467,7 +465,7 @@ public class BrandServiceTester
         // Act
         try
         {
-            var result = await _brandService.UpdateBrandAsync(brand, _context);
+            await _brandService.UpdateBrandAsync(brand, _context);
         }
         catch (RpcException e)
         {
@@ -477,7 +475,7 @@ public class BrandServiceTester
     }
 
     [TestMethod]
-    public async Task DeleteBrandAsync_ReturnsNoContentResult_WhenBrandIsDeleted()
+    public void DeleteBrandAsync_ReturnsNoContentResult_WhenBrandIsDeleted()
     {
         // Arrange
         const int brandId = 1;
@@ -538,7 +536,7 @@ public class BrandServiceTester
         // Act
         try
         {
-            var result = await _brandService.DeleteBrandAsync(request, _context);
+            await _brandService.DeleteBrandAsync(request, _context);
         }
         catch (RpcException e)
         {
@@ -566,7 +564,7 @@ public class BrandServiceTester
         // Act
         try
         {
-            var result = await _brandService.DeleteBrandAsync(request, _context);
+            await _brandService.DeleteBrandAsync(request, _context);
         }
         catch (RpcException e)
         {
@@ -580,7 +578,6 @@ public class BrandServiceTester
     {
         // Arrange
         var brandName = "BrandName";
-        var brandRequest = new BrandRequest { Name = brandName };
 
         var brandResponse = new BrandResponse
         {
@@ -634,7 +631,6 @@ public class BrandServiceTester
     {
         // Arrange
         var brandName = "BrandName";
-        var brandRequest = new BrandRequest { Name = brandName };
 
         var businessResult = new ProcessingStatusResponse<BrandDto>()
         {
@@ -652,7 +648,7 @@ public class BrandServiceTester
         // Act
         try
         {
-            var result = await _brandService.GetBrandByNameAsync(request, _context);
+            await _brandService.GetBrandByNameAsync(request, _context);
         }
         catch (RpcException e)
         {
@@ -667,7 +663,6 @@ public class BrandServiceTester
     {
         // Arrange
         var brandName = "BrandName";
-        var brandRequest = new BrandRequest { Name = brandName };
 
         var businessResult = new ProcessingStatusResponse<BrandDto>()
         {
@@ -686,7 +681,7 @@ public class BrandServiceTester
         // Act
         try
         {
-            var result = await _brandService.GetBrandByNameAsync(request, _context);
+            await _brandService.GetBrandByNameAsync(request, _context);
         }
         catch (RpcException e)
         {

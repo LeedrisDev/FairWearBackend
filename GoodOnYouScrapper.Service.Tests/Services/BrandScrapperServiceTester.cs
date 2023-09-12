@@ -94,7 +94,7 @@ public class BrandScrapperServiceTester
         // Act
         try
         {
-            var response = await _brandScrapperService.GetBrand(brand, _context);
+            await _brandScrapperService.GetBrand(brand, _context);
         }
         catch (RpcException e)
         {
@@ -120,7 +120,7 @@ public class BrandScrapperServiceTester
         // Act
         try
         {
-            var response = await _brandScrapperService.GetBrand(brand, _context);
+            await _brandScrapperService.GetBrand(brand, _context);
         }
         catch (RpcException e)
         {

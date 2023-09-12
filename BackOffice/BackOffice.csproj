@@ -6,6 +6,9 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <ExcludeFromCodeCoverage>
+            wwwroot/**
+        </ExcludeFromCodeCoverage>
     </PropertyGroup>
 
     <ItemGroup>

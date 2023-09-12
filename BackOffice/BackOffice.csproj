@@ -28,5 +28,7 @@
 
     <ItemGroup>
       <Folder Include="Pages\Products\" />
+      <Folder Include="wwwroot\lib\font-awesome\css\" />
+      <Folder Include="wwwroot\lib\font-awesome\js\" />
     </ItemGroup>
 </Project>

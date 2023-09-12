@@ -170,11 +170,11 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./FairWearGateway.API/Dockerfile
+          file: FairWearGateway.API/Dockerfile
           push: true
           tags: |
-            registry.leedrisdev.com/gateway_api:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}
-            registry.leedrisdev.com/gateway_api:latest
+            registry.leedrisdev.com/fairwear_gateway_api:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}
+            registry.leedrisdev.com/fairwear_gateway_api:latest
 
       - uses: sarisia/actions-status-discord@v1
         if: always()

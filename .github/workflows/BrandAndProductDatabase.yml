@@ -37,7 +37,7 @@
           uses: docker/build-push-action@v4
           with:
             context: .
-            file: ./GoodOnYouScrapper.Service/Dockerfile
+            file: GoodOnYouScrapper.Service/Dockerfile
             push: true
             tags: |
               registry.leedrisdev.com/fairwear_brand_and_product_db:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}

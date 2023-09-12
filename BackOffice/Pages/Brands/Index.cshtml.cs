@@ -24,6 +24,9 @@ public class IndexModel : PageModel
     /// <returns>Populates the BrandEntity property with a list of BrandEntities from the database.</returns>
     public async Task OnGetAsync()
     {
-        BrandEntity = await _context.Brands.ToListAsync();
+        BrandEntity = await _context
+            .Brands
+            .OrderBy(e => e.Name.ToLower())
+            .ToListAsync();
     }
 }

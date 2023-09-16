@@ -1,4 +1,5 @@
 using BackOffice.DataAccess;
+using BackOffice.DataAccess.Entities;
 using BackOffice.Utils;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,5 +13,14 @@ public abstract class DependencyInjectionConfiguration
     {
         services.AddDbContext<BrandAndProductDbContext>(options =>
             options.UseNpgsql(AppConstants.Database.BrandAndProductConnectionString));
+        // TODO: Pass this connection string as an environment variable.
+        services.AddDbContext<AuthenticationDbContext>(options =>
+            options.UseNpgsql("User ID=sa;Password=sa;Host=localhost;Port=5433;Database=authentication_db;"));
+        
+        services.AddDefaultIdentity<UserEntity>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+            })
+            .AddEntityFrameworkStores<AuthenticationDbContext>();
     }
 }

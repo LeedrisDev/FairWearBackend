@@ -15,22 +15,6 @@ services:
       - fairwear_internal_network
 
 
-  brand_and_product_db:
-    container_name: brand_and_product_db
-    build:
-      context: .
-      dockerfile: Databases/BrandsAndProductsDatabase/Dockerfile
-    restart: on-failure
-    environment:
-      - POSTGRES_USER=sa
-      - POSTGRES_PASSWORD=sa
-      - POSTGRES_DB=brand_and_product_db
-    ports:
-      - "5432:5432"
-    networks:
-      - fairwear_internal_network
-
-
   brand_and_product_service:
     container_name: brand_and_product_service
     build:
@@ -75,6 +59,39 @@ services:
       - "8083:80"
     networks:
       - fairwear_internal_network
+
+
+  brand_and_product_db:
+    container_name: brand_and_product_db
+    build:
+      context: .
+      dockerfile: Databases/BrandsAndProductsDatabase/Dockerfile
+    restart: on-failure
+    environment:
+      - POSTGRES_USER=sa
+      - POSTGRES_PASSWORD=sa
+      - POSTGRES_DB=brand_and_product_db
+    ports:
+      - "5432:5432"
+    networks:
+      - fairwear_internal_network
+      
+      
+  authentication_db:
+    container_name: authentication_db
+    build:
+      context: .
+      dockerfile: Databases/AuthenticationDatabase/Dockerfile
+    restart: on-failure
+    environment:
+      - POSTGRES_USER=sa
+      - POSTGRES_PASSWORD=sa
+      - POSTGRES_DB=authentication_db
+    ports:
+      - "5433:5432"
+    networks:
+      - fairwear_internal_network
+        
 
 networks:
   fairwear_internal_network:

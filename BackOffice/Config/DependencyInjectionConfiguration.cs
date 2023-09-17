@@ -22,5 +22,14 @@ public abstract class DependencyInjectionConfiguration
                 options.SignIn.RequireConfirmedAccount = false;
             })
             .AddEntityFrameworkStores<AuthenticationDbContext>();
+
+        services.ConfigureApplicationCookie(options =>
+        {
+            options.LoginPath = new PathString("/Account/Login");
+            options.LogoutPath = new PathString("/Account/Logout");
+            options.Cookie.Name = "BackOfficeCookie";
+            options.Cookie.HttpOnly = true;
+            options.ExpireTimeSpan = TimeSpan.FromMinutes(480);
+        });
     }
 }

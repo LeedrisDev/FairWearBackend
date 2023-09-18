@@ -140,8 +140,8 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
                 var convertedValue = Convert.ChangeType(equalFilter.Value.ToLower(), property.Type);
 
                 var filterValue = Expression.Constant(convertedValue);
-                MethodInfo startsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) });
-                MethodInfo toLowerMethod = typeof(string).GetMethod("ToLower", new Type[] { });
+                MethodInfo startsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) })!;
+                MethodInfo toLowerMethod = typeof(string).GetMethod("ToLower", new Type[] { })!;
 
                 var toLowerExpression = Expression.Call(property, toLowerMethod);
 

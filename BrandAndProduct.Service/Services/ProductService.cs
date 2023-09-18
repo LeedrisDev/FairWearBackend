@@ -36,6 +36,7 @@ public class ProductService : Protos.ProductService.ProductServiceBase
 
         if (productList.Status != HttpStatusCode.OK)
         {
+            _logger.LogError("Error while retrieving products: {ErrorMessage}", productList.ErrorMessage);
             throw new RpcException(new Status(StatusCode.Internal, productList.ErrorMessage));
         }
 
@@ -50,6 +51,9 @@ public class ProductService : Protos.ProductService.ProductServiceBase
     {
         var product = await _productBusiness.GetProductByIdAsync(request.Id);
 
+        if (product.Status != HttpStatusCode.OK)
+            _logger.LogError("Error while retrieving product: {ErrorMessage}", product.ErrorMessage);
+
         return product.Status switch
         {
             HttpStatusCode.NotFound => throw new RpcException(new Status(StatusCode.NotFound, product.ErrorMessage)),
@@ -63,6 +67,9 @@ public class ProductService : Protos.ProductService.ProductServiceBase
     {
         var product = await _productBusiness.GetProductByUpcAsync(request.UpcCode);
 
+        if (product.Status != HttpStatusCode.OK)
+            _logger.LogError("Error while retrieving product: {ErrorMessage}", product.ErrorMessage);
+
         return product.Status switch
         {
             HttpStatusCode.NotFound => throw new RpcException(new Status(StatusCode.NotFound, product.ErrorMessage)),
@@ -75,6 +82,9 @@ public class ProductService : Protos.ProductService.ProductServiceBase
     {
         var createdProduct = await _productBusiness.CreateProductAsync(_mapper.Map<ProductDto>(request));
 
+        if (createdProduct.Status != HttpStatusCode.OK)
+            _logger.LogError("Error while creating product: {ErrorMessage}", createdProduct.ErrorMessage);
+
         return createdProduct.Status switch
         {
             HttpStatusCode.OK => _mapper.Map<ProductResponse>(createdProduct.Object),
@@ -85,6 +95,9 @@ public class ProductService : Protos.ProductService.ProductServiceBase
     public override async Task<ProductResponse> UpdateProductAsync(ProductResponse request, ServerCallContext context)
     {
         var updatedProduct = await _productBusiness.UpdateProductAsync(_mapper.Map<ProductDto>(request));
+
+        if (updatedProduct.Status != HttpStatusCode.OK)
+            _logger.LogError("Error while updating product: {ErrorMessage}", updatedProduct.ErrorMessage);
 
         return updatedProduct.Status switch
         {
@@ -98,6 +111,9 @@ public class ProductService : Protos.ProductService.ProductServiceBase
     public override async Task<Empty> DeleteProductAsync(ProductByIdRequest request, ServerCallContext context)
     {
         var product = await _productBusiness.GetProductByIdAsync(request.Id);
+
+        if (product.Status != HttpStatusCode.OK)
+            _logger.LogError("Error while deleting product: {ErrorMessage}", product.ErrorMessage);
 
         if (product.Status != HttpStatusCode.OK)
         {

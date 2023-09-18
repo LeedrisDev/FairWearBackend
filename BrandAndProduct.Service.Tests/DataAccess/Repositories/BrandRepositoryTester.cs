@@ -83,6 +83,100 @@ public class BrandRepositoryTester
     }
 
     [TestMethod]
+    public async Task GetFilter_ReturnsFilteredBrands()
+    {
+        // Arrange
+        var brands = new List<BrandEntity>
+        {
+            new BrandEntity
+            {
+                Id = 1,
+                Name = "Brand 1",
+                Country = "USA",
+                EnvironmentRating = 5,
+                PeopleRating = 4,
+                AnimalRating = 3,
+                RatingDescription = "Description 1",
+                Categories = new List<string> { "Category 1", "Category 2" },
+                Ranges = new List<string> { "Range 1", "Range 2" }
+            },
+            new BrandEntity
+            {
+                Id = 2,
+                Name = "Brand 2",
+                Country = "Canada",
+                EnvironmentRating = 4,
+                PeopleRating = 3,
+                AnimalRating = 2,
+                RatingDescription = "Description 2",
+                Categories = new List<string> { "Category 3", "Category 4" },
+                Ranges = new List<string> { "Range 3", "Range 4" }
+            },
+            new BrandEntity
+            {
+                Id = 3,
+                Name = "Brand 3",
+                Country = "USA",
+                EnvironmentRating = 5,
+                PeopleRating = 4,
+                AnimalRating = 3,
+                RatingDescription = "Description 1",
+                Categories = new List<string> { "Category 1", "Category 2" },
+                Ranges = new List<string> { "Range 1", "Range 2" }
+            },
+        };
+
+        var expected = new List<BrandEntity>
+        {
+            new BrandEntity
+            {
+                Id = 1,
+                Name = "Brand 1",
+                Country = "USA",
+                EnvironmentRating = 5,
+                PeopleRating = 4,
+                AnimalRating = 3,
+                RatingDescription = "Description 1",
+                Categories = new List<string> { "Category 1", "Category 2" },
+                Ranges = new List<string> { "Range 1", "Range 2" }
+            },
+            new BrandEntity
+            {
+                Id = 3,
+                Name = "Brand 3",
+                Country = "USA",
+                EnvironmentRating = 5,
+                PeopleRating = 4,
+                AnimalRating = 3,
+                RatingDescription = "Description 1",
+                Categories = new List<string> { "Category 1", "Category 2" },
+                Ranges = new List<string> { "Range 1", "Range 2" }
+            },
+        };
+        _context.Brands.AddRange(brands);
+        await _context.SaveChangesAsync();
+
+        var repository = new BrandRepository(_context, _mapper);
+
+        // Act
+        var filterDict = new Dictionary<string, string>()
+        {
+            { "Country", "USA" }
+        };
+
+        var genericFilter = new GenericFilterFactory<IFilter>();
+        var filter = genericFilter.CreateFilter(filterDict);
+        var result = await repository.GetAllAsync(filter);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Status.Should().Be(HttpStatusCode.OK);
+        result.Object.Should().NotBeNull();
+        result.Object.ToList().Should().BeEquivalentTo(expected);
+    }
+
+
+    [TestMethod]
     public async Task GetByIdAsync_ReturnsBrandWithMatchingId()
     {
         // Arrange

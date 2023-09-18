@@ -19,6 +19,7 @@ public class BrandBusiness : IBrandBusiness
     /// </summary>
     /// <param name="brandRepository"></param>
     /// <param name="brandData"></param>
+    /// <param name="filterFactory"></param>
     public BrandBusiness(IBrandRepository brandRepository, IBrandData brandData, IFilterFactory<IFilter> filterFactory)
     {
         _brandRepository = brandRepository;
@@ -74,7 +75,7 @@ public class BrandBusiness : IBrandBusiness
     {
         return await _brandRepository.DeleteAsync(id);
     }
-    
+
     private static string TreatBrandName(string brandName)
     {
         var treatedName = brandName

@@ -50,8 +50,7 @@ public class ProductBusiness : IProductBusiness
     /// <inheritdoc />
     public async Task<ProcessingStatusResponse<ProductInformationDto>> GetProductByUpcAsync(string upcCode)
     {
-        var filterDict = new Dictionary<string, string>();
-        filterDict.Add("UpcCode", upcCode);
+        var filterDict = new Dictionary<string, string> { { "UpcCode", upcCode } };
 
         var upcFilter = _filterFactory.CreateFilter(filterDict);
 

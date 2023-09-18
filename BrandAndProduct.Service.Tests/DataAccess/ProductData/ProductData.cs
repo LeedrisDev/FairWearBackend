@@ -30,7 +30,7 @@ public class ProductData
         var config = new MapperConfiguration(cfg => { cfg.AddProfile<AutoMapperProfiles>(); });
         _mapper = config.CreateMapper();
         _productData =
-            new BrandAndProduct.Service.DataAccess.ProductData.ProductData(_mockGrpcClientFactory.Object, _mapper);
+            new BrandAndProduct.Service.DataAccess.ProductData.ProductData(_mockGrpcClientFactory.Object);
     }
 
     [TestMethod]

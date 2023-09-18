@@ -1,5 +1,4 @@
 using System.Net;
-using AutoMapper;
 using BrandAndProduct.Service.Models;
 using Grpc.Core;
 using Grpc.Net.ClientFactory;
@@ -11,14 +10,11 @@ namespace BrandAndProduct.Service.DataAccess.ProductData;
 public class ProductData : IProductData
 {
     private readonly ProductScrapperService.ProductScrapperServiceClient _client;
-    private readonly IMapper _mapper;
-
 
     /// <summary>Constructor.</summary>
-    public ProductData(GrpcClientFactory grpcClientFactory, IMapper mapper)
+    public ProductData(GrpcClientFactory grpcClientFactory)
     {
         _client = grpcClientFactory.CreateClient<ProductScrapperService.ProductScrapperServiceClient>("BrandService");
-        _mapper = mapper;
     }
 
     /// <inheritdoc/>

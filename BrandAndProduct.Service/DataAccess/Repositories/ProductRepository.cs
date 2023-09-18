@@ -37,7 +37,7 @@ public class ProductRepository : Repository<ProductDto, ProductEntity>, IProduct
 
 
         Mapper.Map(entity, entityToUpdate);
-        if (brandEntity != null) entityToUpdate.BrandEntity = brandEntity;
+        entityToUpdate.BrandEntity = brandEntity;
 
         DbSet.Update(entityToUpdate);
         await Context.SaveChangesAsync();

@@ -6,56 +6,110 @@
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
+<link rel="stylesheet" href="~/css/form_ticket.css"/>
+
 <h1>Edit Brand</h1>
 
 <hr />
+
+@if (Model.ModelState.ErrorCount > 0)
+{
+    <div class="alert alert-danger">
+        <strong>Error:</strong> @Model.ModelState.Values.SelectMany(v => v.Errors).FirstOrDefault()?.ErrorMessage
+    </div>
+}
+
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8 mx-auto">
         <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="BrandEntity.Name" class="control-label"></label>
-                <input asp-for="BrandEntity.Name" class="form-control" />
-                <span asp-validation-for="BrandEntity.Name" class="text-danger"></span>
+            
+            @* General Information *@
+            <h3>General Information</h3>
+            <div class="form-group row justify-content-around">
+                @* Brand name *@
+                <div class="col-md-4">
+                    <label asp-for="BrandEntity.Name" class="control-label"></label>
+                    <input asp-for="BrandEntity.Name" class="form-control"/>
+                    <span asp-validation-for="BrandEntity.Name" class="text-danger"></span>
+                </div>
+                
+                @* Brand country *@
+                <div class="col-md-4">
+                    <label asp-for="BrandEntity.Country" class="control-label"></label>
+                    <input asp-for="BrandEntity.Country" class="form-control"/>
+                    <span asp-validation-for="BrandEntity.Country" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="BrandEntity.Country" class="control-label"></label>
-                <input asp-for="BrandEntity.Country" class="form-control" />
-                <span asp-validation-for="BrandEntity.Country" class="text-danger"></span>
+            
+            <hr/>
+            
+            @* Ratings *@
+            <h3>Ratings</h3>
+            <div class="form-group row justify-content-around">
+                @* Environmental rating *@
+                <div class="col-md-4">
+                    <label class="control-label">Environmental rating</label>
+                    <input asp-for="BrandEntity.EnvironmentRating" class="form-control"/>
+                    <span asp-validation-for="BrandEntity.EnvironmentRating" class="text-danger"></span>
+                </div>
+                
+                @* Human rating *@
+                <div class="col-md-4">
+                    <label class="control-label">Human rating</label>
+                    <input asp-for="BrandEntity.PeopleRating" class="form-control"/>
+                    <span asp-validation-for="BrandEntity.PeopleRating" class="text-danger"></span>
+                </div>
+                
+                @* Animal rating *@
+                <div class="col-md-4">
+                    <label class="control-label">Animal rating</label>
+                    <input asp-for="BrandEntity.AnimalRating" class="form-control"/>
+                    <span asp-validation-for="BrandEntity.AnimalRating" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="BrandEntity.EnvironmentRating" class="control-label"></label>
-                <input asp-for="BrandEntity.EnvironmentRating" class="form-control" />
-                <span asp-validation-for="BrandEntity.EnvironmentRating" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BrandEntity.PeopleRating" class="control-label"></label>
-                <input asp-for="BrandEntity.PeopleRating" class="form-control" />
-                <span asp-validation-for="BrandEntity.PeopleRating" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BrandEntity.AnimalRating" class="control-label"></label>
-                <input asp-for="BrandEntity.AnimalRating" class="form-control" />
-                <span asp-validation-for="BrandEntity.AnimalRating" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BrandEntity.RatingDescription" class="control-label"></label>
-                <input asp-for="BrandEntity.RatingDescription" class="form-control" />
+
+            @* Rating description *@
+            <div class="form-group mt-3">
+                <label class="control-label">Rating description</label>
+                <textarea asp-for="BrandEntity.RatingDescription" class="form-control" rows="10"></textarea>
                 <span asp-validation-for="BrandEntity.RatingDescription" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="BrandEntity.Categories" class="control-label"></label>
-                <input asp-for="BrandEntity.Categories" class="form-control" />
+            
+            <hr/>
+            
+            <h3>Diverse</h3>
+            
+            @* Categories *@
+            <div id="categories-list" class="mt-3"></div>
+            <div class="form-group mt-1">
+                <label class="control-label" for="categories-input">Categories</label>
+                <div class="input-group">
+                    <input type="hidden" asp-for="BrandEntity.Categories" id="categories-input-hidden" class="form-control" value="@string.Join(", ", Model.BrandEntity.Categories.Select(item => $"\"{item}\""))" />
+                    <input class="form-control" id="categories-input" style="max-width: 350px"/>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-primary ms-3" id="add-category">Add</button>
+                    </div>
+                </div>
                 <span asp-validation-for="BrandEntity.Categories" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="BrandEntity.Ranges" class="control-label"></label>
-                <input asp-for="BrandEntity.Ranges" class="form-control" />
+            
+            @* Ranges *@
+            <div id="ranges-list" class="mt-3"></div>
+            <div class="form-group mt-1">
+                <label class="control-label" for="ranges-input">Ranges</label>
+                <div class="input-group">
+                    <input type="hidden" asp-for="BrandEntity.Ranges" id="ranges-input-hidden" class="form-control" value="@string.Join(", ", Model.BrandEntity.Ranges.Select(item => $"\"{item}\""))" />
+                    <input class="form-control" id="ranges-input" style="max-width: 350px"/>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-primary ms-3" id="add-range">Add</button>
+                    </div>
+                </div>
                 <span asp-validation-for="BrandEntity.Ranges" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="BrandEntity.Id" />
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            
+            @* Submit Button *@
+            <div class="form-group mt-3">
+                <button type="submit" class="btn btn-primary">Save</button>
             </div>
         </form>
     </div>
@@ -68,3 +122,5 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script src="~/js/form_ticket.js"></script>

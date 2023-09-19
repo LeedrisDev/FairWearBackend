@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using BackOffice.Models;
 
 namespace BackOffice.DataAccess.Entities;
 
 /// <summary>Class representing a Brand in database.</summary>
-public class BrandEntity
+public class BrandEntity : IObjectWithId
 {
     /// <summary>The Id of the Brand.</summary>
     public long Id { get; set; }

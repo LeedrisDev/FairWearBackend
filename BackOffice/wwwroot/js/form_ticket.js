@@ -1,20 +1,23 @@
 // JavaScript to handle category creation, deletion, and form submission
 document.addEventListener("DOMContentLoaded", function () {
     const categoriesInput = document.getElementById("categories-input");
+    const categoriesInputHidden = document.getElementById("categories-input-hidden")
     const categoriesList = document.getElementById("categories-list");
     const addCategoryButton = document.getElementById("add-category");
-    const categories = []; // Array to store created categories
+    let categoriesInputHiddenValue = JSON.parse('[' +  categoriesInputHidden.value + ']');
+    let categories = []; // Array to store created categories
 
     const rangesInput = document.getElementById("ranges-input");
+    const rangesInputHidden = document.getElementById("ranges-input-hidden")
     const rangesList = document.getElementById("ranges-list");
     const addRangeButton = document.getElementById("add-range");
-    const ranges = []; // Array to store created ranges
-
+    let rangesInputHiddenValue = JSON.parse('[' + rangesInputHidden.value + ']');
+    let ranges = []; // Array to store created ranges
     function addCategory() {
         const categoryText = categoriesInput.value.trim();
         if (categoryText !== "") {
             const categoryElement = document.createElement("div");
-            categoryElement.className = "category";
+            categoryElement.className = "category d-inline-flex mb-2";
 
             // Create the colored rectangle element
             const categoryRectangle = document.createElement("div");
@@ -46,8 +49,6 @@ document.addEventListener("DOMContentLoaded", function () {
             categoriesList.appendChild(categoryElement);
             categoriesInput.value = "";
             categories.push(categoryText);
-
-            console.warn(categories)
         }
     }
 
@@ -55,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const rangeText = rangesInput.value.trim();
         if (rangeText !== "") {
             const rangeElement = document.createElement("div");
-            rangeElement.className = "range";
+            rangeElement.className = "range d-inline-flex mb-2";
 
             // Create the colored rectangle element
             const rangeRectangle = document.createElement("div");
@@ -89,6 +90,16 @@ document.addEventListener("DOMContentLoaded", function () {
             ranges.push(rangeText);
         }
     }
+    
+    for (let i = 0; i < categoriesInputHiddenValue.length; i++) {
+        categoriesInput.value = categoriesInputHiddenValue[i]
+        addCategory()
+    }
+    
+    for (let i = 0; i < rangesInputHiddenValue.length; i++) {
+        rangesInput.value = rangesInputHiddenValue[i]
+        addRange()
+    }
 
     // Handle "Add" button click for categories
     addCategoryButton.addEventListener("click", addCategory);
@@ -100,11 +111,11 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector("form").addEventListener("submit", function () {
         // Transform the categories and ranges arrays into JSON strings and store them in hidden input fields
         if (categories.length > 0) {
-            categoriesInput.value = JSON.stringify(categories);
+            categoriesInputHidden.value = JSON.stringify(categories);
         }
         
         if (ranges.length > 0) {
-            rangesInput.value = JSON.stringify(ranges);
+            rangesInputHiddenValue.value = JSON.stringify(ranges);
         }
     });
 });

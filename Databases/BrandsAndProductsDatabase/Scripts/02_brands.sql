@@ -332,14 +332,6 @@ Its animal rating is \'not good enough\'. There is no evidence it has a policy t
 
 OFF-WHITE is rated \'We avoid\' overall.
 ', '{Shirts,Skirts,Dresses,Pants,T-Shirts,Shorts}', '{Kids,Menswear,Womenswear}');
-INSERT INTO public.brands (id, name, country, environment_rating, people_rating, animal_rating, rating_description, categories, ranges) VALUES (28, '1083', 'France', 4, 3, 4, e'1083\'s environment rating is \'good\'. It uses a high proportion of eco-friendly materials including Global Organic Textile Standard (GOTS) cotton. It manufactures locally to reduce its carbon footprint. Its use of eco-friendly materials limits the amount of chemicals, water and wastewater used in production.
-
-Its labour rating is \'it\'s a start\'. Its final stage of production is undertaken in the France, a medium risk country for labour abuse. It traces most of its supply chain. There is no evidence it has a Code of Conduct. There is no evidence it ensures payment of a living wage in its supply chain.
-
-Its animal rating is \'good\'. It does not use fur, wool, down, exotic animal skin, exotic animal hair or angora. It uses leather.
-
-1083 is rated \'Good\' overall.
-', '{Denim,Pants,T-Shirts,Shorts,Sneakers}', '{Menswear,Womenswear}');
 INSERT INTO public.brands (id, name, country, environment_rating, people_rating, animal_rating, rating_description, categories, ranges) VALUES (23, 'AMIRI', 'United States', 1, 1, 2, e'AMIRI\'s environment rating is \'very poor\'. It does not publish sufficient relevant information about its environmental policies to give a higher rating. As a shopper you have the right to know how its production practices impact on the environment.
 
 Its labour rating is \'very poor\'. There is no evidence it has worker empowerment initiatives such as collective bargaining or rights to make a complaint. There is no evidence it implements practices to support diversity and inclusion in its supply chain. There is no evidence it ensures payment of a living wage in its supply chain. It traces some of its supply chain. It does not disclose adequate policies or safeguards to protect suppliers and workers in its supply chain from the impacts of COVID-19.
@@ -830,3 +822,11 @@ Its animal rating is \'not good enough\'. It has a general statement about minim
 
 Abercrombie & Fitch is rated \'Not good enough\' overall.
 ', '{Denim,Pants,Tops & Blouses,Shorts}', '{Kids,Menswear,Womenswear}');
+INSERT INTO public.brands (id, name, country, environment_rating, people_rating, animal_rating, rating_description, categories, ranges) VALUES (28, '1083', 'France', 4, 3, 4, e'1083\'s environment rating is \'good\'. It uses a high proportion of eco-friendly materials including Global Organic Textile Standard (GOTS) cotton. It manufactures locally to reduce its carbon footprint. Its use of eco-friendly materials limits the amount of chemicals, water and wastewater used in production.
+
+Its labour rating is \'it\'s a start\'. Its final stage of production is undertaken in the France, a medium risk country for labour abuse. It traces most of its supply chain. There is no evidence it has a Code of Conduct. There is no evidence it ensures payment of a living wage in its supply chain.
+
+Its animal rating is \'good\'. It does not use fur, wool, down, exotic animal skin, exotic animal hair or angora. It uses leather.
+
+1083 is rated \'Good\' overall.
+', '{Denim,Pants,T-Shirts,Shorts}', '{Menswear,Womenswear}');

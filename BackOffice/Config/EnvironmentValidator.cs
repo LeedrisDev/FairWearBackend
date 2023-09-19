@@ -14,6 +14,8 @@ public abstract class EnvironmentValidator
         varEnvDefined &= IsVarEnvDefined("BRAND_AND_PRODUCT_DB_USER");
         varEnvDefined &= IsVarEnvDefined("BRAND_AND_PRODUCT_DB_PASSWORD");
         varEnvDefined &= IsVarEnvDefined("BRAND_AND_PRODUCT_DB_DATABASE_NAME");
+
+        Console.WriteLine();
         
         if (!varEnvDefined)
             throw new Exception("The required environment variables are not defined.");

@@ -18,6 +18,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="12.0.1" />
+      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
       <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.11" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.11" />
@@ -34,6 +36,7 @@
 
     <ItemGroup>
       <Folder Include="Areas\Identity\" />
+      <Folder Include="Business\" />
       <Folder Include="Pages\Products\" />
       <Folder Include="wwwroot\lib\font-awesome\css\" />
       <Folder Include="wwwroot\lib\font-awesome\js\" />

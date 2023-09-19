@@ -31,5 +31,13 @@ public abstract class DependencyInjectionConfiguration
             options.Cookie.HttpOnly = true;
             options.ExpireTimeSpan = TimeSpan.FromMinutes(480);
         });
+        
+        services.AddAutoMapper(typeof(AutoMapperProfiles));
+        
+        // Repositories
+        services.AddTransient<IBrandRepository, BrandRepository>();
+
+        // Business 
+        services.AddTransient<IBrandBusiness, BrandBusiness>();
     }
 }

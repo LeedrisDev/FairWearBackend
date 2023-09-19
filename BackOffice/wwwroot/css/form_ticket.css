@@ -2,7 +2,6 @@
 .category, .range {
     display: flex;
     align-items: center;
-    margin-bottom: 5px; /* Adjust the margin as needed */
 }
 
 /* Style for the colored rectangle of a category */

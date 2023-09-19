@@ -1,5 +1,6 @@
 using BackOffice.DataAccess;
 using BackOffice.DataAccess.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
@@ -7,6 +8,7 @@ using Newtonsoft.Json;
 namespace BackOffice.Pages.Brands;
 
 /// <summary>PageModel class for creating a new BrandEntity.</summary>
+[Authorize]
 public class CreateModel : PageModel
 {
     /// <summary>Property to bind data from the form to this model.</summary>

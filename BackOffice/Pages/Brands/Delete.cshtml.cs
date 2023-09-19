@@ -1,5 +1,6 @@
 using BackOffice.DataAccess;
 using BackOffice.DataAccess.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BackOffice.Pages.Brands;
 
 /// <summary>PageModel class for deleting a BrandEntity.</summary>
+[Authorize]
 public class DeleteModel : PageModel
 {
     /// <summary>Property to bind the BrandEntity for deletion.</summary>

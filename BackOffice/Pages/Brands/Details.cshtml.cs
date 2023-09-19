@@ -1,5 +1,6 @@
 using BackOffice.DataAccess;
 using BackOffice.DataAccess.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BackOffice.Pages.Brands;
 
 /// <summary>PageModel class for displaying details of a BrandEntity.</summary>
+[Authorize]
 public class DetailsModel : PageModel
 {
     /// <summary>Property to store the BrandEntity to display details.</summary>

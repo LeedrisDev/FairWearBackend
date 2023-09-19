@@ -8,6 +8,7 @@ namespace BackOffice.Pages.Brands;
 
 
 /// <summary>PageModel class for editing a BrandEntity.</summary>
+[Authorize]
 public class EditModel : PageModel
 {
     /// <summary>Property to bind data from the form to this model.</summary>

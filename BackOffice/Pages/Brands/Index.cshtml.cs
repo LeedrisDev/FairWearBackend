@@ -1,11 +1,13 @@
 using BackOffice.DataAccess;
 using BackOffice.DataAccess.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackOffice.Pages.Brands;
 
 /// <summary>PageModel class for displaying a list of BrandEntities.</summary>
+[Authorize]
 public class IndexModel : PageModel
 {
     /// <summary>Property to store a list of BrandEntities to display.</summary>

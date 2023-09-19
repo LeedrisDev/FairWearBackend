@@ -29,7 +29,7 @@ public abstract class DependencyInjectionConfiguration
             options.LogoutPath = new PathString("/Account/Logout");
             options.Cookie.Name = "BackOfficeCookie";
             options.Cookie.HttpOnly = true;
-            options.ExpireTimeSpan = TimeSpan.FromMinutes(480);
+            options.ExpireTimeSpan = TimeSpan.FromHours(2);
         });
         
         services.AddAutoMapper(typeof(AutoMapperProfiles));

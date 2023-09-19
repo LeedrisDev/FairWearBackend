@@ -36,7 +36,6 @@
 
     <ItemGroup>
       <Folder Include="Areas\Identity\" />
-      <Folder Include="Business\" />
       <Folder Include="Pages\Products\" />
       <Folder Include="wwwroot\lib\font-awesome\css\" />
       <Folder Include="wwwroot\lib\font-awesome\js\" />

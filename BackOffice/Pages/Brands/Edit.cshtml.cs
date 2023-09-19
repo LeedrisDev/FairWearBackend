@@ -76,7 +76,7 @@ public class EditModel : PageModel
         return RedirectToPage("./Index");
     }
 
-    private bool BrandEntityExists(int id)
+    private bool BrandEntityExists(long id)
     {
         return _context.Brands.Any(e => e.Id == id);
     }

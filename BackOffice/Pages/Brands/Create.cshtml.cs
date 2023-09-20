@@ -1,9 +1,9 @@
-using BackOffice.DataAccess;
-using BackOffice.DataAccess.Entities;
+using System.Net;
+using BackOffice.Business.Interfaces;
+using BackOffice.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Newtonsoft.Json;
 
 namespace BackOffice.Pages.Brands;
 
@@ -12,21 +12,22 @@ namespace BackOffice.Pages.Brands;
 public class CreateModel : PageModel
 {
     /// <summary>Property to bind data from the form to this model.</summary>
-    [BindProperty] public BrandEntity BrandEntity { get; set; } = default!;
+    [BindProperty] public BrandModel Brand { get; set; } = default!;
+    
+    private readonly IBrandBusiness _brandBusiness;
 
-    private readonly BrandAndProductDbContext _context;
-
-    /// <summary>Constructor to initialize the CreateModel with the database context.</summary>
-    /// <param name="context">The database context for BrandEntity.</param>
-    public CreateModel(BrandAndProductDbContext context)
+    /// <summary>Initializes a new instance of the <see cref="CreateModel"/> class.</summary>
+    /// <param name="brandBusiness">The business service for managing brand entities.</param>
+    public CreateModel(IBrandBusiness brandBusiness)
     {
-        _context = context;
+        _brandBusiness = brandBusiness;
     }
 
     /// <summary>HTTP GET request handler for displaying the create form.</summary>
     /// <returns>The Razor Page for creating a new BrandEntity.</returns>
     public IActionResult OnGet()
     {
+        Brand = new BrandModel();
         return Page();
     }
 
@@ -40,33 +41,34 @@ public class CreateModel : PageModel
         if (!ModelState.IsValid)
             return Page(); // Return the current page with validation errors
         
-        // Check if a brand with the same name already exists in the database
-        if (_context.Brands.Any(b => b.Name.ToLower() == BrandEntity.Name.ToLower()))
+        var response = await _brandBusiness.FindByNameAsync(Brand.Name);
+
+        if (response.StatusCode != HttpStatusCode.NotFound)
         {
             // If a brand with the same name exists, add a model error
             ModelState.AddModelError(string.Empty, "Brand with the same name already exists.");
             return Page(); // Return the current page with the alert
         }
 
-        var categories = JsonConvert.DeserializeObject<List<string>>(BrandEntity.Categories.First());
-        var ranges = JsonConvert.DeserializeObject<List<string>>(BrandEntity.Ranges.First());
-
-        if (categories == null || ranges == null)
+        if (Brand.Categories.Count == 0)
         {
-            ModelState.AddModelError(string.Empty, "Categories and ranges cannot be empty.");
+            ModelState.AddModelError($"{nameof(Brand)}.{nameof(Brand.Categories)}", "Please add at least one category.");
             return Page();
         }
 
-        BrandEntity.Categories = categories;
-        BrandEntity.Ranges = ranges;
+        if (Brand.Ranges.Count == 0)
+        {
+            ModelState.AddModelError($"{nameof(Brand)}.{nameof(Brand.Ranges)}", "Please add at least one range.");
+            return Page();
+        }
 
-        // Add the BrandEntity to the database
-        _context.Brands.Add(BrandEntity);
+        var savedResponse = await _brandBusiness.InsertAsync(Brand);
 
-        // Save changes to the database asynchronously
-        await _context.SaveChangesAsync();
-
-        // Redirect to the Index page after successful creation
-        return RedirectToPage("./Index");
+        // Redirect to the Details page after successful creation
+        if (savedResponse.StatusCode == HttpStatusCode.Created)
+            return RedirectToPage("./Details", new { id = savedResponse.Entity.Id });
+        
+        ModelState.AddModelError(string.Empty, "Failed to save the brand.");
+        return Page();
     }
 }

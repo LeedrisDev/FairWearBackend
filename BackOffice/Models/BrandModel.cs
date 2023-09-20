@@ -37,4 +37,14 @@ public class BrandModel : IObjectWithId
 
     /// <summary>Gets or sets the product ranges associated with the brand.</summary>
     public List<string> Ranges { get; set; } = new List<string>();
+
+    /// <inheritdoc/>
+    public override string ToString()
+    {
+        return "{\n" + $"    Id: {Id}\n" + $"    Name: {Name}\n" + $"    Country: {Country}\n" +
+               $"    EnvironmentRating: {EnvironmentRating}\n" + $"    PeopleRating: {PeopleRating}\n" +
+               $"    AnimalRating: {AnimalRating}\n" + $"    RatingDescription: {RatingDescription}\n" +
+               $"    Categories: {string.Join(", ", Categories)}\n" + $"    Ranges: {string.Join(", ", Ranges)}\n" +
+               "}";
+    }
 }

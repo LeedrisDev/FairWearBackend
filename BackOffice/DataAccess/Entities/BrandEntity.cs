@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using BackOffice.Models;
+﻿using BackOffice.Models;
 
 namespace BackOffice.DataAccess.Entities;
 
@@ -37,4 +36,14 @@ public class BrandEntity : IObjectWithId
 
     /// <summary>The <see cref="ProductEntity"/>s of the Brand.</summary>
     public virtual IEnumerable<ProductEntity> Products { get; set; } = new List<ProductEntity>();
+
+    /// <inheritdoc/>
+    public override string ToString()
+    {
+        return "{\n" + $"    Id: {Id}\n" + $"    Name: {Name}\n" + $"    Country: {Country}\n" +
+               $"    EnvironmentRating: {EnvironmentRating}\n" + $"    PeopleRating: {PeopleRating}\n" +
+               $"    AnimalRating: {AnimalRating}\n" + $"    RatingDescription: {RatingDescription}\n" +
+               $"    Categories: {string.Join(", ", Categories)}\n" + $"    Ranges: {string.Join(", ", Ranges)}\n" +
+               "}";
+    }
 }

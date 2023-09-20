@@ -1,9 +1,9 @@
-using BackOffice.DataAccess;
-using BackOffice.DataAccess.Entities;
+using System.Net;
+using BackOffice.Business.Interfaces;
+using BackOffice.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 
 namespace BackOffice.Pages.Brands;
 
@@ -12,15 +12,15 @@ namespace BackOffice.Pages.Brands;
 public class DeleteModel : PageModel
 {
     /// <summary>Property to bind the BrandEntity for deletion.</summary>
-    [BindProperty] public BrandEntity BrandEntity { get; set; } = default!;
+    [BindProperty] public BrandModel Brand { get; set; } = default!;
 
-    private readonly BrandAndProductDbContext _context;
+    private readonly IBrandBusiness _brandBusiness;
 
-    /// <summary>Constructor to initialize the DeleteModel with the database context.</summary>
-    /// <param name="context">The database context for BrandEntity.</param>
-    public DeleteModel(BrandAndProductDbContext context)
+    /// <summary>Initializes a new instance of the <see cref="DeleteModel"/> class.</summary>
+    /// <param name="brandBusiness">The business service for managing brand entities.</param>
+    public DeleteModel(IBrandBusiness brandBusiness)
     {
-        _context = context;
+        _brandBusiness = brandBusiness;
     }
 
     /// <summary>HTTP GET request handler for displaying the delete confirmation page.</summary>
@@ -34,12 +34,12 @@ public class DeleteModel : PageModel
         if (id == null)
             return NotFound();
 
-        var brandEntity = await _context.Brands.FirstOrDefaultAsync(m => m.Id == id);
-
-        if (brandEntity == null)
+        var response = await _brandBusiness.FindByIdAsync(id.Value);
+        
+        if (response.StatusCode == HttpStatusCode.BadRequest)
             return NotFound();
 
-        BrandEntity = brandEntity;
+        Brand = response.Entity;
         return Page();
     }
 
@@ -54,18 +54,15 @@ public class DeleteModel : PageModel
         if (id == null)
             return NotFound();
 
-        var brandEntity = await _context.Brands.FindAsync(id);
-        if (brandEntity == null)
-            return RedirectToPage("./Index");
-
-        BrandEntity = brandEntity;
-
-        // Remove the BrandEntity from the database
-        _context.Brands.Remove(BrandEntity);
+        var response = await _brandBusiness.FindByIdAsync(id.Value);
         
-        // Save changes to the database asynchronously
-        await _context.SaveChangesAsync();
+        if (response.StatusCode == HttpStatusCode.BadRequest)
+            return NotFound();
 
+        Brand = response.Entity;
+
+        // Remove the brand from the database
+        await _brandBusiness.DeleteAsync(Brand.Id);
         return RedirectToPage("./Index");
     }
 }

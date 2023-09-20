@@ -1,8 +1,9 @@
-using BackOffice.DataAccess;
-using BackOffice.DataAccess.Entities;
+using System.Net;
+using BackOffice.Business.Interfaces;
+using BackOffice.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 
 namespace BackOffice.Pages.Brands;
 
@@ -12,16 +13,17 @@ namespace BackOffice.Pages.Brands;
 public class EditModel : PageModel
 {
     /// <summary>Property to bind data from the form to this model.</summary>
-    [BindProperty] public BrandEntity BrandEntity { get; set; } = default!;
+    [BindProperty] public BrandModel Brand { get; set; } = default!;
 
-    private readonly BrandAndProductDbContext _context;
-
-    /// <summary>Constructor to initialize the EditModel with the database context.</summary>
-    /// <param name="context">The database context for BrandEntity.</param>
-    public EditModel(BrandAndProductDbContext context)
+    private readonly IBrandBusiness _brandBusiness;
+    
+    /// <summary>Initializes a new instance of the <see cref="EditModel"/> class.</summary>
+    /// <param name="brandBusiness">The business service for managing brand entities.</param>
+    public EditModel(IBrandBusiness brandBusiness)
     {
-        _context = context;
+        _brandBusiness = brandBusiness;
     }
+
 
     /// <summary>HTTP GET request handler for displaying the edit form.</summary>
     /// <param name="id">The ID of the BrandEntity to edit.</param>
@@ -29,16 +31,17 @@ public class EditModel : PageModel
     /// If the ID is not provided or the BrandEntity is not found, returns a "Not Found" result;
     /// otherwise, displays the edit form for the BrandEntity.
     /// </returns>
-    public async Task<IActionResult> OnGetAsync(int? id)
+    public async Task<IActionResult> OnGetAsync(long? id)
     {
         if (id == null)
             return NotFound();
+        
+        var response = await _brandBusiness.FindByIdAsync(id.Value);
 
-        var brandEntity = await _context.Brands.FirstOrDefaultAsync(m => m.Id == id);
-        if (brandEntity == null)
+        if (response.StatusCode == HttpStatusCode.BadRequest)
             return NotFound();
-
-        BrandEntity = brandEntity;
+        
+        Brand = response.Entity;
         return Page();
     }
     
@@ -51,33 +54,34 @@ public class EditModel : PageModel
     /// If the BrandEntity does not exist, returns a "Not Found" result.
     /// If the update is successful, redirects to the Index page.
     /// </returns>
-    public async Task<IActionResult> OnPostAsync()
+    public async Task<IActionResult> OnPostAsync(long? id)
     {
         if (!ModelState.IsValid)
+            return Page();
+        
+        if (Brand.Categories.Count == 0)
         {
+            ModelState.AddModelError($"{nameof(Brand)}.{nameof(Brand.Categories)}", "Please add at least one category.");
             return Page();
         }
 
-        // Attach the BrandEntity to track changes
-        _context.Attach(BrandEntity).State = EntityState.Modified;
-
-        try
+        if (Brand.Ranges.Count == 0)
         {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!BrandEntityExists(BrandEntity.Id))
-                return NotFound();
-
-            throw;
+            ModelState.AddModelError($"{nameof(Brand)}.{nameof(Brand.Ranges)}", "Please add at least one range.");
+            return Page();
         }
 
-        return RedirectToPage("./Index");
-    }
+        if (id == null)
+            return NotFound();
+        
+        Brand.Id = id.Value;
+        var response = await _brandBusiness.UpdateAsync(Brand);
 
-    private bool BrandEntityExists(long id)
-    {
-        return _context.Brands.Any(e => e.Id == id);
+        return response.StatusCode switch
+        {
+            HttpStatusCode.BadRequest => NotFound(),
+            HttpStatusCode.InternalServerError => StatusCode(500),
+            _ => RedirectToPage("./Details", new {id = Brand.Id})
+        };
     }
 }

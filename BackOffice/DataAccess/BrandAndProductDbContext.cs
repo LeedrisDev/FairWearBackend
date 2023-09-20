@@ -31,6 +31,8 @@ public class BrandAndProductDbContext : DbContext
 
             entity.ToTable("brands");
 
+            entity.HasIndex(e => e.Name, "brands_name_key").IsUnique();
+
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.AnimalRating).HasColumnName("animal_rating");
             entity.Property(e => e.Categories)
@@ -75,7 +77,6 @@ public class BrandAndProductDbContext : DbContext
 
             entity.HasOne(d => d.BrandEntity).WithMany(p => p.Products)
                 .HasForeignKey(d => d.BrandId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("products_brand_id_fkey");
         });
     }

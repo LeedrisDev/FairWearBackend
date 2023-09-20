@@ -1,34 +1,35 @@
-using BackOffice.DataAccess;
-using BackOffice.DataAccess.Entities;
+using System.Net;
+using BackOffice.Business.Interfaces;
+using BackOffice.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 
 namespace BackOffice.Pages.Brands;
 
-/// <summary>PageModel class for displaying a list of BrandEntities.</summary>
+/// <summary>Represents the model for Brands index page.</summary>
 [Authorize]
 public class IndexModel : PageModel
 {
-    /// <summary>Property to store a list of BrandEntities to display.</summary>
-    public IList<BrandEntity> BrandEntity { get; set; } = default!;
+    /// <summary>Gets or sets the list of brand entities to display.</summary>
+    public IList<BrandModel> Brands { get; set; } = default!;
 
-    private readonly BrandAndProductDbContext _context;
+    private readonly IBrandBusiness _brandBusiness;
 
-    /// <summary>Constructor to initialize the IndexModel with the database context.</summary>
-    /// <param name="context">The database context for BrandEntity.</param>
-    public IndexModel(BrandAndProductDbContext context)
+    /// <summary>Initializes a new instance of the <see cref="IndexModel"/> class.</summary>
+    /// <param name="brandBusiness">The business service for managing brand entities.</param>
+    public IndexModel(IBrandBusiness brandBusiness)
     {
-        _context = context;
+        _brandBusiness = brandBusiness;
     }
 
-    /// <summary>HTTP GET request handler for displaying a list of BrandEntities.</summary>
-    /// <returns>Populates the BrandEntity property with a list of BrandEntities from the database.</returns>
+    /// <summary>Handles the HTTP GET request for the index page.</summary>
     public async Task OnGetAsync()
     {
-        BrandEntity = await _context
-            .Brands
-            .OrderBy(e => e.Name.ToLower())
-            .ToListAsync();
+        var response = await _brandBusiness.GetAsync();
+        
+        if (response.StatusCode == HttpStatusCode.OK)
+            Brands = response.Entity.ToList();
+        else
+            ModelState.AddModelError(string.Empty, response.Message);
     }
 }

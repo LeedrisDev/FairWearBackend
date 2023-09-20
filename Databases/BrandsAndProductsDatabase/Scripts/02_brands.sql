@@ -1,3 +1,5 @@
+ALTER SEQUENCE public.brands_id_seq RESTART WITH 500;
+
 INSERT INTO public.brands (id, name, country, environment_rating, people_rating, animal_rating, rating_description, categories, ranges) VALUES (1, 'Palm Angels', 'Italy', 1, 1, 2, e'Palm Angels is owned by New Guards Group.
 
 Its environment rating is \'very poor\'. It uses few eco-friendly materials. There is no evidence it minimises textile waste. There is no evidence it reduces its carbon and other greenhouse gas emissions in its supply chain. There is no evidence it has taken meaningful action to reduce or eliminate hazardous chemicals.
@@ -156,6 +158,14 @@ Its animal rating is \'not good enough\'. There is no evidence it has a policy t
 
 JACQUEMUS is rated \'We avoid\' overall.
 ', '{Shirts,Skirts,Eyewear,Hats,Swimwear,Dresses,Pants,Jackets & Blazers,Hoodies & Sweatshirts,Knitwear,Tops & Blouses,T-Shirts,Shorts}', '{Menswear,Womenswear}');
+INSERT INTO public.brands (id, name, country, environment_rating, people_rating, animal_rating, rating_description, categories, ranges) VALUES (22, 'OFF-WHITE', 'Italy', 1, 1, 2, e'OFF-WHITE\'s environment rating is \'very poor\'. It uses few eco-friendly materials. There is no evidence it minimises textile waste. There is no evidence it reduces its carbon and other greenhouse gas emissions in its supply chain. There is no evidence it has taken meaningful action to reduce or eliminate hazardous chemicals.
+
+Its labour rating is \'very poor\'. It does not publish sufficient relevant information about its labour policies to give a higher rating. As a shopper you have the right to know how its products impact on its workers.
+
+Its animal rating is \'not good enough\'. There is no evidence it has a policy to minimise the suffering of animals. It uses leather, wool, down and exotic animal hair. It does not use fur, angora or exotic animal skin. There is no evidence it traces any animal products to the first stage of production.
+
+OFF-WHITE is rated \'We avoid\' overall.
+', '{Shirts,Skirts,Dresses,Pants,T-Shirts,Shorts}', '{Kids,Menswear,Womenswear}');
 INSERT INTO public.brands (id, name, country, environment_rating, people_rating, animal_rating, rating_description, categories, ranges) VALUES (10, 'Saint Laurent', 'France', 4, 3, 2, e'Saint Laurent is owned by Kering.
 
 Our “Planet” rating evaluates brands based on the environmental policies in their supply chains, from carbon emissions and wastewater to business models and product circularity. Here we rate Saint Laurent “Good”. These are a few factors influencing its score:
@@ -324,14 +334,6 @@ Brands’ animal welfare policies and, where applicable, how well they trace the
 
 Based on all publicly available information we’ve reviewed, we rate Uniqlo “It\'s a Start” overall.
 ', '{Shirts,Pants,Coats,Knitwear,Activewear,Sleepwear,Maternity,T-Shirts,Plus Size}', '{Kids,Menswear,Womenswear,PlusSize}');
-INSERT INTO public.brands (id, name, country, environment_rating, people_rating, animal_rating, rating_description, categories, ranges) VALUES (22, 'OFF-WHITE', 'Italy', 1, 1, 2, e'OFF-WHITE\'s environment rating is \'very poor\'. It uses few eco-friendly materials. There is no evidence it minimises textile waste. There is no evidence it reduces its carbon and other greenhouse gas emissions in its supply chain. There is no evidence it has taken meaningful action to reduce or eliminate hazardous chemicals.
-
-Its labour rating is \'very poor\'. It does not publish sufficient relevant information about its labour policies to give a higher rating. As a shopper you have the right to know how its products impact on its workers.
-
-Its animal rating is \'not good enough\'. There is no evidence it has a policy to minimise the suffering of animals. It uses leather, wool, down and exotic animal hair. It does not use fur, angora or exotic animal skin. There is no evidence it traces any animal products to the first stage of production.
-
-OFF-WHITE is rated \'We avoid\' overall.
-', '{Shirts,Skirts,Dresses,Pants,T-Shirts,Shorts}', '{Kids,Menswear,Womenswear}');
 INSERT INTO public.brands (id, name, country, environment_rating, people_rating, animal_rating, rating_description, categories, ranges) VALUES (23, 'AMIRI', 'United States', 1, 1, 2, e'AMIRI\'s environment rating is \'very poor\'. It does not publish sufficient relevant information about its environmental policies to give a higher rating. As a shopper you have the right to know how its production practices impact on the environment.
 
 Its labour rating is \'very poor\'. There is no evidence it has worker empowerment initiatives such as collective bargaining or rights to make a complaint. There is no evidence it implements practices to support diversity and inclusion in its supply chain. There is no evidence it ensures payment of a living wage in its supply chain. It traces some of its supply chain. It does not disclose adequate policies or safeguards to protect suppliers and workers in its supply chain from the impacts of COVID-19.
@@ -829,4 +831,4 @@ Its labour rating is \'it\'s a start\'. Its final stage of production is underta
 Its animal rating is \'good\'. It does not use fur, wool, down, exotic animal skin, exotic animal hair or angora. It uses leather.
 
 1083 is rated \'Good\' overall.
-', '{Denim,Pants,T-Shirts,Shorts}', '{Menswear,Womenswear}');
+', '{Denim,Pants,T-Shirts}', '{Menswear,Womenswear}');

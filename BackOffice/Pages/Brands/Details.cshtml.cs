@@ -1,9 +1,9 @@
-using BackOffice.DataAccess;
-using BackOffice.DataAccess.Entities;
+using System.Net;
+using BackOffice.Business.Interfaces;
+using BackOffice.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 
 namespace BackOffice.Pages.Brands;
 
@@ -12,15 +12,15 @@ namespace BackOffice.Pages.Brands;
 public class DetailsModel : PageModel
 {
     /// <summary>Property to store the BrandEntity to display details.</summary>
-    public BrandEntity BrandEntity { get; set; } = default!;
+    public BrandModel Brand { get; set; } = default!;
+    
+    private readonly IBrandBusiness _brandBusiness;
 
-    private readonly BrandAndProductDbContext _context;
-
-    /// <summary>Constructor to initialize the DetailsModel with the database context.</summary>
-    /// <param name="context">The database context for BrandEntity.</param>
-    public DetailsModel(BrandAndProductDbContext context)
+    /// <summary>Initializes a new instance of the <see cref="DetailsModel"/> class.</summary>
+    /// <param name="brandBusiness">The business service for managing brand entities.</param>
+    public DetailsModel(IBrandBusiness brandBusiness)
     {
-        _context = context;
+        _brandBusiness = brandBusiness ?? throw new ArgumentNullException(nameof(brandBusiness));
     }
 
     /// <summary>HTTP GET request handler for displaying details of a BrandEntity.</summary>
@@ -34,11 +34,11 @@ public class DetailsModel : PageModel
         if (id == null)
             return NotFound();
 
-        var brandEntity = await _context.Brands.FirstOrDefaultAsync(m => m.Id == id);
-        if (brandEntity == null)
+        var response = await _brandBusiness.FindByIdAsync(id.Value);
+        if (response.StatusCode == HttpStatusCode.BadRequest)
             return NotFound();
 
-        BrandEntity = brandEntity;
+        Brand = response.Entity;
         return Page();
     }
 }

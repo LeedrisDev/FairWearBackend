@@ -24,7 +24,6 @@ public class EditModel : PageModel
         _brandBusiness = brandBusiness;
     }
 
-
     /// <summary>HTTP GET request handler for displaying the edit form.</summary>
     /// <param name="id">The ID of the BrandEntity to edit.</param>
     /// <returns>

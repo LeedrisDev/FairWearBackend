@@ -29,4 +29,10 @@ public interface IBrandBusiness
     /// <param name="id">The unique identifier of the BrandModel entity to find.</param>
     /// <returns>A processing status response with the found BrandModel entity.</returns>
     Task<ProcessingStatusResponse<BrandModel>> FindByIdAsync(long id);
+    
+    /// <summary>Asynchronously finds a <see cref="BrandModel"/> entity by its name.</summary>
+    /// <param name="name">The name of the <see cref="BrandModel"/> entity to find.</param>
+    /// <returns>A processing status response with the found <see cref="BrandModel"/> entity.</returns>
+    Task<ProcessingStatusResponse<BrandModel>> FindByNameAsync(string name);
+
 }

@@ -48,4 +48,10 @@ public class BrandBusiness : IBrandBusiness
     {
         return await _brandRepository.FindByIdAsync(id);
     }
+
+    /// <inheritdoc/>
+    public async Task<ProcessingStatusResponse<BrandModel>> FindByNameAsync(string name)
+    {
+        return await _brandRepository.FindByNameAsync(name);
+    }
 }

@@ -2,15 +2,15 @@
 
 create table if not exists brands
 (
-    id                 bigint default nextval('brands_id_seq'::regclass) not null,
-    name               varchar                                           not null,
-    country            varchar                                           not null,
-    environment_rating integer                                           not null,
-    people_rating      integer                                           not null,
-    animal_rating      integer                                           not null,
-    rating_description varchar                                           not null,
-    categories         character varying[]                               not null,
-    ranges             character varying[]                               not null,
+    id                 bigserial,
+    name               varchar             not null,
+    country            varchar             not null,
+    environment_rating integer             not null,
+    people_rating      integer             not null,
+    animal_rating      integer             not null,
+    rating_description varchar             not null,
+    categories         character varying[] not null,
+    ranges             character varying[] not null,
     primary key (id),
     unique (name),
     constraint check_environment_rating
@@ -23,12 +23,12 @@ create table if not exists brands
 
 create table if not exists products
 (
-    id       bigint default nextval('products_id_seq'::regclass) not null,
-    upc_code varchar                                             not null,
-    name     varchar                                             not null,
+    id       bigserial,
+    upc_code varchar not null,
+    name     varchar not null,
     category varchar,
     ranges   character varying[],
-    brand_id integer                                             not null,
+    brand_id bigint  not null,
     primary key (id),
     foreign key (brand_id) references brands
         on delete cascade

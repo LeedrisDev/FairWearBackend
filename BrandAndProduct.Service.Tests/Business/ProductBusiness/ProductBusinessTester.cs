@@ -78,6 +78,31 @@ public class ProductBusinessTester
     }
 
     [TestMethod]
+    public async Task GetAllProductsAsync_ReturnsError()
+    {
+        // Arrange
+        _productRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<GenericFilter<IFilter>>())).ReturnsAsync(
+            new ProcessingStatusResponse<IEnumerable<ProductDto>>
+            {
+                Status = HttpStatusCode.InternalServerError,
+                ErrorMessage = "internal server error"
+            });
+
+        var productBusiness =
+            new BrandAndProduct.Service.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object,
+                _brandRepositoryMock.Object, _productDataMock.Object, _brandDataMock.Object, _filterFactoryMock.Object);
+
+        // Act
+        var filterDict = new Dictionary<string, string>();
+        var result = await productBusiness.GetAllProductsAsync(filterDict);
+
+        // // Assert
+        result.Should().NotBeNull();
+        result.Status.Should().Be(HttpStatusCode.InternalServerError);
+        result.ErrorMessage.Should().Be("internal server error");
+    }
+
+    [TestMethod]
     public async Task GetProductByIdAsync_ReturnsProductIfExists()
     {
         // Arrange
@@ -664,6 +689,169 @@ public class ProductBusinessTester
                 ErrorMessage = "Not Found"
             }
         );
+
+        var productBusiness =
+            new BrandAndProduct.Service.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object,
+                _brandRepositoryMock.Object, _productDataMock.Object, _brandDataMock.Object, _filterFactoryMock.Object);
+
+        // Act
+        var result = await productBusiness.GetProductByUpcAsync(upcCode);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Status.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [TestMethod]
+    public async Task GetProductByUpcAsync_GetAllError_ReturnsError()
+    {
+        // Arrange
+        var upcCode = "123";
+
+        _productRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<GenericFilter<IFilter>>())).ReturnsAsync(
+            new ProcessingStatusResponse<IEnumerable<ProductDto>>()
+            {
+                Status = HttpStatusCode.InternalServerError,
+            });
+
+        var productBusiness =
+            new BrandAndProduct.Service.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object,
+                _brandRepositoryMock.Object, _productDataMock.Object, _brandDataMock.Object, _filterFactoryMock.Object);
+
+        // Act
+        var result = await productBusiness.GetProductByUpcAsync(upcCode);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Status.Should().Be(HttpStatusCode.InternalServerError);
+    }
+
+    [TestMethod]
+    public async Task GetProductByUpcAsync_GetByUpcFails_ReturnsError()
+    {
+        // Arrange
+        var upcCode = "123";
+
+        var productsInDb = new List<ProductDto>
+        {
+        };
+
+        _productRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<GenericFilter<IFilter>>())).ReturnsAsync(
+            new ProcessingStatusResponse<IEnumerable<ProductDto>>()
+            {
+                Object = productsInDb
+            });
+
+        _productDataMock.Setup(x => x.GetProductByUpc(It.IsAny<string>())).Returns(
+            new ProcessingStatusResponse<ProductScrapperResponse>()
+            {
+                Status = HttpStatusCode.NotFound,
+                ErrorMessage = "Not found"
+            });
+
+        _brandRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(
+            new ProcessingStatusResponse<BrandDto>()
+            {
+                Status = HttpStatusCode.NotFound,
+                ErrorMessage = "Not Found"
+            }
+        );
+
+        var productBusiness =
+            new BrandAndProduct.Service.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object,
+                _brandRepositoryMock.Object, _productDataMock.Object, _brandDataMock.Object, _filterFactoryMock.Object);
+
+        // Act
+        var result = await productBusiness.GetProductByUpcAsync(upcCode);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Status.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [TestMethod]
+    public async Task GetProductByUpcAsync_GetByName_ReturnsError()
+    {
+        // Arrange
+        var upcCode = "123";
+
+        var productsInDb = new List<ProductDto>();
+
+        var productScrapperResponse = new ProductScrapperResponse()
+        {
+            UpcCode = upcCode,
+            BrandName = "NorthFace",
+            Name = "Etip Hardface Glove",
+            Category = "Gloves",
+        };
+        productScrapperResponse.Ranges.AddRange(
+            new List<string>()
+            {
+                "Men", "Women"
+            }
+        );
+
+        var brand = new BrandDto()
+        {
+            Id = 1,
+            Name = "NorthFace",
+            Country = "USA",
+            EnvironmentRating = 1,
+            PeopleRating = 1,
+            AnimalRating = 1,
+            RatingDescription = "Rating",
+            Categories = new List<string> { "Category" },
+            Ranges = new List<string> { "Range" }
+        };
+
+        var product = new ProductDto()
+        {
+            Id = 1,
+            Name = "Etip Hardface Glove",
+            UpcCode = upcCode,
+            Category = "Category",
+            Ranges = new List<string> { "Range" },
+            BrandId = 1
+        };
+
+        var productScores = new ProductScoreDto
+        {
+            Moral = 1,
+            Animal = 1,
+            Environmental = 1
+        };
+
+        var productInformation = new ProductInformationDto()
+        {
+            Name = "Etip Hardface Glove",
+            Country = "USA",
+            Image = "No image found",
+            GlobalScore = (productScores.Animal + productScores.Environmental + productScores.Moral) / 3,
+            Scores = productScores,
+            Composition = new List<ProductCompositionDto>(),
+            Brand = "NorthFace"
+        };
+
+        _productRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<GenericFilter<IFilter>>())).ReturnsAsync(
+            new ProcessingStatusResponse<IEnumerable<ProductDto>>()
+            {
+                Object = new List<ProductDto>()
+            }
+        );
+
+        _productDataMock.Setup(x => x.GetProductByUpc(It.IsAny<string>())).Returns(
+            new ProcessingStatusResponse<ProductScrapperResponse>()
+            {
+                Status = HttpStatusCode.OK,
+                Object = productScrapperResponse
+            });
+
+        _brandDataMock.Setup(x => x.GetBrandByName(It.IsAny<string>())).Returns(
+            new ProcessingStatusResponse<BrandDto>()
+            {
+                Status = HttpStatusCode.NotFound
+            });
+
 
         var productBusiness =
             new BrandAndProduct.Service.Business.ProductBusiness.ProductBusiness(_productRepositoryMock.Object,

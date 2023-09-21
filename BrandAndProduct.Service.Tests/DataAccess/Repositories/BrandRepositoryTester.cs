@@ -161,7 +161,8 @@ public class BrandRepositoryTester
         // Act
         var filterDict = new Dictionary<string, string>()
         {
-            { "Country", "USA" }
+            { "Country", "USA" },
+            { "EnvironmentRating", "5" }
         };
 
         var genericFilter = new GenericFilterFactory<IFilter>();
@@ -170,6 +171,7 @@ public class BrandRepositoryTester
 
         // Assert
         result.Should().NotBeNull();
+        result.ErrorMessage.Should().Be("");
         result.Status.Should().Be(HttpStatusCode.OK);
         result.Object.Should().NotBeNull();
         result.Object.ToList().Should().BeEquivalentTo(expected);

@@ -136,18 +136,31 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
                 var parameter = Expression.Parameter(typeof(TEntity), "a");
                 var property = Expression.Property(parameter, equalFilter.PropertyName);
 
-                // Convert the filter value to the property type
-                var convertedValue = Convert.ChangeType(equalFilter.Value.ToLower(), property.Type);
+                Expression comparisonExpression;
 
-                var filterValue = Expression.Constant(convertedValue);
-                MethodInfo startsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) })!;
-                MethodInfo toLowerMethod = typeof(string).GetMethod("ToLower", new Type[] { })!;
+                if (property.Type == typeof(string))
+                {
+                    // Convert the filter value to the property type and make it lowercase
+                    var convertedValue = Convert.ChangeType(equalFilter.Value.ToLower(), property.Type);
+                    var filterValue = Expression.Constant(convertedValue);
 
-                var toLowerExpression = Expression.Call(property, toLowerMethod);
+                    MethodInfo startsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) })!;
+                    MethodInfo toLowerMethod = typeof(string).GetMethod("ToLower", new Type[] { })!;
 
-                var startsWithExpression = Expression.Call(toLowerExpression, startsWithMethod, filterValue);
+                    var toLowerExpression = Expression.Call(property, toLowerMethod);
 
-                var lambdaExpression = Expression.Lambda<Func<TEntity, bool>>(startsWithExpression, parameter);
+                    var startsWithExpression = Expression.Call(toLowerExpression, startsWithMethod, filterValue);
+
+                    comparisonExpression = startsWithExpression;
+                }
+                else
+                {
+                    // Non-string
+                    var filterValue = Expression.Constant(Convert.ChangeType(equalFilter.Value, property.Type));
+                    comparisonExpression = Expression.Equal(property, filterValue);
+                }
+
+                var lambdaExpression = Expression.Lambda<Func<TEntity, bool>>(comparisonExpression, parameter);
                 query = query.Where(lambdaExpression);
             }
 

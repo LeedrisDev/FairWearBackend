@@ -5,25 +5,27 @@ VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FairWearGateway.API", "FairWearGateway.API\FairWearGateway.API.csproj", "{EA5B672B-5594-4C8C-B20F-86A7211E1C65}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FairWearProductDataRetriever.API", "FairWearProductDataRetriever.API\FairWearProductDataRetriever.API.csproj", "{2E2CC2A2-E61C-4AD4-9908-E556A83D5336}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductDataRetriever.Service.Tests", "ProductDataRetriever.Service.Tests\ProductDataRetriever.Service.Tests.csproj", "{5930D285-80B9-4620-8D72-B4F260BA826E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FairWearProductDataRetriever.API.Tests", "FairWearProductDataRetriever.API.Tests\FairWearProductDataRetriever.API.Tests.csproj", "{5930D285-80B9-4620-8D72-B4F260BA826E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoodOnYouScrapper.Service.Tests", "GoodOnYouScrapper.Service.Tests\GoodOnYouScrapper.Service.Tests.csproj", "{82C52078-8910-4F5D-89B3-905CDD284989}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoodOnYouScrapper.API", "GoodOnYouScrapper.API\GoodOnYouScrapper.API.csproj", "{6837512C-16AC-4E31-B453-EA0BE3C8A4E9}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoodOnYouScrapper.API.Tests", "GoodOnYouScrapper.API.Tests\GoodOnYouScrapper.API.Tests.csproj", "{82C52078-8910-4F5D-89B3-905CDD284989}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrandAndProductDatabase.API", "BrandAndProductDatabase.API\BrandAndProductDatabase.API.csproj", "{73BD25C4-39B9-473B-AB49-EEDA022C4301}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrandAndProductDatabase.API.Tests", "BrandAndProductDatabase.API.Tests\BrandAndProductDatabase.API.Tests.csproj", "{85755176-D22D-44D6-B0B8-93AF38B6133C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrandAndProduct.Service.Tests", "BrandAndProduct.Service.Tests\BrandAndProduct.Service.Tests.csproj", "{85755176-D22D-44D6-B0B8-93AF38B6133C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FairWearGateway.API.Tests", "FairWearGateway.API.Tests\FairWearGateway.API.Tests.csproj", "{1BE7138B-BE21-43DD-AFF5-9F21220A77EF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodOnYouScrapper.Service", "GoodOnYouScrapper.Service\GoodOnYouScrapper.Service.csproj", "{21F4328A-962A-441C-89F0-5255D5213A10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FairWearProductDataRetriever.Service", "FairWearProductDataRetriever.Service\FairWearProductDataRetriever.Service.csproj", "{13C85BCE-12AA-4822-AFAD-31FAE9AB134B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductDataRetriever.Service", "ProductDataRetriever.Service\ProductDataRetriever.Service.csproj", "{13C85BCE-12AA-4822-AFAD-31FAE9AB134B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrandAndProductDatabase.Service", "BrandAndProductDatabase.Service\BrandAndProductDatabase.Service.csproj", "{CD847A1E-EEE4-4240-9B2A-4B0B5C19AC9E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrandAndProduct.Service", "BrandAndProduct.Service\BrandAndProduct.Service.csproj", "{CD847A1E-EEE4-4240-9B2A-4B0B5C19AC9E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = " GoodOnYouScrapperService", " GoodOnYouScrapperService", "{8761B058-2C93-4DD5-8D51-6845A5992151}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProductDataRetrieverService", "ProductDataRetrieverService", "{7ED8EF9E-C66D-4D15-8589-4421D8DDBED2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{C8A11D82-3452-4C21-B6E7-8FC4F6A02624}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BrandAndProductService", "BrandAndProductService", "{2FB3557A-A09C-44AB-A7F8-845CE92E175D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,26 +37,14 @@ Global
 		{EA5B672B-5594-4C8C-B20F-86A7211E1C65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA5B672B-5594-4C8C-B20F-86A7211E1C65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA5B672B-5594-4C8C-B20F-86A7211E1C65}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2E2CC2A2-E61C-4AD4-9908-E556A83D5336}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2E2CC2A2-E61C-4AD4-9908-E556A83D5336}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2E2CC2A2-E61C-4AD4-9908-E556A83D5336}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E2CC2A2-E61C-4AD4-9908-E556A83D5336}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5930D285-80B9-4620-8D72-B4F260BA826E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5930D285-80B9-4620-8D72-B4F260BA826E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5930D285-80B9-4620-8D72-B4F260BA826E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5930D285-80B9-4620-8D72-B4F260BA826E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6837512C-16AC-4E31-B453-EA0BE3C8A4E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6837512C-16AC-4E31-B453-EA0BE3C8A4E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6837512C-16AC-4E31-B453-EA0BE3C8A4E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6837512C-16AC-4E31-B453-EA0BE3C8A4E9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{82C52078-8910-4F5D-89B3-905CDD284989}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{82C52078-8910-4F5D-89B3-905CDD284989}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82C52078-8910-4F5D-89B3-905CDD284989}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82C52078-8910-4F5D-89B3-905CDD284989}.Release|Any CPU.Build.0 = Release|Any CPU
-		{73BD25C4-39B9-473B-AB49-EEDA022C4301}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73BD25C4-39B9-473B-AB49-EEDA022C4301}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73BD25C4-39B9-473B-AB49-EEDA022C4301}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73BD25C4-39B9-473B-AB49-EEDA022C4301}.Release|Any CPU.Build.0 = Release|Any CPU
 		{85755176-D22D-44D6-B0B8-93AF38B6133C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{85755176-D22D-44D6-B0B8-93AF38B6133C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85755176-D22D-44D6-B0B8-93AF38B6133C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -81,5 +71,15 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B6F8507C-A60C-4950-B8A1-995B75669F9A}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{82C52078-8910-4F5D-89B3-905CDD284989} = {8761B058-2C93-4DD5-8D51-6845A5992151}
+		{21F4328A-962A-441C-89F0-5255D5213A10} = {8761B058-2C93-4DD5-8D51-6845A5992151}
+		{5930D285-80B9-4620-8D72-B4F260BA826E} = {7ED8EF9E-C66D-4D15-8589-4421D8DDBED2}
+		{13C85BCE-12AA-4822-AFAD-31FAE9AB134B} = {7ED8EF9E-C66D-4D15-8589-4421D8DDBED2}
+		{EA5B672B-5594-4C8C-B20F-86A7211E1C65} = {C8A11D82-3452-4C21-B6E7-8FC4F6A02624}
+		{1BE7138B-BE21-43DD-AFF5-9F21220A77EF} = {C8A11D82-3452-4C21-B6E7-8FC4F6A02624}
+		{CD847A1E-EEE4-4240-9B2A-4B0B5C19AC9E} = {2FB3557A-A09C-44AB-A7F8-845CE92E175D}
+		{85755176-D22D-44D6-B0B8-93AF38B6133C} = {2FB3557A-A09C-44AB-A7F8-845CE92E175D}
 	EndGlobalSection
 EndGlobal

@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Parse arguments
 while [[ $# -gt 0 ]]; do
   key="$1"

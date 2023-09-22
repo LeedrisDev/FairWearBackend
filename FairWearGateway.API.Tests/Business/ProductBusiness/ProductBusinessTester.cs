@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using BrandAndProductDatabase.Service.Protos;
+using BrandAndProduct.Service.Protos;
 using FairWearGateway.API.DataAccess.ProductData;
 using FairWearGateway.API.Models;
 using FluentAssertions;

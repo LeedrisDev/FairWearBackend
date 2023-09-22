@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using BrandAndProductDatabase.Service.Protos;
+using BrandAndProduct.Service.Protos;
 using FluentAssertions;
 using Grpc.Core;
 using Grpc.Net.ClientFactory;

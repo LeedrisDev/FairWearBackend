@@ -24,7 +24,7 @@ public class ProductData
         _mockGrpcClientFactory = new Mock<GrpcClientFactory>();
         _mockProductServiceClient = new Mock<ProductScrapperService.ProductScrapperServiceClient>();
         _mockGrpcClientFactory
-            .Setup(f => f.CreateClient<ProductScrapperService.ProductScrapperServiceClient>("BrandService"))
+            .Setup(f => f.CreateClient<ProductScrapperService.ProductScrapperServiceClient>("ProductService"))
             .Returns(_mockProductServiceClient.Object);
 
         var config = new MapperConfiguration(cfg => { cfg.AddProfile<AutoMapperProfiles>(); });

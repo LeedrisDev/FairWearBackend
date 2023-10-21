@@ -14,7 +14,7 @@ public class ProductData : IProductData
     /// <summary>Constructor.</summary>
     public ProductData(GrpcClientFactory grpcClientFactory)
     {
-        _client = grpcClientFactory.CreateClient<ProductScrapperService.ProductScrapperServiceClient>("BrandService");
+        _client = grpcClientFactory.CreateClient<ProductScrapperService.ProductScrapperServiceClient>("ProductService");
     }
 
     /// <inheritdoc/>

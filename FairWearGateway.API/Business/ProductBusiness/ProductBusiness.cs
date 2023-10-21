@@ -1,6 +1,6 @@
+using BrandAndProduct.Service.Protos;
 using FairWearGateway.API.DataAccess.ProductData;
 using FairWearGateway.API.Models;
-using FairWearGateway.API.Models.Response;
 
 namespace FairWearGateway.API.Business.ProductBusiness;
 
@@ -16,14 +16,21 @@ public class ProductBusiness : IProductBusiness
     }
 
     /// <inheritdoc/>
-    public async Task<ProcessingStatusResponse<ProductResponse>> GetProductByIdAsync(int productId)
+    public ProcessingStatusResponse<ProductResponse> GetProductById(int productId)
     {
-        return await _productData.GetProductByIdAsync(productId);
+        return _productData.GetProductById(productId);
     }
 
     /// <inheritdoc />
-    public async Task<ProcessingStatusResponse<ProductInformationResponse>> GetProductByUpcAsync(string upc)
+    public ProcessingStatusResponse<ProductInformationResponse> GetProductByUpc(string upc)
     {
-        return await _productData.GetProductByUpcAsync(upc);
+        return _productData.GetProductByUpc(upc);
+    }
+
+    /// <inheritdoc />
+    public async Task<ProcessingStatusResponse<IEnumerable<ProductResponse>>> GetAllProducts(
+        Dictionary<string, string> filters)
+    {
+        return await _productData.GetAllProducts(filters);
     }
 }

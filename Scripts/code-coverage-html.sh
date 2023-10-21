@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Parse arguments
 while [[ $# -gt 0 ]]; do
   key="$1"
@@ -33,8 +32,7 @@ if [ -z "$PROJECT" ]; then
 fi
 
 # Run unit tests with code coverage
-dotnet test --no-restore --verbosity normal "$PROJECT" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
-
+dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:ExcludeByFile=**/obj/** "$PROJECT"
 # Generate code coverage report with ReportGenerator
 dotnet "$HOME"/.nuget/packages/reportgenerator/*/tools/net7.0/ReportGenerator.dll -reports:"$PROJECT_DIR"/coverage.cobertura.xml -targetdir:coveragereport -reporttypes:Html
 

@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS products;
 
 CREATE TABLE brands (
   id SERIAL PRIMARY KEY,
-  name VARCHAR NOT NULL,
+  name VARCHAR NOT NULL UNIQUE,
   country VARCHAR NOT NULL,
   environment_rating INTEGER NOT NULL,
   people_rating INTEGER NOT NULL,
@@ -21,5 +21,5 @@ CREATE TABLE products (
   name VARCHAR NOT NULL,
   category VARCHAR,
   ranges VARCHAR[],
-  brand_id INTEGER NOT NULL REFERENCES brands(id)
+  brand_id INTEGER NOT NULL REFERENCES brands(id) ON DELETE CASCADE
 );

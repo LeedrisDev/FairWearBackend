@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option csharp_namespace = "GoodOnYouScrapper.Service.Protos";
+
+package GoodOnYouScrapper;
+
+service BrandScrapperService {
+    rpc GetBrand (BrandScrapperRequest) returns (BrandScrapperResponse);
+}
+
+// The request message containing the name of the brand.
+message BrandScrapperRequest {
+    string name = 1;
+}
+
+// The response message containing brand informations.
+
+message BrandScrapperResponse {
+    string name = 1;
+    string country = 2;
+    int32 environmentRating = 3;
+    int32 peopleRating = 4;
+    int32 animalRating = 5;
+    string ratingDescription = 6;
+    repeated string categories = 7;
+    repeated string ranges = 8;
+}
+

@@ -1,6 +1,6 @@
+using BrandAndProduct.Service.Protos;
 using FairWearGateway.API.DataAccess.BrandData;
 using FairWearGateway.API.Models;
-using FairWearGateway.API.Models.Response;
 
 namespace FairWearGateway.API.Business.BrandBusiness;
 
@@ -16,14 +16,21 @@ public class BrandBusiness : IBrandBusiness
     }
 
     /// <inheritdoc/>
-    public async Task<ProcessingStatusResponse<BrandResponse>> GetBrandByIdAsync(int brandId)
+    public ProcessingStatusResponse<BrandResponse> GetBrandById(int brandId)
     {
-        return await _brandData.GetBrandByIdAsync(brandId);
+        return _brandData.GetBrandById(brandId);
     }
 
     /// <inheritdoc/>
-    public async Task<ProcessingStatusResponse<BrandResponse>> GetBrandByNameAsync(string brandName)
+    public ProcessingStatusResponse<BrandResponse> GetBrandByName(string brandName)
     {
-        return await _brandData.GetBrandByNameAsync(brandName);
+        return _brandData.GetBrandByName(brandName);
+    }
+
+    /// <inheritdoc/>
+    public async Task<ProcessingStatusResponse<IEnumerable<BrandResponse>>> GetAllBrands(
+        Dictionary<string, string> filters)
+    {
+        return await _brandData.GetAllBrands(filters);
     }
 }

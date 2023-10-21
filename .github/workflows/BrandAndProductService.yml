@@ -1,0 +1,185 @@
+name: Brand & Product Service CI/CD
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+      - feature/*
+      - hotfix/*
+      - release/*
+      - fix/*
+    paths:
+      - 'BrandAndProduct.Service/**'
+      - 'BrandAndProduct.Service.Tests/**'
+      - '.github/workflows/BrandAndProductService.yml'
+      - 'Scripts/**'
+        
+jobs:
+  linter:
+    name: 'Linter'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET Core SDK 7.0.x
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+
+      - name: Cache Resharper CLI
+        id: cache-resharper
+        uses: actions/cache@v3
+        with:
+          path: ~/.dotnet/tools
+          key: resharper-cli
+          restore-keys: resharper-cli
+
+      - name: Install Resharper CLI
+        if: steps.cache-resharper.outputs.cache-hit != 'true'
+        run: |
+          dotnet tool install JetBrains.ReSharper.GlobalTools --tool-path ~/.dotnet/tools
+          export PATH=$PATH:~/.dotnet/tools
+
+      - name: Run ReSharper InspectCode
+        run: jb inspectcode BrandAndProduct.Service/BrandAndProduct.Service.csproj -o=resharper-report.xml -f=Xml -verbosity=INFO -no-swea
+
+      - name: Check Resharper results
+        run: |
+          if grep -q 'Severity="WARNING"' resharper-report.xml; then cat resharper-report.xml && exit 1; fi
+          if grep -q 'Severity="ERROR"' resharper-report.xml; then cat resharper-report.xml && exit 1; fi
+          if grep -q 'Severity="SUGGESTION"' resharper-report.xml; then cat resharper-report.xml && exit 1; fi
+
+      - uses: sarisia/actions-status-discord@v1
+        if: always() && (job.status == 'failure' || job.status == 'cancelled')
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          status: ${{ job.status }}
+          title: "Linter Brand & Product Database Service"
+          username: GitHub Actions
+          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+          
+  build:
+    name: 'Build'
+    needs: linter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET Core SDK 7.0.x
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          # Look to see if there is a cache hit for the corresponding requirements file
+          key: ${{ runner.os }}-nuget-brand-and-product-database-Service-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-brand-and-product-database-Service-
+
+      - name: 'Install dependencies'
+        run: dotnet restore BrandAndProduct.Service/BrandAndProduct.Service.csproj
+
+      - name: Build
+        run: dotnet build BrandAndProduct.Service/BrandAndProduct.Service.csproj --configuration Release --no-restore
+
+      - uses: sarisia/actions-status-discord@v1
+        if: always() && (job.status == 'failure' || job.status == 'cancelled')
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          status: ${{ job.status }}
+          title: "Build & Test Brand & Product Database Service"
+          username: GitHub Actions
+          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+          
+  test:
+    name: 'Tests'
+    needs:
+      - build
+      - linter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET Core SDK 7.0.x
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          # Look to see if there is a cache hit for the corresponding requirements file
+          key: ${{ runner.os }}-nuget-brand-and-product-database-Service-tests-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-brand-and-product-database-Service-tests-
+
+      - name: 'Install dependencies'
+        run: |
+          dotnet restore BrandAndProduct.Service.Tests/BrandAndProduct.Service.Tests.csproj
+          dotnet restore BrandAndProduct.Service/BrandAndProduct.Service.csproj 
+          
+      - name: 'Run tests'
+        run: dotnet test --no-restore  --verbosity normal BrandAndProduct.Service.Tests/BrandAndProduct.Service.Tests.csproj
+
+      - name: 'Code Coverage'
+        run: ./Scripts/code-coverage-ci.sh -p BrandAndProduct.Service.Tests/BrandAndProduct.Service.Tests.csproj -t 75
+
+      - uses: sarisia/actions-status-discord@v1
+        if: always()
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          status: ${{ job.status }}
+          title: "Build & Test Brand & Product Database Service"
+          username: GitHub Actions
+          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+          
+  deploy:
+    name: 'Deploy'
+    needs:
+      - linter
+      - build
+      - test
+    runs-on: ubuntu-latest
+    if: contains(github.ref, 'release') || contains(github.ref, 'develop') || contains(github.ref, 'master')
+    steps:
+      - uses: actions/checkout@v3
+        
+      - name: Retrieve GITHUB_REF
+        id: get_branch
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: echo "::set-output name=tag::${BRANCH//\//_}"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Registry
+        uses: docker/login-action@v2
+        with:
+          registry: https://registry.leedrisdev.com
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./BrandAndProduct.Service/Dockerfile
+          push: true
+          tags: |
+            registry.leedrisdev.com/brand_and_product_service:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}
+            registry.leedrisdev.com/brand_and_product_service:latest
+
+      - uses: sarisia/actions-status-discord@v1
+        if: always()
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          status: ${{ job.status }}
+          title: "Deliver Brand & Product Database Service to Registry"
+          username: GitHub Actions
+          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png

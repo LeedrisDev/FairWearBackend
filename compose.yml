@@ -19,8 +19,22 @@ services:
       - ./TraefikConfig/Certs:/etc/ssl/traefik
     networks:
       - traefik-network
-
-
+  
+  
+  brand_and_product_db:
+    container_name: brand_and_product_db
+    build:
+        context: .
+        dockerfile: Databases/BrandsAndProductsDatabase/Dockerfile
+    restart: on-failure
+    environment:
+      - POSTGRES_USER=fairwear
+      - POSTGRES_PASSWORD=fairwear
+      - POSTGRES_DB=fairwear_brand_and_product_database
+    ports: 
+      - "5432:5432"
+    
+  
   gateway_api:
     container_name: gateway_api
     build:

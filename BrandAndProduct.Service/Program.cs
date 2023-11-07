@@ -1,5 +1,8 @@
 using BrandAndProduct.Service.Config;
 using BrandAndProduct.Service.Services;
+using BrandAndProduct.Service.Utils;
+using GoodOnYouScrapper.Service.Protos;
+using ProductDataRetriever.Service.Protos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +16,11 @@ EnvironmentValidator.ValidateRequiredVariables();
 builder.Services.AddGrpc();
 
 DependencyInjectionConfiguration.Configure(builder.Services);
+
+builder.Services.AddGrpcClient<BrandScrapperService.BrandScrapperServiceClient>("BrandService",
+    o => { o.Address = new Uri(AppConstants.GoodOnYouScrapperUrl); });
+builder.Services.AddGrpcClient<ProductScrapperService.ProductScrapperServiceClient>("ProductService",
+    o => { o.Address = new Uri(AppConstants.ProductDataRetrieverUrl); });
 
 var app = builder.Build();
 

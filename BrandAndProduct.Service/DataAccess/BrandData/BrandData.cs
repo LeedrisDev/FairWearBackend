@@ -2,25 +2,22 @@ using System.Net;
 using AutoMapper;
 using BrandAndProduct.Service.Models;
 using BrandAndProduct.Service.Models.Dto;
-using BrandAndProduct.Service.Utils;
 using GoodOnYouScrapper.Service.Protos;
 using Grpc.Core;
-using Grpc.Net.Client;
+using Grpc.Net.ClientFactory;
 
 namespace BrandAndProduct.Service.DataAccess.BrandData;
 
 /// <summary>Class to contact appropriate microservice for brand data.</summary>
 public class BrandData : IBrandData
 {
-    private readonly GrpcChannel _channel;
     private readonly BrandScrapperService.BrandScrapperServiceClient _client;
     private readonly IMapper _mapper;
 
     /// <summary>Constructor</summary>
-    public BrandData(IMapper mapper)
+    public BrandData(GrpcClientFactory grpcClientFactory, IMapper mapper)
     {
-        _channel = GrpcChannel.ForAddress(AppConstants.GoodOnYouScrapperUrl);
-        _client = new BrandScrapperService.BrandScrapperServiceClient(_channel);
+        _client = grpcClientFactory.CreateClient<BrandScrapperService.BrandScrapperServiceClient>("BrandService");
         _mapper = mapper;
     }
 

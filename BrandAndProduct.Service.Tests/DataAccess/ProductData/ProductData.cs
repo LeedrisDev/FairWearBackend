@@ -1,24 +1,36 @@
 ﻿using System.Net;
-using BrandAndProduct.Service.Models.Dto;
+using AutoMapper;
 using BrandAndProduct.Service.Utils;
-using BrandAndProduct.Service.Utils.HttpClientWrapper;
 using FluentAssertions;
+using Grpc.Core;
+using Grpc.Net.ClientFactory;
 using Moq;
-using Newtonsoft.Json;
+using ProductDataRetriever.Service.Protos;
 
 namespace BrandAndProduct.Service.Tests.DataAccess.ProductData;
 
 [TestClass]
 public class ProductData
 {
-    private Mock<IHttpClientWrapper> _httpClientWrapperMock;
+    private IMapper _mapper;
+    private Mock<GrpcClientFactory> _mockGrpcClientFactory;
+    private Mock<ProductScrapperService.ProductScrapperServiceClient> _mockProductServiceClient;
     private BrandAndProduct.Service.DataAccess.ProductData.ProductData _productData;
+
 
     [TestInitialize]
     public void Initialize()
     {
-        _httpClientWrapperMock = new Mock<IHttpClientWrapper>();
-        _productData = new BrandAndProduct.Service.DataAccess.ProductData.ProductData(_httpClientWrapperMock.Object);
+        _mockGrpcClientFactory = new Mock<GrpcClientFactory>();
+        _mockProductServiceClient = new Mock<ProductScrapperService.ProductScrapperServiceClient>();
+        _mockGrpcClientFactory
+            .Setup(f => f.CreateClient<ProductScrapperService.ProductScrapperServiceClient>("ProductService"))
+            .Returns(_mockProductServiceClient.Object);
+
+        var config = new MapperConfiguration(cfg => { cfg.AddProfile<AutoMapperProfiles>(); });
+        _mapper = config.CreateMapper();
+        _productData =
+            new BrandAndProduct.Service.DataAccess.ProductData.ProductData(_mockGrpcClientFactory.Object);
     }
 
     [TestMethod]
@@ -26,34 +38,30 @@ public class ProductData
     {
         // Arrange
         var expectedUpc = "123456789";
-        var expectedProductRetrieverDto = new ProductRetrieverDto
+        var expectedProductRetriever = new ProductScrapperResponse()
         {
             UpcCode = expectedUpc,
             BrandName = "NorthFace",
             Name = "Etip Hardface Glove",
             Category = "Gloves",
-            Ranges = new List<string>()
+        };
+
+        expectedProductRetriever.Ranges.AddRange(
+            new List<string>()
             {
                 "Men", "Women"
-            }
-        };
+            });
 
-        var expectedResponse = new HttpResponseMessage
-        {
-            StatusCode = HttpStatusCode.OK,
-            Content = new StringContent(JsonConvert.SerializeObject(expectedProductRetrieverDto))
-        };
-
-        _httpClientWrapperMock
-            .Setup(mock => mock.GetAsync($"{AppConstants.ProductDataRetrieverUrl}/{expectedUpc}"))
-            .ReturnsAsync(expectedResponse);
+        _mockProductServiceClient
+            .Setup(c => c.GetProduct(It.IsAny<ProductScrapperRequest>(), null, null, new CancellationToken()))
+            .Returns(expectedProductRetriever);
 
         // Act
-        var result = await _productData.GetProductByUpc(expectedUpc);
+        var result = _productData.GetProductByUpc(expectedUpc);
 
         // Assert
         result.Status.Should().Be(HttpStatusCode.OK);
-        result.Object.Should().BeEquivalentTo(expectedProductRetrieverDto);
+        result.Object.Should().BeEquivalentTo(expectedProductRetriever);
     }
 
     [TestMethod]
@@ -66,12 +74,14 @@ public class ProductData
             StatusCode = HttpStatusCode.NotFound
         };
 
-        _httpClientWrapperMock
-            .Setup(mock => mock.GetAsync($"{AppConstants.ProductDataRetrieverUrl}/{expectedUpc}"))
-            .ReturnsAsync(expectedResponse);
+        _mockProductServiceClient
+            .Setup(c => c.GetProduct(It.IsAny<ProductScrapperRequest>(), null, null, new CancellationToken()))
+            .Throws(new RpcException(
+                new Status(StatusCode.NotFound, ($"Product with barcode {expectedUpc} not found."))));
+
 
         // Act
-        var result = await _productData.GetProductByUpc(expectedUpc);
+        var result = _productData.GetProductByUpc(expectedUpc);
 
         // Assert
         result.Status.Should().Be(HttpStatusCode.NotFound);
@@ -83,42 +93,17 @@ public class ProductData
     {
         // Arrange
         var expectedUpc = "123456789";
-        var expectedResponse = new HttpResponseMessage
-        {
-            StatusCode = HttpStatusCode.InternalServerError
-        };
 
-        _httpClientWrapperMock
-            .Setup(mock => mock.GetAsync($"{AppConstants.ProductDataRetrieverUrl}/{expectedUpc}"))
-            .ReturnsAsync(expectedResponse);
+        _mockProductServiceClient
+            .Setup(c => c.GetProduct(It.IsAny<ProductScrapperRequest>(), null, null, new CancellationToken()))
+            .Throws(new RpcException(new Status(StatusCode.Internal, ($"Barcode service is unavailable."))));
+
 
         // Act
-        var result = await _productData.GetProductByUpc(expectedUpc);
-
-        // Assert
-        result.Status.Should().Be(HttpStatusCode.ServiceUnavailable);
-        result.ErrorMessage.Should().Be($"Barcode service is unavailable.");
-    }
-
-    [TestMethod]
-    public async Task GetProductByUpc_ReturnsInternalServerErrorForDeserializationFailure()
-    {
-        // Arrange
-        var expectedUpc = "123456789";
-        var expectedResponse = new HttpResponseMessage
-        {
-            StatusCode = HttpStatusCode.OK,
-        };
-
-        _httpClientWrapperMock
-            .Setup(mock => mock.GetAsync($"{AppConstants.ProductDataRetrieverUrl}/{expectedUpc}"))
-            .ReturnsAsync(expectedResponse);
-
-        // Act
-        var result = await _productData.GetProductByUpc(expectedUpc);
+        var result = _productData.GetProductByUpc(expectedUpc);
 
         // Assert
         result.Status.Should().Be(HttpStatusCode.InternalServerError);
-        result.ErrorMessage.Should().Be($"Could not deserialize product.");
+        result.ErrorMessage.Should().Be($"Barcode service is unavailable.");
     }
 }

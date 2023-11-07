@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using AutoMapper;
 using BrandAndProduct.Service.DataAccess;
+using BrandAndProduct.Service.DataAccess.Filters;
 using BrandAndProduct.Service.DataAccess.Repositories;
 using BrandAndProduct.Service.Models.Dto;
 using BrandAndProduct.Service.Models.Entity;
@@ -63,7 +64,11 @@ public class ProductRepositoryTester
         var repository = new ProductRepository(_context, _mapper);
 
         // Act
-        var result = await repository.GetAllAsync();
+        var filterDict = new Dictionary<string, string>();
+        var genericFilter = new GenericFilterFactory<IFilter>();
+        var filter = genericFilter.CreateFilter(filterDict);
+
+        var result = await repository.GetAllAsync(filter);
 
         // Assert
         result.Should().NotBeNull();
@@ -185,7 +190,7 @@ public class ProductRepositoryTester
 
 
     [TestMethod]
-    public async Task UpdateAsync_UpdatesProductInDatabase()
+    public async Task UpdateProductAsync_UpdatesProductInDatabase()
     {
         // Arrange
         var products = new List<ProductEntity>
@@ -217,7 +222,7 @@ public class ProductRepositoryTester
             UpcCode = "987654321",
             Category = "Updated Category",
             Ranges = new List<string> { "Updated Range" },
-            BrandId = 2,
+            BrandId = 3,
         };
 
         _context.Products.AddRange(products);
@@ -226,7 +231,7 @@ public class ProductRepositoryTester
         var repository = new ProductRepository(_context, _mapper);
 
         // Act
-        var result = await repository.UpdateAsync(productToUpdate);
+        var result = await repository.UpdateProductAsync(productToUpdate);
 
         // Assert
         result.Should().NotBeNull();
@@ -241,7 +246,7 @@ public class ProductRepositoryTester
     }
 
     [TestMethod]
-    public async Task UpdateAsync_ReturnsNotFoundForNonExistentId()
+    public async Task UpdateProductAsync_ReturnsNotFoundForNonExistentId()
     {
         // Arrange
         var products = new List<ProductEntity>
@@ -273,7 +278,7 @@ public class ProductRepositoryTester
         var repository = new ProductRepository(_context, _mapper);
 
         // Act
-        var result = await repository.UpdateAsync(productToUpdate);
+        var result = await repository.UpdateProductAsync(productToUpdate);
 
         // Assert
         result.Should().NotBeNull();

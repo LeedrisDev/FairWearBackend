@@ -32,7 +32,7 @@ public class ProductRepository : Repository<ProductDto, ProductEntity>, IProduct
 
         if (entityToUpdate.BrandId != entity.BrandId)
         {
-            brandEntity = Context.Brands.FirstOrDefault(x => x.Id == entity.BrandId);
+            brandEntity = Context.Brands.FirstOrDefault(x => x.Id == entity.BrandId)!;
         }
 
 

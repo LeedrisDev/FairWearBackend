@@ -1,10 +1,12 @@
 ﻿using System.Net;
+using AutoMapper;
 using BrandAndProduct.Service.Models.Dto;
 using BrandAndProduct.Service.Utils;
-using BrandAndProduct.Service.Utils.HttpClientWrapper;
 using FluentAssertions;
+using GoodOnYouScrapper.Service.Protos;
+using Grpc.Core;
+using Grpc.Net.ClientFactory;
 using Moq;
-using Newtonsoft.Json;
 
 namespace BrandAndProduct.Service.Tests.DataAccess.BrandData;
 
@@ -12,13 +14,23 @@ namespace BrandAndProduct.Service.Tests.DataAccess.BrandData;
 public class BrandDataTester
 {
     private BrandAndProduct.Service.DataAccess.BrandData.BrandData _brandData;
-    private Mock<IHttpClientWrapper> _httpClientWrapperMock;
+    private IMapper _mapper;
+    private Mock<BrandScrapperService.BrandScrapperServiceClient> _mockBrandServiceClient;
+    private Mock<GrpcClientFactory> _mockGrpcClientFactory;
+
 
     [TestInitialize]
     public void Initialize()
     {
-        _httpClientWrapperMock = new Mock<IHttpClientWrapper>();
-        _brandData = new BrandAndProduct.Service.DataAccess.BrandData.BrandData(_httpClientWrapperMock.Object);
+        _mockGrpcClientFactory = new Mock<GrpcClientFactory>();
+        _mockBrandServiceClient = new Mock<BrandScrapperService.BrandScrapperServiceClient>();
+        _mockGrpcClientFactory
+            .Setup(f => f.CreateClient<BrandScrapperService.BrandScrapperServiceClient>("BrandService"))
+            .Returns(_mockBrandServiceClient.Object);
+
+        var config = new MapperConfiguration(cfg => { cfg.AddProfile<AutoMapperProfiles>(); });
+        _mapper = config.CreateMapper();
+        _brandData = new BrandAndProduct.Service.DataAccess.BrandData.BrandData(_mockGrpcClientFactory.Object, _mapper);
     }
 
     [TestMethod]
@@ -28,31 +40,36 @@ public class BrandDataTester
         var expectedName = "ExampleBrand";
         var expectedBrandDto = new BrandDto
         {
-            Id = 1,
+            Id = 0,
             Name = expectedName,
             Country = "USA",
             EnvironmentRating = 5,
             PeopleRating = 4,
             AnimalRating = 3,
             RatingDescription = "Description 1",
-            Categories = new List<string> { "Category 1", "Category 2" },
-            Ranges = new List<string> { "Range 1", "Range 2" }
+            Categories = new List<string> { "Category 1" },
+            Ranges = new List<string> { "Range 1" }
         };
 
-        var expectedResponse = new HttpResponseMessage
+        var brandResponse = new BrandScrapperResponse
         {
-            StatusCode = HttpStatusCode.OK,
-            Content = new StringContent(JsonConvert.SerializeObject(expectedBrandDto))
+            Name = expectedName,
+            Country = "USA",
+            EnvironmentRating = 5,
+            PeopleRating = 4,
+            AnimalRating = 3,
+            RatingDescription = "Description 1",
         };
 
-        _httpClientWrapperMock
-            .Setup(mock => mock.PostAsync(
-                AppConstants.GoodOnYouScrapperUrl,
-                It.IsAny<StringContent>()))
-            .ReturnsAsync(expectedResponse);
+        brandResponse.Categories.AddRange(new List<string> { "Category 1" });
+        brandResponse.Ranges.AddRange(new List<string> { "Range 1" });
+
+        _mockBrandServiceClient
+            .Setup(c => c.GetBrand(It.IsAny<BrandScrapperRequest>(), null, null, new CancellationToken()))
+            .Returns(brandResponse);
 
         // Act
-        var result = await _brandData.GetBrandByNameAsync(expectedName);
+        var result = _brandData.GetBrandByName(expectedName);
 
         // Assert
         result.Status.Should().Be(HttpStatusCode.OK);
@@ -70,41 +87,14 @@ public class BrandDataTester
             StatusCode = HttpStatusCode.InternalServerError
         };
 
-        _httpClientWrapperMock
-            .Setup(mock => mock.PostAsync(
-                AppConstants.GoodOnYouScrapperUrl,
-                It.IsAny<StringContent>()))
-            .ReturnsAsync(expectedResponse);
+        _mockBrandServiceClient
+            .Setup(c => c.GetBrand(It.IsAny<BrandScrapperRequest>(), null, null, new CancellationToken()))
+            .Throws(new RpcException(new Status(StatusCode.Internal, "Internal Server Error")));
 
         // Act
-        var result = await _brandData.GetBrandByNameAsync(expectedName);
+        var result = _brandData.GetBrandByName(expectedName);
 
         // Assert
         result.Status.Should().Be(HttpStatusCode.InternalServerError);
-    }
-
-    [TestMethod]
-    public async Task GetBrandByNameAsync_ReturnsErrorForDeserializationFailure()
-    {
-        // Arrange  
-        var expectedName = "ExampleBrand";
-
-        var expectedResponse = new HttpResponseMessage
-        {
-            StatusCode = HttpStatusCode.OK,
-        };
-
-        _httpClientWrapperMock
-            .Setup(mock => mock.PostAsync(
-                AppConstants.GoodOnYouScrapperUrl,
-                It.IsAny<StringContent>()))
-            .ReturnsAsync(expectedResponse);
-
-        // Act
-        var result = await _brandData.GetBrandByNameAsync(expectedName);
-
-        // Assert
-        result.Status.Should().Be(HttpStatusCode.InternalServerError);
-        result.ErrorMessage.Should().Be("Error deserializing brand.");
     }
 }

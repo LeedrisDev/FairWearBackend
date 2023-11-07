@@ -1,27 +1,20 @@
 using System.Net;
-using AutoMapper;
 using BrandAndProduct.Service.Models;
-using BrandAndProduct.Service.Utils;
-using ProductDataRetriever.Service.Protos;
 using Grpc.Core;
-using Grpc.Net.Client;
+using Grpc.Net.ClientFactory;
+using ProductDataRetriever.Service.Protos;
 
 namespace BrandAndProduct.Service.DataAccess.ProductData;
 
 /// <summary>Class to contact appropriate microservice for product data.</summary>
 public class ProductData : IProductData
 {
-    private readonly GrpcChannel _channel;
     private readonly ProductScrapperService.ProductScrapperServiceClient _client;
-    private readonly IMapper _mapper;
-
 
     /// <summary>Constructor.</summary>
-    public ProductData(IMapper mapper)
+    public ProductData(GrpcClientFactory grpcClientFactory)
     {
-        _channel = GrpcChannel.ForAddress(AppConstants.ProductDataRetrieverUrl);
-        _client = new ProductScrapperService.ProductScrapperServiceClient(_channel);
-        _mapper = mapper;
+        _client = grpcClientFactory.CreateClient<ProductScrapperService.ProductScrapperServiceClient>("ProductService");
     }
 
     /// <inheritdoc/>
@@ -42,12 +35,12 @@ public class ProductData : IProductData
             if (e.Status.StatusCode == StatusCode.NotFound)
             {
                 processingStatusResponse.Status = HttpStatusCode.NotFound;
-                processingStatusResponse.ErrorMessage = e.Message;
+                processingStatusResponse.ErrorMessage = e.Status.Detail;
             }
             else
             {
                 processingStatusResponse.Status = HttpStatusCode.InternalServerError;
-                processingStatusResponse.ErrorMessage = e.Message;
+                processingStatusResponse.ErrorMessage = e.Status.Detail;
             }
         }
 

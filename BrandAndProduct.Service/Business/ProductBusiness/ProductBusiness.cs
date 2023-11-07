@@ -22,6 +22,7 @@ public class ProductBusiness : IProductBusiness
     /// <param name="brandRepository"></param>
     /// <param name="productData"></param>
     /// <param name="brandData"></param>
+    /// <param name="filterFactory"></param>
     public ProductBusiness(IProductRepository productRepository, IBrandRepository brandRepository,
         IProductData productData, IBrandData brandData, IFilterFactory<IFilter> filterFactory)
     {
@@ -49,8 +50,7 @@ public class ProductBusiness : IProductBusiness
     /// <inheritdoc />
     public async Task<ProcessingStatusResponse<ProductInformationDto>> GetProductByUpcAsync(string upcCode)
     {
-        var filterDict = new Dictionary<string, string>();
-        filterDict.Add("UpcCode", upcCode);
+        var filterDict = new Dictionary<string, string> { { "UpcCode", upcCode } };
 
         var upcFilter = _filterFactory.CreateFilter(filterDict);
 

@@ -37,6 +37,7 @@ public class BrandService : Protos.BrandService.BrandServiceBase
 
         if (brandList.Status != HttpStatusCode.OK)
         {
+            _logger.LogError("Error while retrieving brands: {ErrorMessage}", brandList.ErrorMessage);
             throw new RpcException(new Status(StatusCode.Internal, brandList.ErrorMessage));
         }
 
@@ -49,6 +50,8 @@ public class BrandService : Protos.BrandService.BrandServiceBase
     public override async Task<BrandResponse> GetBrandByIdAsync(BrandByIdRequest request, ServerCallContext context)
     {
         var brand = await _brandBusiness.GetBrandByIdAsync(request.Id);
+        if (brand.Status != HttpStatusCode.OK)
+            _logger.LogError("Error while retrieving brand: {ErrorMessage}", brand.ErrorMessage);
 
         return brand.Status switch
         {
@@ -62,6 +65,8 @@ public class BrandService : Protos.BrandService.BrandServiceBase
         ServerCallContext context)
     {
         var brand = await _brandBusiness.GetBrandByNameAsync(request.Name);
+        if (brand.Status != HttpStatusCode.OK)
+            _logger.LogError("Error while retrieving brand: {ErrorMessage}", brand.ErrorMessage);
 
         return brand.Status switch
         {
@@ -74,7 +79,8 @@ public class BrandService : Protos.BrandService.BrandServiceBase
     public override async Task<BrandResponse> CreateBrandAsync(BrandRequest request, ServerCallContext context)
     {
         var createdBrand = await _brandBusiness.CreateBrandAsync(_mapper.Map<BrandDto>(request));
-
+        if (createdBrand.Status != HttpStatusCode.OK)
+            _logger.LogError("Error while creating brand: {ErrorMessage}", createdBrand.ErrorMessage);
         return createdBrand.Status switch
         {
             HttpStatusCode.OK => _mapper.Map<BrandResponse>(createdBrand.Object),
@@ -85,7 +91,8 @@ public class BrandService : Protos.BrandService.BrandServiceBase
     public override async Task<BrandResponse> UpdateBrandAsync(BrandResponse request, ServerCallContext context)
     {
         var updatedBrand = await _brandBusiness.UpdateBrandAsync(_mapper.Map<BrandDto>(request));
-
+        if (updatedBrand.Status != HttpStatusCode.OK)
+            _logger.LogError("Error while updating brands: {ErrorMessage}", updatedBrand.ErrorMessage);
         return updatedBrand.Status switch
         {
             HttpStatusCode.NotFound => throw new RpcException(new Status(StatusCode.NotFound,
@@ -99,8 +106,10 @@ public class BrandService : Protos.BrandService.BrandServiceBase
     {
         var brand = await _brandBusiness.GetBrandByIdAsync(request.Id);
 
+
         if (brand.Status != HttpStatusCode.OK)
         {
+            _logger.LogError("Error while deleting brands: {ErrorMessage}", brand.ErrorMessage);
             return brand.Status switch
             {
                 HttpStatusCode.NotFound => throw new RpcException(new Status(StatusCode.NotFound,

@@ -1,40 +1,4 @@
 services:
-  
-  treafik:
-    container_name: traefik
-    restart: unless-stopped
-    depends_on:
-      - traefik-helper
-    image: traefik:v2.10
-    ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"
-    labels:
-      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./TraefikConfig/TraefikFiles/traefik.yml:/etc/traefik/traefik.yml
-      - ./TraefikConfig/TraefikFiles/tls.yml:/etc/traefik/tls.yml
-      - ./TraefikConfig/Certs:/etc/ssl/traefik
-    networks:
-      - traefik-network
-  
-  
-  brand_and_product_db:
-    container_name: brand_and_product_db
-    build:
-        context: .
-        dockerfile: Databases/BrandsAndProductsDatabase/Dockerfile
-    restart: on-failure
-    environment:
-      - POSTGRES_USER=fairwear
-      - POSTGRES_PASSWORD=fairwear
-      - POSTGRES_DB=fairwear_brand_and_product_database
-    ports: 
-      - "5432:5432"
-    
-  
   gateway_api:
     container_name: gateway_api
     build:
@@ -44,27 +8,8 @@ services:
     environment:
       - BRAND_AND_PRODUCT_API_SERVICE_HOST=brand_and_product_service
       - BRAND_AND_PRODUCT_API_SERVICE_PORT_HTTP=80
-    labels:
-      - "traefik.docker.network=fairwearbackend_traefik-network"
-      - "traefik.http.routers.gateway_api.rule=Host(`gateway.traefik.me`)"
-      - "traefik.http.routers.gateway_api.tls=true"
-    networks:
-      - traefik-network
-      - fairwear_internal_network
-
-
-  brand_and_product_db:
-    container_name: brand_and_product_db
-    build:
-      context: .
-      dockerfile: Databases/BrandsAndProductsDatabase/Dockerfile
-    restart: on-failure
-    environment:
-      - POSTGRES_USER=fairwear
-      - POSTGRES_PASSWORD=fairwear
-      - POSTGRES_DB=fairwear_brand_and_product_database
     ports:
-      - "5432:5432"
+      - "80:80"
     networks:
       - fairwear_internal_network
 
@@ -82,6 +27,9 @@ services:
       - PRODUCT_DATA_RETRIEVER_SERVICE_PORT_HTTP=80
       - BRAND_AND_PRODUCT_DB_SERVICE_HOST=brand_and_product_db
       - BRAND_AND_PRODUCT_DB_SERVICE_PORT_HTTP=5432
+      - BRAND_AND_PRODUCT_DB_USER=sa
+      - BRAND_AND_PRODUCT_DB_PASSWORD=sa
+      - BRAND_AND_PRODUCT_DB_DATABASE_NAME=brand_and_product_db
     ports:
       - "8081:80"
     networks:
@@ -112,16 +60,38 @@ services:
       - fairwear_internal_network
 
 
-  traefik-helper:
-    container_name: traefik-helper
-    image: alpine:3.17
-    command: sh -c "cd /etc/ssl/traefik
-      && wget traefik.me/cert.pem -O cert.pem
-      && wget traefik.me/privkey.pem -O cert-key.pem"
-    volumes:
-      - ./TraefikConfig/Certs:/etc/ssl/traefik
+  brand_and_product_db:
+    container_name: brand_and_product_db
+    build:
+      context: .
+      dockerfile: Databases/BrandsAndProductsDatabase/Dockerfile
+    restart: on-failure
+    environment:
+      - POSTGRES_USER=sa
+      - POSTGRES_PASSWORD=sa
+      - POSTGRES_DB=brand_and_product_db
+    ports:
+      - "5432:5432"
+    networks:
+      - fairwear_internal_network
+      
+      
+  authentication_db:
+    container_name: authentication_db
+    build:
+      context: .
+      dockerfile: Databases/AuthenticationDatabase/Dockerfile
+    restart: on-failure
+    environment:
+      - POSTGRES_USER=sa
+      - POSTGRES_PASSWORD=sa
+      - POSTGRES_DB=authentication_db
+    ports:
+      - "5433:5432"
+    networks:
+      - fairwear_internal_network
+        
 
 networks:
-  traefik-network:
-  
   fairwear_internal_network:
+    driver: bridge

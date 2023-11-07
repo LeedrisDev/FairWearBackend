@@ -81,7 +81,8 @@ public class BrandBusiness : IBrandBusiness
         var treatedName = brandName
             .ToLower()
             .Replace(" ", "-")
-            .Replace("'", "");
+            .Replace("'", "")
+            .Replace("&", "and");
 
         return treatedName;
     }

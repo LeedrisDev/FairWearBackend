@@ -46,7 +46,7 @@ services:
       - "8082:80"
     networks:
       - fairwear_internal_network
-  
+
 
   good_on_you_scrapper_service:
     container_name: good_on_you_scrapper_service
@@ -74,8 +74,7 @@ services:
       - "5432:5432"
     networks:
       - fairwear_internal_network
-      
-      
+
   authentication_db:
     container_name: authentication_db
     build:
@@ -90,7 +89,21 @@ services:
       - "5433:5432"
     networks:
       - fairwear_internal_network
-        
+      
+  users_db:
+    container_name: users_db
+    build:
+      context: .
+      dockerfile: Databases/UsersDatabase/Dockerfile
+    restart: on-failure
+    environment:
+      - POSTGRES_USER=sa
+      - POSTGRES_PASSWORD=sa
+      - POSTGRES_DB=users_db
+    ports:
+      - "5434:5432"
+    networks:
+      - fairwear_internal_network
 
 networks:
   fairwear_internal_network:

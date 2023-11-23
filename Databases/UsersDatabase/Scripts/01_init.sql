@@ -30,14 +30,6 @@ create table if not exists products
     primary key (id)
 );
 
-create table if not exists brands
-(
-    id     bigint not null,
-    name   varchar not null,
-    rating integer not null,
-    primary key (id)
-);
-
 create table if not exists user_product_history
 (
     id          bigserial,
@@ -51,15 +43,14 @@ create table if not exists user_product_history
         on delete cascade
 );
 
-create table user_brand_history
+create table if not exists user_experience
 (
-    id          bigserial,
-    user_id     bigint not null,
-    brand_id    bigint not null,
-    timestamp   date default CURRENT_DATE,
+    id      bigserial,
+    user_id bigint not null,
+    score   bigint    default 0,
+    level   integer   default 0,
+    todos   integer[] default '{0,0,0}'::integer[],
     primary key (id),
     foreign key (user_id) references users
-        on delete cascade,
-    foreign key (brand_id) references brands
         on delete cascade
 );

@@ -58,6 +58,23 @@ services:
       - "8083:80"
     networks:
       - fairwear_internal_network
+  
+  users_service:
+    container_name: users_service
+    build:
+      context: .
+      dockerfile: Users.Service/Dockerfile
+    restart: on-failure
+    environment:
+      - USERS_DB_SERVICE_HOST=users_db
+      - USERS_DB_SERVICE_PORT_HTTP=5434
+      - USERS_DB_USER=sa
+      - USERS_DB_PASSWORD=sa
+      - USERS_DB_DATABASE_NAME=users_db
+    ports:
+      - "8081:80"
+    networks:
+      - fairwear_internal_network
 
 
   brand_and_product_db:

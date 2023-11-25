@@ -1,4 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Users.Service.Business.ProductBusiness;
+using Users.Service.Business.UserBusiness;
+using Users.Service.Business.UserExperienceBusiness;
+using Users.Service.Business.UserProductHistoryBusiness;
 using Users.Service.DataAccess;
 using Users.Service.DataAccess.Filters;
 using Users.Service.DataAccess.IRepositories;
@@ -29,5 +33,11 @@ public static class DependencyInjectionConfiguration
         services.AddTransient<IUserProductHistoryRepository, UserProductHistoryRepository>();
 
         services.AddTransient<IFilterFactory<IFilter>, GenericFilterFactory<IFilter>>();
+
+        // Business
+        services.AddTransient<IProductBusiness, ProductBusiness>();
+        services.AddTransient<IUserBusiness, UserBusiness>();
+        services.AddTransient<IUserExperienceBusiness, UserExperienceBusiness>();
+        services.AddTransient<IUserProductHistoryBusiness, UserProductHistoryBusiness>();
     }
 }

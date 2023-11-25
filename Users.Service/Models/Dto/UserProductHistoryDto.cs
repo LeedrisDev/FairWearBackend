@@ -1,15 +1,10 @@
-﻿namespace Users.Service.Models.Entity
+namespace Users.Service.Models.Dto
 {
     /// <summary>
-    /// Represents an entity for user's product history.
+    /// Data Transfer Object (DTO) for user's product history information.
     /// </summary>
-    public partial class UserProductHistoryEntity
+    public class UserProductHistoryDto : IObjectWithId
     {
-        /// <summary>
-        /// Gets or sets the unique identifier for the user's product history.
-        /// </summary>
-        public long Id { get; set; }
-
         /// <summary>
         /// Gets or sets the ID of the user associated with this product history.
         /// </summary>
@@ -28,11 +23,16 @@
         /// <summary>
         /// Gets or sets the entity representing the product associated with this history.
         /// </summary>
-        public virtual ProductEntity ProductEntity { get; set; } = null!;
+        public virtual ProductDto ProductEntity { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the entity representing the user associated with this product history.
         /// </summary>
-        public virtual UserEntity UserEntity { get; set; } = null!;
+        public virtual UserDto UserEntity { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets the unique identifier for the user's product history.
+        /// </summary>
+        public long Id { get; set; }
     }
 }

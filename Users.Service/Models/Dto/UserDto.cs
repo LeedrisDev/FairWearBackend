@@ -1,15 +1,10 @@
-﻿namespace Users.Service.Models.Entity
+namespace Users.Service.Models.Dto
 {
     /// <summary>
-    /// Represents a User entity.
+    /// Data Transfer Object (DTO) for user information.
     /// </summary>
-    public partial class UserEntity
+    public class UserDto : IObjectWithId
     {
-        /// <summary>
-        /// Gets or sets the unique identifier for the user.
-        /// </summary>
-        public long Id { get; set; }
-
         /// <summary>
         /// Gets or sets the username of the user.
         /// </summary>
@@ -43,13 +38,17 @@
         /// <summary>
         /// Gets or sets the collection of user experiences associated with this user.
         /// </summary>
-        public virtual ICollection<UserExperienceEntity> UserExperiences { get; set; } =
-            new List<UserExperienceEntity>();
+        public virtual ICollection<UserExperienceDto> UserExperiences { get; set; } = new List<UserExperienceDto>();
 
         /// <summary>
         /// Gets or sets the collection of user product histories associated with this user.
         /// </summary>
-        public virtual ICollection<UserProductHistoryEntity> UserProductHistories { get; set; } =
-            new List<UserProductHistoryEntity>();
+        public virtual ICollection<UserProductHistoryDto> UserProductHistories { get; set; } =
+            new List<UserProductHistoryDto>();
+
+        /// <summary>
+        /// Gets or sets the unique identifier for the user.
+        /// </summary>
+        public long Id { get; set; }
     }
 }

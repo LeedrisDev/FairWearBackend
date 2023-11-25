@@ -15,5 +15,7 @@ public static class DependencyInjectionConfiguration
         {
             options.UseNpgsql(AppConstants.Database.BrandAndProductConnectionString);
         });
+
+        services.AddAutoMapper(typeof(AutoMapperProfiles));
     }
 }

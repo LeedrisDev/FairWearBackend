@@ -4,5 +4,5 @@ namespace Users.Service.Models;
 public interface IObjectWithId
 {
     /// <summary>Id of the object</summary>
-    public int Id { get; set; }
+    public long Id { get; set; }
 }

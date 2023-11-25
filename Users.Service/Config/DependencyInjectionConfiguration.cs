@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Users.Service.DataAccess;
+using Users.Service.DataAccess.Filters;
+using Users.Service.DataAccess.IRepositories;
+using Users.Service.DataAccess.Repositories;
 using Users.Service.Utils;
 
 namespace Users.Service.Config;
@@ -16,6 +19,15 @@ public static class DependencyInjectionConfiguration
             options.UseNpgsql(AppConstants.Database.BrandAndProductConnectionString);
         });
 
+        // Services
         services.AddAutoMapper(typeof(AutoMapperProfiles));
+
+        // DataAccess
+        services.AddTransient<IProductRepository, ProductRepository>();
+        services.AddTransient<IUserRepository, UserRepository>();
+        services.AddTransient<IUserExperienceRepository, UserExperienceRepository>();
+        services.AddTransient<IUserProductHistoryRepository, UserProductHistoryRepository>();
+
+        services.AddTransient<IFilterFactory<IFilter>, GenericFilterFactory<IFilter>>();
     }
 }

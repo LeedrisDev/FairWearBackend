@@ -3,13 +3,8 @@
     /// <summary>
     /// Represents an entity for user's product history.
     /// </summary>
-    public partial class UserProductHistoryEntity
+    public partial class UserProductHistoryEntity : IObjectWithId
     {
-        /// <summary>
-        /// Gets or sets the unique identifier for the user's product history.
-        /// </summary>
-        public long Id { get; set; }
-
         /// <summary>
         /// Gets or sets the ID of the user associated with this product history.
         /// </summary>
@@ -34,5 +29,10 @@
         /// Gets or sets the entity representing the user associated with this product history.
         /// </summary>
         public virtual UserEntity UserEntity { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets the unique identifier for the user's product history.
+        /// </summary>
+        public long Id { get; set; }
     }
 }

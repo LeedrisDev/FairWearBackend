@@ -3,13 +3,8 @@
     /// <summary>
     /// Represents a User entity.
     /// </summary>
-    public partial class UserEntity
+    public partial class UserEntity : IObjectWithId
     {
-        /// <summary>
-        /// Gets or sets the unique identifier for the user.
-        /// </summary>
-        public long Id { get; set; }
-
         /// <summary>
         /// Gets or sets the username of the user.
         /// </summary>
@@ -51,5 +46,10 @@
         /// </summary>
         public virtual ICollection<UserProductHistoryEntity> UserProductHistories { get; set; } =
             new List<UserProductHistoryEntity>();
+
+        /// <summary>
+        /// Gets or sets the unique identifier for the user.
+        /// </summary>
+        public long Id { get; set; }
     }
 }

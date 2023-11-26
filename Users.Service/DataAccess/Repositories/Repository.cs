@@ -1,6 +1,5 @@
 using System.Linq.Expressions;
 using System.Net;
-using System.Reflection;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Users.Service.DataAccess.Filters;
@@ -58,6 +57,25 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
     }
 
     /// <inheritdoc/>
+    public async Task<ProcessingStatusResponse<IEnumerable<TModel>>> GetAllAsync()
+    {
+        var processingStatusResponse = new ProcessingStatusResponse<IEnumerable<TModel>>();
+        try
+        {
+            var entities = await DbSet.ToListAsync();
+            processingStatusResponse.Object = Mapper.Map<IEnumerable<TModel>>(entities);
+            processingStatusResponse.Status = HttpStatusCode.OK;
+        }
+        catch (Exception ex)
+        {
+            processingStatusResponse.Status = HttpStatusCode.BadRequest;
+            processingStatusResponse.ErrorMessage = ex.Message;
+        }
+
+        return processingStatusResponse;
+    }
+
+    /// <inheritdoc/>
     public async Task<ProcessingStatusResponse<TModel>> GetByIdAsync(long id)
     {
         var processingStatusResponse = new ProcessingStatusResponse<TModel>();
@@ -79,11 +97,20 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
     {
         var processingStatusResponse = new ProcessingStatusResponse<TModel>();
 
-        var entityToAdd = Mapper.Map<TEntity>(entity);
-        await DbSet.AddAsync(entityToAdd);
-        await Context.SaveChangesAsync();
+        try
+        {
+            var entityToAdd = Mapper.Map<TEntity>(entity);
+            await DbSet.AddAsync(entityToAdd);
+            await Context.SaveChangesAsync();
 
-        processingStatusResponse.Object = Mapper.Map<TModel>(entityToAdd);
+            processingStatusResponse.Object = Mapper.Map<TModel>(entityToAdd);
+        }
+        catch (DbUpdateException e)
+        {
+            processingStatusResponse.Status = HttpStatusCode.BadRequest;
+            processingStatusResponse.ErrorMessage = e.InnerException?.Message ?? e.Message;
+        }
+
         return processingStatusResponse;
     }
 
@@ -136,31 +163,12 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
                 var parameter = Expression.Parameter(typeof(TEntity), "a");
                 var property = Expression.Property(parameter, equalFilter.PropertyName);
 
-                Expression comparisonExpression;
+                // Convert the filter value to the property type
+                var convertedValue = Convert.ChangeType(equalFilter.Value, property.Type);
 
-                if (property.Type == typeof(string))
-                {
-                    // Convert the filter value to the property type and make it lowercase
-                    var convertedValue = Convert.ChangeType(equalFilter.Value.ToLower(), property.Type);
-                    var filterValue = Expression.Constant(convertedValue);
-
-                    MethodInfo startsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) })!;
-                    MethodInfo toLowerMethod = typeof(string).GetMethod("ToLower", new Type[] { })!;
-
-                    var toLowerExpression = Expression.Call(property, toLowerMethod);
-
-                    var startsWithExpression = Expression.Call(toLowerExpression, startsWithMethod, filterValue);
-
-                    comparisonExpression = startsWithExpression;
-                }
-                else
-                {
-                    // Non-string
-                    var filterValue = Expression.Constant(Convert.ChangeType(equalFilter.Value, property.Type));
-                    comparisonExpression = Expression.Equal(property, filterValue);
-                }
-
-                var lambdaExpression = Expression.Lambda<Func<TEntity, bool>>(comparisonExpression, parameter);
+                var filterValue = Expression.Constant(convertedValue);
+                var equalExpression = Expression.Equal(property, filterValue);
+                var lambdaExpression = Expression.Lambda<Func<TEntity, bool>>(equalExpression, parameter);
                 query = query.Where(lambdaExpression);
             }
 

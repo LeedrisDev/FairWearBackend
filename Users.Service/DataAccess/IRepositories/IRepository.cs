@@ -11,6 +11,10 @@ public interface IRepository<TModel>
     where TModel : class, IObjectWithId
 {
     /// <summary>Gets all entities from the data store.</summary>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    Task<ProcessingStatusResponse<IEnumerable<TModel>>> GetAllAsync();
+
+    /// <summary>Gets all entities from the data store with filter.</summary>
     /// <param name="filter">Contains filters to apply.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     Task<ProcessingStatusResponse<IEnumerable<TModel>>> GetAllAsync(GenericFilter<IFilter> filter);

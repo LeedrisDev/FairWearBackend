@@ -28,6 +28,11 @@ namespace Users.Service.Business.UserBusiness
         public async Task<ProcessingStatusResponse<IEnumerable<UserDto>>> GetAllUsersAsync(
             Dictionary<string, string> filters)
         {
+            if (!filters.Any())
+            {
+                return await _userRepository.GetAllAsync();
+            }
+
             var filter = _filterFactory.CreateFilter(filters);
 
             return await _userRepository.GetAllAsync(filter);
@@ -52,7 +57,7 @@ namespace Users.Service.Business.UserBusiness
 
             var filter = _filterFactory.CreateFilter(new Dictionary<string, string>
             {
-                { "firebaseId", id }
+                { "FirebaseId", id }
             });
 
             var results = await _userRepository.GetAllAsync(filter);
@@ -89,7 +94,7 @@ namespace Users.Service.Business.UserBusiness
 
             var filter = _filterFactory.CreateFilter(new Dictionary<string, string>
             {
-                { "firebaseId", id }
+                { "FirebaseId", id }
             });
 
             var results = await _userRepository.GetAllAsync(filter);

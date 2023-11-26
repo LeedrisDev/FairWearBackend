@@ -14,7 +14,7 @@ DependencyInjectionConfiguration.Configure(builder.Services);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.MapGrpcService<GreeterService>();
+app.MapGrpcService<UserService>();
 
 app.MapGet("/",
     () =>

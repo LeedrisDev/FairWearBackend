@@ -33,7 +33,7 @@ namespace Users.Service.Business.UserProductHistoryBusiness
         }
 
         /// <inheritdoc/>
-        public async Task<ProcessingStatusResponse<UserProductHistoryDto>> GetUserProductHistoryByIdAsync(int id)
+        public async Task<ProcessingStatusResponse<UserProductHistoryDto>> GetUserProductHistoryByIdAsync(long id)
         {
             return await _userProductHistoryRepository.GetByIdAsync(id);
         }
@@ -53,7 +53,7 @@ namespace Users.Service.Business.UserProductHistoryBusiness
         }
 
         /// <inheritdoc/>
-        public async Task<ProcessingStatusResponse<UserProductHistoryDto>> DeleteUserProductHistoryAsync(int id)
+        public async Task<ProcessingStatusResponse<UserProductHistoryDto>> DeleteUserProductHistoryAsync(long id)
         {
             return await _userProductHistoryRepository.DeleteAsync(id);
         }

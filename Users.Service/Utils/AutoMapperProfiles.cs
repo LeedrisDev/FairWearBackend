@@ -22,9 +22,10 @@ public class AutoMapperProfiles : Profile
         CreateMap<UserExperienceDto, UserExperienceEntity>();
         CreateMap<UserProductHistoryDto, UserProductHistoryEntity>();
 
-        // Dto to Response
+        // Dto to proto object
+        CreateMap<UserDto, User>();
 
-
-        // Response to Dto
+        // Proto object to Dto
+        CreateMap<User, UserDto>();
     }
 }

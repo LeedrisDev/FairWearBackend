@@ -18,7 +18,7 @@ public interface IRepository<TModel>
     /// <summary>Gets a single entity from the data store by its ID.</summary>
     /// <param name="id">The ID of the entity to retrieve.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-    Task<ProcessingStatusResponse<TModel>> GetByIdAsync(int id);
+    Task<ProcessingStatusResponse<TModel>> GetByIdAsync(long id);
 
     /// <summary>Adds a new entity to the data store.</summary>
     /// <param name="entity">The entity to add.</param>
@@ -33,5 +33,5 @@ public interface IRepository<TModel>
     /// <summary>Deletes an entity from the data store by its ID.</summary>
     /// <param name="id">The ID of the entity to delete.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-    Task<ProcessingStatusResponse<TModel>> DeleteAsync(int id);
+    Task<ProcessingStatusResponse<TModel>> DeleteAsync(long id);
 }

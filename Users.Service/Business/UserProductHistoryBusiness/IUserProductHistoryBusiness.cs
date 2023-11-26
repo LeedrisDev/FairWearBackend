@@ -16,7 +16,7 @@ namespace Users.Service.Business.UserProductHistoryBusiness
         /// <summary>Gets a UserProductHistory by Id.</summary>
         /// <param name="id">The Id of the UserProductHistory.</param>
         /// <returns>A <see cref="UserProductHistoryDto"/>.</returns>
-        Task<ProcessingStatusResponse<UserProductHistoryDto>> GetUserProductHistoryByIdAsync(int id);
+        Task<ProcessingStatusResponse<UserProductHistoryDto>> GetUserProductHistoryByIdAsync(long id);
 
         /// <summary>Creates a UserProductHistory.</summary>
         /// <param name="userProductHistoryDto">The UserProductHistory to create.</param>
@@ -33,6 +33,6 @@ namespace Users.Service.Business.UserProductHistoryBusiness
         /// <summary>Deletes a UserProductHistory.</summary>
         /// <param name="id">The Id of the UserProductHistory to delete.</param>
         /// <returns>A <see cref="Task"/>.</returns>
-        Task<ProcessingStatusResponse<UserProductHistoryDto>> DeleteUserProductHistoryAsync(int id);
+        Task<ProcessingStatusResponse<UserProductHistoryDto>> DeleteUserProductHistoryAsync(long id);
     }
 }

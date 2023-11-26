@@ -6,10 +6,16 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>2607778e-f308-4042-96a5-c1fba77b51ab</UserSecretsId>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <ExcludeFromCodeCoverage>
+            <!-- Add patterns to exclude auto-generated gRPC files -->
+            **/*.grpc.cs;
+            **/*.proto.cs
+        </ExcludeFromCodeCoverage>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
-        <Protobuf Include="Protos\greet.proto" GrpcServices="Server"/>
+        <Protobuf Include="Protos\UserService.proto" GrpcServices="Server"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -29,5 +35,4 @@
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4"/>
         <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0"/>
     </ItemGroup>
-
 </Project>

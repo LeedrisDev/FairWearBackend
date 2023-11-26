@@ -15,7 +15,12 @@ namespace Users.Service.Business.UserBusiness
         /// <summary>Gets a User by Id.</summary>
         /// <param name="id">The Id of the User.</param>
         /// <returns>A <see cref="UserDto"/>.</returns>
-        Task<ProcessingStatusResponse<UserDto>> GetUserByIdAsync(int id);
+        Task<ProcessingStatusResponse<UserDto>> GetUserByIdAsync(long id);
+
+        /// <summary>Gets a User by Firebase Id.</summary>
+        /// <param name="id">The Firebase Id of the User.</param>
+        /// <returns>A <see cref="UserDto"/>.</returns>
+        Task<ProcessingStatusResponse<UserDto>> GetUserByFirebaseIdAsync(string id);
 
         /// <summary>Creates a User.</summary>
         /// <param name="userDto">The User to create.</param>
@@ -30,6 +35,11 @@ namespace Users.Service.Business.UserBusiness
         /// <summary>Deletes a User.</summary>
         /// <param name="id">The Id of the User to delete.</param>
         /// <returns>A <see cref="Task"/>.</returns>
-        Task<ProcessingStatusResponse<UserDto>> DeleteUserAsync(int id);
+        Task<ProcessingStatusResponse<UserDto>> DeleteUserAsync(long id);
+
+        /// <summary>Deletes a User by firebase ID.</summary>
+        /// <param name="id">The firebase Id of the User to delete.</param>
+        /// <returns>A <see cref="Task"/>.</returns>
+        Task<ProcessingStatusResponse<UserDto>> DeleteUserByFirebaseIdAsync(string id);
     }
 }

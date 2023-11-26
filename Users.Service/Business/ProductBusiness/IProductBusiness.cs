@@ -15,7 +15,7 @@ namespace Users.Service.Business.ProductBusiness
         /// <summary>Gets a Product by Id.</summary>
         /// <param name="id">The Id of the Product.</param>
         /// <returns>A <see cref="ProductDto"/>.</returns>
-        Task<ProcessingStatusResponse<ProductDto>> GetProductByIdAsync(int id);
+        Task<ProcessingStatusResponse<ProductDto>> GetProductByIdAsync(long id);
 
         /// <summary>Creates a Product.</summary>
         /// <param name="productDto">The Product to create.</param>
@@ -30,6 +30,6 @@ namespace Users.Service.Business.ProductBusiness
         /// <summary>Deletes a Product.</summary>
         /// <param name="id">The Id of the Product to delete.</param>
         /// <returns>A <see cref="Task"/>.</returns>
-        Task<ProcessingStatusResponse<ProductDto>> DeleteProductAsync(int id);
+        Task<ProcessingStatusResponse<ProductDto>> DeleteProductAsync(long id);
     }
 }

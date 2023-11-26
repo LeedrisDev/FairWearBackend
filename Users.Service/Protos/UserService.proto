@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option csharp_namespace = "Users.Service";
+
+package Services;
+
+import "google/protobuf/empty.proto";
+
+service UserService {
+    rpc GetAllUsers (UserFilterList) returns (stream User);
+    rpc GetUserById (UserRequest) returns (User);
+    rpc GetUserByFirebaseId (UserFirebaseRequest) returns (User);
+    rpc CreateUser (User) returns (User);
+    rpc UpdateUser (User) returns (User);
+    rpc DeleteUser (UserRequest) returns (google.protobuf.Empty);
+    rpc DeleteUserByFirebaseId (UserFirebaseRequest) returns (google.protobuf.Empty);
+}
+
+message User {
+    int64 id = 1;
+    string username = 2;
+    string email = 3;
+    string phone = 4;
+    string language_preferences = 5;
+    string theme = 6;
+    string firebase_id = 7;
+}
+
+message UserFilterList {
+    repeated UserFilter filters = 1;
+}
+
+message UserFilter {
+    string key = 1;
+    string value = 2;
+}
+
+message UserRequest {
+    int64 id = 1;
+}
+
+message UserFirebaseRequest {
+    string id = 1;
+}

@@ -16,7 +16,7 @@ namespace Users.Service.Business.UserExperienceBusiness
         /// <summary>Gets a UserExperience by Id.</summary>
         /// <param name="id">The Id of the UserExperience.</param>
         /// <returns>A <see cref="UserExperienceDto"/>.</returns>
-        Task<ProcessingStatusResponse<UserExperienceDto>> GetUserExperienceByIdAsync(int id);
+        Task<ProcessingStatusResponse<UserExperienceDto>> GetUserExperienceByIdAsync(long id);
 
         /// <summary>Creates a UserExperience.</summary>
         /// <param name="userExperienceDto">The UserExperience to create.</param>
@@ -33,6 +33,6 @@ namespace Users.Service.Business.UserExperienceBusiness
         /// <summary>Deletes a UserExperience.</summary>
         /// <param name="id">The Id of the UserExperience to delete.</param>
         /// <returns>A <see cref="Task"/>.</returns>
-        Task<ProcessingStatusResponse<UserExperienceDto>> DeleteUserExperienceAsync(int id);
+        Task<ProcessingStatusResponse<UserExperienceDto>> DeleteUserExperienceAsync(long id);
     }
 }

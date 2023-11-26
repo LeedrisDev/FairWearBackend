@@ -58,7 +58,7 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
     }
 
     /// <inheritdoc/>
-    public async Task<ProcessingStatusResponse<TModel>> GetByIdAsync(int id)
+    public async Task<ProcessingStatusResponse<TModel>> GetByIdAsync(long id)
     {
         var processingStatusResponse = new ProcessingStatusResponse<TModel>();
 
@@ -109,7 +109,7 @@ public class Repository<TModel, TEntity> : IRepository<TModel>
     }
 
     /// <inheritdoc/>
-    public async Task<ProcessingStatusResponse<TModel>> DeleteAsync(int id)
+    public async Task<ProcessingStatusResponse<TModel>> DeleteAsync(long id)
     {
         var processingStatusResponse = new ProcessingStatusResponse<TModel>();
         var entityToDelete = await DbSet.FindAsync(id);

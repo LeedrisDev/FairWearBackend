@@ -33,7 +33,7 @@ namespace Users.Service.Business.UserExperienceBusiness
         }
 
         /// <inheritdoc/>
-        public async Task<ProcessingStatusResponse<UserExperienceDto>> GetUserExperienceByIdAsync(int id)
+        public async Task<ProcessingStatusResponse<UserExperienceDto>> GetUserExperienceByIdAsync(long id)
         {
             return await _userExperienceRepository.GetByIdAsync(id);
         }
@@ -53,7 +53,7 @@ namespace Users.Service.Business.UserExperienceBusiness
         }
 
         /// <inheritdoc/>
-        public async Task<ProcessingStatusResponse<UserExperienceDto>> DeleteUserExperienceAsync(int id)
+        public async Task<ProcessingStatusResponse<UserExperienceDto>> DeleteUserExperienceAsync(long id)
         {
             return await _userExperienceRepository.DeleteAsync(id);
         }

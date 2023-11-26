@@ -3,7 +3,8 @@ using Users.Service.Models.Entity;
 
 namespace Users.Service.DataAccess;
 
-public partial class UsersDbContext : DbContext
+/// <inheritdoc />
+public class UsersDbContext : DbContext
 {
     /// <inheritdoc />
     public UsersDbContext()

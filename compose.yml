@@ -67,14 +67,14 @@ services:
     restart: on-failure
     environment:
       - USERS_DB_SERVICE_HOST=users_db
-      - USERS_DB_SERVICE_PORT_HTTP=5434
+      - USERS_DB_SERVICE_PORT_HTTP=5432
       - USERS_DB_USER=sa
       - USERS_DB_PASSWORD=sa
       - USERS_DB_DATABASE_NAME=users_db
     ports:
-      - "8081:80"
+      - "8084:80"
     networks:
-      - fairwear_internal_network
+      - users_db_network
 
 
   brand_and_product_db:
@@ -118,10 +118,12 @@ services:
       - POSTGRES_PASSWORD=sa
       - POSTGRES_DB=users_db
     ports:
-      - "5434:5432"
+      - "5432"
     networks:
-      - fairwear_internal_network
+      - users_db_network
 
 networks:
   fairwear_internal_network:
+    driver: bridge
+  users_db_network:
     driver: bridge

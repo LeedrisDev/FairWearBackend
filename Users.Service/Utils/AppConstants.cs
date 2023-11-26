@@ -12,8 +12,8 @@ public static class AppConstants
         private static readonly string Password = Environment.GetEnvironmentVariable("USERS_DB_PASSWORD")!;
         private static readonly string DatabaseName = Environment.GetEnvironmentVariable("USERS_DB_DATABASE_NAME")!;
 
-        /// <summary>Connection string to the Brand and Product database.</summary>
-        public static string BrandAndProductConnectionString =>
+        /// <summary>Connection string to the Users database.</summary>
+        public static string UsersDbConnectionString =>
             $"User ID={User};Password={Password};Host={Host};Port={Port};Database={DatabaseName};";
     }
 }

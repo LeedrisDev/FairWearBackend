@@ -17,10 +17,9 @@ public static class DependencyInjectionConfiguration
     /// <summary>Configures the dependency injection.</summary>
     public static void Configure(IServiceCollection services)
     {
-        // DbContext
         services.AddDbContext<UsersDbContext>(options =>
         {
-            options.UseNpgsql(AppConstants.Database.BrandAndProductConnectionString);
+            options.UseNpgsql(AppConstants.Database.UsersDbConnectionString);
         });
 
         // Services

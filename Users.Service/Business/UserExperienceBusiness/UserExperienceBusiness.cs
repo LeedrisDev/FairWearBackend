@@ -46,7 +46,7 @@ namespace Users.Service.Business.UserExperienceBusiness
 
             var dict = new Dictionary<string, string>()
             {
-                { "User_id", id.ToString() }
+                { "UserId", id.ToString() }
             };
 
             var filter = _filterFactory.CreateFilter(dict);

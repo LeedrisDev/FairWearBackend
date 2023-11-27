@@ -99,7 +99,7 @@ public class UsersDbContext : DbContext
                 .HasDefaultValueSql("0")
                 .HasColumnName("score");
             entity.Property(e => e.Todos)
-                .HasDefaultValueSql("'{0,0,0}'::integer[]")
+                .HasDefaultValueSql("'{0,0,0}'")
                 .HasColumnName("todos");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 

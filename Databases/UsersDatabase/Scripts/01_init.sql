@@ -49,7 +49,7 @@ create table if not exists user_experience
     user_id bigint not null,
     score   bigint    default 0,
     level   integer   default 0,
-    todos   integer[] default '{0,0,0}'::integer[],
+    todos   integer[] default '{0,0,0}',
     primary key (id),
     foreign key (user_id) references users
         on delete cascade,

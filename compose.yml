@@ -8,10 +8,13 @@ services:
     environment:
       - BRAND_AND_PRODUCT_API_SERVICE_HOST=brand_and_product_service
       - BRAND_AND_PRODUCT_API_SERVICE_PORT_HTTP=80
+      - USERS_API_SERVICE_HOST=users_service
+      - USERS_API_SERVICE_PORT_HTTP=80
     ports:
       - "80:80"
     networks:
       - fairwear_internal_network
+      - users_db_network
 
 
   brand_and_product_service:

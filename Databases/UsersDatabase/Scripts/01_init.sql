@@ -52,5 +52,6 @@ create table if not exists user_experience
     todos   integer[] default '{0,0,0}'::integer[],
     primary key (id),
     foreign key (user_id) references users
-        on delete cascade
+        on delete cascade,
+    unique (user_id)
 );

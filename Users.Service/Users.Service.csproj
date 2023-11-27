@@ -17,6 +17,7 @@
     <ItemGroup>
         <Protobuf Include="Protos\UserService.proto" GrpcServices="Server"/>
         <Protobuf Include="Protos\UserProductHistoryService.proto" GrpcServices="Server"/>
+        <Protobuf Include="Protos\UserExperienceService.proto" GrpcServices="Server"/>
     </ItemGroup>
 
     <ItemGroup>

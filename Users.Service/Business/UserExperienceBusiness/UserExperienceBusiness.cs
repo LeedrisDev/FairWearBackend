@@ -1,3 +1,4 @@
+using System.Net;
 using Users.Service.DataAccess.Filters;
 using Users.Service.DataAccess.IRepositories;
 using Users.Service.Models;
@@ -36,6 +37,33 @@ namespace Users.Service.Business.UserExperienceBusiness
         public async Task<ProcessingStatusResponse<UserExperienceDto>> GetUserExperienceByIdAsync(long id)
         {
             return await _userExperienceRepository.GetByIdAsync(id);
+        }
+
+        /// <inheritdoc/>
+        public async Task<ProcessingStatusResponse<UserExperienceDto>> GetUserExperienceByUserIdAsync(long id)
+        {
+            var processingStatusResponse = new ProcessingStatusResponse<UserExperienceDto>();
+
+            var dict = new Dictionary<string, string>()
+            {
+                { "User_id", id.ToString() }
+            };
+
+            var filter = _filterFactory.CreateFilter(dict);
+
+            var results = await _userExperienceRepository.GetAllAsync(filter);
+
+            if (!results.Object.Any())
+            {
+                processingStatusResponse.Status = HttpStatusCode.NotFound;
+                processingStatusResponse.ErrorMessage = $"UserExperience with userId {id} not found.";
+            }
+            else
+            {
+                processingStatusResponse.Object = results.Object.First();
+            }
+
+            return processingStatusResponse;
         }
 
         /// <inheritdoc/>

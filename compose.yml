@@ -118,7 +118,7 @@ services:
       - POSTGRES_PASSWORD=sa
       - POSTGRES_DB=users_db
     ports:
-      - "5432"
+      - "5434:5432"
     networks:
       - users_db_network
 

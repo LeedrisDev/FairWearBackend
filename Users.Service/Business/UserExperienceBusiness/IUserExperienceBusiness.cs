@@ -18,6 +18,11 @@ namespace Users.Service.Business.UserExperienceBusiness
         /// <returns>A <see cref="UserExperienceDto"/>.</returns>
         Task<ProcessingStatusResponse<UserExperienceDto>> GetUserExperienceByIdAsync(long id);
 
+        /// <summary>Gets a UserExperience by it's user Id.</summary>
+        /// <param name="id">The user Id.</param>
+        /// <returns>A <see cref="UserExperienceDto"/>.</returns>
+        Task<ProcessingStatusResponse<UserExperienceDto>> GetUserExperienceByUserIdAsync(long id);
+
         /// <summary>Creates a UserExperience.</summary>
         /// <param name="userExperienceDto">The UserExperience to create.</param>
         /// <returns>A <see cref="UserExperienceDto"/>.</returns>

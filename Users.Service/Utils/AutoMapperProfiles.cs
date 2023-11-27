@@ -24,8 +24,14 @@ public class AutoMapperProfiles : Profile
 
         // Dto to proto object
         CreateMap<UserDto, User>();
+        CreateMap<UserProductHistoryDto, UserProductHistory>();
+        CreateMap<UserExperienceDto, UserExperience>();
+        CreateMap<ProductDto, Product>();
 
         // Proto object to Dto
         CreateMap<User, UserDto>();
+        CreateMap<UserProductHistory, UserProductHistoryDto>();
+        CreateMap<UserExperience, UserExperienceDto>();
+        CreateMap<Product, ProductDto>();
     }
 }

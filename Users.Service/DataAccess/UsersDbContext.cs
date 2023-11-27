@@ -89,6 +89,8 @@ public class UsersDbContext : DbContext
 
             entity.ToTable("user_experience");
 
+            entity.HasIndex(e => e.UserId, "user_experience_user_id_key").IsUnique();
+
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Level)
                 .HasDefaultValueSql("0")

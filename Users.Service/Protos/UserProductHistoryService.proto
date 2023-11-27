@@ -21,7 +21,7 @@ message UserProductHistory {
     google.protobuf.Timestamp timestamp = 4;
 }
 
-message Products {
+message Product {
     int64 id = 1;
     string name = 2;
     int64 product_id = 3;
@@ -30,7 +30,7 @@ message Products {
 
 message GetUserProductHistoryResponse {
     int64 user_id = 1;
-    repeated Products products = 2;
+    repeated Product products = 2;
 }
 
 message UserProductHistoryRequest {

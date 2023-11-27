@@ -46,18 +46,19 @@ namespace Users.Service.Business.UserProductHistoryBusiness
 
             var userProductHistory = await _userProductHistoryRepository.GetAllAsync(filter);
 
-            var product = new List<Products>();
+            var product = new List<Product>();
 
             foreach (var userProductHistoryDto in userProductHistory.Object)
             {
                 var productDto = await _productRepository.GetByIdAsync(userProductHistoryDto.ProductId);
-                product.Add(_mapper.Map<Products>(productDto.Object));
+                product.Add(_mapper.Map<Product>(productDto.Object));
             }
 
             processingStatusResponse.Object = new GetUserProductHistoryResponse()
             {
                 UserId = id,
             };
+
             processingStatusResponse.Object.Products.AddRange(product);
 
             return processingStatusResponse;

@@ -8,6 +8,10 @@ namespace Users.Service.Business.UserProductHistoryBusiness
     /// </summary>
     public interface IUserProductHistoryBusiness
     {
+        /// <summary>Gets all the UserProductHistory of a user.</summary>
+        /// <returns>A <see cref="GetUserProductHistoryResponse"/>.</returns>
+        Task<ProcessingStatusResponse<GetUserProductHistoryResponse>> GetUserProductHistoryComplete(long id);
+
         /// <summary>Gets all the UserProductHistorys.</summary>
         /// <returns>A list of <see cref="UserProductHistoryDto"/>.</returns>
         Task<ProcessingStatusResponse<IEnumerable<UserProductHistoryDto>>> GetAllUserProductHistorysAsync(

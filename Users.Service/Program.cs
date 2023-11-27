@@ -15,6 +15,7 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.MapGrpcService<UserService>();
+app.MapGrpcService<UserProductHistoryService>();
 
 app.MapGet("/",
     () =>

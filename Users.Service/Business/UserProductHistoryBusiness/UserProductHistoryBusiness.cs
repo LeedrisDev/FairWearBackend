@@ -1,3 +1,4 @@
+using AutoMapper;
 using Users.Service.DataAccess.Filters;
 using Users.Service.DataAccess.IRepositories;
 using Users.Service.Models;
@@ -9,18 +10,57 @@ namespace Users.Service.Business.UserProductHistoryBusiness
     public class UserProductHistoryBusiness : IUserProductHistoryBusiness
     {
         private readonly IFilterFactory<IFilter> _filterFactory;
+        private readonly IMapper _mapper;
+        private readonly IProductRepository _productRepository;
         private readonly IUserProductHistoryRepository _userProductHistoryRepository;
 
         /// <summary>
         /// Constructor for UserProductHistoryBusiness.
         /// </summary>
         /// <param name="userProductHistoryRepository"></param>
+        /// <param name="productRepository"></param>
         /// <param name="filterFactory"></param>
+        /// <param name="mapper"></param>
         public UserProductHistoryBusiness(IUserProductHistoryRepository userProductHistoryRepository,
-            IFilterFactory<IFilter> filterFactory)
+            IProductRepository productRepository,
+            IFilterFactory<IFilter> filterFactory, IMapper mapper)
         {
             _userProductHistoryRepository = userProductHistoryRepository;
+            _productRepository = productRepository;
             _filterFactory = filterFactory;
+            _mapper = mapper;
+        }
+
+        /// <inheritdoc/>
+        public async Task<ProcessingStatusResponse<GetUserProductHistoryResponse>>
+            GetUserProductHistoryComplete(long id)
+        {
+            var processingStatusResponse = new ProcessingStatusResponse<GetUserProductHistoryResponse>();
+
+            var dict = new Dictionary<string, string>()
+            {
+                { "User_id", id.ToString() }
+            };
+
+            var filter = _filterFactory.CreateFilter(dict);
+
+            var userProductHistory = await _userProductHistoryRepository.GetAllAsync(filter);
+
+            var product = new List<Products>();
+
+            foreach (var userProductHistoryDto in userProductHistory.Object)
+            {
+                var productDto = await _productRepository.GetByIdAsync(userProductHistoryDto.ProductId);
+                product.Add(_mapper.Map<Products>(productDto.Object));
+            }
+
+            processingStatusResponse.Object = new GetUserProductHistoryResponse()
+            {
+                UserId = id,
+            };
+            processingStatusResponse.Object.Products.AddRange(product);
+
+            return processingStatusResponse;
         }
 
         /// <inheritdoc/>

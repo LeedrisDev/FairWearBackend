@@ -66,6 +66,9 @@ public class BrandAndProductDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasColumnType("character varying")
                 .HasColumnName("name");
+            entity.Property(e => e.Color)
+                .HasColumnType("character varying")
+                .HasColumnName("color");
             entity.Property(e => e.Ranges)
                 .HasColumnType("character varying[]")
                 .HasColumnName("ranges");

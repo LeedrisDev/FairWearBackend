@@ -1,5 +1,9 @@
+using BackOffice.Business.Classes;
+using BackOffice.Business.Interfaces;
 using BackOffice.DataAccess;
 using BackOffice.DataAccess.Entities;
+using BackOffice.DataAccess.Repositories.Classes;
+using BackOffice.DataAccess.Repositories.Interfaces;
 using BackOffice.Utils;
 using Microsoft.EntityFrameworkCore;
 

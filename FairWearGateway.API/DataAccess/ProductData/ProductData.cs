@@ -110,4 +110,38 @@ public class ProductData : IProductData
 
         return processingStatusResponse;
     }
+
+    /// <inheritdoc />
+    public async Task<ProcessingStatusResponse<IEnumerable<ProductResponse>>> GetProductAlternatives(int productId)
+    {
+        var processingStatusResponse = new ProcessingStatusResponse<IEnumerable<ProductResponse>>();
+        var data = new ProductByIdRequest { Id = productId };
+        
+        try
+        {
+            var response = _client.GetProductAlternativesAsync(data);
+            var brandList = new List<ProductResponse>();
+            while (await response.ResponseStream.MoveNext())
+                brandList.Add(response.ResponseStream.Current);
+
+            processingStatusResponse.Status = HttpStatusCode.OK;
+            processingStatusResponse.Object = brandList;
+        }
+        catch (RpcException e)
+        {
+            switch (e.StatusCode)
+            {
+                case StatusCode.InvalidArgument:
+                    processingStatusResponse.Status = HttpStatusCode.BadRequest;
+                    processingStatusResponse.ErrorMessage = $"Product with id {productId} could not be found";
+                    break;
+                default:
+                    processingStatusResponse.Status = HttpStatusCode.InternalServerError;
+                    processingStatusResponse.ErrorMessage = e.Status.Detail;
+                    break;
+            }
+        }
+        
+        return processingStatusResponse;
+    }
 }

@@ -12,4 +12,11 @@ public interface IProductRepository : IRepository<ProductDto>
     /// <param name="entity"></param>
     /// <returns></returns>
     Task<ProcessingStatusResponse<ProductDto>> UpdateProductAsync(ProductDto entity);
+    
+    /// <summary>
+    /// Get recommended products for a product
+    /// </summary>
+    /// <param name="productId">The product id to get recommended products for.</param>
+    /// <returns></returns>
+    Task<ProcessingStatusResponse<IEnumerable<ProductDto>>> GetRecommendedProductsAsync(int productId);
 }

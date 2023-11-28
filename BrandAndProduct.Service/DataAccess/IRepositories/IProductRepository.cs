@@ -16,7 +16,7 @@ public interface IProductRepository : IRepository<ProductDto>
     /// <summary>
     /// Get recommended products for a product
     /// </summary>
-    /// <param name="productId">The product id to get recommended products for.</param>
+    /// <param name="productId">The product id to get alternatives products for.</param>
     /// <returns></returns>
-    Task<ProcessingStatusResponse<IEnumerable<ProductDto>>> GetRecommendedProductsAsync(int productId);
+    Task<ProcessingStatusResponse<IEnumerable<ProductDto>>> GetProductAlternativesAsync(int productId);
 }

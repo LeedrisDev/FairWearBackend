@@ -48,26 +48,35 @@ public class ProductRepository : Repository<ProductDto, ProductEntity>, IProduct
     }
 
     /// <inheritdoc/>
-    public async Task<ProcessingStatusResponse<IEnumerable<ProductDto>>> GetRecommendedProductsAsync(int productId)
+    public async Task<ProcessingStatusResponse<IEnumerable<ProductDto>>> GetProductAlternativesAsync(int productId)
     {
         var processingStatusResponse = new ProcessingStatusResponse<IEnumerable<ProductDto>>();
-        var productEntity = await DbSet.FindAsync(productId);
-
-        if (productEntity == null)
+        try
         {
-            processingStatusResponse.Status = HttpStatusCode.NotFound;
-            processingStatusResponse.ErrorMessage = $"Entity with ID {productId} not found.";
-            return processingStatusResponse;
+            var productEntity = await DbSet.FindAsync(productId);
+            if (productEntity == null)
+            {
+                processingStatusResponse.Status = HttpStatusCode.BadRequest;
+                processingStatusResponse.ErrorMessage = $"Entity with ID {productId} not found.";
+                return processingStatusResponse;
+            }
+
+            var recommendedProducts = await DbSet
+                .AsNoTracking()
+                .Where(e => e.Category == productEntity.Category && e.Id != productId)
+                .OrderBy(e => e.Color == productEntity.Color)
+                .Take(20)
+                .ToListAsync();
+
+            processingStatusResponse.Object = Mapper.Map<IEnumerable<ProductDto>>(recommendedProducts);
         }
-
-        var recommendedProducts = await DbSet
-            .AsNoTracking()
-            .Where(e => e.Category == productEntity.Category && e.Id != productId)
-            .OrderBy(e => e.Color == productEntity.Color)
-            .Take(20)
-            .ToListAsync();
-
-        processingStatusResponse.Object = Mapper.Map<IEnumerable<ProductDto>>(recommendedProducts);
+        catch (Exception e)
+        {
+            // TODO: Log exception
+            processingStatusResponse.Status = HttpStatusCode.InternalServerError;
+            processingStatusResponse.ErrorMessage = "Internal Server Error";
+        }
+        
         return processingStatusResponse;
     }
 }

@@ -188,7 +188,15 @@ public class ProductService : Protos.ProductService.ProductServiceBase
         var productAlternatives = await _productBusiness.GetProductAlternativesAsync(request.Id);
 
         if (productAlternatives.Status != HttpStatusCode.OK)
+        {
             _logger.LogError("Error while retrieving product alternatives: {ErrorMessage}", productAlternatives.ErrorMessage);
+            throw productAlternatives.Status switch
+            {
+                HttpStatusCode.BadRequest => new RpcException(new Status(StatusCode.InvalidArgument,
+                    productAlternatives.ErrorMessage)),
+                _ => new RpcException(new Status(StatusCode.Internal, productAlternatives.ErrorMessage))
+            };
+        }
 
         foreach (var product in productAlternatives.Object)
             await responseStream.WriteAsync(_mapper.Map<ProductResponse>(product));

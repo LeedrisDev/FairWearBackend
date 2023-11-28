@@ -171,6 +171,12 @@ public class ProductBusiness : IProductBusiness
         return await _productRepository.DeleteAsync(id);
     }
 
+    /// <inheritdoc />
+    public async Task<ProcessingStatusResponse<IEnumerable<ProductDto>>> GetProductAlternativesAsync(int productId)
+    {
+        return await _productRepository.GetProductAlternativesAsync(productId);
+    }
+
     private ProductInformationDto ProductDtoToProductInformation(ProductDto productDto, BrandDto brandDto)
     {
         var productScore = new ProductScoreDto()

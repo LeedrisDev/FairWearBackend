@@ -12,6 +12,7 @@ service ProductService {
     rpc CreateProductAsync (ProductRequest) returns (ProductResponse);
     rpc UpdateProductAsync (ProductResponse) returns (ProductResponse);
     rpc DeleteProductAsync (ProductByIdRequest) returns (google.protobuf.Empty);
+    rpc GetProductAlternativesAsync (ProductByIdRequest) returns (stream ProductResponse);
 }
 
 // Requests

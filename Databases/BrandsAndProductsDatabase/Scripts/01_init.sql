@@ -33,3 +33,11 @@ create table if not exists products
     foreign key (brand_id) references brands
         on delete cascade
 );
+
+create table if not exists integration_events
+(
+    id         bigserial,
+    event  varchar not null,
+    data  varchar not null,
+    primary key (id)
+);

@@ -1,6 +1,7 @@
 using BrandAndProduct.Service.Config;
 using BrandAndProduct.Service.Services;
 using BrandAndProduct.Service.Utils;
+using Confluent.Kafka;
 using GoodOnYouScrapper.Service.Protos;
 using ProductDataRetriever.Service.Protos;
 
@@ -21,6 +22,16 @@ builder.Services.AddGrpcClient<BrandScrapperService.BrandScrapperServiceClient>(
     o => { o.Address = new Uri(AppConstants.GoodOnYouScrapperUrl); });
 builder.Services.AddGrpcClient<ProductScrapperService.ProductScrapperServiceClient>("ProductService",
     o => { o.Address = new Uri(AppConstants.ProductDataRetrieverUrl); });
+
+
+var config = new ProducerConfig
+{
+    BootstrapServers = AppConstants.KafkaConnectionString
+};
+
+Console.WriteLine($"[KAFKA] {AppConstants.KafkaConnectionString}");
+
+builder.Services.AddSingleton<IProducer<string, string>>(_ => new ProducerBuilder<string, string>(config).Build());
 
 var app = builder.Build();
 

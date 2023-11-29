@@ -830,3 +830,10 @@ Its animal rating is \'good\'. It does not use fur, wool, down, exotic animal sk
 
 1083 is rated \'Good\' overall.
 ', '{Denim,Pants,T-Shirts}', '{Menswear,Womenswear}');
+
+INSERT INTO public.brands (name, country, environment_rating, people_rating, animal_rating, rating_description, categories, ranges) VALUES
+('Levi''s', 'United States', 4, 2, 2,
+  E'Levi''s is owned by Levi Strauss & Co.\n\nIts environment rating is \'good\'. It uses some eco-friendly materials including recycled materials. It has set a science-based target to reduce greenhouse gas emissions generated from its own operations and supply chain and it is on track to meet its target. It implements water reduction initiatives throughout its supply chain. It has met its Zero Discharge of Hazardous Chemicals Group (ZDHC) target to eliminate hazardous chemicals from most of its supply chain.\n\nIts labour rating is \'not good enough\'. Almost none of its supply chain is certified by labour standards which ensure worker health and safety, living wages or other labour rights. It received a score of 41-50% in the 2021 Fashion Transparency Index. It implements gender equality and empowerment initiatives in its supply chain. There is no evidence it ensures payment of a living wage in its supply chain. It discloses policies to protect suppliers in its supply chain from the impacts of COVID-19 but not workers.\n\nIts animal rating is \'not good enough\'. It has a formal animal welfare policy aligned with Five Freedoms but has no clear mechanisms to implement. It uses leather. It uses down accredited by the Responsible Down Standard. It has a policy to source wool from non-mulesed sheep but does not provide evidence on how it is implemented. It does not use fur, angora, exotic animal hair or exotic animal skin. It traces some animal products to the first stage of production.\n\nLevi''s is rated \'It''s a start\' overall\n',
+  '{Denim,Pants,Maternity,Plus Size}',
+  '{Menswear,Womenswear,PlusSize}');
+

@@ -1,0 +1,16 @@
+INSERT INTO public.products (upc_code, name, color, category, ranges, brand_id) VALUES
+(72527273070, 'Jean 501® Levi''s® Original', 'Dark Indigo Rinse - Bleu', 'Jean', '{Menswear}', 60),
+(72527273071, 'Jean 501® Levi''s® Original', 'Medium Indigo Worn In - Bleu', 'Jean', '{Menswear}', 60),
+(72527273073, 'Jean 511™ Slim', 'Call It Off - Bleu', 'Jean', '{Menswear}', 60),
+(72527273074, 'Jean 511™ Slim', 'Hold On Me - Bleu', 'Jean', '{Menswear}', 60),
+(72527273075, 'Jean 511™ Slim', 'Just One More - Bleu', 'Jean', '{Menswear}', 60),
+(72527273076, 'Jean 511™ Slim', 'Biologia - Bleu', 'Jean', '{Menswear}', 60),
+(72527273077, 'Jean 511™ Slim', 'Rock Cod - Bleu', 'Jean', '{Menswear}', 60),
+(72527273078, 'Jean 511™ Slim', 'Nightshine - Noir', 'Jean', '{Menswear}', 60),
+(72527273079, 'Jean 511™ Slim', 'Grey Stonewash - Gris', 'Jean', '{Menswear}', 60),
+(72527273080, 'Jean 511™ Slim', 'Kota Kupang Adapt - Bleu', 'Jean', '{Menswear}', 60),
+(72527273081, 'Jean 511™ Slim', 'Medium Indigo Worn In - Bleu', 'Jean', '{Menswear}', 60),
+(72527273082, 'Jean 511™ Slim', 'Dark Blue Stonewash - Bleu', 'Jean', '{Menswear}', 60),
+(72527273083, 'Jean 511™ Slim', 'Richmond - Noir', 'Jean', '{Menswear}', 60),
+(72527273084, 'Jean 511™ Slim', 'Crab Brittlegrill - Bleu', 'Jean', '{Menswear}', 60),
+(72527273085, 'Jean 511™ Slim', 'Terrible Claw Adv - Bleu', 'Jean', '{Menswear}', 60);

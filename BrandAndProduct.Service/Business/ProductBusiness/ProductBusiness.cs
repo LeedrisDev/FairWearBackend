@@ -6,7 +6,6 @@ using BrandAndProduct.Service.DataAccess.ProductData;
 using BrandAndProduct.Service.Models;
 using BrandAndProduct.Service.Models.Dto;
 using BrandAndProduct.Service.Services;
-using BrandAndProduct.Service.Utils;
 using Newtonsoft.Json;
 
 namespace BrandAndProduct.Service.Business.ProductBusiness;
@@ -135,10 +134,6 @@ public class ProductBusiness : IProductBusiness
             });
 
             await PublishToMessageQueue("product.create", integrationEventData);
-
-            Console.WriteLine("[INTEGRATION] : DONE");
-            Console.WriteLine($"[INTEGRATION] : {AppConstants.KafkaConnectionString}");
-            Console.WriteLine($"[INTEGRATION] : {AppConstants.ProductDataRetrieverUrl}");
 
             _integrationEventSenderService.StartPublishingOutstandingIntegrationEvents();
 

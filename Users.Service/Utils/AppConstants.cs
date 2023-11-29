@@ -16,4 +16,15 @@ public static class AppConstants
         public static string UsersDbConnectionString =>
             $"User ID={User};Password={Password};Host={Host};Port={Port};Database={DatabaseName};";
     }
+
+    public static class Kafka
+    {
+        private static readonly string KafkaServiceHost =
+            Environment.GetEnvironmentVariable("KAFKA_SERVICE_HOST")!;
+
+        private static readonly string KafkaServicePort =
+            Environment.GetEnvironmentVariable("KAFKA_SERVICE_PORT_HTTP")!;
+
+        public static readonly string KafkaConnectionString = $"{KafkaServiceHost}:{KafkaServicePort}";
+    }
 }

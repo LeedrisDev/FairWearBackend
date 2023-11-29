@@ -1,5 +1,7 @@
+using Confluent.Kafka;
 using Users.Service.Config;
 using Users.Service.Services;
+using Users.Service.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,17 @@ EnvironmentValidator.ValidateRequiredVariables();
 builder.Services.AddGrpc();
 
 DependencyInjectionConfiguration.Configure(builder.Services);
+
+var config = new ConsumerConfig()
+{
+    BootstrapServers = AppConstants.Kafka.KafkaConnectionString,
+    GroupId = "products-consumer-group",
+    AutoOffsetReset = AutoOffsetReset.Earliest
+};
+
+builder.Services.AddSingleton<IConsumer<string, string>>(_ => new ConsumerBuilder<string, string>(config).Build());
+builder.Services.AddHostedService<ProductConsumer>();
+
 
 var app = builder.Build();
 

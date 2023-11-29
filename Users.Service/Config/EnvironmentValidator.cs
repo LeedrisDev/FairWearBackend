@@ -18,6 +18,8 @@ public class EnvironmentValidator
         varEnvDefined &= IsVarEnvDefined("USERS_DB_USER");
         varEnvDefined &= IsVarEnvDefined("USERS_DB_PASSWORD");
         varEnvDefined &= IsVarEnvDefined("USERS_DB_DATABASE_NAME");
+        varEnvDefined &= IsVarEnvDefined("KAFKA_SERVICE_HOST");
+        varEnvDefined &= IsVarEnvDefined("KAFKA_SERVICE_PORT_HTTP");
 
 
         if (!varEnvDefined)

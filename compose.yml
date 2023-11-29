@@ -75,6 +75,8 @@ services:
       - USERS_DB_USER=sa
       - USERS_DB_PASSWORD=sa
       - USERS_DB_DATABASE_NAME=users_db
+      - KAFKA_SERVICE_HOST=kafka
+      - KAFKA_SERVICE_PORT_HTTP=9092
     ports:
       - "8084:80"
     networks:
@@ -133,6 +135,7 @@ services:
       - "2181:2181"
     networks:
       - fairwear_internal_network
+      - users_db_network
 
   kafka:
     image: wurstmeister/kafka

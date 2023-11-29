@@ -29,8 +29,6 @@ var config = new ProducerConfig
     BootstrapServers = AppConstants.KafkaConnectionString
 };
 
-Console.WriteLine($"[KAFKA] {AppConstants.KafkaConnectionString}");
-
 builder.Services.AddSingleton<IProducer<string, string>>(_ => new ProducerBuilder<string, string>(config).Build());
 
 var app = builder.Build();

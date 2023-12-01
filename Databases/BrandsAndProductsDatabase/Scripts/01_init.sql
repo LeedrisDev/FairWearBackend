@@ -26,7 +26,7 @@ create table if not exists products
     id       bigserial,
     upc_code varchar not null,
     name     varchar not null,
-    color    varchar(30),
+    color    varchar(50),
     category varchar not null,
     ranges   character varying[],
     brand_id bigint  not null,

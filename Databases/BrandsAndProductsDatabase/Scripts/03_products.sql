@@ -13,4 +13,9 @@ INSERT INTO public.products (upc_code, name, color, category, ranges, brand_id) 
 (72527273082, 'Jean 511™ Slim', 'Dark Blue Stonewash - Bleu', 'Jean', '{Menswear}', 60),
 (72527273083, 'Jean 511™ Slim', 'Richmond - Noir', 'Jean', '{Menswear}', 60),
 (72527273084, 'Jean 511™ Slim', 'Crab Brittlegrill - Bleu', 'Jean', '{Menswear}', 60),
-(72527273085, 'Jean 511™ Slim', 'Terrible Claw Adv - Bleu', 'Jean', '{Menswear}', 60);
+(72527273085, 'Jean 511™ Slim', 'Terrible Claw Adv - Bleu', 'Jean', '{Menswear}', 60),
+(72527273086, 'T-shirt Manche Longue Monica', 'Caviar - Noir', 'T-shirt', '{Womenswear}', 60),
+(72527273087, 'T-shirt Manche Longue Monica', 'Black Forest - Vert', 'T-shirt', '{Womenswear}', 60),
+(72527273088, 'T-shirt Manche Longue Monica', 'Penny Stripe Keepsake Lilac - Rose', 'T-shirt', '{Womenswear}', 60),
+(72527273089, 'T-shirt Manche Longue Monica', 'White + - Blanc', 'T-shirt', '{Womenswear}', 60)
+;

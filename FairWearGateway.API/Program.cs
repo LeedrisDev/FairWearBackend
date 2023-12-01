@@ -41,6 +41,10 @@ builder.Services.AddGrpcClient<UserExperienceService.UserExperienceServiceClient
         o => { o.Address = new Uri(AppConstants.UserServiceUrl); })
     .ConfigureChannel(channelOptions => { channelOptions.Credentials = ChannelCredentials.Insecure; });
 
+builder.Services.AddGrpcClient<UserProductHistoryService.UserProductHistoryServiceClient>("UserProductHistoryService",
+        o => { o.Address = new Uri(AppConstants.UserServiceUrl); })
+    .ConfigureChannel(channelOptions => { channelOptions.Credentials = ChannelCredentials.Insecure; });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 SwaggerConfiguration.Configure(builder.Services);

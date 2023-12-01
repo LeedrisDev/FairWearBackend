@@ -24,7 +24,7 @@ public class UserExperiencesController : ControllerBase
     [ProducesResponseType(typeof(UserExperience), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(UserExperience), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
-    public IActionResult GetUserExperienceByFirebaseId([Required] long userId)
+    public IActionResult GetUserExperienceByUserId([Required] long userId)
     {
         var processingStatusResponse = _userExperienceBusiness.GetUserExperienceByUserId(userId);
 

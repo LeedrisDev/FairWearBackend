@@ -47,8 +47,9 @@ message ProductResponse {
     string upcCode = 2;
     string name = 3;
     string category = 4;
-    repeated string ranges = 5;
-    int32 brandId = 6;
+    string color = 5;
+    repeated string ranges = 6;
+    int32 brandId = 7;
 }
 
 message ProductScoreResponse {

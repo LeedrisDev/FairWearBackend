@@ -30,8 +30,6 @@ services:
       - BRAND_AND_PRODUCT_API_SERVICE_PORT_HTTP=80
       - USERS_API_SERVICE_HOST=users_service
       - USERS_API_SERVICE_PORT_HTTP=80
-    ports:
-      - "80:80"
     labels:
       - "traefik.docker.network=fairwearbackend_traefik-network"
       - "traefik.http.routers.gateway_api.rule=Host(`gateway.traefik.me`)"

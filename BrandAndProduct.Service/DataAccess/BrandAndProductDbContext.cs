@@ -22,6 +22,9 @@ public class BrandAndProductDbContext : DbContext
     /// <summary>The Products table.</summary>
     public virtual DbSet<ProductEntity> Products { get; set; } = null!;
 
+    public virtual DbSet<IntegrationEventEntity> IntegrationEvents { get; set; } = null!;
+
+
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -50,6 +53,21 @@ public class BrandAndProductDbContext : DbContext
             entity.Property(e => e.RatingDescription)
                 .HasColumnType("character varying")
                 .HasColumnName("rating_description");
+        });
+
+        modelBuilder.Entity<IntegrationEventEntity>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("integration_events_pkey");
+
+            entity.ToTable("integration_events");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Data)
+                .HasColumnType("character varying")
+                .HasColumnName("data");
+            entity.Property(e => e.Event)
+                .HasColumnType("character varying")
+                .HasColumnName("event");
         });
 
         modelBuilder.Entity<ProductEntity>(entity =>

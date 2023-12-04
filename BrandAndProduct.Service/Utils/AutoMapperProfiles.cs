@@ -15,10 +15,12 @@ public class AutoMapperProfiles : Profile
         // Entity to Dto
         CreateMap<BrandEntity, BrandDto>();
         CreateMap<ProductEntity, ProductDto>();
+        CreateMap<IntegrationEventEntity, IntegrationEventDto>();
 
         // Dto to Entity
         CreateMap<BrandDto, BrandEntity>();
         CreateMap<ProductDto, ProductEntity>();
+        CreateMap<IntegrationEventDto, IntegrationEventEntity>();
 
         // Dto to Response
         CreateMap<BrandDto, BrandResponse>();

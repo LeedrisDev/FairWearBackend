@@ -5,6 +5,8 @@ using BrandAndProduct.Service.DataAccess.IRepositories;
 using BrandAndProduct.Service.DataAccess.ProductData;
 using BrandAndProduct.Service.Models;
 using BrandAndProduct.Service.Models.Dto;
+using BrandAndProduct.Service.Services;
+using Newtonsoft.Json;
 
 namespace BrandAndProduct.Service.Business.ProductBusiness;
 
@@ -14,6 +16,8 @@ public class ProductBusiness : IProductBusiness
     private readonly IBrandData _brandData;
     private readonly IBrandRepository _brandRepository;
     private readonly IFilterFactory<IFilter> _filterFactory;
+    private readonly IIntegrationEventRepository _integrationEventRepository;
+    private readonly IIntegrationEventSenderService _integrationEventSenderService;
     private readonly IProductData _productData;
     private readonly IProductRepository _productRepository;
 
@@ -23,14 +27,20 @@ public class ProductBusiness : IProductBusiness
     /// <param name="productData"></param>
     /// <param name="brandData"></param>
     /// <param name="filterFactory"></param>
+    /// <param name="integrationEventRepository"></param>
+    /// <param name="integrationEventSenderService"></param>
     public ProductBusiness(IProductRepository productRepository, IBrandRepository brandRepository,
-        IProductData productData, IBrandData brandData, IFilterFactory<IFilter> filterFactory)
+        IProductData productData, IBrandData brandData, IFilterFactory<IFilter> filterFactory,
+        IIntegrationEventRepository integrationEventRepository,
+        IIntegrationEventSenderService integrationEventSenderService)
     {
         _productRepository = productRepository;
         _brandRepository = brandRepository;
         _productData = productData;
         _brandData = brandData;
         _filterFactory = filterFactory;
+        _integrationEventSenderService = integrationEventSenderService;
+        _integrationEventRepository = integrationEventRepository;
     }
 
     /// <inheritdoc/>
@@ -97,7 +107,7 @@ public class ProductBusiness : IProductBusiness
                         ErrorMessage = productBrand.ErrorMessage
                     };
                 }
-
+                
                 brandEntity = await _brandRepository.AddAsync(productBrand.Object);
             }
 
@@ -115,6 +125,17 @@ public class ProductBusiness : IProductBusiness
             {
                 Object = ProductDtoToProductInformation(entityFromDatabase.Object, brandEntity.Object)
             };
+
+            var integrationEventData = JsonConvert.SerializeObject(new
+            {
+                id = entityFromDatabase.Object.Id,
+                name = response.Object.Name,
+                rating = response.Object.GlobalScore,
+            });
+
+            await PublishToMessageQueue("product.create", integrationEventData);
+
+            _integrationEventSenderService.StartPublishingOutstandingIntegrationEvents();
 
             return response;
         }
@@ -153,7 +174,25 @@ public class ProductBusiness : IProductBusiness
             };
         }
 
-        return await _productRepository.AddAsync(productDto);
+        var product = await _productRepository.AddAsync(productDto);
+
+        if (product.Status == HttpStatusCode.OK)
+        {
+            var productInformation = ProductDtoToProductInformation(product.Object, brandExists.Object);
+
+            var integrationEventData = JsonConvert.SerializeObject(new
+            {
+                id = product.Object.Id,
+                name = productInformation.Name,
+                rating = productInformation.GlobalScore,
+            });
+
+            await PublishToMessageQueue("product.create", integrationEventData);
+
+            _integrationEventSenderService.StartPublishingOutstandingIntegrationEvents();
+        }
+
+        return product;
     }
 
     /// <inheritdoc/>
@@ -169,13 +208,44 @@ public class ProductBusiness : IProductBusiness
             };
         }
 
-        return await _productRepository.UpdateProductAsync(productDto);
+        var product = await _productRepository.UpdateProductAsync(productDto);
+        if (product.Status == HttpStatusCode.OK)
+        {
+            var productInformation = ProductDtoToProductInformation(product.Object, brandExists.Object);
+
+            var integrationEventData = JsonConvert.SerializeObject(new
+            {
+                id = product.Object.Id,
+                name = productInformation.Name,
+                rating = productInformation.GlobalScore,
+            });
+
+            await PublishToMessageQueue("product.update", integrationEventData);
+
+            _integrationEventSenderService.StartPublishingOutstandingIntegrationEvents();
+        }
+
+        return product;
     }
 
     /// <inheritdoc/>
     public async Task<ProcessingStatusResponse<ProductDto>> DeleteProductAsync(int id)
     {
-        return await _productRepository.DeleteAsync(id);
+        var response = await _productRepository.DeleteAsync(id);
+
+        if (response.Status == HttpStatusCode.OK)
+        {
+            var integrationEventData = JsonConvert.SerializeObject(new
+            {
+                id = id,
+            });
+
+            PublishToMessageQueue("product.delete", integrationEventData);
+
+            _integrationEventSenderService.StartPublishingOutstandingIntegrationEvents();
+        }
+
+        return response;
     }
 
     private ProductInformationDto ProductDtoToProductInformation(ProductDto productDto, BrandDto brandDto)
@@ -199,5 +269,16 @@ public class ProductBusiness : IProductBusiness
         };
 
         return brandInformation;
+    }
+
+    private async Task PublishToMessageQueue(string integrationEvent, string eventData)
+    {
+        await _integrationEventRepository.AddAsync(
+            new IntegrationEventDto()
+            {
+                Event = integrationEvent,
+                Data = eventData
+            }
+        );
     }
 }

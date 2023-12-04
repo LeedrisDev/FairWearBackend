@@ -1,5 +1,9 @@
+using BackOffice.Business.Classes;
+using BackOffice.Business.Interfaces;
 using BackOffice.DataAccess;
 using BackOffice.DataAccess.Entities;
+using BackOffice.DataAccess.Repositories.Classes;
+using BackOffice.DataAccess.Repositories.Interfaces;
 using BackOffice.Utils;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,11 +20,8 @@ public abstract class DependencyInjectionConfiguration
         // TODO: Pass this connection string as an environment variable.
         services.AddDbContext<AuthenticationDbContext>(options =>
             options.UseNpgsql("User ID=sa;Password=sa;Host=localhost;Port=5433;Database=authentication_db;"));
-        
-        services.AddDefaultIdentity<UserEntity>(options =>
-            {
-                options.SignIn.RequireConfirmedAccount = false;
-            })
+
+        services.AddDefaultIdentity<UserEntity>(options => { options.SignIn.RequireConfirmedAccount = false; })
             .AddEntityFrameworkStores<AuthenticationDbContext>();
 
         services.ConfigureApplicationCookie(options =>
@@ -31,9 +32,9 @@ public abstract class DependencyInjectionConfiguration
             options.Cookie.HttpOnly = true;
             options.ExpireTimeSpan = TimeSpan.FromHours(2);
         });
-        
+
         services.AddAutoMapper(typeof(AutoMapperProfiles));
-        
+
         // Repositories
         services.AddTransient<IBrandRepository, BrandRepository>();
 

@@ -31,13 +31,22 @@
           <Link>Protos\BrandService.proto</Link>
         </Protobuf>
         <Protobuf Include="..\BrandAndProduct.Service\Protos\ProductService.proto">
-          <GrpcServices>Client</GrpcServices>
-          <Access>Public</Access>
-          <ProtoCompile>True</ProtoCompile>
-          <CompileOutputs>True</CompileOutputs>
-          <OutputDir>obj\Debug\net7.0\</OutputDir>
-          <Generator>MSBuild:Compile</Generator>
-          <Link>Protos\ProductService.proto</Link>
+            <GrpcServices>Client</GrpcServices>
+            <Access>Public</Access>
+            <ProtoCompile>True</ProtoCompile>
+            <CompileOutputs>True</CompileOutputs>
+            <OutputDir>obj\Debug\net7.0\</OutputDir>
+            <Generator>MSBuild:Compile</Generator>
+            <Link>Protos\ProductService.proto</Link>
+        </Protobuf>
+        <Protobuf Include="..\Users.Service\Protos\UserExperienceService.proto" GrpcServices="Client">
+            <Link>Protos\UserExperienceService.proto</Link>
+        </Protobuf>
+        <Protobuf Include="..\Users.Service\Protos\UserProductHistoryService.proto" GrpcServices="Client">
+            <Link>Protos\UserProductHistoryService.proto</Link>
+        </Protobuf>
+        <Protobuf Include="..\Users.Service\Protos\UserService.proto" GrpcServices="Client">
+            <Link>Protos\UserService.proto</Link>
         </Protobuf>
     </ItemGroup>
 

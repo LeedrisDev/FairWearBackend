@@ -1,4 +1,24 @@
 services:
+  treafik:
+    container_name: traefik
+    restart: unless-stopped
+    depends_on:
+      - traefik-helper
+    image: traefik:v2.10
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    labels:
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./TraefikConfig/TraefikFiles/traefik.yml:/etc/traefik/traefik.yml
+      - ./TraefikConfig/TraefikFiles/tls.yml:/etc/traefik/tls.yml
+      - ./TraefikConfig/Certs:/etc/ssl/traefik
+    networks:
+      - traefik-network
+
   gateway_api:
     container_name: gateway_api
     build:
@@ -12,7 +32,12 @@ services:
       - USERS_API_SERVICE_PORT_HTTP=80
     ports:
       - "80:80"
+    labels:
+      - "traefik.docker.network=fairwearbackend_traefik-network"
+      - "traefik.http.routers.gateway_api.rule=Host(`gateway.traefik.me`)"
+      - "traefik.http.routers.gateway_api.tls=true"
     networks:
+      - traefik-network
       - fairwear_internal_network
       - users_db_network
 
@@ -155,8 +180,21 @@ services:
       - fairwear_internal_network
       - users_db_network
 
+  traefik-helper:
+    container_name: traefik-helper
+    image: alpine:3.17
+    command: sh -c "cd /etc/ssl/traefik
+      && wget traefik.me/cert.pem -O cert.pem
+      && wget traefik.me/privkey.pem -O cert-key.pem"
+    volumes:
+      - ./TraefikConfig/Certs:/etc/ssl/traefik
+
 networks:
+  traefik-network:
+    
   fairwear_internal_network:
     driver: bridge
+
   users_db_network:
     driver: bridge
+

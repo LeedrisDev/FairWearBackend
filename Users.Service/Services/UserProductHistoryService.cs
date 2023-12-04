@@ -66,9 +66,17 @@ public class UserProductHistoryService : Service.UserProductHistoryService.UserP
                 _mapper.Map<UserProductHistoryDto>(request));
         if (createdHistory.Status != HttpStatusCode.OK)
             _logger.LogError("Error while creating user history: {ErrorMessage}", createdHistory.ErrorMessage);
+
+        var response = new UserProductHistory()
+        {
+            Id = createdHistory.Object.Id,
+            ProductId = createdHistory.Object.ProductId,
+            UserId = createdHistory.Object.UserId,
+            Timestamp = Timestamp.FromDateTime(createdHistory.Object.Timestamp ?? DateTime.UtcNow.ToUniversalTime())
+        };
         return createdHistory.Status switch
         {
-            HttpStatusCode.OK => _mapper.Map<UserProductHistory>(createdHistory.Object),
+            HttpStatusCode.OK => response,
             _ => throw new RpcException(new Status(StatusCode.Internal, createdHistory.ErrorMessage))
         };
     }

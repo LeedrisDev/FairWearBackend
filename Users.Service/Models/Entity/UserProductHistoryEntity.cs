@@ -18,7 +18,7 @@
         /// <summary>
         /// Gets or sets the timestamp of the product history (if available).
         /// </summary>
-        public DateOnly? Timestamp { get; set; }
+        public DateTime? Timestamp { get; set; }
 
         /// <summary>
         /// Gets or sets the entity representing the product associated with this history.

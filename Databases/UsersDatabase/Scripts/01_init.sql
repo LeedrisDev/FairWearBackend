@@ -35,7 +35,7 @@ create table if not exists user_product_history
     id          bigserial,
     user_id     bigint not null,
     product_id  bigint not null,
-    timestamp   date default CURRENT_DATE,
+    timestamp   timestamp with time zone default CURRENT_TIMESTAMP,
     primary key (id),
     foreign key (user_id) references users
         on delete cascade,

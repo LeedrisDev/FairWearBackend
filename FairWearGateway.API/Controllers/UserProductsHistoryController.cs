@@ -1,7 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using FairWearGateway.API.Business.UserProductHistoryBusiness;
+using FairWearGateway.API.Models.Request;
 using FairWearGateway.API.Models.Response;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Mvc;
 using Users.Service;
 
@@ -38,9 +40,16 @@ public class UserProductsHistoryController : ControllerBase
     [HttpPost()]
     [ProducesResponseType(typeof(User), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
-    public IActionResult CreateUserProductHistory(UserProductHistory request)
+    public IActionResult CreateUserProductHistory(CreateUserProductHistoryRequest request)
     {
-        var processingStatusResponse = _userProductHistoryBusiness.CreateUserProductHistory(request);
+        var userProductHistory = new UserProductHistory
+        {
+            UserId = request.UserId,
+            ProductId = request.ProductId,
+            Timestamp = Timestamp.FromDateTime(DateTime.UtcNow.ToUniversalTime())
+        };
+        
+        var processingStatusResponse = _userProductHistoryBusiness.CreateUserProductHistory(userProductHistory);
 
         return processingStatusResponse.Status switch
         {

@@ -117,7 +117,7 @@ public class UsersDbContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.ProductId).HasColumnName("product_id");
             entity.Property(e => e.Timestamp)
-                .HasDefaultValueSql("CURRENT_DATE")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnName("timestamp");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 

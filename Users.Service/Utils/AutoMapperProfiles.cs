@@ -33,5 +33,9 @@ public class AutoMapperProfiles : Profile
         CreateMap<UserProductHistory, UserProductHistoryDto>();
         CreateMap<UserExperience, UserExperienceDto>();
         CreateMap<Product, ProductDto>();
+
+        // Add a custom resolver for mapping Timestamp to DateTime
+        CreateMap<Google.Protobuf.WellKnownTypes.Timestamp, DateTime>().ConvertUsing(timestamp =>
+            timestamp.ToDateTime());
     }
 }

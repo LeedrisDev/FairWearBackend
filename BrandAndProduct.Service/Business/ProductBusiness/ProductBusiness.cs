@@ -78,23 +78,28 @@ public class ProductBusiness : IProductBusiness
                 };
             }
 
-            var treatedName = productDataResponse.Object.BrandName
-                .ToLower()
-                .Replace(" ", "-")
-                .Replace("'", "");
+            var brandEntity = await _brandRepository.GetBrandByNameAsync(productDataResponse.Object.BrandName);
 
-            var productBrand = _brandData.GetBrandByName(treatedName);
-
-            if (productBrand.Status != HttpStatusCode.OK)
+            if (brandEntity.Status != HttpStatusCode.OK)
             {
-                return new ProcessingStatusResponse<ProductInformationDto>()
-                {
-                    Status = productBrand.Status,
-                    ErrorMessage = productBrand.ErrorMessage
-                };
-            }
+                var treatedName = productDataResponse.Object.BrandName
+                    .ToLower()
+                    .Replace(" ", "-")
+                    .Replace("'", "");
 
-            productBrand = await _brandRepository.AddAsync(productBrand.Object);
+                var productBrand = _brandData.GetBrandByName(treatedName);
+
+                if (productBrand.Status != HttpStatusCode.OK)
+                {
+                    return new ProcessingStatusResponse<ProductInformationDto>()
+                    {
+                        Status = productBrand.Status,
+                        ErrorMessage = productBrand.ErrorMessage
+                    };
+                }
+
+                brandEntity = await _brandRepository.AddAsync(productBrand.Object);
+            }
 
             var entityFromDatabase = await _productRepository.AddAsync(
                 new ProductDto()
@@ -103,13 +108,15 @@ public class ProductBusiness : IProductBusiness
                     UpcCode = upcCode,
                     Category = productDataResponse.Object.Category,
                     Ranges = productDataResponse.Object.Ranges.ToList(),
-                    BrandId = productBrand.Object.Id
+                    BrandId = brandEntity.Object.Id
                 });
 
-            return new ProcessingStatusResponse<ProductInformationDto>()
+            var response = new ProcessingStatusResponse<ProductInformationDto>()
             {
-                Object = ProductDtoToProductInformation(entityFromDatabase.Object, productBrand.Object)
+                Object = ProductDtoToProductInformation(entityFromDatabase.Object, brandEntity.Object)
             };
+
+            return response;
         }
 
         var product = productResponse.Object.First();

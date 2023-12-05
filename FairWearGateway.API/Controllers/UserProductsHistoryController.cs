@@ -22,8 +22,8 @@ public class UserProductsHistoryController : ControllerBase
     }
 
     [HttpGet("{userId:long}")]
-    [ProducesResponseType(typeof(UserProductHistory), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(UserProductHistory), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(GetUserProductHistoryResponse), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
     public IActionResult GetUserProductHistoryByUserId([Required] long userId)
     {

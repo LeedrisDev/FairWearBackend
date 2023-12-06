@@ -548,6 +548,7 @@ public class ProductServiceTester
         };
         var productInformationDto = new ProductInformationDto()
         {
+            Id = 1,
             Name = "White shirt",
             Country = "Bangladesh",
             Image = "image",
@@ -579,6 +580,7 @@ public class ProductServiceTester
         };
         var productInformation = new ProductInformationResponse()
         {
+            Id = 1,
             Name = "White shirt",
             Country = "Bangladesh",
             Image = "image",

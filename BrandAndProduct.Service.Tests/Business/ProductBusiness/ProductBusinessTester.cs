@@ -552,6 +552,7 @@ public class ProductBusinessTester
 
         var productInformation = new ProductInformationDto()
         {
+            Id = 1,
             Name = "Product 1",
             Country = "Country 1",
             Image = "No image found",
@@ -641,6 +642,7 @@ public class ProductBusinessTester
 
         var productInformation = new ProductInformationDto()
         {
+            Id = 1,
             Name = "Etip Hardface Glove",
             Country = "USA",
             Image = "No image found",
@@ -881,6 +883,7 @@ public class ProductBusinessTester
 
         var productInformation = new ProductInformationDto()
         {
+            Id = 1,
             Name = "Etip Hardface Glove",
             Country = "USA",
             Image = "No image found",

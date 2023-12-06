@@ -90,7 +90,7 @@ public class ProductBusiness : IProductBusiness
 
             var brandEntity = await _brandRepository.GetBrandByNameAsync(productDataResponse.Object.BrandName);
 
-            if (brandEntity.Status != HttpStatusCode.OK)
+            if (brandEntity == null || brandEntity.Status != HttpStatusCode.OK)
             {
                 var treatedName = productDataResponse.Object.BrandName
                     .ToLower()
@@ -259,6 +259,7 @@ public class ProductBusiness : IProductBusiness
 
         var brandInformation = new ProductInformationDto()
         {
+            Id = productDto.Id,
             Name = productDto.Name,
             Country = brandDto.Country,
             Image = "No image found",

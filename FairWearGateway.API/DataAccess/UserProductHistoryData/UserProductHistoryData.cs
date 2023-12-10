@@ -7,6 +7,9 @@ using Users.Service;
 
 namespace FairWearGateway.API.DataAccess.UserProductHistoryData;
 
+/// <summary>
+/// Data access class for user product history data operations.
+/// </summary>
 public class UserProductHistoryData : IUserProductHistoryData
 {
     private readonly UserProductHistoryService.UserProductHistoryServiceClient _client;
@@ -18,6 +21,7 @@ public class UserProductHistoryData : IUserProductHistoryData
             grpcClientFactory.CreateClient<UserProductHistoryService.UserProductHistoryServiceClient>("UserProductHistoryService");
     }
     
+    /// <inheritdoc />
     public ProcessingStatusResponse<GetUserProductHistoryResponse> GetUserProductHistoryByUserId(long userId)
     {
         var processingStatusResponse = new ProcessingStatusResponse<GetUserProductHistoryResponse>();
@@ -47,6 +51,7 @@ public class UserProductHistoryData : IUserProductHistoryData
         return processingStatusResponse;
     }
 
+    /// <inheritdoc />
     public ProcessingStatusResponse<UserProductHistory> CreateUserProductHistory(UserProductHistory request)
     {
         var processingStatusResponse = new ProcessingStatusResponse<UserProductHistory>();
@@ -66,6 +71,7 @@ public class UserProductHistoryData : IUserProductHistoryData
         return processingStatusResponse;
     }
 
+    /// <inheritdoc />
     public ProcessingStatusResponse<UserProductHistory> UpdateUserProductHistory(UserProductHistory request)
     {
         var processingStatusResponse = new ProcessingStatusResponse<UserProductHistory>();
@@ -80,7 +86,7 @@ public class UserProductHistoryData : IUserProductHistoryData
             if (e.Status.StatusCode == StatusCode.NotFound)
             {
                 processingStatusResponse.Status = HttpStatusCode.NotFound;
-                processingStatusResponse.ErrorMessage = $"User experience could not be found";
+                processingStatusResponse.ErrorMessage = "User experience could not be found";
             }
             else
             {
@@ -92,6 +98,7 @@ public class UserProductHistoryData : IUserProductHistoryData
         return processingStatusResponse;
     }
 
+    /// <inheritdoc />
     public ProcessingStatusResponse<Empty> DeleteUserProductHistory(long userId)
     {
         var processingStatusResponse = new ProcessingStatusResponse<Empty>();
@@ -102,6 +109,7 @@ public class UserProductHistoryData : IUserProductHistoryData
         {
             var response = _client.DeleteUserProductHistory(data);
             processingStatusResponse.Status = HttpStatusCode.OK;
+            processingStatusResponse.Object = response;
         }
         catch (RpcException e)
         {

@@ -20,7 +20,7 @@ public class UserData : IUserData
         _client = grpcClientFactory.CreateClient<UserService.UserServiceClient>("UserService");
     }
 
-
+    /// <inheritdoc />
     public ProcessingStatusResponse<User> GetUserByFirebaseId(string id)
     {
         var processingStatusResponse = new ProcessingStatusResponse<User>();
@@ -50,6 +50,7 @@ public class UserData : IUserData
         return processingStatusResponse;
     }
 
+    /// <inheritdoc />
     public ProcessingStatusResponse<User> CreateUser(User request)
     {
         var processingStatusResponse = new ProcessingStatusResponse<User>();
@@ -68,6 +69,7 @@ public class UserData : IUserData
         return processingStatusResponse;
     }
 
+    /// <inheritdoc />
     public ProcessingStatusResponse<User> UpdateUser(User request)
     {
         var processingStatusResponse = new ProcessingStatusResponse<User>();
@@ -82,7 +84,7 @@ public class UserData : IUserData
             if (e.Status.StatusCode == StatusCode.NotFound)
             {
                 processingStatusResponse.Status = HttpStatusCode.NotFound;
-                processingStatusResponse.ErrorMessage = $"User could not be found";
+                processingStatusResponse.ErrorMessage = "User could not be found";
             }
             else
             {
@@ -94,6 +96,7 @@ public class UserData : IUserData
         return processingStatusResponse;
     }
 
+    /// <inheritdoc />
     public ProcessingStatusResponse<Empty> DeleteUserByFirebaseId(string id)
     {
         var processingStatusResponse = new ProcessingStatusResponse<Empty>();
@@ -103,6 +106,7 @@ public class UserData : IUserData
         {
             var response = _client.DeleteUserByFirebaseId(request);
             processingStatusResponse.Status = HttpStatusCode.OK;
+            processingStatusResponse.Object = response;
         }
         catch (RpcException e)
         {

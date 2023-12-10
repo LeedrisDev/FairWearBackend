@@ -1,5 +1,8 @@
 namespace FairWearGateway.API.Models.Request;
 
+/// <summary>
+/// Represents a request to create a new user experience.
+/// </summary>
 public class UserExperienceCreateRequest
 {
     /// <summary>

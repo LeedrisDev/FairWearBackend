@@ -5,6 +5,9 @@ using Users.Service;
 
 namespace FairWearGateway.API.Business.UserProductHistoryBusiness;
 
+/// <summary>
+/// Represents business operations for managing user product history.
+/// </summary>
 public class UserProductHistoryBusiness : IUserProductHistoryBusiness
 {
     
@@ -16,21 +19,25 @@ public class UserProductHistoryBusiness : IUserProductHistoryBusiness
         _userProductHistoryData = userProductHistoryData;
     }
 
+    /// <inheritdoc/>
     public ProcessingStatusResponse<GetUserProductHistoryResponse> GetUserProductHistoryByUserId(long userId)
     {
         return _userProductHistoryData.GetUserProductHistoryByUserId(userId);
     }
 
+    /// <inheritdoc/>
     public ProcessingStatusResponse<UserProductHistory> CreateUserProductHistory(UserProductHistory request)
     {
         return _userProductHistoryData.CreateUserProductHistory(request);
     }
 
+    /// <inheritdoc/>
     public ProcessingStatusResponse<UserProductHistory> UpdateUserProductHistory(UserProductHistory request)
     {
         return _userProductHistoryData.UpdateUserProductHistory(request);
     }
 
+    /// <inheritdoc/>
     public ProcessingStatusResponse<Empty> DeleteUserProductHistory(long userId)
     {
         return _userProductHistoryData.DeleteUserProductHistory(userId);

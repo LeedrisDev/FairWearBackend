@@ -7,7 +7,9 @@ using Users.Service;
 
 namespace FairWearGateway.API.Controllers;
 
-/// <summary>Controller that handles the requests for the User model.</summary>
+/// <summary>
+/// Controller that handles the requests for the User model.
+/// </summary>
 [ApiController]
 [Route("/api/")]
 [Produces("application/json")]
@@ -15,12 +17,20 @@ public class UsersController : ControllerBase
 {
     private readonly IUserBusiness _userBusiness;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="UsersController"/> class.
+    /// </summary>
+    /// <param name="userBusiness">The user business service.</param>
     public UsersController(IUserBusiness userBusiness)
     {
         _userBusiness = userBusiness;
     }
 
-    /// <summary>Gets a user by its firebase id.</summary>
+    /// <summary>
+    /// Gets a user by its Firebase ID.
+    /// </summary>
+    /// <param name="firebaseId">The Firebase ID of the user.</param>
+    /// <returns>An action result containing the user or an error response.</returns>
     [HttpGet("user/{firebaseId}")]
     [ProducesResponseType(typeof(User), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(User), (int)HttpStatusCode.NotFound)]
@@ -37,7 +47,11 @@ public class UsersController : ControllerBase
         };
     }
 
-    /// <summary>Create a new user.</summary>
+    /// <summary>
+    /// Creates a new user.
+    /// </summary>
+    /// <param name="request">The user details to create.</param>
+    /// <returns>An action result containing the created user or an error response.</returns>
     [HttpPost("user")]
     [ProducesResponseType(typeof(User), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
@@ -52,7 +66,11 @@ public class UsersController : ControllerBase
         };
     }
 
-    /// <summary>Update a new user.</summary>
+    /// <summary>
+    /// Updates an existing user.
+    /// </summary>
+    /// <param name="request">The user details to update.</param>
+    /// <returns>An action result containing the updated user or an error response.</returns>
     [HttpPut("user")]
     [ProducesResponseType(typeof(User), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
@@ -67,7 +85,11 @@ public class UsersController : ControllerBase
         };
     }
 
-    /// <summary>Delete a user by its firebase id.</summary>
+    /// <summary>
+    /// Deletes a user by its Firebase ID.
+    /// </summary>
+    /// <param name="firebaseId">The Firebase ID of the user.</param>
+    /// <returns>An action result indicating the result of the deletion or an error response.</returns>
     [HttpDelete("user/{firebaseId}")]
     [ProducesResponseType(typeof(User), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(User), (int)HttpStatusCode.NotFound)]

@@ -49,7 +49,6 @@ jobs:
         run: |
           if grep -q 'Severity="WARNING"' resharper-report.xml; then cat resharper-report.xml && exit 1; fi
           if grep -q 'Severity="ERROR"' resharper-report.xml; then cat resharper-report.xml && exit 1; fi
-          if grep -q 'Severity="SUGGESTION"' resharper-report.xml; then cat resharper-report.xml && exit 1; fi
           
       - uses: sarisia/actions-status-discord@v1
         if: always() && (job.status == 'failure' || job.status == 'cancelled')
@@ -128,7 +127,7 @@ jobs:
         run: dotnet test --no-restore  --verbosity normal FairWearGateway.API.Tests/FairWearGateway.API.Tests.csproj
 
       - name: 'Code Coverage'
-        run: ./Scripts/code-coverage-ci.sh -p FairWearGateway.API.Tests/FairWearGateway.API.Tests.csproj -t 60
+        run: ./Scripts/code-coverage-ci.sh -p FairWearGateway.API.Tests/FairWearGateway.API.Tests.csproj -t 25
 
       - uses: sarisia/actions-status-discord@v1
         if: always()

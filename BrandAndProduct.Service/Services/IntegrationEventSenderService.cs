@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Text;
 using BrandAndProduct.Service.Business.IntegrationEventBusiness;
 using Confluent.Kafka;
 
@@ -12,17 +11,19 @@ public class IntegrationEventSenderService : BackgroundService, IIntegrationEven
 {
     private readonly IIntegrationEventBusiness _integrationEventBusiness;
     private readonly IProducer<string, string> _producer;
-    private CancellationTokenSource _wakeupCancelationTokenSource = new CancellationTokenSource();
+    private CancellationTokenSource _wakeupCancelationTokenSource;
 
     /// <summary>
     /// Constructor for IntegrationEventSenderService.
     /// </summary>
     /// <param name="integrationEventBusiness"></param>
     /// <param name="producer"></param>
-    public IntegrationEventSenderService(IIntegrationEventBusiness integrationEventBusiness, IProducer<string, string> producer)
+    public IntegrationEventSenderService(IIntegrationEventBusiness integrationEventBusiness,
+        IProducer<string, string> producer)
     {
         _integrationEventBusiness = integrationEventBusiness;
         _producer = producer;
+        _wakeupCancelationTokenSource = new CancellationTokenSource();
     }
 
     /// <summary>
@@ -46,11 +47,6 @@ public class IntegrationEventSenderService : BackgroundService, IIntegrationEven
     {
         try
         {
-            var config = new ProducerConfig
-            {
-                BootstrapServers = "host1:9092",
-            };
-
             while (!stoppingToken.IsCancellationRequested)
             {
                 var response = await _integrationEventBusiness.GetAllIntegrationEventsAsync();
@@ -58,7 +54,6 @@ public class IntegrationEventSenderService : BackgroundService, IIntegrationEven
                 Debug.WriteLine("[PUBLISH] HERE");
                 foreach (var e in events)
                 {
-                    var body = Encoding.UTF8.GetBytes(e.Data);
                     _producer.Produce("products", new Message<string, string> { Key = e.Event, Value = e.Data },
                         deliveryReport =>
                         {

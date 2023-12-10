@@ -7,6 +7,9 @@ using Users.Service;
 
 namespace FairWearGateway.API.DataAccess.UserExperienceData;
 
+/// <summary>
+/// Data access class for user experience data operations.
+/// </summary>
 public class UserExperienceData : IUserExperienceData
 {
     private readonly UserExperienceService.UserExperienceServiceClient _client;
@@ -18,6 +21,7 @@ public class UserExperienceData : IUserExperienceData
             grpcClientFactory.CreateClient<UserExperienceService.UserExperienceServiceClient>("UserExperienceService");
     }
 
+    /// <inheritdoc />
     public ProcessingStatusResponse<UserExperience> GetUserExperienceByUserId(long userId)
     {
         var processingStatusResponse = new ProcessingStatusResponse<UserExperience>();
@@ -47,6 +51,7 @@ public class UserExperienceData : IUserExperienceData
         return processingStatusResponse;
     }
 
+    /// <inheritdoc />
     public ProcessingStatusResponse<UserExperience> CreateUserExperience(UserExperience request)
     {
         var processingStatusResponse = new ProcessingStatusResponse<UserExperience>();
@@ -66,6 +71,7 @@ public class UserExperienceData : IUserExperienceData
         return processingStatusResponse;
     }
 
+    /// <inheritdoc />
     public ProcessingStatusResponse<UserExperience> UpdateUserExperience(UserExperience request)
     {
         var processingStatusResponse = new ProcessingStatusResponse<UserExperience>();
@@ -92,6 +98,7 @@ public class UserExperienceData : IUserExperienceData
         return processingStatusResponse;
     }
 
+    /// <inheritdoc />
     public ProcessingStatusResponse<Empty> DeleteUserExperience(long userId)
     {
         var processingStatusResponse = new ProcessingStatusResponse<Empty>();

@@ -33,4 +33,10 @@ public class ProductBusiness : IProductBusiness
     {
         return await _productData.GetAllProducts(filters);
     }
+
+    /// <inheritdoc />
+    public async Task<ProcessingStatusResponse<IEnumerable<ProductResponse>>> GetProductAlternatives(int productId)
+    {
+        return await _productData.GetProductAlternatives(productId);
+    }
 }

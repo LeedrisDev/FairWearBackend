@@ -5,11 +5,17 @@ namespace BrandAndProduct.Service.Models.Dto;
 /// <summary>Class representing a Product in the business.</summary>
 public class ProductDto : IObjectWithId
 {
+    /// <summary>The Id of the Product.</summary>
+    public int Id { get; set; }
+    
     /// <summary>The UpcCode of the Product.</summary>
     public string UpcCode { get; set; } = null!;
 
     /// <summary>The Name of the Product.</summary>
     public string Name { get; set; } = null!;
+    
+    /// <summary>The Color of the Product.</summary>
+    public string Color { get; set; } = null!;
 
     /// <summary>The category of the Product.</summary>
     public string? Category { get; set; }
@@ -22,7 +28,4 @@ public class ProductDto : IObjectWithId
 
     /// <summary>The <see cref="BrandEntity"/> of the Product.</summary>
     public virtual BrandEntity BrandEntity { get; set; } = null!;
-
-    /// <summary>The Id of the Product.</summary>
-    public int Id { get; set; }
 }

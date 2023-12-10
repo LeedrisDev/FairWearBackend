@@ -678,6 +678,13 @@ public class ProductBusinessTester
                 Object = brand
             });
 
+        _brandRepositoryMock.Setup(x => x.GetBrandByNameAsync(It.IsAny<String>())).ReturnsAsync(
+            new ProcessingStatusResponse<BrandDto>()
+            {
+                Status = HttpStatusCode.OK,
+                Object = brand
+            });
+
         _productRepositoryMock.Setup(x => x.AddAsync(It.IsAny<ProductDto>())).ReturnsAsync(
             new ProcessingStatusResponse<ProductDto>()
             {
@@ -900,11 +907,23 @@ public class ProductBusinessTester
             }
         );
 
+        _productRepositoryMock.Setup(x => x.AddAsync(It.IsAny<ProductDto>())).ReturnsAsync(
+            new ProcessingStatusResponse<ProductDto>()
+            {
+                Object = product
+            });
+
+        _brandRepositoryMock.Setup(x => x.GetBrandByNameAsync(It.IsAny<String>())).ReturnsAsync(
+            new ProcessingStatusResponse<BrandDto>()
+            {
+                Status = HttpStatusCode.OK,
+                Object = brand
+            });
+
         _productDataMock.Setup(x => x.GetProductByUpc(It.IsAny<string>())).Returns(
             new ProcessingStatusResponse<ProductScrapperResponse>()
             {
-                Status = HttpStatusCode.OK,
-                Object = productScrapperResponse
+                Status = HttpStatusCode.NotFound,
             });
 
         _brandDataMock.Setup(x => x.GetBrandByName(It.IsAny<string>())).Returns(

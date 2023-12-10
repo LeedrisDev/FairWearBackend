@@ -90,7 +90,7 @@ public class ProductBusiness : IProductBusiness
 
             var brandEntity = await _brandRepository.GetBrandByNameAsync(productDataResponse.Object.BrandName);
 
-            if (brandEntity == null || brandEntity.Status != HttpStatusCode.OK)
+            if (brandEntity.Status != HttpStatusCode.OK)
             {
                 var treatedName = productDataResponse.Object.BrandName
                     .ToLower()
@@ -107,7 +107,7 @@ public class ProductBusiness : IProductBusiness
                         ErrorMessage = productBrand.ErrorMessage
                     };
                 }
-                
+
                 brandEntity = await _brandRepository.AddAsync(productBrand.Object);
             }
 
@@ -237,10 +237,10 @@ public class ProductBusiness : IProductBusiness
         {
             var integrationEventData = JsonConvert.SerializeObject(new
             {
-                id = id,
+                id,
             });
 
-            PublishToMessageQueue("product.delete", integrationEventData);
+            await PublishToMessageQueue("product.delete", integrationEventData);
 
             _integrationEventSenderService.StartPublishingOutstandingIntegrationEvents();
         }

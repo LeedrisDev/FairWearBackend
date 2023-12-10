@@ -1,30 +1,40 @@
 using System.Diagnostics;
-using System.Text;
 using BrandAndProduct.Service.Business.IntegrationEventBusiness;
 using Confluent.Kafka;
 
 namespace BrandAndProduct.Service.Services;
 
+/// <summary>
+/// Background service for sending integration events.
+/// </summary>
 public class IntegrationEventSenderService : BackgroundService, IIntegrationEventSenderService
 {
     private readonly IIntegrationEventBusiness _integrationEventBusiness;
     private readonly IProducer<string, string> _producer;
-    private readonly IServiceScopeFactory _scopeFactory;
-    private CancellationTokenSource _wakeupCancelationTokenSource = new CancellationTokenSource();
+    private CancellationTokenSource _wakeupCancelationTokenSource;
 
-    public IntegrationEventSenderService(IServiceScopeFactory scopeFactory,
-        IIntegrationEventBusiness integrationEventBusiness, IProducer<string, string> producer)
+    /// <summary>
+    /// Constructor for IntegrationEventSenderService.
+    /// </summary>
+    /// <param name="integrationEventBusiness"></param>
+    /// <param name="producer"></param>
+    public IntegrationEventSenderService(IIntegrationEventBusiness integrationEventBusiness,
+        IProducer<string, string> producer)
     {
-        _scopeFactory = scopeFactory;
         _integrationEventBusiness = integrationEventBusiness;
         _producer = producer;
+        _wakeupCancelationTokenSource = new CancellationTokenSource();
     }
 
+    /// <summary>
+    /// Starts publishing outstanding integration events.
+    /// </summary>
     public void StartPublishingOutstandingIntegrationEvents()
     {
         _wakeupCancelationTokenSource.Cancel();
     }
 
+    /// <inheritdoc />
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
@@ -37,11 +47,6 @@ public class IntegrationEventSenderService : BackgroundService, IIntegrationEven
     {
         try
         {
-            var config = new ProducerConfig
-            {
-                BootstrapServers = "host1:9092",
-            };
-
             while (!stoppingToken.IsCancellationRequested)
             {
                 var response = await _integrationEventBusiness.GetAllIntegrationEventsAsync();
@@ -49,7 +54,6 @@ public class IntegrationEventSenderService : BackgroundService, IIntegrationEven
                 Debug.WriteLine("[PUBLISH] HERE");
                 foreach (var e in events)
                 {
-                    var body = Encoding.UTF8.GetBytes(e.Data);
                     _producer.Produce("products", new Message<string, string> { Key = e.Event, Value = e.Data },
                         deliveryReport =>
                         {

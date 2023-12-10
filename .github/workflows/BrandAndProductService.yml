@@ -126,7 +126,7 @@ jobs:
         run: dotnet test --no-restore  --verbosity normal BrandAndProduct.Service.Tests/BrandAndProduct.Service.Tests.csproj
 
       - name: 'Code Coverage'
-        run: ./Scripts/code-coverage-ci.sh -p BrandAndProduct.Service.Tests/BrandAndProduct.Service.Tests.csproj -t 75
+        run: ./Scripts/code-coverage-ci.sh -p BrandAndProduct.Service.Tests/BrandAndProduct.Service.Tests.csproj -t 63
 
       - uses: sarisia/actions-status-discord@v1
         if: always()

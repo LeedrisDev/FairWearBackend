@@ -86,7 +86,7 @@ public class UserProductHistoryData : IUserProductHistoryData
             if (e.Status.StatusCode == StatusCode.NotFound)
             {
                 processingStatusResponse.Status = HttpStatusCode.NotFound;
-                processingStatusResponse.ErrorMessage = $"User experience could not be found";
+                processingStatusResponse.ErrorMessage = "User experience could not be found";
             }
             else
             {
@@ -109,6 +109,7 @@ public class UserProductHistoryData : IUserProductHistoryData
         {
             var response = _client.DeleteUserProductHistory(data);
             processingStatusResponse.Status = HttpStatusCode.OK;
+            processingStatusResponse.Object = response;
         }
         catch (RpcException e)
         {

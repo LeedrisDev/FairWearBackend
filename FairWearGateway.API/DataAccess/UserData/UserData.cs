@@ -84,7 +84,7 @@ public class UserData : IUserData
             if (e.Status.StatusCode == StatusCode.NotFound)
             {
                 processingStatusResponse.Status = HttpStatusCode.NotFound;
-                processingStatusResponse.ErrorMessage = $"User could not be found";
+                processingStatusResponse.ErrorMessage = "User could not be found";
             }
             else
             {
@@ -106,6 +106,7 @@ public class UserData : IUserData
         {
             var response = _client.DeleteUserByFirebaseId(request);
             processingStatusResponse.Status = HttpStatusCode.OK;
+            processingStatusResponse.Object = response;
         }
         catch (RpcException e)
         {

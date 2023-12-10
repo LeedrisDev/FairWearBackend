@@ -240,7 +240,7 @@ public class ProductBusiness : IProductBusiness
                 id = id,
             });
 
-            PublishToMessageQueue("product.delete", integrationEventData);
+            await PublishToMessageQueue("product.delete", integrationEventData);
 
             _integrationEventSenderService.StartPublishingOutstandingIntegrationEvents();
         }

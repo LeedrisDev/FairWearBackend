@@ -5,26 +5,35 @@ using Confluent.Kafka;
 
 namespace BrandAndProduct.Service.Services;
 
+/// <summary>
+/// Background service for sending integration events.
+/// </summary>
 public class IntegrationEventSenderService : BackgroundService, IIntegrationEventSenderService
 {
     private readonly IIntegrationEventBusiness _integrationEventBusiness;
     private readonly IProducer<string, string> _producer;
-    private readonly IServiceScopeFactory _scopeFactory;
     private CancellationTokenSource _wakeupCancelationTokenSource = new CancellationTokenSource();
 
-    public IntegrationEventSenderService(IServiceScopeFactory scopeFactory,
-        IIntegrationEventBusiness integrationEventBusiness, IProducer<string, string> producer)
+    /// <summary>
+    /// Constructor for IntegrationEventSenderService.
+    /// </summary>
+    /// <param name="integrationEventBusiness"></param>
+    /// <param name="producer"></param>
+    public IntegrationEventSenderService(IIntegrationEventBusiness integrationEventBusiness, IProducer<string, string> producer)
     {
-        _scopeFactory = scopeFactory;
         _integrationEventBusiness = integrationEventBusiness;
         _producer = producer;
     }
 
+    /// <summary>
+    /// Starts publishing outstanding integration events.
+    /// </summary>
     public void StartPublishingOutstandingIntegrationEvents()
     {
         _wakeupCancelationTokenSource.Cancel();
     }
 
+    /// <inheritdoc />
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)

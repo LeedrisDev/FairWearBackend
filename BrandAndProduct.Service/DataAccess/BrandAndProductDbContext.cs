@@ -22,6 +22,9 @@ public class BrandAndProductDbContext : DbContext
     /// <summary>The Products table.</summary>
     public virtual DbSet<ProductEntity> Products { get; set; } = null!;
 
+    /// <summary>
+    /// The IntegrationEvents table.
+    /// </summary>
     public virtual DbSet<IntegrationEventEntity> IntegrationEvents { get; set; } = null!;
 
 

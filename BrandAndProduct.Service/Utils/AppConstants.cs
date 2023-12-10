@@ -21,6 +21,9 @@ public static class AppConstants
     private static readonly string KafkaServicePort =
         Environment.GetEnvironmentVariable("KAFKA_SERVICE_PORT_HTTP")!;
 
+    /// <summary>
+    ///    Connection string to the Kafka service.
+    /// </summary>
     public static readonly string KafkaConnectionString = $"{KafkaServiceHost}:{KafkaServicePort}";
 
     /// <summary>URL for the Good On You Scrapper microservice.</summary>

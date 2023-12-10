@@ -70,7 +70,7 @@ public class ProductRepository : Repository<ProductDto, ProductEntity>, IProduct
 
             processingStatusResponse.Object = Mapper.Map<IEnumerable<ProductDto>>(recommendedProducts);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             // TODO: Log exception
             processingStatusResponse.Status = HttpStatusCode.InternalServerError;

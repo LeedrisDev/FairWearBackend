@@ -5,6 +5,7 @@
 /// </summary>
 public class ProductInformationDto
 {
+    public int Id { get; set; }
     /// <summary>
     /// The Name of the Product.
     /// </summary>

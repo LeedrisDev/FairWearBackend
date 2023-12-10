@@ -39,7 +39,7 @@ jobs:
       - name: Install Resharper CLI
         if: steps.cache-resharper.outputs.cache-hit != 'true'
         run: |
-          dotnet tool install JetBrains.ReSharper.GlobalTools --tool-path ~/.dotnet/tools
+          dotnet tool install JetBrains.ReSharper.GlobalTools --tool-path ~/.dotnet/tools --version 2023.3.0
           export PATH=$PATH:~/.dotnet/tools
 
       - name: Run ReSharper InspectCode

@@ -38,7 +38,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: Database/AuthenticationDatabase/Dockerfile
+          file: Databases/AuthenticationDatabase/Dockerfile
           push: true
           tags: |
             registry.digitalocean.com/fairwear/authentication_db:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}

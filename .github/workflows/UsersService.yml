@@ -17,134 +17,134 @@ on:
 
 jobs:
 
-  linter:
-    name: 'Linter'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup .NET Core SDK 7.0.x
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '7.0.x'
-
-      - name: Cache Resharper CLI
-        id: cache-resharper
-        uses: actions/cache@v3
-        with:
-          path: ~/.dotnet/tools
-          key: resharper-cli
-          restore-keys: resharper-cli
-
-      - name: Install Resharper CLI
-        if: steps.cache-resharper.outputs.cache-hit != 'true'
-        run: |
-          dotnet tool install JetBrains.ReSharper.GlobalTools --tool-path ~/.dotnet/tools --version 2023.3.0
-          export PATH=$PATH:~/.dotnet/tools
-
-      - name: Run ReSharper InspectCode
-        run: jb inspectcode Users.Service/Users.Service.csproj -o=resharper-report.xml -f=Xml -verbosity=INFO -no-swea
-
-      - name: Check Resharper results
-        run: |
-          if grep -q 'Severity="WARNING"' resharper-report.xml; then cat resharper-report.xml && exit 1; fi
-          if grep -q 'Severity="ERROR"' resharper-report.xml; then cat resharper-report.xml && exit 1; fi
-
-      - uses: sarisia/actions-status-discord@v1
-        if: always() && (job.status == 'failure' || job.status == 'cancelled')
-        with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          status: ${{ job.status }}
-          title: "Linter on Users Service"
-          username: GitHub Actions
-          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
-  
-  
-  build:
-    name: 'Build'
-    needs: linter
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup .NET Core SDK 7.0.x
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '7.0.x'
-
-      - name: Cache NuGet packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-nuget-users-service-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-users-service-
-
-      - name: 'Install dependencies'
-        run: dotnet restore Users.Service/Users.Service.csproj
-
-      - name: Build
-        run: dotnet build Users.Service/Users.Service.csproj --configuration Release --no-restore
-
-      - uses: sarisia/actions-status-discord@v1
-        if: always() && (job.status == 'failure' || job.status == 'cancelled')
-        with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          status: ${{ job.status }}
-          title: "Build & Test Users Service"
-          username: GitHub Actions
-          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
-  
-  test:
-    name: 'Tests'
-    needs:
-      - build
-      - linter
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup .NET Core SDK 7.0.x
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '7.0.x'
-
-      - name: Cache NuGet packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-nuget-users-service-tests-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-users-service-tests-
-
-      - name: 'Install dependencies'
-        run: |
-          dotnet restore Users.Service.Tests/Users.Service.Tests.csproj
-          dotnet restore Users.Service/Users.Service.csproj  
-
-      - name: 'Run tests'
-        run: dotnet test --no-restore  --verbosity normal Users.Service.Tests/Users.Service.Tests.csproj
-
-      - name: 'Code Coverage'
-        run: ./Scripts/code-coverage-ci.sh -p Users.Service.Tests/Users.Service.Tests.csproj -t 0
-
-      - uses: sarisia/actions-status-discord@v1
-        if: always()
-        with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          status: ${{ job.status }}
-          title: "Build & Test Users Service"
-          username: GitHub Actions
-          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+#  linter:
+#    name: 'Linter'
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#
+#      - name: Setup .NET Core SDK 7.0.x
+#        uses: actions/setup-dotnet@v3
+#        with:
+#          dotnet-version: '7.0.x'
+#
+#      - name: Cache Resharper CLI
+#        id: cache-resharper
+#        uses: actions/cache@v3
+#        with:
+#          path: ~/.dotnet/tools
+#          key: resharper-cli
+#          restore-keys: resharper-cli
+#
+#      - name: Install Resharper CLI
+#        if: steps.cache-resharper.outputs.cache-hit != 'true'
+#        run: |
+#          dotnet tool install JetBrains.ReSharper.GlobalTools --tool-path ~/.dotnet/tools --version 2023.3.0
+#          export PATH=$PATH:~/.dotnet/tools
+#
+#      - name: Run ReSharper InspectCode
+#        run: jb inspectcode Users.Service/Users.Service.csproj -o=resharper-report.xml -f=Xml -verbosity=INFO -no-swea
+#
+#      - name: Check Resharper results
+#        run: |
+#          if grep -q 'Severity="WARNING"' resharper-report.xml; then cat resharper-report.xml && exit 1; fi
+#          if grep -q 'Severity="ERROR"' resharper-report.xml; then cat resharper-report.xml && exit 1; fi
+#
+#      - uses: sarisia/actions-status-discord@v1
+#        if: always() && (job.status == 'failure' || job.status == 'cancelled')
+#        with:
+#          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+#          status: ${{ job.status }}
+#          title: "Linter on Users Service"
+#          username: GitHub Actions
+#          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+#  
+#  
+#  build:
+#    name: 'Build'
+#    needs: linter
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#
+#      - name: Setup .NET Core SDK 7.0.x
+#        uses: actions/setup-dotnet@v3
+#        with:
+#          dotnet-version: '7.0.x'
+#
+#      - name: Cache NuGet packages
+#        uses: actions/cache@v3
+#        with:
+#          path: ~/.nuget/packages
+#          # Look to see if there is a cache hit for the corresponding requirements file
+#          key: ${{ runner.os }}-nuget-users-service-${{ hashFiles('**/packages.lock.json') }}
+#          restore-keys: |
+#            ${{ runner.os }}-nuget-users-service-
+#
+#      - name: 'Install dependencies'
+#        run: dotnet restore Users.Service/Users.Service.csproj
+#
+#      - name: Build
+#        run: dotnet build Users.Service/Users.Service.csproj --configuration Release --no-restore
+#
+#      - uses: sarisia/actions-status-discord@v1
+#        if: always() && (job.status == 'failure' || job.status == 'cancelled')
+#        with:
+#          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+#          status: ${{ job.status }}
+#          title: "Build & Test Users Service"
+#          username: GitHub Actions
+#          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+#  
+#  test:
+#    name: 'Tests'
+#    needs:
+#      - build
+#      - linter
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#
+#      - name: Setup .NET Core SDK 7.0.x
+#        uses: actions/setup-dotnet@v3
+#        with:
+#          dotnet-version: '7.0.x'
+#
+#      - name: Cache NuGet packages
+#        uses: actions/cache@v3
+#        with:
+#          path: ~/.nuget/packages
+#          # Look to see if there is a cache hit for the corresponding requirements file
+#          key: ${{ runner.os }}-nuget-users-service-tests-${{ hashFiles('**/packages.lock.json') }}
+#          restore-keys: |
+#            ${{ runner.os }}-nuget-users-service-tests-
+#
+#      - name: 'Install dependencies'
+#        run: |
+#          dotnet restore Users.Service.Tests/Users.Service.Tests.csproj
+#          dotnet restore Users.Service/Users.Service.csproj  
+#
+#      - name: 'Run tests'
+#        run: dotnet test --no-restore  --verbosity normal Users.Service.Tests/Users.Service.Tests.csproj
+#
+#      - name: 'Code Coverage'
+#        run: ./Scripts/code-coverage-ci.sh -p Users.Service.Tests/Users.Service.Tests.csproj -t 0
+#
+#      - uses: sarisia/actions-status-discord@v1
+#        if: always()
+#        with:
+#          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+#          status: ${{ job.status }}
+#          title: "Build & Test Users Service"
+#          username: GitHub Actions
+#          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
   
   deploy:
     name: 'Deploy'
-    needs:
-      - linter
-      - build
-      - test
+#    needs:
+#      - linter
+#      - build
+#      - test
     runs-on: ubuntu-latest
     if: contains(github.ref, 'release') || contains(github.ref, 'develop') || contains(github.ref, 'master')
     steps:

@@ -17,14 +17,21 @@ public static class AppConstants
             $"User ID={User};Password={Password};Host={Host};Port={Port};Database={DatabaseName};";
     }
 
+    /// <summary>Constants related to Kafka.</summary>
     public static class Kafka
     {
+        // Retrieve Kafka service host from environment variable "KAFKA_SERVICE_HOST"
         private static readonly string KafkaServiceHost =
             Environment.GetEnvironmentVariable("KAFKA_SERVICE_HOST")!;
 
+        // Retrieve Kafka service port from environment variable "KAFKA_SERVICE_PORT_HTTP"
         private static readonly string KafkaServicePort =
             Environment.GetEnvironmentVariable("KAFKA_SERVICE_PORT_HTTP")!;
-
+        
+        /// <summary>
+        /// Concatenate host and port to create Kafka connection string
+        /// </summary>
         public static readonly string KafkaConnectionString = $"{KafkaServiceHost}:{KafkaServicePort}";
     }
+
 }

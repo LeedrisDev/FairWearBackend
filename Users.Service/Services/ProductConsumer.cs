@@ -6,27 +6,38 @@ using Users.Service.Models.Dto;
 
 namespace Users.Service.Services;
 
+/// <summary>
+/// Represents a hosted service for consuming messages related to products.
+/// </summary>
 public class ProductConsumer : IHostedService, IDisposable
 {
     private readonly IConsumer<string, string> _consumer;
     private readonly IProductBusiness _productBusiness;
 
-    public ProductConsumer(IProductBusiness productBusiness, IServiceScopeFactory serviceScopeFactory,
-        IConsumer<string, string> consumer)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ProductConsumer"/> class.
+    /// </summary>
+    /// <param name="productBusiness">The business service for handling product-related operations.</param>
+    /// <param name="consumer">The Kafka consumer used for message consumption.</param>
+    public ProductConsumer(IProductBusiness productBusiness, IConsumer<string, string> consumer)
     {
         _productBusiness = productBusiness;
         _consumer = consumer;
         _consumer.Subscribe("products");
     }
 
+    /// <summary>
+    /// Gets the name of the queue for product messages.
+    /// </summary>
     protected string QueueName => "products";
 
+    /// <inheritdoc/>
     public void Dispose()
     {
         try
         {
-            _consumer?.Close();
-            _consumer?.Dispose();
+            _consumer.Close();
+            _consumer.Dispose();
         }
         catch (Exception ex)
         {
@@ -34,12 +45,14 @@ public class ProductConsumer : IHostedService, IDisposable
         }
     }
 
+    /// <inheritdoc/>
     public Task StartAsync(CancellationToken cancellationToken)
     {
         Task.Run(() => ConsumeMessages(cancellationToken));
         return Task.CompletedTask;
     }
 
+    /// <inheritdoc/>
     public Task StopAsync(CancellationToken cancellationToken)
     {
         Dispose();
@@ -64,23 +77,21 @@ public class ProductConsumer : IHostedService, IDisposable
                             case "product.create":
                                 _productBusiness.CreateProductAsync(new ProductDto()
                                 {
-                                    Id = data["id"].Value<long>(),
-                                    Name = data["name"].Value<string>(),
-                                    Rating = data["rating"].Value<int>(),
+                                    Id = data["id"]!.Value<long>(),
+                                    Name = data["name"]!.Value<string>()!,
+                                    Rating = data["rating"]!.Value<int>(),
                                 });
                                 break;
                             case "product.update":
                                 _productBusiness.UpdateProductAsync(new ProductDto()
                                 {
-                                    Id = data["id"].Value<long>(),
-                                    Name = data["name"].Value<string>(),
-                                    Rating = data["rating"].Value<int>(),
+                                    Id = data["id"]!.Value<long>(),
+                                    Name = data["name"]!.Value<string>()!,
+                                    Rating = data["rating"]!.Value<int>()
                                 });
                                 break;
                             case "product.delete":
-                                _productBusiness.DeleteProductAsync(data["id"].Value<long>());
-                                break;
-                            default:
+                                _productBusiness.DeleteProductAsync(data["id"]!.Value<long>());
                                 break;
                         }
 

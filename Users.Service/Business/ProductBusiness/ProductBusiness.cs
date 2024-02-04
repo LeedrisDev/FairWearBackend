@@ -1,5 +1,4 @@
 using Users.Service.DataAccess.IRepositories;
-using Users.Service.Models;
 using Users.Service.Models.Dto;
 
 namespace Users.Service.Business.ProductBusiness;

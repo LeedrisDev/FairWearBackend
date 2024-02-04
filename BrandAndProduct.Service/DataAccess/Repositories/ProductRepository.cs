@@ -4,6 +4,7 @@ using BrandAndProduct.Service.DataAccess.IRepositories;
 using BrandAndProduct.Service.Models;
 using BrandAndProduct.Service.Models.Dto;
 using BrandAndProduct.Service.Models.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace BrandAndProduct.Service.DataAccess.Repositories;
 
@@ -43,6 +44,39 @@ public class ProductRepository : Repository<ProductDto, ProductEntity>, IProduct
         await Context.SaveChangesAsync();
 
         processingStatusResponse.Object = Mapper.Map<ProductDto>(entityToUpdate);
+        return processingStatusResponse;
+    }
+
+    /// <inheritdoc/>
+    public async Task<ProcessingStatusResponse<IEnumerable<ProductDto>>> GetProductAlternativesAsync(int productId)
+    {
+        var processingStatusResponse = new ProcessingStatusResponse<IEnumerable<ProductDto>>();
+        try
+        {
+            var productEntity = await DbSet.FindAsync(productId);
+            if (productEntity == null)
+            {
+                processingStatusResponse.Status = HttpStatusCode.BadRequest;
+                processingStatusResponse.ErrorMessage = $"Entity with ID {productId} not found.";
+                return processingStatusResponse;
+            }
+
+            var recommendedProducts = await DbSet
+                .AsNoTracking()
+                .Where(e => e.Category == productEntity.Category && e.Id != productId)
+                .OrderBy(e => e.Color == productEntity.Color)
+                .Take(20)
+                .ToListAsync();
+
+            processingStatusResponse.Object = Mapper.Map<IEnumerable<ProductDto>>(recommendedProducts);
+        }
+        catch (Exception)
+        {
+            // TODO: Log exception
+            processingStatusResponse.Status = HttpStatusCode.InternalServerError;
+            processingStatusResponse.ErrorMessage = "Internal Server Error";
+        }
+        
         return processingStatusResponse;
     }
 }

@@ -57,7 +57,7 @@ public class ProductsController : ControllerBase
 
     /// <summary>Gets all products.</summary>
     [HttpGet("product")]
-    [ProducesResponseType(typeof(BrandResponse), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(IEnumerable<ProductResponse>), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
     public async Task<IActionResult> GetAllProductsAsync([FromQuery] Dictionary<string, string> filters)
     {
@@ -66,6 +66,27 @@ public class ProductsController : ControllerBase
         return processingStatusResponse.Status switch
         {
             HttpStatusCode.OK => Ok(processingStatusResponse.Object),
+            _ => StatusCode((int)processingStatusResponse.Status, processingStatusResponse.MessageObject)
+        };
+    }
+    
+    /// <summary>
+    /// Gets all products that are alternatives to the product with the given id.
+    /// </summary>
+    /// <param name="productId">The id of the product for which we want to get the alternatives.</param>
+    /// <returns></returns>
+    [HttpGet("product/{productId:int}/alternatives")]
+    [ProducesResponseType(typeof(IEnumerable<ProductResponse>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
+    public async Task<IActionResult> GetProductAlternatives([FromRoute] int productId)
+    {
+        var processingStatusResponse = await _productBusiness.GetProductAlternatives(productId);
+
+        return processingStatusResponse.Status switch
+        {
+            HttpStatusCode.OK => Ok(processingStatusResponse.Object),
+            HttpStatusCode.BadRequest => BadRequest(processingStatusResponse.MessageObject),
             _ => StatusCode((int)processingStatusResponse.Status, processingStatusResponse.MessageObject)
         };
     }

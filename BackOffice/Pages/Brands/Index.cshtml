@@ -1,0 +1,88 @@
+@page
+@model BackOffice.Pages.Brands.IndexModel
+
+@{
+    ViewData["Title"] = "Brands";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Brands</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="d-inline">
+                        @Html.DisplayNameFor(model => model.Brands[0].Name)
+                    </span>
+                    <i class="fa-solid fa-sort d-inline"></i>
+                </div>
+            </th>
+            <th>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="d-inline">
+                        @Html.DisplayNameFor(model => model.Brands[0].Country)
+                    </span>
+                    <i class="fa-solid fa-sort d-inline"></i>
+                </div>
+            </th>
+            <th>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="d-inline">
+                        Environmental rating
+                    </span>
+                    <i class="fa-solid fa-sort d-inline"></i>
+                </div>
+            </th>
+            <th>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="d-inline">
+                        Human rating
+                    </span>
+                    <i class="fa-solid fa-sort d-inline"></i>
+                </div>
+            </th>
+            <th>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="d-inline">
+                        Animal rating
+                    </span>
+                    <i class="fa-solid fa-sort d-inline"></i>
+                </div>
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Brands) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Country)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EnvironmentRating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PeopleRating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AnimalRating)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

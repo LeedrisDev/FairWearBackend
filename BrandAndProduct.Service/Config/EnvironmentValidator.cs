@@ -15,10 +15,15 @@ public class EnvironmentValidator
 
         var varEnvDefined = IsVarEnvDefined("GOODONYOU_SCRAPPER_SERVICE_HOST");
         varEnvDefined &= IsVarEnvDefined("GOODONYOU_SCRAPPER_SERVICE_PORT_HTTP");
-        varEnvDefined &= IsVarEnvDefined("BRAND_AND_PRODUCT_DB_SERVICE_HOST");
-        varEnvDefined &= IsVarEnvDefined("BRAND_AND_PRODUCT_DB_SERVICE_PORT_HTTP");
         varEnvDefined &= IsVarEnvDefined("PRODUCT_DATA_RETRIEVER_SERVICE_HOST");
         varEnvDefined &= IsVarEnvDefined("PRODUCT_DATA_RETRIEVER_SERVICE_PORT_HTTP");
+        varEnvDefined &= IsVarEnvDefined("BRAND_AND_PRODUCT_DB_SERVICE_HOST");
+        varEnvDefined &= IsVarEnvDefined("BRAND_AND_PRODUCT_DB_SERVICE_PORT_HTTP");
+        varEnvDefined &= IsVarEnvDefined("BRAND_AND_PRODUCT_DB_USER");
+        varEnvDefined &= IsVarEnvDefined("BRAND_AND_PRODUCT_DB_PASSWORD");
+        varEnvDefined &= IsVarEnvDefined("BRAND_AND_PRODUCT_DB_DATABASE_NAME");
+        varEnvDefined &= IsVarEnvDefined("KAFKA_SERVICE_HOST");
+        varEnvDefined &= IsVarEnvDefined("KAFKA_SERVICE_PORT_HTTP");
 
 
         if (!varEnvDefined)

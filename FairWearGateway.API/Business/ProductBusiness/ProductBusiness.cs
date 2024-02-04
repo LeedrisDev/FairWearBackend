@@ -28,9 +28,15 @@ public class ProductBusiness : IProductBusiness
     }
 
     /// <inheritdoc />
-    public async Task<ProcessingStatusResponse<IEnumerable<ProductResponse>>> GetAllProducts(
+    public Task<ProcessingStatusResponse<IEnumerable<ProductResponse>>> GetAllProducts(
         Dictionary<string, string> filters)
     {
-        return await _productData.GetAllProducts(filters);
+        return _productData.GetAllProducts(filters);
+    }
+
+    /// <inheritdoc />
+    public Task<ProcessingStatusResponse<IEnumerable<ProductResponse>>> GetProductAlternatives(int productId)
+    {
+        return _productData.GetProductAlternatives(productId);
     }
 }

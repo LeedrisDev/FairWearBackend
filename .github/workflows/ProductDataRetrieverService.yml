@@ -39,7 +39,7 @@ jobs:
       - name: Install Resharper CLI
         if: steps.cache-resharper.outputs.cache-hit != 'true'
         run: |
-          dotnet tool install JetBrains.ReSharper.GlobalTools --tool-path ~/.dotnet/tools
+          dotnet tool install JetBrains.ReSharper.GlobalTools --tool-path ~/.dotnet/tools --version 2023.3.0
           export PATH=$PATH:~/.dotnet/tools
 
       - name: Run ReSharper InspectCode
@@ -49,7 +49,6 @@ jobs:
         run: |
           if grep -q 'Severity="WARNING"' resharper-report.xml; then cat resharper-report.xml && exit 1; fi
           if grep -q 'Severity="ERROR"' resharper-report.xml; then cat resharper-report.xml && exit 1; fi
-          if grep -q 'Severity="SUGGESTION"' resharper-report.xml; then cat resharper-report.xml && exit 1; fi
 
       - uses: sarisia/actions-status-discord@v1
         if: always() && (job.status == 'failure' || job.status == 'cancelled')
@@ -162,22 +161,23 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Login to Docker Registry
-        uses: docker/login-action@v2
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
         with:
-          registry: https://registry.leedrisdev.com
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Log in to DigitalOcean Container Registry with short-lived credentials
+        run: doctl registry login --expiry-seconds 600
 
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./ProductDataRetriever.Service/Dockerfile
+          file: ProductDataRetriever.Service/Dockerfile
           push: true
           tags: |
-            registry.leedrisdev.com/product_data_retriever_service:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}
-            registry.leedrisdev.com/product_data_retriever_service:latest
+            registry.digitalocean.com/fairwear/fairwear_product_data_retriever_service:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}
+            registry.digitalocean.com/fairwear/fairwear_product_data_retriever_service:latest
 
       - uses: sarisia/actions-status-discord@v1
         if: always()

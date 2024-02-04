@@ -13,8 +13,8 @@ public class HttpClientWrapper: IHttpClientWrapper
     }
     
     /// <inheritdoc />
-    public async Task<HttpResponseMessage> GetAsync(string requestUri)
+    public Task<HttpResponseMessage> GetAsync(string requestUri)
     {
-        return await _httpClient.GetAsync(requestUri);
+        return _httpClient.GetAsync(requestUri);
     }
 }

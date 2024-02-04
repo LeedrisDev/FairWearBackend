@@ -28,4 +28,11 @@ public interface IProductData
     /// A <see cref="ProcessingStatusResponse{T}"/> instance, that contains the list of product object if the call succeed.
     /// </returns>
     Task<ProcessingStatusResponse<IEnumerable<ProductResponse>>> GetAllProducts(Dictionary<string, string> filters);
+    
+    /// <summary>
+    /// Call the appropriate microservice to get all products that are alternatives to the product with the given id
+    /// </summary>
+    /// <param name="productId">The id of the product for which we want to get the alternatives.</param>
+    /// <returns></returns>
+    Task<ProcessingStatusResponse<IEnumerable<ProductResponse>>> GetProductAlternatives(int productId);
 }

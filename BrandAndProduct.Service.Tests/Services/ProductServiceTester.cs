@@ -65,6 +65,7 @@ public class ProductServiceTester
                     UpcCode = "123456789",
                     Category = "Category A",
                     Ranges = new List<string> { "Range A" },
+                    Color = "red",
                     BrandId = 1,
                 },
                 new ProductDto()
@@ -74,6 +75,7 @@ public class ProductServiceTester
                     UpcCode = "987654321",
                     Category = "Category B",
                     Ranges = new List<string> { "Range B" },
+                    Color = "red",
                     BrandId = 2,
                 },
             },
@@ -88,6 +90,7 @@ public class ProductServiceTester
                 Name = "Product 1",
                 UpcCode = "123456789",
                 Category = "Category A",
+                Color = "red",
                 BrandId = 1,
             },
             new ProductResponse()
@@ -96,6 +99,7 @@ public class ProductServiceTester
                 Name = "Product 2",
                 UpcCode = "987654321",
                 Category = "Category B",
+                Color = "red",
                 BrandId = 2,
             },
         };
@@ -164,6 +168,7 @@ public class ProductServiceTester
                 UpcCode = "123456789",
                 Category = "Category A",
                 Ranges = new List<string> { "Range A" },
+                Color = "red",
                 BrandId = 1,
             },
             Status = HttpStatusCode.OK
@@ -269,6 +274,7 @@ public class ProductServiceTester
             UpcCode = "123456789",
             Category = "Category A",
             Ranges = new List<string> { "Range A" },
+            Color = "red",
             BrandId = 1,
         };
         var businessResult = new ProcessingStatusResponse<ProductDto>()
@@ -283,6 +289,7 @@ public class ProductServiceTester
             Name = "Product 1",
             UpcCode = "123456789",
             Category = "Category A",
+            Color = "red",
             BrandId = 1,
         };
 
@@ -548,6 +555,7 @@ public class ProductServiceTester
         };
         var productInformationDto = new ProductInformationDto()
         {
+            Id = 1,
             Name = "White shirt",
             Country = "Bangladesh",
             Image = "image",
@@ -579,6 +587,7 @@ public class ProductServiceTester
         };
         var productInformation = new ProductInformationResponse()
         {
+            Id = 1,
             Name = "White shirt",
             Country = "Bangladesh",
             Image = "image",

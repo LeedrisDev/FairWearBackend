@@ -39,4 +39,11 @@ public interface IProductBusiness
     /// <param name="id">The Id of the Product to delete.</param>
     /// <returns>A <see cref="Task"/>.</returns>
     Task<ProcessingStatusResponse<ProductDto>> DeleteProductAsync(int id);
+    
+    /// <summary>
+    /// Get recommended products for a product.
+    /// </summary>
+    /// <param name="productId">Product id to get alternatives products for.</param>
+    /// <returns></returns>
+    Task<ProcessingStatusResponse<IEnumerable<ProductDto>>> GetProductAlternativesAsync(int productId);
 }

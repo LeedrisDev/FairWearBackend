@@ -12,6 +12,7 @@ service ProductService {
     rpc CreateProductAsync (ProductRequest) returns (ProductResponse);
     rpc UpdateProductAsync (ProductResponse) returns (ProductResponse);
     rpc DeleteProductAsync (ProductByIdRequest) returns (google.protobuf.Empty);
+    rpc GetProductAlternativesAsync (ProductByIdRequest) returns (stream ProductResponse);
 }
 
 // Requests
@@ -46,8 +47,9 @@ message ProductResponse {
     string upcCode = 2;
     string name = 3;
     string category = 4;
-    repeated string ranges = 5;
-    int32 brandId = 6;
+    string color = 5;
+    repeated string ranges = 6;
+    int32 brandId = 7;
 }
 
 message ProductScoreResponse {
@@ -62,13 +64,14 @@ message ProductCompositionResponse {
 }
 
 message ProductInformationResponse {
-    string name = 1;
-    string country = 2;
-    string image = 3;
-    int32 globalScore = 4;
-    ProductScoreResponse scores = 5;
-    repeated ProductCompositionResponse composition = 6;
-    string brand = 7;
+    int32 id = 1;
+    string name = 2;
+    string country = 3;
+    string image = 4;
+    int32 globalScore = 5;
+    ProductScoreResponse scores = 6;
+    repeated ProductCompositionResponse composition = 7;
+    string brand = 8;
 }
 
 

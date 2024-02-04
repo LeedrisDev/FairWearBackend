@@ -44,6 +44,7 @@ public class ProductRepositoryTester
                 Id = 1,
                 Name = "Product 1",
                 UpcCode = "123456789",
+                Color = "red",
                 Category = "Category A",
                 Ranges = new List<string> { "Range A" },
                 BrandId = 1,
@@ -52,6 +53,7 @@ public class ProductRepositoryTester
             {
                 Id = 2,
                 Name = "Product 2",
+                Color = "red",
                 UpcCode = "987654321",
                 Category = "Category B",
                 Ranges = new List<string> { "Range B" },
@@ -89,6 +91,7 @@ public class ProductRepositoryTester
                 Name = "Product 1",
                 UpcCode = "123456789",
                 Category = "Category A",
+                Color = "red",
                 Ranges = new List<string> { "Range A" },
                 BrandId = 1,
             },
@@ -98,6 +101,7 @@ public class ProductRepositoryTester
                 Name = "Product 2",
                 UpcCode = "987654321",
                 Category = "Category B",
+                Color = "red",
                 Ranges = new List<string> { "Range B" },
                 BrandId = 2,
             }
@@ -130,6 +134,7 @@ public class ProductRepositoryTester
                 Id = 1,
                 Name = "Product 1",
                 UpcCode = "123456789",
+                Color = "red",
                 Category = "Category A",
                 Ranges = new List<string> { "Range A" },
                 BrandId = 1,
@@ -139,6 +144,7 @@ public class ProductRepositoryTester
                 Id = 2,
                 Name = "Product 2",
                 UpcCode = "987654321",
+                Color = "red",
                 Category = "Category B",
                 Ranges = new List<string> { "Range B" },
                 BrandId = 2,
@@ -167,6 +173,7 @@ public class ProductRepositoryTester
             Name = "Product 1",
             UpcCode = "123456789",
             Category = "Category A",
+            Color = "red",
             Ranges = new List<string> { "Range A" },
             BrandId = 1,
         };
@@ -202,6 +209,7 @@ public class ProductRepositoryTester
                 UpcCode = "123456789",
                 Category = "Category A",
                 Ranges = new List<string> { "Range A" },
+                Color = "red",
                 BrandId = 1,
             },
             new ProductEntity
@@ -211,6 +219,7 @@ public class ProductRepositoryTester
                 UpcCode = "987654321",
                 Category = "Category B",
                 Ranges = new List<string> { "Range B" },
+                Color = "red",
                 BrandId = 2,
             }
         };
@@ -222,6 +231,7 @@ public class ProductRepositoryTester
             UpcCode = "987654321",
             Category = "Updated Category",
             Ranges = new List<string> { "Updated Range" },
+            Color = "red",
             BrandId = 3,
         };
 
@@ -257,6 +267,7 @@ public class ProductRepositoryTester
                 Name = "Product 1",
                 UpcCode = "123456789",
                 Category = "Category A",
+                Color = "red",
                 Ranges = new List<string> { "Range A" },
                 BrandId = 1,
             },
@@ -268,6 +279,7 @@ public class ProductRepositoryTester
             Name = "Updated Product",
             UpcCode = "987654321",
             Category = "Updated Category",
+            Color = "red",
             Ranges = new List<string> { "Updated Range" },
             BrandId = 2,
         };
@@ -299,6 +311,7 @@ public class ProductRepositoryTester
                 UpcCode = "123456789",
                 Category = "Category A",
                 Ranges = new List<string> { "Range A" },
+                Color = "red",
                 BrandId = 1,
             },
             new ProductEntity
@@ -308,6 +321,7 @@ public class ProductRepositoryTester
                 UpcCode = "987654321",
                 Category = "Category B",
                 Ranges = new List<string> { "Range B" },
+                Color = "red",
                 BrandId = 2,
             }
         };

@@ -8,6 +8,9 @@ using Grpc.Core;
 
 namespace BrandAndProduct.Service.Services;
 
+/// <summary>
+///   Brand service
+/// </summary>
 public class BrandService : Protos.BrandService.BrandServiceBase
 {
     private readonly IBrandBusiness _brandBusiness;
@@ -15,6 +18,12 @@ public class BrandService : Protos.BrandService.BrandServiceBase
     private readonly IMapper _mapper;
 
 
+    /// <summary>
+    ///    Constructor
+    /// </summary>
+    /// <param name="brandBusiness"></param>
+    /// <param name="logger"></param>
+    /// <param name="mapper"></param>
     public BrandService(IBrandBusiness brandBusiness, ILogger<BrandService> logger, IMapper mapper)
     {
         _brandBusiness = brandBusiness;
@@ -22,6 +31,13 @@ public class BrandService : Protos.BrandService.BrandServiceBase
         _mapper = mapper;
     }
 
+    /// <summary>
+    ///    Get all brands
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="responseStream"></param>
+    /// <param name="context"></param>
+    /// <exception cref="RpcException"></exception>
     public override async Task GetAllBrandsAsync(BrandFilterList request,
         IServerStreamWriter<BrandResponse> responseStream,
         ServerCallContext context)
@@ -47,6 +63,13 @@ public class BrandService : Protos.BrandService.BrandServiceBase
         }
     }
 
+    /// <summary>
+    ///   Get brand by id
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    /// <exception cref="RpcException"></exception>
     public override async Task<BrandResponse> GetBrandByIdAsync(BrandByIdRequest request, ServerCallContext context)
     {
         var brand = await _brandBusiness.GetBrandByIdAsync(request.Id);
@@ -61,6 +84,13 @@ public class BrandService : Protos.BrandService.BrandServiceBase
         };
     }
 
+    /// <summary>
+    ///  Get brand by name
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    /// <exception cref="RpcException"></exception>
     public override async Task<BrandResponse> GetBrandByNameAsync(BrandByNameRequest request,
         ServerCallContext context)
     {
@@ -76,6 +106,13 @@ public class BrandService : Protos.BrandService.BrandServiceBase
         };
     }
 
+    /// <summary>
+    ///   Create brand
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    /// <exception cref="RpcException"></exception>
     public override async Task<BrandResponse> CreateBrandAsync(BrandRequest request, ServerCallContext context)
     {
         var createdBrand = await _brandBusiness.CreateBrandAsync(_mapper.Map<BrandDto>(request));
@@ -88,6 +125,13 @@ public class BrandService : Protos.BrandService.BrandServiceBase
         };
     }
 
+    /// <summary>
+    ///   Update brand
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    /// <exception cref="RpcException"></exception>
     public override async Task<BrandResponse> UpdateBrandAsync(BrandResponse request, ServerCallContext context)
     {
         var updatedBrand = await _brandBusiness.UpdateBrandAsync(_mapper.Map<BrandDto>(request));
@@ -102,6 +146,13 @@ public class BrandService : Protos.BrandService.BrandServiceBase
         };
     }
 
+    /// <summary>
+    ///  Delete brand
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    /// <exception cref="RpcException"></exception>
     public override async Task<Empty> DeleteBrandAsync(BrandByIdRequest request, ServerCallContext context)
     {
         var brand = await _brandBusiness.GetBrandByIdAsync(request.Id);

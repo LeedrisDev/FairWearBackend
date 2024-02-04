@@ -7,6 +7,9 @@ using Users.Service.Models.Dto;
 
 namespace Users.Service.Services;
 
+/// <summary>
+/// gRPC service implementation for handling user experience-related operations.
+/// </summary>
 public class UserExperienceService : Service.UserExperienceService.UserExperienceServiceBase
 {
     private readonly ILogger<UserExperienceService> _logger;

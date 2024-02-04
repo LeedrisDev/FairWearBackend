@@ -172,8 +172,8 @@ jobs:
           file: FairWearGateway.API/Dockerfile
           push: true
           tags: |
-            ${{ secrets.REGISTRY_URL }}/fairwear/fairwear_gateway_api:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}
-            ${{ secrets.REGISTRY_URL }}/fairwear/fairwear_gateway_api:latest
+            ${{ secrets.REGISTRY_URL }}/fairwear/gateway_api:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}
+            ${{ secrets.REGISTRY_URL }}/fairwear/gateway_api:latest
 
       - uses: sarisia/actions-status-discord@v1
         if: always()

@@ -173,8 +173,8 @@ jobs:
           file: GoodOnYouScrapper.Service/Dockerfile
           push: true
           tags: |
-            ${{ secrets.REGISTRY_URL }}/fairwear/fairwear_goodonyou_scrapper_service:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}
-            ${{ secrets.REGISTRY_URL }}/fairwear/fairwear_goodonyou_scrapper_service:latest
+            ${{ secrets.REGISTRY_URL }}/fairwear/goodonyou_scrapper_service:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}
+            ${{ secrets.REGISTRY_URL }}/fairwear/goodonyou_scrapper_service:latest
 
       - uses: sarisia/actions-status-discord@v1
         if: always()

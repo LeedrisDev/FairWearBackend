@@ -40,8 +40,8 @@
             file: Databases/BrandsAndProductsDatabase/Dockerfile
             push: true
             tags: |
-              ${{ secrets.REGISTRY_URL }}/fairwear/fairwear_brand_and_product_db:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}
-              ${{ secrets.REGISTRY_URL }}/fairwear/fairwear_brand_and_product_db:latest
+              ${{ secrets.REGISTRY_URL }}/fairwear/brand_and_product_db:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}
+              ${{ secrets.REGISTRY_URL }}/fairwear/brand_and_product_db:latest
               
         - uses: sarisia/actions-status-discord@v1
           if: always()

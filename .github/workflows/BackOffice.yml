@@ -126,8 +126,8 @@ jobs:
           file: BackOffice/Dockerfile
           push: true
           tags: |
-            ${{ secrets.REGISTRY_URL }}/fairwear_back_office:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}
-            ${{ secrets.REGISTRY_URL }}/fairwear_back_office:latest
+            ${{ secrets.REGISTRY_URL }}/fairwear/back_office:${{ steps.get_branch.outputs.tag }}-${{ github.run_number }}
+            ${{ secrets.REGISTRY_URL }}/fairwear/back_office:latest
             
       - uses: sarisia/actions-status-discord@v1
         if: always()
